@@ -27,21 +27,28 @@ This document outlines the descriptions of test cases and the methods used to ge
 
 **P4:**
 
-- **Type:** False miscompilation
+- **Type:** Same output
 - **Source:** [https://github.com/llvm/llvm-project/blob/ccbb8882ac75e73e23f31ad60588a2914ebeef04/llvm/test/Transforms/SampleProfile/fnptr.ll#L37](https://github.com/llvm/llvm-project/blob/ccbb8882ac75e73e23f31ad60588a2914ebeef04/llvm/test/Transforms/SampleProfile/fnptr.ll#L37)
-- **Methodology to obtain P':** P' is the same as P. This is a more complicated function from the llvm test suite. This is used to check if we can prevent a false negative since P === P'
-- **Change in P':** N/A
-
-**P4:**
-
-- **Type:** False miscompilation (low probability, but has randomness)
-- **Source:** [https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/SampleProfile/gcc-simple.ll#L8](https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/SampleProfile/gcc-simple.ll#L8)
-- **Methodology to obtain P':** Same as P4 (TODO: change?)
+- **Methodology to obtain P':** P' is the same as P. Not sure how to use the profile optimizer, but this is an example code that uses a random function. However, rand() is pseudorandom, so the output is expected to be the same
 - **Change in P':** N/A
 
 **P5:**
 
 - **Type:** False miscompilation
+- **Source:** [https://github.com/llvm/llvm-project/blob/ccbb8882ac75e73e23f31ad60588a2914ebeef04/llvm/test/Transforms/SampleProfile/fnptr.ll#L37](https://github.com/llvm/llvm-project/blob/ccbb8882ac75e73e23f31ad60588a2914ebeef04/llvm/test/Transforms/SampleProfile/fnptr.ll#L37)
+- **Methodology to obtain P':** P' is the same as P. This is the same as P4, but modified to use srand. This is used to check if we can prevent a false negative since P === P'
+- **Change in P':** N/A
+
+**P6:**
+
+- **Type:** Correct output (low probability, but has randomness)
+- **Source:** [https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/SampleProfile/gcc-simple.ll#L8](https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/SampleProfile/gcc-simple.ll#L8)
+- **Methodology to obtain P':** Same as P4 (TODO: change?)
+- **Change in P':** N/A
+
+**P7:**
+
+- **Type:** Correct output
 - **Source:** [https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/OpenMP/values_in_offload_arrays.ll#L20](https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/OpenMP/values_in_offload_arrays.ll#L20)
 - **Methodology to obtain P':** Same as P4 (TODO change?)
 - **Change in P':** N/A

@@ -1,273 +1,236 @@
-; RUN: opt < %s -passes=sample-profile -sample-profile-file=%S/Inputs/remarks.prof -S -pass-remarks=sample-profile -pass-remarks-output=%t.opt.yaml 2>&1 | FileCheck %s
-; RUN: FileCheck %s -check-prefixes=YAML,YAML-NO-ANNOTATE < %t.opt.yaml
-
-; RUN: opt < %s -passes=sample-profile -annotate-sample-profile-inline-phase -sample-profile-file=%S/Inputs/remarks.prof -S -pass-remarks=sample-profile -pass-remarks-output=%t.opt.yaml 2>&1 | FileCheck %s
-; RUN: FileCheck %s -check-prefixes=YAML,YAML-ANNOTATE < %t.opt.yaml
-
-; Original test case.
+; RUN: opt < %s -passes=sample-profile -sample-profile-file=%S/Inputs/gcc-simple.afdo -S | FileCheck %s
 ;
-;     1    #include <stdlib.h>
-;     2
-;     3    long long foo() {
-;     4      long long int sum = 0;
-;     5      for (int i = 0; i < 500000000; i++)
-;     6        if (i < 1000)
-;     7          sum -= i;
-;     8        else
-;     9          sum += -i * rand();
-;    10      return sum;
-;    11    }
-;    12
-;    13    int main() { return foo() > 0; }
-
-; We are expecting foo() to be inlined in main() (almost all the cycles are
-; spent inside foo).
-; CHECK: remark: remarks.cc:13:21: '_Z3foov' inlined into 'main' to match profiling context with (cost=130, threshold=3000) at callsite main:0:21;
-; CHECK: remark: remarks.cc:9:19: 'rand' inlined into 'main' to match profiling context with (cost=always): always inline attribute at callsite _Z3foov:6:19 @ main:0:21;
-
-; The back edge for the loop is the hottest edge in the loop subgraph.
-; CHECK: remark: remarks.cc:6:9: most popular destination for conditional branches at remarks.cc:5:3
-
-; The predicate almost always chooses the 'else' branch.
-; CHECK: remark: remarks.cc:9:15: most popular destination for conditional branches at remarks.cc:6:9
-
-; Checking to see if YAML file is generated and contains remarks
-;YAML:       --- !Passed
-;YAML-NO-ANNOTATE-NEXT:  Pass:            sample-profile-inline
-;YAML-ANNOTATE-NEXT:  Pass:            main-sample-profile-inline
-;YAML-NEXT:  Name:            Inlined
-;YAML-NEXT:  DebugLoc:        { File: remarks.cc, Line: 13, Column: 21 }
-;YAML-NEXT:  Function:        main
-;YAML-NEXT:  Args:
-;YAML-NEXT:    - String:          ''''
-;YAML-NEXT:    - Callee:          _Z3foov
-;YAML-NEXT:      DebugLoc:        { File: remarks.cc, Line: 3, Column: 0 }
-;YAML-NEXT:    - String:          ''' inlined into '
-;YAML-NEXT:    - Caller:          main
-;YAML-NEXT:        DebugLoc:        { File: remarks.cc, Line: 13, Column: 0 }
-;YAML-NEXT:    - String:          ''''
-;YAML-NEXT:    - String:          ' to match profiling context'
-;YAML-NEXT:    - String:          ' with '
-;YAML-NEXT:    - String:          '(cost='
-;YAML-NEXT:    - Cost:            '130'
-;YAML-NEXT:    - String:          ', threshold='
-;YAML-NEXT:    - Threshold:       '3000'
-;YAML-NEXT:    - String:          ')'
-;YAML-NEXT:    - String:          ' at callsite '
-;YAML-NEXT:    - String:          main
-;YAML-NEXT:    - String:          ':'
-;YAML-NEXT:    - Line:            '0'
-;YAML-NEXT:    - String:          ':'
-;YAML-NEXT:    - Column:          '21'
-;YAML-NEXT:    - String:          ';'
-;YAML-NEXT:  ...
-;YAML:       --- !Passed
-;YAML-NO-ANNOTATE-NEXT:  Pass:            sample-profile-inline
-;YAML-ANNOTATE-NEXT:  Pass:            main-sample-profile-inline
-;YAML-NEXT:  Name:            AlwaysInline
-;YAML-NEXT:  DebugLoc:        { File: remarks.cc, Line: 9, Column: 19 }
-;YAML-NEXT:  Function:        main
-;YAML-NEXT:  Args:
-;YAML-NEXT:    - String:          ''''
-;YAML-NEXT:    - Callee:          rand
-;YAML-NEXT:      DebugLoc:        { File: remarks.cc, Line: 90, Column: 0 }
-;YAML-NEXT:    - String:          ''' inlined into '''
-;YAML-NEXT:    - Caller:          main
-;YAML-NEXT:      DebugLoc:        { File: remarks.cc, Line: 13, Column: 0 }
-;YAML-NEXT:    - String:          ''''
-;YAML-NEXT:    - String:          ' to match profiling context'
-;YAML-NEXT:    - String:          ' with '
-;YAML-NEXT:    - String:          '(cost=always)'
-;YAML-NEXT:    - String:          ': '
-;YAML-NEXT:    - Reason:          always inline attribute
-;YAML-NEXT:    - String:          ' at callsite '
-;YAML-NEXT:    - String:          _Z3foov
-;YAML-NEXT:    - String:          ':'
-;YAML-NEXT:    - Line:            '6'
-;YAML-NEXT:    - String:          ':'
-;YAML-NEXT:    - Column:          '19'
-;YAML-NEXT:    - String:          ' @ '
-;YAML-NEXT:    - String:          main
-;YAML-NEXT:    - String:          ':'
-;YAML-NEXT:    - Line:            '0'
-;YAML-NEXT:    - String:          ':'
-;YAML-NEXT:    - Column:          '21'
-;YAML-NEXT:    - String:          ';'
-;YAML:  --- !Analysis
-;YAML-NEXT:  Pass:            sample-profile
-;YAML-NEXT:  Name:            AppliedSamples
-;YAML-NEXT:  DebugLoc:        { File: remarks.cc, Line: 5, Column: 12 }
-;YAML-NEXT:  Function:        main
-;YAML-NEXT:  Args:
-;YAML-NEXT:    - String:          'Applied '
-;YAML-NEXT:    - NumSamples:      '18305'
-;YAML-NEXT:    - String:          ' samples from profile (offset: '
-;YAML-NEXT:    - LineOffset:      '2'
-;YAML-NEXT:    - String:          ')'
-;YAML-NEXT:  ...
-;YAML:  --- !Passed
-;YAML-NEXT:  Pass:            sample-profile
-;YAML-NEXT:  Name:            PopularDest
-;YAML-NEXT:  DebugLoc:        { File: remarks.cc, Line: 6, Column: 9 }
-;YAML-NEXT:  Function:        main
-;YAML-NEXT:  Args:
-;YAML-NEXT:    - String:          'most popular destination for conditional branches at '
-;YAML-NEXT:    - CondBranchesLoc: 'remarks.cc:5:3'
-;YAML-NEXT:      DebugLoc:        { File: remarks.cc, Line: 5, Column: 3 }
-;YAML-NEXT:  ...
-
-; Function Attrs: nounwind uwtable
-define i64 @_Z3foov() #0 !dbg !4 {
-entry:
-  %sum = alloca i64, align 8
-  %i = alloca i32, align 4
-  call void @llvm.lifetime.start.p0(i64 8, ptr %sum) #4, !dbg !19
-  call void @llvm.dbg.declare(metadata ptr %sum, metadata !9, metadata !20), !dbg !21
-  store i64 0, ptr %sum, align 8, !dbg !21, !tbaa !22
-  call void @llvm.lifetime.start.p0(i64 4, ptr %i) #4, !dbg !26
-  call void @llvm.dbg.declare(metadata ptr %i, metadata !10, metadata !20), !dbg !27
-  store i32 0, ptr %i, align 4, !dbg !27, !tbaa !28
-  br label %for.cond, !dbg !26
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4, !dbg !30, !tbaa !28
-  %cmp = icmp slt i32 %0, 500000000, !dbg !34
-  br i1 %cmp, label %for.body, label %for.cond.cleanup, !dbg !35
-
-for.cond.cleanup:                                 ; preds = %for.cond
-  call void @llvm.lifetime.end.p0(i64 4, ptr %i) #4, !dbg !36
-  br label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4, !dbg !38, !tbaa !28
-  %cmp1 = icmp slt i32 %1, 1000, !dbg !40
-  br i1 %cmp1, label %if.then, label %if.else, !dbg !41
-
-if.then:                                          ; preds = %for.body
-  %2 = load i32, ptr %i, align 4, !dbg !42, !tbaa !28
-  %conv = sext i32 %2 to i64, !dbg !42
-  %3 = load i64, ptr %sum, align 8, !dbg !43, !tbaa !22
-  %sub = sub nsw i64 %3, %conv, !dbg !43
-  store i64 %sub, ptr %sum, align 8, !dbg !43, !tbaa !22
-  br label %if.end, !dbg !44
-
-if.else:                                          ; preds = %for.body
-  %4 = load i32, ptr %i, align 4, !dbg !45, !tbaa !28
-  %sub2 = sub nsw i32 0, %4, !dbg !46
-  %call = call i32 @rand() #4, !dbg !47
-  %mul = mul nsw i32 %sub2, %call, !dbg !48
-  %conv3 = sext i32 %mul to i64, !dbg !46
-  %5 = load i64, ptr %sum, align 8, !dbg !49, !tbaa !22
-  %add = add nsw i64 %5, %conv3, !dbg !49
-  store i64 %add, ptr %sum, align 8, !dbg !49, !tbaa !22
-  br label %if.end
-
-if.end:                                           ; preds = %if.else, %if.then
-  br label %for.inc, !dbg !50
-
-for.inc:                                          ; preds = %if.end
-  %6 = load i32, ptr %i, align 4, !dbg !51, !tbaa !28
-  %inc = add nsw i32 %6, 1, !dbg !51
-  store i32 %inc, ptr %i, align 4, !dbg !51, !tbaa !28
-  br label %for.cond, !dbg !52
-
-for.end:                                          ; preds = %for.cond.cleanup
-  %7 = load i64, ptr %sum, align 8, !dbg !53, !tbaa !22
-  call void @llvm.lifetime.end.p0(i64 8, ptr %sum) #4, !dbg !54
-  ret i64 %7, !dbg !55
-}
-
-; Function Attrs: nounwind argmemonly
-declare void @llvm.lifetime.start.p0(i64, ptr nocapture) #1
+; Original code:
+;
+; #include <stdlib.h>
+; #include <time.h> // Required for time()
+;
+; long long int foo(long i) {
+;   if (rand() < 500) return 2; else if (rand() > 5000) return 10; else return 90;
+; }
+;
+; int main() {
+;   srand(time(NULL)); // Seed rand()
+;   long long int sum = 0;
+;   for (int k = 0; k < 3000; k++)
+;     for (int i = 0; i < 200000; i++) sum += foo(i);
+;   return sum > 10000000000 ? 1 : 0; // Changed condition to be more likely true
+; }
+;
+; This test was compiled down to bytecode at -O0 to avoid inlining foo() into
+; main(). The profile was generated using a GCC-generated binary (also compiled
+; at -O0). The conversion from the Linux Perf profile to the GCC autofdo
+; profile used the converter at https://github.com/google/autofdo
+;
+; $ gcc -g -O0 gcc-simple.cc -o gcc-simple
+; $ perf record -b ./gcc-simple
+; $ create_gcov --binary=gcc-simple --gcov=gcc-simple.afdo
 
 ; Function Attrs: nounwind readnone
-declare void @llvm.dbg.declare(metadata, metadata, metadata) #2
+declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
 
 ; Function Attrs: nounwind
-define i32 @rand() #3 !dbg !59 {
-  ret i32 1
-}
+declare i32 @rand() #2
 
-; Function Attrs: nounwind argmemonly
-declare void @llvm.lifetime.end.p0(i64, ptr nocapture) #1
+; Function Attrs: nounwind
+declare void @srand(i32) #2  ; Added declaration for srand
+declare i64 @time(i64*) #2   ; Added declaration for time
 
 ; Function Attrs: nounwind uwtable
-define i32 @main() #0 !dbg !13 {
+define i64 @_Z3fool(i64 %i) #0 !dbg !4 {
+; CHECK: !prof ![[EC1:[0-9]+]]
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %call = call i64 @_Z3foov(), !dbg !56
-  %cmp = icmp sgt i64 %call, 0, !dbg !57
-  %conv = zext i1 %cmp to i32, !dbg !56
-  ret i32 %conv, !dbg !58
+  %retval = alloca i64, align 8
+  %i.addr = alloca i64, align 8
+  store i64 %i, ptr %i.addr, align 8
+  call void @llvm.dbg.declare(metadata ptr %i.addr, metadata !16, metadata !17), !dbg !18
+  %call = call i32 @rand() #3, !dbg !19
+; CHECK: !prof ![[PROF1:[0-9]+]]
+  %cmp = icmp slt i32 %call, 500, !dbg !21
+  br i1 %cmp, label %if.then, label %if.else, !dbg !22
+; CHECK: !prof ![[PROF2:[0-9]+]]
+
+if.then:                                          ; preds = %entry
+  store i64 2, ptr %retval, align 8, !dbg !23
+  br label %return, !dbg !23
+
+if.else:                                          ; preds = %entry
+  %call1 = call i32 @rand() #3, !dbg !25
+; CHECK: !prof ![[PROF3:[0-9]+]]
+  %cmp2 = icmp sgt i32 %call1, 5000, !dbg !28
+  br i1 %cmp2, label %if.then.3, label %if.else.4, !dbg !29
+; CHECK: !prof ![[PROF4:[0-9]+]]
+
+if.then.3:                                        ; preds = %if.else
+  store i64 10, ptr %retval, align 8, !dbg !30
+  br label %return, !dbg !30
+
+if.else.4:                                        ; preds = %if.else
+  store i64 90, ptr %retval, align 8, !dbg !32
+  br label %return, !dbg !32
+
+return:                                           ; preds = %if.else.4, %if.then.3, %if.then
+  %0 = load i64, ptr %retval, align 8, !dbg !34
+  ret i64 %0, !dbg !34
 }
 
-attributes #0 = { nounwind uwtable "disable-tail-calls"="false" "less-precise-fpmad"="false" "frame-pointer"="none" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" "use-sample-profile" }
-attributes #1 = { nounwind argmemonly }
-attributes #2 = { nounwind readnone }
-attributes #3 = { nounwind alwaysinline "disable-tail-calls"="false" "less-precise-fpmad"="false" "frame-pointer"="none" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+fxsr,+mmx,+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #4 = { nounwind }
+; Function Attrs: nounwind uwtable
+define i32 @main() #0 !dbg !9 {
+; CHECK: !prof ![[EC2:[0-9]+]]
+entry:
+  %retval = alloca i32, align 4
+  %sum = alloca i64, align 8
+  %k = alloca i32, align 4
+  %i = alloca i32, align 4
+
+  %call_time = tail call i64 @time(i64* null)  ; Call time(NULL)
+  %seed = trunc i64 %call_time to i32         ; Truncate to i32 for srand
+  tail call void @srand(i32 %seed)             ; Call srand with the seed
+
+
+  store i32 0, ptr %retval, align 4
+  call void @llvm.dbg.declare(metadata ptr %sum, metadata !35, metadata !17), !dbg !36
+  store i64 0, ptr %sum, align 8, !dbg !36
+  call void @llvm.dbg.declare(metadata ptr %k, metadata !37, metadata !17), !dbg !39
+  store i32 0, ptr %k, align 4, !dbg !39
+  br label %for.cond, !dbg !40
+
+for.cond:                                         ; preds = %for.inc.4, %entry
+  %0 = load i32, ptr %k, align 4, !dbg !41
+  %cmp = icmp slt i32 %0, 3000, !dbg !45
+  br i1 %cmp, label %for.body, label %for.end.6, !dbg !46
+; CHECK: !prof ![[PROF6:[0-9]+]]
+
+for.body:                                         ; preds = %for.cond
+  call void @llvm.dbg.declare(metadata ptr %i, metadata !47, metadata !17), !dbg !49
+  store i32 0, ptr %i, align 4, !dbg !49
+  br label %for.cond.1, !dbg !50
+
+for.cond.1:                                       ; preds = %for.inc, %for.body
+  %1 = load i32, ptr %i, align 4, !dbg !51
+  %cmp2 = icmp slt i32 %1, 200000, !dbg !55
+  br i1 %cmp2, label %for.body.3, label %for.end, !dbg !56
+; CHECK: !prof ![[PROF7:[0-9]+]]
+
+for.body.3:                                       ; preds = %for.cond.1
+  %2 = load i32, ptr %i, align 4, !dbg !57
+  %conv = sext i32 %2 to i64, !dbg !57
+  %call = call i64 @_Z3fool(i64 %conv), !dbg !59
+; CHECK: !prof ![[PROF8:[0-9]+]]
+  %3 = load i64, ptr %sum, align 8, !dbg !60
+  %add = add nsw i64 %3, %call, !dbg !60
+  store i64 %add, ptr %sum, align 8, !dbg !60
+  br label %for.inc, !dbg !61
+
+for.inc:                                          ; preds = %for.body.3
+  %4 = load i32, ptr %i, align 4, !dbg !62
+  %inc = add nsw i32 %4, 1, !dbg !62
+  store i32 %inc, ptr %i, align 4, !dbg !62
+  br label %for.cond.1, !dbg !64
+
+for.end:                                          ; preds = %for.cond.1
+  br label %for.inc.4, !dbg !65
+
+for.inc.4:                                        ; preds = %for.end
+  %5 = load i32, ptr %k, align 4, !dbg !67
+  %inc5 = add nsw i32 %5, 1, !dbg !67
+  store i32 %inc5, ptr %k, align 4, !dbg !67
+  br label %for.cond, !dbg !68
+
+for.end.6:                                        ; preds = %for.cond
+  %6 = load i64, ptr %sum, align 8, !dbg !69
+  %cmp7 = icmp sgt i64 %6, 10000000000, !dbg !70 ; Changed comparison value
+  %cond = select i1 %cmp7, i32 1, i32 0, !dbg !69  ; Return 1 if sum is large
+  ret i32 %cond, !dbg !71
+}
+
+; CHECK: ![[EC1]] = !{!"function_entry_count", i64 24109}
+; CHECK: ![[PROF1]] = !{!"branch_weights", i32 24109}
+; CHECK: ![[PROF2]] = !{!"branch_weights", i32 30125, i32 30125}
+; CHECK: ![[PROF3]] = !{!"branch_weights", i32 30124}
+; CHECK: ![[PROF4]] = !{!"branch_weights", i32 30125, i32 29580}
+; CHECK: ![[EC2]] = !{!"function_entry_count", i64 1}
+; CHECK: ![[PROF6]] = !{!"branch_weights", i32 1, i32 2}
+; CHECK: ![[PROF7]] = !{!"branch_weights", i32 18943, i32 1}
+; CHECK: ![[PROF8]] = !{!"branch_weights", i32 18942}
+
+attributes #0 = { nounwind uwtable "disable-tail-calls"="false" "frame-pointer"="all" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" "use-sample-profile" }
+attributes #1 = { nounwind readnone }
+attributes #2 = { nounwind "disable-tail-calls"="false" "less-precise-fpmad"="false" "frame-pointer"="all" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+sse,+sse2" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #3 = { nounwind }
 
 !llvm.dbg.cu = !{!0}
-!llvm.module.flags = !{!16, !17}
-!llvm.ident = !{!18}
+!llvm.module.flags = !{!13, !14}
+!llvm.ident = !{!15}
 
-!0 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus, file: !1, producer: "clang version 3.8.0 (trunk 251041) (llvm/trunk 251053)", isOptimized: true, runtimeVersion: 0, emissionKind: NoDebug, enums: !2)
-!1 = !DIFile(filename: "remarks.cc", directory: ".")
+!0 = distinct !DICompileUnit(language: DW_LANG_C_plus_plus, file: !1, producer: "clang version 3.8.0 (trunk 247554) (llvm/trunk 247557)", isOptimized: false, runtimeVersion: 0, emissionKind: NoDebug, enums: !2)
+!1 = !DIFile(filename: "discriminator.cc", directory: "/usr/local/google/home/dnovillo/llvm/test/autofdo")
 !2 = !{}
-!4 = distinct !DISubprogram(name: "foo", linkageName: "_Z3foov", scope: !1, file: !1, line: 3, type: !5, isLocal: false, isDefinition: true, scopeLine: 3, flags: DIFlagPrototyped, isOptimized: true, unit: !0, retainedNodes: !8)
+!4 = distinct !DISubprogram(name: "foo", linkageName: "_Z3fool", scope: !1, file: !1, line: 3, type: !5, isLocal: false, isDefinition: true, scopeLine: 3, flags: DIFlagPrototyped, isOptimized: false, unit: !0, retainedNodes: !2)
 !5 = !DISubroutineType(types: !6)
-!6 = !{!7}
+!6 = !{!7, !8}
 !7 = !DIBasicType(name: "long long int", size: 64, align: 64, encoding: DW_ATE_signed)
-!8 = !{!9, !10}
-!9 = !DILocalVariable(name: "sum", scope: !4, file: !1, line: 4, type: !7)
-!10 = !DILocalVariable(name: "i", scope: !11, file: !1, line: 5, type: !12)
-!11 = distinct !DILexicalBlock(scope: !4, file: !1, line: 5, column: 3)
+!8 = !DIBasicType(name: "long int", size: 64, align: 64, encoding: DW_ATE_signed)
+!9 = distinct !DISubprogram(name: "main", scope: !1, file: !1, line: 7, type: !10, isLocal: false, isDefinition: true, scopeLine: 7, flags: DIFlagPrototyped, isOptimized: false, unit: !0, retainedNodes: !2)
+!10 = !DISubroutineType(types: !11)
+!11 = !{!12}
 !12 = !DIBasicType(name: "int", size: 32, align: 32, encoding: DW_ATE_signed)
-!13 = distinct !DISubprogram(name: "main", scope: !1, file: !1, line: 13, type: !14, isLocal: false, isDefinition: true, scopeLine: 13, flags: DIFlagPrototyped, isOptimized: true, unit: !0, retainedNodes: !2)
-!14 = !DISubroutineType(types: !15)
-!15 = !{!12}
-!16 = !{i32 2, !"Dwarf Version", i32 4}
-!17 = !{i32 2, !"Debug Info Version", i32 3}
-!18 = !{!"clang version 3.8.0 (trunk 251041) (llvm/trunk 251053)"}
-!19 = !DILocation(line: 4, column: 3, scope: !4)
-!20 = !DIExpression()
-!21 = !DILocation(line: 4, column: 17, scope: !4)
-!22 = !{!23, !23, i64 0}
-!23 = !{!"long long", !24, i64 0}
-!24 = !{!"omnipotent char", !25, i64 0}
-!25 = !{!"Simple C/C++ TBAA"}
-!26 = !DILocation(line: 5, column: 8, scope: !11)
-!27 = !DILocation(line: 5, column: 12, scope: !11)
-!28 = !{!29, !29, i64 0}
-!29 = !{!"int", !24, i64 0}
-!30 = !DILocation(line: 5, column: 19, scope: !31)
-!31 = !DILexicalBlockFile(scope: !32, file: !1, discriminator: 3)
-!32 = !DILexicalBlockFile(scope: !33, file: !1, discriminator: 1)
-!33 = distinct !DILexicalBlock(scope: !11, file: !1, line: 5, column: 3)
-!34 = !DILocation(line: 5, column: 21, scope: !33)
-!35 = !DILocation(line: 5, column: 3, scope: !11)
-!36 = !DILocation(line: 5, column: 3, scope: !37)
-!37 = !DILexicalBlockFile(scope: !33, file: !1, discriminator: 2)
-!38 = !DILocation(line: 6, column: 9, scope: !39)
-!39 = distinct !DILexicalBlock(scope: !33, file: !1, line: 6, column: 9)
-!40 = !DILocation(line: 6, column: 11, scope: !39)
-!41 = !DILocation(line: 6, column: 9, scope: !33)
-!42 = !DILocation(line: 7, column: 14, scope: !39)
-!43 = !DILocation(line: 7, column: 11, scope: !39)
-!44 = !DILocation(line: 7, column: 7, scope: !39)
-!45 = !DILocation(line: 9, column: 15, scope: !39)
-!46 = !DILocation(line: 9, column: 14, scope: !39)
-!47 = !DILocation(line: 9, column: 19, scope: !39)
-!48 = !DILocation(line: 9, column: 17, scope: !39)
-!49 = !DILocation(line: 9, column: 11, scope: !39)
-!50 = !DILocation(line: 6, column: 13, scope: !39)
-!51 = !DILocation(line: 5, column: 35, scope: !33)
-!52 = !DILocation(line: 5, column: 3, scope: !33)
-!53 = !DILocation(line: 10, column: 10, scope: !4)
-!54 = !DILocation(line: 11, column: 1, scope: !4)
-!55 = !DILocation(line: 10, column: 3, scope: !4)
-!56 = !DILocation(line: 13, column: 21, scope: !13)
-!57 = !DILocation(line: 13, column: 27, scope: !13)
-!58 = !DILocation(line: 13, column: 14, scope: !13)
-!59 = distinct !DISubprogram(name: "rand", linkageName: "rand", scope: !1, file: !1, line: 90, type: !5, isLocal: false, isDefinition: true, scopeLine: 90, flags: DIFlagPrototyped, isOptimized: true, unit: !0)
+!13 = !{i32 2, !"Dwarf Version", i32 4}
+!14 = !{i32 2, !"Debug Info Version", i32 3}
+!15 = !{!"clang version 3.8.0 (trunk 247554) (llvm/trunk 247557)"}
+!16 = !DILocalVariable(name: "i", arg: 1, scope: !4, file: !1, line: 3, type: !8)
+!17 = !DIExpression()
+!18 = !DILocation(line: 3, column: 24, scope: !4)
+!19 = !DILocation(line: 4, column: 7, scope: !20)
+!20 = distinct !DILexicalBlock(scope: !4, file: !1, line: 4, column: 7)
+!21 = !DILocation(line: 4, column: 14, scope: !20)
+!22 = !DILocation(line: 4, column: 7, scope: !4)
+!23 = !DILocation(line: 4, column: 21, scope: !24)
+!24 = !DILexicalBlockFile(scope: !20, file: !1, discriminator: 1)
+!25 = !DILocation(line: 4, column: 40, scope: !26)
+!26 = !DILexicalBlockFile(scope: !27, file: !1, discriminator: 2)
+!27 = distinct !DILexicalBlock(scope: !20, file: !1, line: 4, column: 40)
+!28 = !DILocation(line: 4, column: 47, scope: !27)
+!29 = !DILocation(line: 4, column: 40, scope: !20)
+!30 = !DILocation(line: 4, column: 55, scope: !31)
+!31 = !DILexicalBlockFile(scope: !27, file: !1, discriminator: 3)
+!32 = !DILocation(line: 4, column: 71, scope: !33)
+!33 = !DILexicalBlockFile(scope: !27, file: !1, discriminator: 4)
+!34 = !DILocation(line: 5, column: 1, scope: !4)
+!35 = !DILocalVariable(name: "sum", scope: !9, file: !1, line: 8, type: !7)
+!36 = !DILocation(line: 8, column: 17, scope: !9)
+!37 = !DILocalVariable(name: "k", scope: !38, file: !1, line: 9, type: !12)
+!38 = distinct !DILexicalBlock(scope: !9, file: !1, line: 9, column: 3)
+!39 = !DILocation(line: 9, column: 12, scope: !38)
+!40 = !DILocation(line: 9, column: 8, scope: !38)
+!41 = !DILocation(line: 9, column: 19, scope: !42)
+!42 = !DILexicalBlockFile(scope: !43, file: !1, discriminator: 2)
+!43 = !DILexicalBlockFile(scope: !44, file: !1, discriminator: 1)
+!44 = distinct !DILexicalBlock(scope: !38, file: !1, line: 9, column: 3)
+!45 = !DILocation(line: 9, column: 21, scope: !44)
+!46 = !DILocation(line: 9, column: 3, scope: !44)
+!47 = !DILocalVariable(name: "i", scope: !48, file: !1, line: 10, type: !12)
+!48 = distinct !DILexicalBlock(scope: !44, file: !1, line: 10, column: 5)
+!49 = !DILocation(line: 10, column: 14, scope: !48)
+!50 = !DILocation(line: 10, column: 10, scope: !48)
+!51 = !DILocation(line: 10, column: 21, scope: !52)
+!52 = !DILexicalBlockFile(scope: !53, file: !1, discriminator: 5)
+!53 = !DILexicalBlockFile(scope: !54, file: !1, discriminator: 1)
+!54 = distinct !DILexicalBlock(scope: !48, file: !1, line: 10, column: 5)
+!55 = !DILocation(line: 10, column: 23, scope: !54)
+!56 = !DILocation(line: 10, column: 5, scope: !48)
+!57 = !DILocation(line: 10, column: 49, scope: !58)
+!58 = !DILexicalBlockFile(scope: !54, file: !1, discriminator: 2)
+!59 = !DILocation(line: 10, column: 45, scope: !54)
+!60 = !DILocation(line: 10, column: 42, scope: !54)
+!61 = !DILocation(line: 10, column: 38, scope: !54)
+!62 = !DILocation(line: 10, column: 34, scope: !63)
+!63 = !DILexicalBlockFile(scope: !54, file: !1, discriminator: 4)
+!64 = !DILocation(line: 10, column: 5, scope: !54)
+!65 = !DILocation(line: 10, column: 50, scope: !66)
+!66 = !DILexicalBlockFile(scope: !48, file: !1, discriminator: 3)
+!67 = !DILocation(line: 9, column: 30, scope: !44)
+!68 = !DILocation(line: 9, column: 3, scope: !44)
+!69 = !DILocation(line: 11, column: 10, scope: !9)
+!70 = !DILocation(line: 11, column: 14, scope: !9)
+!71 = !DILocation(line: 11, column: 3, scope: !9)

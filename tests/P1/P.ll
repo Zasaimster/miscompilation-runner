@@ -7,4 +7,3 @@ entry:
   tail call i32 (ptr, ...) @printf(ptr @.str)
   ret i32 0
 }
-
