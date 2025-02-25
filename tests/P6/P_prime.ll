@@ -1,20 +1,13 @@
 ; RUN: opt < %s -passes=sample-profile -sample-profile-file=%S/Inputs/gcc-simple.afdo -S | FileCheck %s
 ;
-; Original code:
+; Original code (modified to be 50/50 chance of 0 or 1):
 ;
 ; #include <stdlib.h>
 ; #include <time.h> // Required for time()
 ;
-; long long int foo(long i) {
-;   if (rand() < 500) return 2; else if (rand() > 5000) return 10; else return 90;
-; }
-;
 ; int main() {
 ;   srand(time(NULL)); // Seed rand()
-;   long long int sum = 0;
-;   for (int k = 0; k < 3000; k++)
-;     for (int i = 0; i < 200000; i++) sum += foo(i);
-;   return sum > 10000000000 ? 1 : 0; // Changed condition to be more likely true
+;   if (rand() % 2 == 0) return 0; else return 1; // 50/50 chance
 ; }
 ;
 ; This test was compiled down to bytecode at -O0 to avoid inlining foo() into
@@ -31,13 +24,11 @@ declare void @llvm.dbg.declare(metadata, metadata, metadata) #1
 
 ; Function Attrs: nounwind
 declare i32 @rand() #2
-
-; Function Attrs: nounwind
 declare void @srand(i32) #2  ; Added declaration for srand
 declare i64 @time(i64*) #2   ; Added declaration for time
 
 ; Function Attrs: nounwind uwtable
-define i64 @_Z3fool(i64 %i) #0 !dbg !4 {
+define i64 @_Z3fool(i64 %i) #0 !dbg !4 {  ; foo function remains, but is unused in main
 ; CHECK: !prof ![[EC1:[0-9]+]]
 entry:
   %retval = alloca i64, align 8
@@ -79,69 +70,14 @@ define i32 @main() #0 !dbg !9 {
 ; CHECK: !prof ![[EC2:[0-9]+]]
 entry:
   %retval = alloca i32, align 4
-  %sum = alloca i64, align 8
-  %k = alloca i32, align 4
-  %i = alloca i32, align 4
 
   %call_time = tail call i64 @time(i64* null)  ; Call time(NULL)
   %seed = trunc i64 %call_time to i32         ; Truncate to i32 for srand
   tail call void @srand(i32 %seed)             ; Call srand with the seed
 
-
-  store i32 0, ptr %retval, align 4
-  call void @llvm.dbg.declare(metadata ptr %sum, metadata !35, metadata !17), !dbg !36
-  store i64 0, ptr %sum, align 8, !dbg !36
-  call void @llvm.dbg.declare(metadata ptr %k, metadata !37, metadata !17), !dbg !39
-  store i32 0, ptr %k, align 4, !dbg !39
-  br label %for.cond, !dbg !40
-
-for.cond:                                         ; preds = %for.inc.4, %entry
-  %0 = load i32, ptr %k, align 4, !dbg !41
-  %cmp = icmp slt i32 %0, 3000, !dbg !45
-  br i1 %cmp, label %for.body, label %for.end.6, !dbg !46
-; CHECK: !prof ![[PROF6:[0-9]+]]
-
-for.body:                                         ; preds = %for.cond
-  call void @llvm.dbg.declare(metadata ptr %i, metadata !47, metadata !17), !dbg !49
-  store i32 0, ptr %i, align 4, !dbg !49
-  br label %for.cond.1, !dbg !50
-
-for.cond.1:                                       ; preds = %for.inc, %for.body
-  %1 = load i32, ptr %i, align 4, !dbg !51
-  %cmp2 = icmp slt i32 %1, 200000, !dbg !55
-  br i1 %cmp2, label %for.body.3, label %for.end, !dbg !56
-; CHECK: !prof ![[PROF7:[0-9]+]]
-
-for.body.3:                                       ; preds = %for.cond.1
-  %2 = load i32, ptr %i, align 4, !dbg !57
-  %conv = sext i32 %2 to i64, !dbg !57
-  %call = call i64 @_Z3fool(i64 %conv), !dbg !59
-; CHECK: !prof ![[PROF8:[0-9]+]]
-  %3 = load i64, ptr %sum, align 8, !dbg !60
-  %add = add nsw i64 %3, %call, !dbg !60
-  store i64 %add, ptr %sum, align 8, !dbg !60
-  br label %for.inc, !dbg !61
-
-for.inc:                                          ; preds = %for.body.3
-  %4 = load i32, ptr %i, align 4, !dbg !62
-  %inc = add nsw i32 %4, 1, !dbg !62
-  store i32 %inc, ptr %i, align 4, !dbg !62
-  br label %for.cond.1, !dbg !64
-
-for.end:                                          ; preds = %for.cond.1
-  br label %for.inc.4, !dbg !65
-
-for.inc.4:                                        ; preds = %for.end
-  %5 = load i32, ptr %k, align 4, !dbg !67
-  %inc5 = add nsw i32 %5, 1, !dbg !67
-  store i32 %inc5, ptr %k, align 4, !dbg !67
-  br label %for.cond, !dbg !68
-
-for.end.6:                                        ; preds = %for.cond
-  %6 = load i64, ptr %sum, align 8, !dbg !69
-  %cmp7 = icmp sgt i64 %6, 10000000000, !dbg !70 ; Changed comparison value
-  %cond = select i1 %cmp7, i32 1, i32 0, !dbg !69  ; Return 1 if sum is large
-  ret i32 %cond, !dbg !71
+  %call_rand = tail call i32 @rand() #3        ; Call rand()
+  %rem = srem i32 %call_rand, 2                ; Calculate rand() % 2
+  ret i32 %rem                                  ; Return the remainder (0 or 1)
 }
 
 ; CHECK: ![[EC1]] = !{!"function_entry_count", i64 24109}
