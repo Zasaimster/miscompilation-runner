@@ -41,10 +41,10 @@ This document outlines the descriptions of test cases and the methods used to ge
 
 **P6:**
 
-- **Type:** Correct output (low probability, but has randomness)
+- **Type:** Correct output (low probability, with non-srand "randomness")
 - **Source:** [https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/SampleProfile/gcc-simple.ll#L8](https://github.com/llvm/llvm-project/blob/49c31201278ae5949694ed78b69ffbbca6a1826a/llvm/test/Transforms/SampleProfile/gcc-simple.ll#L8)
-- **Methodology to obtain P':** Same as P4 (TODO: change?)
-- **Change in P':** N/A
+- **Methodology to obtain P':** Use LLM to alter the logic
+- **Change in P':** To make it very clear, the entire logic of the for loop is changed to a coin flip to return 0 or 1. Thus, we'll be able to easily check for randomness due to failure
 
 **P7:**
 
