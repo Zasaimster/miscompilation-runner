@@ -2,3 +2,15 @@ P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_corre
 ,,True,False,True,False,,,,
 P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_correct,alive2_incorrect,alive2_no_prove,alive2_error
 tests/P5/P.ll,tests/P5/P_prime.ll,True,False,True,False,3,0,0,0
+P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_correct,alive2_incorrect,alive2_no_prove,alive2_error,naive_is_miscompilation,final_is_miscompilation
+tests/P5/P.ll,tests/P5/P_prime.ll,True,False,True,True,3,0,0,0,True,False
+P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_correct,alive2_incorrect,alive2_no_prove,alive2_error,naive_is_miscompilation,final_is_miscompilation
+tests/P1/P.ll,tests/P1/P_prime.ll,True,False,True,False,0,0,1,0,True,False
+P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_correct,alive2_incorrect,alive2_no_prove,alive2_error,naive_is_miscompilation,final_is_miscompilation
+tests/P1/P.ll,tests/P1/P_prime.ll,True,False,True,False,0,0,1,0,True,False
+P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_correct,alive2_incorrect,alive2_no_prove,alive2_error,naive_is_miscompilation,final_is_miscompilation
+tests/P5/P.ll,tests/P5/P_prime.ll,True,False,True,True,3,0,0,0,True,False
+P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_correct,alive2_incorrect,alive2_no_prove,alive2_error,naive_is_miscompilation,final_is_miscompilation
+tests/P5/P.ll,tests/P5/P_prime.ll,True,False,True,True,3,0,0,0,True,False
+P,P_prime,returncode_match,stdout_match,stderr_match,has_randomness,alive2_correct,alive2_incorrect,alive2_no_prove,alive2_error,naive_is_miscompilation,final_is_miscompilation
+tests/P5/P.ll,tests/P5/P_prime.ll,True,False,True,True,3,0,0,0,True,False

@@ -2,3 +2,5 @@ runtime/
 __pycache__/
 __pycache__/*
 results/*
+miscomp_tests
+.vscode
