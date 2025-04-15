@@ -97,7 +97,7 @@ def get_commands_for_normal_exec(file, it):
     exec = f"clang {out_path}_{it}.o -o {out_path}_{it}"
     execute_cmd = [f"./{out_path}_{it}"]
 
-    return [llc, obj_file, exec, execute_cmd]
+    return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
 
 
 # TODO: make the architecture configurable
@@ -599,20 +599,19 @@ def main():
         csv_output["alive2_error"] = alive2_res["errors"]
     print("---------------Finished Running Alive2---------------\n")
 
-    crc_p = add_crc_to_ir(p_file)
-    crc_p_prime = add_crc_to_ir(p_prime_file)
+    # crc_p = add_crc_to_ir(p_file)
+    # crc_p_prime = add_crc_to_ir(p_prime_file)
 
-    # Run the code with injected CRC calculation.
-    # todo: figure out how to detect fail/success. write fake tests to see how it behaves?
-    crc_cmd_outs = None
-    if crc_p is False or crc_p_prime is False:
-        print("Error adding CRC to IR code. Skipping CRC code execution")
-    else:
-        crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
+    # # Run the code with injected CRC calculation.
+    # # todo: figure out how to detect fail/success. write fake tests to see how it behaves?
+    # crc_cmd_outs = None
+    # if crc_p is False or crc_p_prime is False:
+    #     print("Error adding CRC to IR code. Skipping CRC code execution")
+    # else:
+    #     crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
 
-    print(crc_cmd_outs)
+    # print(crc_cmd_outs)
 
-    return
     og_cmds_outs = execute_original_programs(p_file, p_prime_file, num_runs=1)
 
     # Evaluate results
