@@ -1,5 +1,5 @@
 ; @.old_str = private unnamed_addr constant [12 x i8] c"What's up!\0A\00", align 1
-@old_str = private unnamed_addr constant [15 x i8] c"Hello, world!\0A\00", align 1
+@old_str = private unnamed_addr constant [14 x i8] c"Hello, worl!\0A\00", align 1
 @old_str1 = private unnamed_addr constant [16 x i8] c"Hello, world1!\0A\00", align 1
 
 declare i32 @printf(i8* nocapture readonly, ...) #0

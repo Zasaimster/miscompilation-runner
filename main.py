@@ -1,11 +1,11 @@
 import argparse
-import os
-from string import Template
-import subprocess
 import csv
+import os
 
 # import regex as re
 import re
+import subprocess
+from string import Template
 
 # import llvmlite
 
@@ -63,9 +63,7 @@ exit:
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Parse two filenames from command line."
-    )
+    parser = argparse.ArgumentParser(description="Parse two filenames from command line.")
     parser.add_argument("p", help="Path to the first file")
     parser.add_argument("p_prime", help="Path to the second file")
     # TODO: this should be updated to correctly reflect the system architectures
@@ -128,11 +126,11 @@ def run_cmds(cmds):
     for cmd in cmds:
         try:
             print(f"Running: {' '.join(cmd)}")
-            out = subprocess.run(cmd, capture_output=True)
+            out = subprocess.run(cmd, capture_output=True, text=True)
             print(f"Return code: {out.returncode}")
             res.append(out)
             if out.returncode != 0:
-                print(f"stderr: {out.stderr.decode('utf-8')}")
+                print(f"stderr: {out.stderr}")
                 break
         except Exception as e:
             print(f"Error running command: {' '.join(cmd)}")
@@ -314,24 +312,16 @@ def add_crc_to_ir(p):
 
     # For array types [N x type]
     # TODO: this doesn't support matrices b/c recursion is needed.
-    array_pattern = (
-        r"(?:global|private\s+unnamed_addr\s+constant)\s+(\[\d+\s+x\s+i\d+\])"
-    )
+    array_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+(\[\d+\s+x\s+i\d+\])"
     # For vector types <N x type>
-    vector_pattern = (
-        r"(?:global|private\s+unnamed_addr\s+constant)\s+((<\d+\s+x\s+[^>]+?>))"
-    )
+    vector_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+((<\d+\s+x\s+[^>]+?>))"
     # For structure types (both named and literal)
     # TODO: this doesn't handle nested structs. Seems like a lot of effort to figure out, and it may not be worth the benefit
     struct_pattern = r"(?:global|private unnamed_addr constant)\s+((?:%[\w.]+|{[^}]*}|<{[^}]*}>))(?:\s+[^,]+)?"
     # For pointer types specifically
-    pointer_pattern = (
-        r"(?:global|private\s+unnamed_addr\s+constant)\s+([\w.]+\*+)(?:\s+[^,]+)?"
-    )
+    pointer_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+([\w.]+\*+)(?:\s+[^,]+)?"
     # For basic types (integers, floats)
-    basic_pattern = (
-        r"(?:global|private\s+unnamed_addr\s+constant)\s+([\w.]+)(?:\s+[^,]+)?"
-    )
+    basic_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+([\w.]+)(?:\s+[^,]+)?"
 
     varname_template = Template(
         '@_crc_varname_$name = private unnamed_addr constant [$size x i8] c"$name\\00", align 1'
@@ -378,19 +368,15 @@ def add_crc_to_ir(p):
             var_name_length = len(var_name) + 1
             # Create global variables that store a string representation of each variable
             # TODO: make sure \00 gets added correctly to updated IR program
-            global_var_info[var_name]["varname_code"] = varname_template.substitute(
-                name=var_name, size=var_name_length
-            )
+            global_var_info[var_name]["varname_code"] = varname_template.substitute(name=var_name, size=var_name_length)
 
             # Create entry in globals_table
             # @_crc_varname_$name
-            global_var_info[var_name]["global_info_entry"] = (
-                global_info_entry_template.substitute(
-                    type=f"{var_type}*",
-                    name=var_name,
-                    num_bytes=get_type_size(var_type),
-                    name_len=var_name_length,
-                )
+            global_var_info[var_name]["global_info_entry"] = global_info_entry_template.substitute(
+                type=f"{var_type}*",
+                name=var_name,
+                num_bytes=get_type_size(var_type),
+                name_len=var_name_length,
             )
 
     # Create name global vars for each variable
@@ -413,11 +399,11 @@ def add_crc_to_ir(p):
 
     crc_declaration = "\n; External function declaration for crc calculation\ndeclare void @transparent_crc_bytes(i8*, i32, i8*, i1)\n"
     global_info = "\n; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }\n%global_info = type { i8*, i32, i8*}\n"
-    call_compute_globals_crc = "\n  ; Call function to compute and print CRC for globals\n  call void @_compute_globals_crc()\n\n"
-
-    loop_and_call_crc_code = compute_globals_crc_template.substitute(
-        num_table_entries=num_vars
+    call_compute_globals_crc = (
+        "\n  ; Call function to compute and print CRC for globals\n  call void @_compute_globals_crc()\n\n"
     )
+
+    loop_and_call_crc_code = compute_globals_crc_template.substitute(num_table_entries=num_vars)
 
     crc_code = (
         code_arr[: last_global_var_index + 1]
@@ -440,10 +426,10 @@ def add_crc_to_ir(p):
         if "@main(" in line:
             main_function_index = i
 
-    if main_function_index == -1:
-        # TODO: Create main function if it's not present
-        print("Main function 'main' not found in LLVM module. Exiting")
-        return False
+    # if main_function_index == -1:
+    #     # TODO: Create main function if it's not present
+    #     print("Main function 'main' not found in LLVM module. Exiting")
+    #     return False
 
     # Find the first termination and end of main function
     main_function_end = main_function_index
@@ -472,14 +458,8 @@ def add_crc_to_ir(p):
     if first_termination == last_termination:
         # When there is only one termination statement in main()
         print("Only one termination statement found in main()")
-        print(
-            f"first_termination: {first_termination}, last_termination: {last_termination}"
-        )
-        crc_code = (
-            crc_code[:first_termination]
-            + call_compute_globals_crc.splitlines()
-            + crc_code[first_termination:]
-        )
+        print(f"first_termination: {first_termination}, last_termination: {last_termination}")
+        crc_code = crc_code[:first_termination] + call_compute_globals_crc.splitlines() + crc_code[first_termination:]
     else:
         print("Multiple termination statements found in main()")
         crc_code = (
@@ -605,38 +585,44 @@ def main():
     # Run original files
     og_cmds_outs = execute_original_programs(p_file, p_prime_file, num_runs=1)
     og_cmds_error = False
-    # Check P's output
+
+    # Check if P had a compilation issue
     for cmd_out in og_cmds_outs["p"]:
-        if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+        if isinstance(cmd_out, tuple):  # or cmd_out.returncode != 0:
             og_cmds_error = True
-            print("MISCOMPILATION STATUS: REGULAR CRASHED FOR P")
-            if isinstance(cmd_out, tuple):
-                print(f"Error running command: {cmd_out[0]}")
-                print(f"Error: {cmd_out[1]}")
-                continue
+            print(f"Error running command: {cmd_out[0]}")
+            print(f"Error: {cmd_out[1]}")
+            print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P")
 
-            print(f"Error running command: {cmd_out.args}")
-            print(f"stdout: {cmd_out.stdout}")
-            print(f"stderr: {cmd_out.stderr}")
-
-    # Check P_prime's output
+    # Check if P_prime had a compilation issue
     for cmd_out in og_cmds_outs["p_prime"]:
-        if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+        if isinstance(cmd_out, tuple):  # or cmd_out.returncode != 0:
             og_cmds_error = True
-            print("MISCOMPILATION STATUS: REGULAR CRASHED FOR P'")
-            if isinstance(cmd_out, tuple):
-                print(f"Error running command: {cmd_out[0]}")
-                print(f"Error: {cmd_out[1]}")
-                continue
-            print(f"Error running command: {cmd_out.args}")
-            print(f"stdout: {cmd_out.stdout}")
-            print(f"stderr: {cmd_out.stderr}")
+            print(f"Error running command: {cmd_out[0]}")
+            print(f"Error: {cmd_out[1]}")
+            print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P'")
 
+    p_last_out = og_cmds_outs["p"][-1]
+    p_prime_last_out = og_cmds_outs["p_prime"][-1]
+
+    # Handle no crash
     if not og_cmds_error:
         print("MISCOMPILATION STATUS: REGULAR EXECUTED")
+        print(f"p return code: {p_last_out.returncode} | p_prime return code: {p_prime_last_out.returncode}")
+        print(f"p stdout: {p_last_out.stdout} | p_prime stdout: {p_prime_last_out.stdout}")
+        print(f"p stderr: {p_last_out.stderr} | p_prime stderr: {p_prime_last_out.stderr}")
+
+        if (
+            p_last_out.returncode == p_prime_last_out.returncode
+            and p_last_out.stdout == p_prime_last_out.stdout
+            and p_last_out.stderr == p_prime_last_out.stderr
+        ):
+            print("MISCOMPILATION STATUS: REGULAR OUTPUT MATCH.")
+        else:
+            print("MISCOMPILATION STATUS: REGULAR OUTPUT DIFFERENT.")
 
     # Run modified code with injected CRC
-    print("Injecting CRC to P...")
+    print("\nInjecting CRC to P...")
     crc_p = add_crc_to_ir(p_file)
     print("\nInjecting CRC to P prime...")
     crc_p_prime = add_crc_to_ir(p_prime_file)
@@ -683,10 +669,8 @@ def main():
     # TODO If there was an error in running the CRC commands, skip this section
     if not crc_cmds_error:
         # Find hash outputs
-        p_stdout = crc_cmd_outs["p"][-1].stdout.decode("utf-8").strip().split("\n")
-        p_prime_stdout = (
-            crc_cmd_outs["p_prime"][-1].stdout.decode("utf-8").strip().split("\n")
-        )
+        p_stdout = crc_cmd_outs["p"][-1].stdout.strip().split("\n")
+        p_prime_stdout = crc_cmd_outs["p_prime"][-1].stdout.strip().split("\n")
 
         p_hash_i, p_prime_hash_i = -1, -1
         for i, l in enumerate(p_stdout):
@@ -730,7 +714,7 @@ def main():
         if p_out.returncode != p_prime_out.returncode:
             same_outputs = False
             print(
-                f"Iteration #{i+1}: Invalid return codes.\n\tP: {p_out.returncode}\n\tP_prime: {p_prime_out.returncode}"
+                f"Iteration #{i + 1}: Invalid return codes.\n\tP: {p_out.returncode}\n\tP_prime: {p_prime_out.returncode}"
             )
             csv_output["returncode_match"] = False
         else:
@@ -738,17 +722,13 @@ def main():
 
         if p_out.stdout != p_prime_out.stdout:
             same_outputs = False
-            print(
-                f"Iteration #{i+1}: Invalid stdout.\n\tP: {p_out.stdout}\n\tP_prime: {p_prime_out.stdout}"
-            )
+            print(f"Iteration #{i + 1}: Invalid stdout.\n\tP: {p_out.stdout}\n\tP_prime: {p_prime_out.stdout}")
             csv_output["stdout_match"] = False
         else:
             csv_output["stdout_match"] = True
         if p_out.stderr != p_prime_out.stderr:
             same_outputs = False
-            print(
-                f"Iteration #{i+1}: Invalid stderr.\n\tP: {p_out.stderr}\n\tP_prime: {p_prime_out.stderr}"
-            )
+            print(f"Iteration #{i + 1}: Invalid stderr.\n\tP: {p_out.stderr}\n\tP_prime: {p_prime_out.stderr}")
             csv_output["stderr_match"] = False
         else:
             csv_output["stderr_match"] = True
@@ -758,9 +738,7 @@ def main():
     randomness_string = ""
     if naive_check_randomness(p_file, p_prime_file):
         randomness_string = "Program has randomness. Results can differ."
-        randomness_string += (
-            " Tentatively NOT a miscompilation" if not same_outputs else ""
-        )
+        randomness_string += " Tentatively NOT a miscompilation" if not same_outputs else ""
 
         csv_output["has_randomness"] = True
     else:
@@ -769,9 +747,7 @@ def main():
 
         csv_output["has_randomness"] = False
     print(randomness_string)
-    print(
-        "---------------Finished evaluating program outputs and randomness---------------\n"
-    )
+    print("---------------Finished evaluating program outputs and randomness---------------\n")
 
     # todo: update final prediction
     csv_output["final_is_miscompilation"] = not csv_output["alive2_incorrect"] == 0
