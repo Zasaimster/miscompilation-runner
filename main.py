@@ -7,11 +7,11 @@ import csv
 # import regex as re
 import re
 
-import llvmlite
+# import llvmlite
 
-# this cannot be set any later in the code or it won't work
-llvmlite.opaque_pointers_enabled = True
-import llvmlite.binding as llvm
+# # this cannot be set any later in the code or it won't work
+# llvmlite.opaque_pointers_enabled = True
+# import llvmlite.binding as llvm
 
 CRC_HELPER_OBJ_FILE = "crc/csmith_crc_minimal.o"
 CSV_FILENAME = "results/results.csv"
@@ -92,7 +92,7 @@ def get_commands_for_normal_exec(file, it):
     out_path = f"{path}/runtime/{filename}"
 
     # Commands
-    llc = f"llc --march=arm64 --mtriple=arm64-apple-darwin {file} -o {out_path}_{it}.s"
+    llc = f"llc {file} -o {out_path}_{it}.s"
     # llc = f"llc {file} -o {out_path}_{it}.s"
     obj_file = f"clang -c {out_path}_{it}.s -o {out_path}_{it}.o"
     exec = f"clang {out_path}_{it}.o -o {out_path}_{it}"
@@ -218,28 +218,28 @@ def naive_check_randomness(p, p_prime):
     return True if p_random or p_prime_randomn else False
 
 
-def init_llvmlite():
-    llvm.initialize()
-    llvm.initialize_native_target()
-    llvm.initialize_native_asmprinter()
+# def init_llvmlite():
+#     llvm.initialize()
+#     llvm.initialize_native_target()
+#     llvm.initialize_native_asmprinter()
 
-    target = llvm.Target.from_default_triple()
-    # target = llvm.Target.from_triple("arm64-apple-darwin")
-    target_machine = target.create_target_machine()
-    backing_mod = llvm.parse_assembly("")
-    engine = llvm.create_mcjit_compiler(backing_mod, target_machine)
-    return engine
+#     target = llvm.Target.from_default_triple()
+#     # target = llvm.Target.from_triple("arm64-apple-darwin")
+#     target_machine = target.create_target_machine()
+#     backing_mod = llvm.parse_assembly("")
+#     engine = llvm.create_mcjit_compiler(backing_mod, target_machine)
+#     return engine
 
 
-def compile_ir(engine, filename):
-    ir = get_code(filename)
-    mod: llvm.ModuleRef = llvm.parse_assembly(ir)  # not ir.Module
-    mod.verify()  # make sure code is good. This is LLVM's verifier https://github.com/llvm/llvm-project/blob/main/llvm/lib/IR/Verifier.cpp
+# def compile_ir(engine, filename):
+#     ir = get_code(filename)
+#     mod: llvm.ModuleRef = llvm.parse_assembly(ir)  # not ir.Module
+#     mod.verify()  # make sure code is good. This is LLVM's verifier https://github.com/llvm/llvm-project/blob/main/llvm/lib/IR/Verifier.cpp
 
-    engine.add_module(mod)
-    engine.finalize_object()
-    engine.run_static_constructors()
-    return mod
+#     engine.add_module(mod)
+#     engine.finalize_object()
+#     engine.run_static_constructors()
+#     return mod
 
 
 def get_type_size(var_type):

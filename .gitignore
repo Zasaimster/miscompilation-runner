@@ -7,3 +7,4 @@ miscomp_tests
 *_modified_crc.ll
 miscomp_tests_runner/test_outs/*
 miscomp_tests_runner/*.txt
+csmith_crc_minimal.o
