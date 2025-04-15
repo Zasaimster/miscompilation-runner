@@ -11,7 +11,6 @@ import llvmlite
 # this cannot be set any later in the code or it won't work
 llvmlite.opaque_pointers_enabled = True
 import llvmlite.binding as llvm
-from llvmlite import ir
 
 CRC_HELPER_OBJ_FILE = "crc/csmith_crc_minimal.o"
 CSV_FILENAME = "results/results.csv"
@@ -19,46 +18,46 @@ CSV_FILENAME = "results/results.csv"
 
 compute_globals_crc_template = Template(
     """
-    ; Function to compute CRC for all globals in the table
-    define void @_compute_globals_crc() {
-    entry:
-        ; Get pointer to the first element of the globals_table (1 element)
-        %table_ptr = getelementptr inbounds [$num_table_entries x %global_info], [$num_table_entries x %global_info]* @globals_table, i32 0, i32 0
-        ; Allocate loop counter
-        %i = alloca i32, align 4
-        store i32 0, i32* %i
-        br label %loop
+; Function to compute CRC for all globals in the table
+define void @_compute_globals_crc() {
+entry:
+    ; Get pointer to the first element of the globals_table (1 element)
+    %table_ptr = getelementptr inbounds [$num_table_entries x %global_info], [$num_table_entries x %global_info]* @globals_table, i32 0, i32 0
+    ; Allocate loop counter
+    %i = alloca i32, align 4
+    store i32 0, i32* %i
+    br label %loop
 
-    loop:
-        %i_val = load i32, i32* %i, align 4
-        ; Compare i with the number of elements (1)
-        %cmp = icmp slt i32 %i_val, $num_table_entries
-        br i1 %cmp, label %body, label %exit
+loop:
+    %i_val = load i32, i32* %i, align 4
+    ; Compare i with the number of elements (1)
+    %cmp = icmp slt i32 %i_val, $num_table_entries
+    br i1 %cmp, label %body, label %exit
 
-    body:
-        ; Get pointer to globals_table[i]
-        %entry_ptr = getelementptr inbounds %global_info, %global_info* %table_ptr, i32 %i_val
-        
-        ; Load the entry
-        %gi = load %global_info, %global_info* %entry_ptr, align 4
-        
-        ; Extract the ptr, size, and name
-        %global_ptr = extractvalue %global_info %gi, 0
-        %global_size = extractvalue %global_info %gi, 1
-        %global_name = extractvalue %global_info %gi, 2
-        
-        ; Call the CRC function
-        call void @transparent_crc_bytes(i8* %global_ptr, i32 %global_size, i8* %global_name, i1 true)
+body:
+    ; Get pointer to globals_table[i]
+    %entry_ptr = getelementptr inbounds %global_info, %global_info* %table_ptr, i32 %i_val
+    
+    ; Load the entry
+    %gi = load %global_info, %global_info* %entry_ptr, align 4
+    
+    ; Extract the ptr, size, and name
+    %global_ptr = extractvalue %global_info %gi, 0
+    %global_size = extractvalue %global_info %gi, 1
+    %global_name = extractvalue %global_info %gi, 2
+    
+    ; Call the CRC function
+    call void @transparent_crc_bytes(i8* %global_ptr, i32 %global_size, i8* %global_name, i1 true)
 
-        ; Increment the loop counter
-        %i_next = add i32 %i_val, 1
-        store i32 %i_next, i32* %i
-        br label %loop
+    ; Increment the loop counter
+    %i_next = add i32 %i_val, 1
+    store i32 %i_next, i32* %i
+    br label %loop
 
-    exit:
-        ret void
-    }
-    """
+exit:
+    ret void
+}
+"""
 )
 
 
@@ -93,9 +92,14 @@ def get_commands_for_normal_exec(file, it):
 
     # Commands
     llc = f"llc --march=arm64 --mtriple=arm64-apple-darwin {file} -o {out_path}_{it}.s"
+    # llc = f"llc {file} -o {out_path}_{it}.s"
     obj_file = f"clang -c {out_path}_{it}.s -o {out_path}_{it}.o"
     exec = f"clang {out_path}_{it}.o -o {out_path}_{it}"
-    execute_cmd = [f"./{out_path}_{it}"]
+    # execute_cmd = [f"./{out_path}_{it}"]
+    if out_path.startswith("./"):
+        execute_cmd = [f"{out_path}_{it}"]
+    else:
+        execute_cmd = [f"./{out_path}_{it}"]
 
     return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
 
@@ -110,52 +114,46 @@ def get_commands_for_crc_exec(file):
     llc = f"llc {file} -o {out_path}.s"
     obj_file = f"clang -c {out_path}.s -o {out_path}.o"
     exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -o {out_path}"
-    execute_cmd = [f"./{out_path}"]
+    if out_path.startswith("./"):
+        execute_cmd = [f"{out_path}"]
+    else:
+        execute_cmd = [f"./{out_path}"]
 
     return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
 
 
 def run_cmds(cmds):
-    res = None
+    res = []
     for cmd in cmds:
         try:
             print(f"Running: {' '.join(cmd)}")
             if cmd[0][0:2] == "./":
-                res = subprocess.run(cmd, capture_output=True)
+                out = subprocess.run(cmd, capture_output=True)
                 # update to returncode or stdout check based on input programs
-                print(res)
+                print(f"Return code: {out.returncode}")
+                # print(out.stderr)
+                res.append(out)
             else:
-                subprocess.run(cmd)
-        except subprocess.CalledProcessError as e:
+                out = subprocess.run(cmd, capture_output=True)
+                print(f"Return code: {out.returncode}")
+                # print(out.stdout)
+                res.append(out)
+        # except subprocess.CalledProcessError as e:
+        # use general exception to catch all errors (ex: file not found) and report in the main func
+        except Exception as e:
             print(f"Error running command: {' '.join(cmd)}")
             print("Error: ", e)
-            raise
+            res.append((cmd, e))  # associate calling command with exception
     return res
 
 
-def execute_original_programs(p, p_prime, num_runs=3):
+# TODO: extend logic to account for multiple runs. first implementation is for only 1 run
+def execute_original_programs(p, p_prime, num_runs=1):
     """
     Compile each .ll file and run the executable multiple times for differential testing.
     The results are returned as
     """
-
-    # def run_cmds(cmds):
-    #     res = None
-    #     for cmd in cmds:
-    #         try:
-    #             print(f"Running: {' '.join(cmd)}")
-    #             if cmd[0][0:2] == "./":
-    #                 res = subprocess.run(cmd, capture_output=True)
-    #                 # update to returncode or stdout check based on input programs
-    #                 print(res)
-    #             else:
-    #                 subprocess.run(cmd)
-    #         except subprocess.CalledProcessError as e:
-    #             print(f"Error running command: {' '.join(cmd)}")
-    #             print("Error: ", e)
-    #             raise
-    #     return res
-
+    num_runs = 1  # TODO: remove this when logic is added
     print(f"\n----------------Executing {p}, {p_prime}----------------")
     p_out = []
     p_prime_out = []
@@ -163,8 +161,9 @@ def execute_original_programs(p, p_prime, num_runs=3):
         p_cmds = get_commands_for_normal_exec(p, i)
         p_prime_cmds = get_commands_for_normal_exec(p_prime, i)
 
-        p_out.append(run_cmds(p_cmds))
-        p_prime_out.append(run_cmds(p_prime_cmds))
+        # TODO: update when num_runs logic implemented
+        p_out = run_cmds(p_cmds)
+        p_prime_out = run_cmds(p_prime_cmds)
 
     print(f"----------------Finished executing {p}, {p_prime}----------------\n")
     return {"p": p_out, "p_prime": p_prime_out}
@@ -183,7 +182,7 @@ def execute_crc_programs(p, p_prime):
     p_prime_out = run_cmds(p_prime_cmds)
     print(f"----------------Finished executing {p}, {p_prime}----------------\n")
 
-    return {"p_crc": p_out, "p_prime_crc": p_prime_out}
+    return {"p": p_out, "p_prime": p_prime_out}
 
 
 def get_code(filename):
@@ -588,32 +587,133 @@ def main():
         "final_is_miscompilation": None,
     }
 
-    print("\n---------------Running Alive2 Translation Validation---------------")
-    # Run Alive2 soundness check
-    alive2_res = alive2_tv_check(p_file, p_prime_file)
-    if alive2_res is not None:
-        print(f"Alive2 output: {alive2_res}")
-        csv_output["alive2_correct"] = alive2_res["correct_transformations"]
-        csv_output["alive2_incorrect"] = alive2_res["incorrect_transformations"]
-        csv_output["alive2_no_prove"] = alive2_res["no_prove_transformations"]
-        csv_output["alive2_error"] = alive2_res["errors"]
-    print("---------------Finished Running Alive2---------------\n")
+    # print("\n---------------Running Alive2 Translation Validation---------------")
+    # # Run Alive2 soundness check
+    # alive2_res = alive2_tv_check(p_file, p_prime_file)
+    # if alive2_res is not None:
+    #     print(f"Alive2 output: {alive2_res}")
+    #     csv_output["alive2_correct"] = alive2_res["correct_transformations"]
+    #     csv_output["alive2_incorrect"] = alive2_res["incorrect_transformations"]
+    #     csv_output["alive2_no_prove"] = alive2_res["no_prove_transformations"]
+    #     csv_output["alive2_error"] = alive2_res["errors"]
+    # print("---------------Finished Running Alive2---------------\n")
 
-    # crc_p = add_crc_to_ir(p_file)
-    # crc_p_prime = add_crc_to_ir(p_prime_file)
-
-    # # Run the code with injected CRC calculation.
-    # # todo: figure out how to detect fail/success. write fake tests to see how it behaves?
-    # crc_cmd_outs = None
-    # if crc_p is False or crc_p_prime is False:
-    #     print("Error adding CRC to IR code. Skipping CRC code execution")
-    # else:
-    #     crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
-
-    # print(crc_cmd_outs)
-
+    # Run original files
     og_cmds_outs = execute_original_programs(p_file, p_prime_file, num_runs=1)
+    og_cmds_error = False
+    # Check P's output
+    for cmd_out in og_cmds_outs["p"]:
+        if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+            og_cmds_error = True
+            print("MISCOMPILATION STATUS: REGULAR CRASHED FOR P")
+            if isinstance(cmd_out, tuple):
+                print(f"Error running command: {cmd_out[0]}")
+                print(f"Error: {cmd_out[1]}")
+                continue
 
+            print(f"Error running command: {cmd_out.args}")
+            print(f"stdout: {cmd_out.stdout}")
+            print(f"stderr: {cmd_out.stderr}")
+
+    # Check P_prime's output
+    for cmd_out in og_cmds_outs["p_prime"]:
+        if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+            og_cmds_error = True
+            print("MISCOMPILATION STATUS: REGULAR CRASHED FOR P'")
+            if isinstance(cmd_out, tuple):
+                print(f"Error running command: {cmd_out[0]}")
+                print(f"Error: {cmd_out[1]}")
+                continue
+            print(f"Error running command: {cmd_out.args}")
+            print(f"stdout: {cmd_out.stdout}")
+            print(f"stderr: {cmd_out.stderr}")
+
+    if not og_cmds_error:
+        print("MISCOMPILATION STATUS: REGULAR EXECUTED")
+
+    # Run modified code with injected CRC
+    crc_p = add_crc_to_ir(p_file)
+    crc_p_prime = add_crc_to_ir(p_prime_file)
+
+    # Run the code with injected CRC calculation.
+    crc_cmds_error = False
+    crc_cmd_outs = None
+    if crc_p is False or crc_p_prime is False:
+        crc_cmds_error = True
+        print("MISCOMPILATION STATUS: CRC FAILED. unable to inject crc")
+    else:
+        crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
+
+    if crc_cmd_outs is not None:
+        # Check CRC P's output
+        for cmd_out in crc_cmd_outs["p"]:
+            if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+                crc_cmds_error = True
+                print("MISCOMPILATION STATUS: CRC CRASHED FOR P")
+                if isinstance(cmd_out, tuple):
+                    print(f"Error running command: {cmd_out[0]}")
+                    print(f"Error: {cmd_out[1]}")
+                    continue
+
+                print(f"Error running command: {cmd_out.args}")
+                print(f"stdout: {cmd_out.stdout}")
+                print(f"stderr: {cmd_out.stderr}")
+
+        # Check CRC P_prime's output
+        for cmd_out in crc_cmd_outs["p_prime"]:
+            if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+                crc_cmds_error = True
+                print("MISCOMPILATION STATUS: CRC CRASHED FOR P'")
+                if isinstance(cmd_out, tuple):
+                    print(f"Error running command: {cmd_out[0]}")
+                    print(f"Error: {cmd_out[1]}")
+                    continue
+                print(f"Error running command: {cmd_out.args}")
+                print(f"stdout: {cmd_out.stdout}")
+                print(f"stderr: {cmd_out.stderr}")
+    if not crc_cmds_error:
+        print("MISCOMPILATION STATUS: CRC EXECUTED")
+
+    # TODO If there was an error in running the CRC commands, skip this section
+    if not crc_cmds_error:
+        # Find hash outputs
+        p_stdout = crc_cmd_outs["p"][-1].stdout.decode("utf-8").strip().split("\n")
+        p_prime_stdout = (
+            crc_cmd_outs["p_prime"][-1].stdout.decode("utf-8").strip().split("\n")
+        )
+
+        p_hash_i, p_prime_hash_i = -1, -1
+        for i, l in enumerate(p_stdout):
+            if "...checksum after hashing" in l:
+                p_hash_i = i
+                break
+        for i, l in enumerate(p_prime_stdout):
+            if "...checksum after hashing" in l:
+                p_prime_hash_i = i
+                break
+        if not p_hash_i == -1 and not p_prime_hash_i == -1:
+            # Separate normal output and the CRC output
+            p_out = p_stdout[:p_hash_i]
+            p_hash = p_stdout[p_hash_i:]
+            p_prime_out = p_prime_stdout[:p_prime_hash_i]
+            p_prime_hash = p_prime_stdout[p_prime_hash_i:]
+
+            print(p_out)
+            print(p_hash)
+            print(p_prime_out)
+            print(p_prime_hash)
+
+            if len(p_hash) != len(p_prime_hash):
+                print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
+            elif p_hash[-1].split(" ")[-1] != p_prime_hash[-1].split(" ")[-1]:
+                print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different hashes")
+            else:
+                print("MISCOMPILATION STATUS: CRC SUCCEEDED. Same hashes")
+
+        else:
+            print("MISCOMPILATION STATUS: CRC LOGIC FAILED. No hash output found")
+
+    return
     # Evaluate results
     print("---------------Evaluating program outputs and randomness---------------")
     same_outputs = True

@@ -1,23 +1,26 @@
 ; @.old_str = private unnamed_addr constant [12 x i8] c"What's up!\0A\00", align 1
 @old_str = private unnamed_addr constant [15 x i8] c"Hello, world!\0A\00", align 1
+@old_str1 = private unnamed_addr constant [16 x i8] c"Hello, world1!\0A\00", align 1
 
 ; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }
 %global_info = type { i8*, i32, i8*}
 
 ; Create name global variables for each variable
 @_crc_varname_old_str = private unnamed_addr constant [8 x i8] c"old_str\00", align 1
+@_crc_varname_old_str1 = private unnamed_addr constant [9 x i8] c"old_str1\00", align 1
 
 ; External function declaration for crc calculation
 declare void @transparent_crc_bytes(i8*, i32, i8*, i1)
-@globals_table = constant [1 x %global_info] [
-	%global_info { i8* bitcast ([15 x i8]* @old_str to i8*), i32 15, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @_crc_varname_old_str, i32 0, i32 0 ) }
+@globals_table = constant [2 x %global_info] [
+	%global_info { i8* bitcast ([15 x i8]* @old_str to i8*), i32 15, i8* getelementptr inbounds ([8 x i8], [8 x i8]* @_crc_varname_old_str, i32 0, i32 0 ) },
+	%global_info { i8* bitcast ([16 x i8]* @old_str1 to i8*), i32 16, i8* getelementptr inbounds ([9 x i8], [9 x i8]* @_crc_varname_old_str1, i32 0, i32 0 ) }
 ]
 
     ; Function to compute CRC for all globals in the table
     define void @_compute_globals_crc() {
     entry:
         ; Get pointer to the first element of the globals_table (1 element)
-        %table_ptr = getelementptr inbounds [1 x %global_info], [1 x %global_info]* @globals_table, i32 0, i32 0
+        %table_ptr = getelementptr inbounds [2 x %global_info], [2 x %global_info]* @globals_table, i32 0, i32 0
         ; Allocate loop counter
         %i = alloca i32, align 4
         store i32 0, i32* %i
@@ -26,7 +29,7 @@ declare void @transparent_crc_bytes(i8*, i32, i8*, i1)
     loop:
         %i_val = load i32, i32* %i, align 4
         ; Compare i with the number of elements (1)
-        %cmp = icmp slt i32 %i_val, 1
+        %cmp = icmp slt i32 %i_val, 2
         br i1 %cmp, label %body, label %exit
 
     body:
