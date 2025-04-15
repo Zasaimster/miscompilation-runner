@@ -1,4 +1,5 @@
 import argparse
+import os
 from string import Template
 import subprocess
 import csv
@@ -579,6 +580,16 @@ def main():
         "naive_is_miscompilation": None,
         "final_is_miscompilation": None,
     }
+
+    p_path = "/".join(p_file.split("/")[:-1])
+    p_prime_path = "/".join(p_prime_file.split("/")[:-1])
+    for p in [p_path, p_prime_path]:
+        if not os.path.exists(f"{p}/runtime"):
+            try:
+                os.makedirs(f"{p}/runtime")
+                print(f"Directory {p}/runtime created successfully.")
+            except OSError as e:
+                print(f"Error creating directory {p}/runtime: {e}")
 
     # print("\n---------------Running Alive2 Translation Validation---------------")
     # # Run Alive2 soundness check
