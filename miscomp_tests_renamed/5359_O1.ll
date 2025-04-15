@@ -1,20 +1,19 @@
-; 194920478303660570284458061948649041434
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194920478303660570284458061948649041434.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194920478303660570284458061948649041434.c"
+; 110458916580423353421960883629719329362
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110458916580423353421960883629719329362.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110458916580423353421960883629719329362.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str = private unnamed_addr constant [20 x i8] c"This is dead code.\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local range(i32 0, 2) i32 @f(i32 noundef %x) local_unnamed_addr #0 {
+define dso_local noundef i64 @f(i64 noundef %x, i64 noundef %y) local_unnamed_addr #0 {
 entry:
   %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp = icmp eq i32 %call, 0
-  %cmp1 = icmp ne i32 %x, 0
-  %or.cond.not = and i1 %cmp1, %cmp
-  %. = zext i1 %or.cond.not to i32
-  ret i32 %.
+  %tobool.not = icmp eq i32 %call, 0
+  %and = and i64 %y, 1
+  %cond = select i1 %tobool.not, i64 %and, i64 %y
+  ret i64 %cond
 }
 
 ; Function Attrs: nofree nounwind
@@ -24,8 +23,8 @@ declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unna
 define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
   %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp.i.not = icmp eq i32 %call.i, 0
-  br i1 %cmp.i.not, label %if.then, label %if.end
+  %tobool.not.i.not = icmp eq i32 %call.i, 0
+  br i1 %tobool.not.i.not, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   tail call void @abort() #5

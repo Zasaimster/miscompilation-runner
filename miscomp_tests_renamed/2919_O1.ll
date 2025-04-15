@@ -1,52 +1,50 @@
-; 145442430072218641484187836139544711269
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145442430072218641484187836139544711269.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145442430072218641484187836139544711269.c"
+; 175976432051985130311263037274289721825
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175976432051985130311263037274289721825.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175976432051985130311263037274289721825.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Not happening\0A\00", align 1
-@.str.1 = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+%struct.S = type { i64 }
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @foo(i32 noundef %i) local_unnamed_addr #0 {
-entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %0 = zext i32 %call to i64
-  %vla = alloca i32, i64 %0, align 16
-  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1)
-  %idxprom = sext i32 %call1 to i64
-  %arrayidx = getelementptr inbounds i32, ptr %vla, i64 %idxprom
-  store i32 3, ptr %arrayidx, align 4, !tbaa !5
-  store i32 1, ptr %vla, align 16, !tbaa !5
-  %idxprom3 = sext i32 %i to i64
-  %arrayidx4 = getelementptr inbounds i32, ptr %vla, i64 %idxprom3
-  store i32 2, ptr %arrayidx4, align 4, !tbaa !5
-  %1 = load i32, ptr %vla, align 16, !tbaa !5
-  ret i32 %1
-}
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+@e = dso_local local_unnamed_addr global i32 1, align 4
+@d = internal unnamed_addr global [6 x %struct.S] zeroinitializer, align 16
+@i = dso_local local_unnamed_addr global i32 0, align 4
+@.str = private unnamed_addr constant [43 x i8] c"This will always print the same value: %d\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 @foo(i32 noundef 0)
-  %cmp.not = icmp eq i32 %call, 2
-  br i1 %cmp.not, label %lor.lhs.false, label %if.then
+  %0 = load i32, ptr @e, align 4, !tbaa !5
+  %tobool.not = icmp eq i32 %0, 0
+  br i1 %tobool.not, label %if.end, label %if.then
 
-lor.lhs.false:                                    ; preds = %entry
-  %call1 = tail call i32 @foo(i32 noundef 1)
-  %cmp2.not = icmp eq i32 %call1, 1
-  br i1 %cmp2.not, label %if.end, label %if.then
+if.then:                                          ; preds = %entry
+  %1 = load i32, ptr @i, align 4, !tbaa !5
+  %idxprom = sext i32 %1 to i64
+  %arrayidx = getelementptr inbounds [6 x %struct.S], ptr @d, i64 0, i64 %idxprom
+  %bf.load = load i64, ptr %arrayidx, align 8
+  %bf.clear = and i64 %bf.load, -2305843004918759424
+  %bf.set5 = or disjoint i64 %bf.clear, 4294967297
+  store i64 %bf.set5, ptr %arrayidx, align 8
+  br label %if.end
 
-if.then:                                          ; preds = %lor.lhs.false, %entry
+if.end:                                           ; preds = %if.then, %entry
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %0)
+  %bf.load6 = load i64, ptr @d, align 16
+  %2 = and i64 %bf.load6, 2305843004918726656
+  %cmp.not = icmp eq i64 %2, 4294967296
+  br i1 %cmp.not, label %if.end8, label %if.then7
+
+if.then7:                                         ; preds = %if.end
   tail call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false
+if.end8:                                          ; preds = %if.end
   ret i32 0
 }
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #2

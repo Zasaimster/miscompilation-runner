@@ -1,30 +1,15 @@
-; 140134194743433186782390590039292952571
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/140134194743433186782390590039292952571_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/140134194743433186782390590039292952571.c"
+; 191185694777355064004610276668818942208
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191185694777355064004610276668818942208_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191185694777355064004610276668818942208.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@.str = private unnamed_addr constant [4 x i8] c"aab\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %out = alloca [4 x i8], align 1
   store i32 0, ptr %retval, align 4
-  %arraydecay = getelementptr inbounds [4 x i8], ptr %out, i64 0, i64 0
-  %call = call ptr @test(ptr noundef @.str, ptr noundef %arraydecay)
   ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal ptr @test(ptr noundef %in, ptr noundef %out) #0 {
-entry:
-  %in.addr = alloca ptr, align 8
-  %out.addr = alloca ptr, align 8
-  store ptr %in, ptr %in.addr, align 8
-  store ptr %out, ptr %out.addr, align 8
-  ret ptr null
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

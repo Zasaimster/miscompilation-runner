@@ -1,6 +1,6 @@
-; 101687989899275581771857129271489643501
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101687989899275581771857129271489643501.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101687989899275581771857129271489643501.c"
+; 102498018928715947404321537321103374287
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102498018928715947404321537321103374287.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102498018928715947404321537321103374287.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,8 +8,17 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i32, align 4
+  %f = alloca float, align 4
   store i32 0, ptr %retval, align 4
-  ret i32 0
+  store i32 10, ptr %a, align 4
+  store float 0.000000e+00, ptr %f, align 4
+  %0 = load float, ptr %f, align 4
+  %1 = load i32, ptr %a, align 4
+  %conv = sitofp i32 %1 to float
+  %cmp = fcmp oeq float %0, %conv
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

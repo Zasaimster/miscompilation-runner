@@ -1,26 +1,79 @@
-; 11954747576094951733367095071849467750
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11954747576094951733367095071849467750.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11954747576094951733367095071849467750.c"
+; 194720573901042957829521735776896467894
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194720573901042957829521735776896467894.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194720573901042957829521735776896467894.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local double @foo() #0 {
+entry:
+  %retval = alloca double, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %0 = load double, ptr %retval, align 8
+  ret double %0
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @do_sibcall() #0 {
+entry:
+  %call = call double @foo()
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %p = alloca ptr, align 8
+  %x = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  store ptr inttoptr (i64 5 to ptr), ptr %p, align 8
-  %0 = load ptr, ptr %p, align 8
-  %call = call i32 @strlen(ptr noundef %0)
-  %sub = sub nsw i32 %call, 5
-  ret i32 %sub
+  store double 0.000000e+00, ptr %x, align 8
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load double, ptr %x, align 8
+  %cmp = fcmp olt double %0, 2.000000e+01
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  call void @do_sibcall()
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %1 = load double, ptr %x, align 8
+  %inc = fadd double %1, 1.000000e+00
+  store double %inc, ptr %x, align 8
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  %2 = load double, ptr %x, align 8
+  %cmp1 = fcmp oge double %2, 1.000000e+01
+  br i1 %cmp1, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.end
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %for.end
+  call void @exit(i32 noundef 0) #5
+  unreachable
 }
 
-declare i32 @strlen(ptr noundef) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -31,3 +84,5 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}

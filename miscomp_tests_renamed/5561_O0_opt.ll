@@ -1,56 +1,40 @@
-; 17672353252044672670993262853855829372
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17672353252044672670993262853855829372_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17672353252044672670993262853855829372.c"
+; 151208739329743924812541129893693990448
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151208739329743924812541129893693990448_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151208739329743924812541129893693990448.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %n) #0 {
-entry:
-  %n.addr = alloca i32, align 4
-  store i32 %n, ptr %n.addr, align 4
-  %0 = load i32, ptr %n.addr, align 4
-  %not = xor i32 %0, -1
-  %not1 = xor i32 %not, -1
-  ret i32 %not1
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @func3() #0 {
-entry:
-  %u = alloca i32, align 4
-  %v = alloca i32, align 4
-  store i32 0, ptr %u, align 4
-  store i32 0, ptr %v, align 4
-  %0 = load i32, ptr %u, align 4
-  %add = add nsw i32 %0, 5
-  store i32 %add, ptr %v, align 4
-  ret void
-}
+@d = dso_local global i32 1, align 4
+@a = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
+@c = dso_local global i32 0, align 4
+@e = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 0)
-  %cmp = icmp ne i32 %call, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #2
+  %call = call signext i8 @foo()
+  call void @exit(i32 noundef 0) #2
   unreachable
-
-if.end:                                           ; preds = %entry
-  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #1
+
+; Function Attrs: noinline nounwind uwtable
+define internal signext i8 @foo() #0 {
+entry:
+  %g = alloca i32, align 4
+  %0 = load i32, ptr @a, align 4
+  store i32 %0, ptr %g, align 4
+  ret i8 0
+}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

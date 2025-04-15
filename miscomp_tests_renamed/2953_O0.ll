@@ -1,20 +1,12 @@
-; 14503196108647189477959016363988140539
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/14503196108647189477959016363988140539.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/14503196108647189477959016363988140539.c"
+; 153465680805504027236933475343493756751
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153465680805504027236933475343493756751.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153465680805504027236933475343493756751.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.F = type { i32 }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f1(ptr noundef %x, ptr noundef %y) #0 {
+define dso_local void @fred() #0 {
 entry:
-  %x.addr = alloca ptr, align 8
-  %y.addr = alloca ptr, align 8
-  %timeout = alloca i32, align 4
-  store ptr %x, ptr %x.addr, align 8
-  store ptr %y, ptr %y.addr, align 8
-  store i32 0, ptr %timeout, align 4
   ret void
 }
 
@@ -22,24 +14,12 @@ entry:
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca %struct.F, align 4
-  %y = alloca %struct.F, align 4
   store i32 0, ptr %retval, align 4
-  %i = getelementptr inbounds nuw %struct.F, ptr %x, i32 0, i32 0
-  store i32 0, ptr %i, align 4
-  %i1 = getelementptr inbounds nuw %struct.F, ptr %y, i32 0, i32 0
-  store i32 1, ptr %i1, align 4
-  call void @f1(ptr noundef %x, ptr noundef %y)
-  call void @exit(i32 noundef 0) #2
-  unreachable
+  call void @fred()
+  ret i32 0
 }
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

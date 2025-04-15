@@ -1,50 +1,37 @@
-; 166942001598006473754407727188009321097
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/166942001598006473754407727188009321097.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/166942001598006473754407727188009321097.c"
+; 113251765168654253468832165341060721373
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/113251765168654253468832165341060721373.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/113251765168654253468832165341060721373.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @bar() #0 {
+define dso_local i32 @f(i32 noundef %x, i32 noundef %n) #0 {
 entry:
-  ret i32 32768
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @computeValue() #0 {
-entry:
-  ret i32 42
+  %x.addr = alloca i32, align 4
+  %n.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  store i32 %n, ptr %n.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %1 = load i32, ptr %n.addr, align 4
+  %shl = shl i32 1, %1
+  %div = sdiv i32 %0, %shl
+  ret i32 %div
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %nStyle = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @bar()
-  store i32 %call, ptr %nStyle, align 4
-  %0 = load i32, ptr %nStyle, align 4
-  %and = and i32 %0, 32768
-  %tobool = icmp ne i32 %and, 0
-  br i1 %tobool, label %if.then, label %if.end
+  %call = call i32 @f(i32 noundef -1, i32 noundef 1)
+  %cmp = icmp ne i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %1 = load i32, ptr %nStyle, align 4
-  %or = or i32 %1, 65536
-  store i32 %or, ptr %nStyle, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load i32, ptr %nStyle, align 4
-  %cmp = icmp ne i32 %2, 98304
-  br i1 %cmp, label %if.then1, label %if.end2
-
-if.then1:                                         ; preds = %if.end
   call void @abort() #2
   unreachable
 
-if.end2:                                          ; preds = %if.end
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

@@ -1,33 +1,48 @@
-; 189809298859103887437598910430020497547
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189809298859103887437598910430020497547.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189809298859103887437598910430020497547.c"
+; 172675484161046049114810119887957671138
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172675484161046049114810119887957671138.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172675484161046049114810119887957671138.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @f(ptr noundef %p) #0 {
+define dso_local i32 @f(i32 noundef %x) #0 {
 entry:
-  %p.addr = alloca ptr, align 8
-  %a = alloca i64, align 8
-  store ptr %p, ptr %p.addr, align 8
-  store i64 0, ptr %a, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %1 = load i64, ptr %a, align 8
-  %add.ptr = getelementptr inbounds nuw i64, ptr %0, i64 %1
-  ret ptr %add.ptr
+  %x.addr = alloca i32, align 4
+  %y = alloca i32, align 4
+  %p = alloca ptr, align 8
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %y, align 4
+  %sub = sub nsw i32 0, %0
+  store i32 %sub, ptr %y, align 4
+  %1 = load i32, ptr %x.addr, align 4
+  %tobool = icmp ne i32 %1, 0
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %2 = load i32, ptr %y, align 4
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %3 = load i32, ptr %y, align 4
+  %sub1 = sub nsw i32 0, %3
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %2, %cond.true ], [ %sub1, %cond.false ]
+  store i32 %cond, ptr %y, align 4
+  store ptr %x.addr, ptr %p, align 8
+  %4 = load i32, ptr %y, align 4
+  ret i32 %4
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  store i64 2147483648, ptr %x, align 8
-  %call = call ptr @f(ptr noundef %x)
-  %add.ptr = getelementptr inbounds i64, ptr %x, i64 129
-  %cmp = icmp ne ptr %call, %add.ptr
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 @f(i32 noundef 0)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

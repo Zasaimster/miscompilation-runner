@@ -1,32 +1,44 @@
-; 175735311704095502529746810480242082709
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175735311704095502529746810480242082709.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175735311704095502529746810480242082709.c"
+; 190105962946241041468583471600915559597
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190105962946241041468583471600915559597.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190105962946241041468583471600915559597.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %x, i32 noundef %y) #0 {
-entry:
-  %x.addr = alloca i32, align 4
-  %y.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  store i32 %y, ptr %y.addr, align 4
-  call void @abort() #3
-  unreachable
-}
+@a = dso_local constant [1 x ptr] [ptr @f], align 8
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+; Function Attrs: noinline nounwind uwtable
+define dso_local double @f(double noundef %a) #0 {
+entry:
+  %retval = alloca double, align 8
+  %a.addr = alloca double, align 8
+  store double %a, ptr %a.addr, align 8
+  %0 = load double, ptr %retval, align 8
+  ret double %0
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef -5, i32 noundef 5)
+  store ptr inttoptr (i64 20 to ptr), ptr %p, align 8
+  %0 = load ptr, ptr %p, align 8
+  %1 = load ptr, ptr @a, align 8
+  %cmp = icmp ne ptr %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

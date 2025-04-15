@@ -1,6 +1,6 @@
-; 158000770482723690629356411190755618102
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/158000770482723690629356411190755618102_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/158000770482723690629356411190755618102.c"
+; 153160675506575901261720933655106370391
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153160675506575901261720933655106370391_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153160675506575901261720933655106370391.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -15,25 +15,9 @@ entry:
   store i64 %y, ptr %y.addr, align 8
   br label %for.cond
 
-for.cond:                                         ; preds = %if.end, %entry
+for.cond:                                         ; preds = %entry
   %0 = load i64, ptr %x.addr, align 8
-  %1 = load i64, ptr %y.addr, align 8
-  %rem = urem i64 %0, %1
-  store i64 %rem, ptr %x.addr, align 8
-  %2 = load i64, ptr %x.addr, align 8
-  %cmp = icmp eq i64 %2, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.cond
-  %3 = load i64, ptr %y.addr, align 8
-  ret i64 %3
-
-if.end:                                           ; preds = %for.cond
-  %4 = load i64, ptr %y.addr, align 8
-  %5 = load i64, ptr %x.addr, align 8
-  %rem1 = urem i64 %4, %5
-  store i64 %rem1, ptr %y.addr, align 8
-  br label %for.cond
+  ret i64 %0
 }
 
 ; Function Attrs: noinline nounwind uwtable

@@ -1,34 +1,49 @@
-; 136655052032012314539911935961602154905
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136655052032012314539911935961602154905_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136655052032012314539911935961602154905.c"
+; 145964736829019396560831605815490098891
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145964736829019396560831605815490098891_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145964736829019396560831605815490098891.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.T = type { %struct.anon }
-%struct.anon = type { i8, i8 }
+%struct.four_quarters = type { i16, i16, i16, i16 }
+
+@a = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
+@x = dso_local global %struct.four_quarters zeroinitializer, align 2
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %x) #0 {
+define dso_local void @f(i64 %j.coerce) #0 {
 entry:
-  %x.addr = alloca i32, align 4
-  %num = alloca i32, align 4
-  %reg = alloca %union.T, align 1
-  store i32 %x, ptr %x.addr, align 4
-  store i32 0, ptr %num, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %conv = trunc i32 %0 to i8
-  %l = getelementptr inbounds nuw %struct.anon, ptr %reg, i32 0, i32 1
-  store i8 %conv, ptr %l, align 1
-  ret i32 0
+  %j = alloca %struct.four_quarters, align 2
+  store i64 %j.coerce, ptr %j, align 2
+  %0 = load i32, ptr @a, align 4
+  %1 = load i32, ptr @b, align 4
+  %add = add nsw i32 %0, %1
+  store i32 %add, ptr @b, align 4
+  %b3 = getelementptr inbounds nuw %struct.four_quarters, ptr %j, i32 0, i32 3
+  %2 = load i16, ptr %b3, align 2
+  %conv = zext i16 %2 to i32
+  store i32 %conv, ptr @a, align 4
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca %struct.four_quarters, align 2
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 2)
-  %cmp = icmp ne i32 %call, 1
+  %b2 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 2
+  store i16 0, ptr %b2, align 2
+  %b1 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 1
+  store i16 0, ptr %b1, align 2
+  %b0 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 0
+  store i16 0, ptr %b0, align 2
+  %b3 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 3
+  store i16 38, ptr %b3, align 2
+  %0 = load i64, ptr %x, align 2
+  call void @f(i64 %0)
+  %1 = load i32, ptr @a, align 4
+  %cmp = icmp ne i32 %1, 38
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

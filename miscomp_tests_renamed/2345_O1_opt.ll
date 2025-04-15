@@ -1,29 +1,11 @@
-; 157885275284688213500930215027052426585
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157885275284688213500930215027052426585_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157885275284688213500930215027052426585.c"
+; 178276761884233950177509426510398611261
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/178276761884233950177509426510398611261_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/178276761884233950177509426510398611261.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local void @put_field(i32 noundef %start, i32 noundef %len) local_unnamed_addr #0 {
-entry:
-  tail call void @exit(i32 noundef 0) #2
-  unreachable
-}
-
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #1
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  tail call void @exit(i32 noundef 0) #2
-  unreachable
-}
-
-attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+@count = dso_local local_unnamed_addr global i32 0, align 4
+@dummy = dso_local local_unnamed_addr global i32 0, align 4
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

@@ -1,18 +1,31 @@
-; 185353959727050122049801710475652737389
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/185353959727050122049801710475652737389.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/185353959727050122049801710475652737389.c"
+; 11613777666427519340370035554836157322
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11613777666427519340370035554836157322.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11613777666427519340370035554836157322.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @anotherDummyFunc() #0 {
+define dso_local ptr @NSReturnAddress(i32 noundef %offset) #0 {
 entry:
-  %dummyVar = alloca i32, align 4
-  store i32 100, ptr %dummyVar, align 4
-  ret void
+  %offset.addr = alloca i32, align 4
+  store i32 %offset, ptr %offset.addr, align 4
+  %0 = call ptr @llvm.returnaddress(i32 1)
+  ret ptr %0
+}
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(none)
+declare ptr @llvm.returnaddress(i32 immarg) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(none) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,31 +1,20 @@
-; 176351642863250979366387593758380660056
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176351642863250979366387593758380660056_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176351642863250979366387593758380660056.c"
+; 135593072413256511245628027738849404309
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135593072413256511245628027738849404309_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135593072413256511245628027738849404309.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"X is positive\0A\00", align 1
+@.str = private unnamed_addr constant [30 x i8] c"This function has dead code.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local zeroext i16 @showbug(ptr noundef %a, ptr noundef %b) #0 {
+define dso_local i32 @f(i32 noundef %n) #0 {
 entry:
-  %a.addr = alloca ptr, align 8
-  %b.addr = alloca ptr, align 8
-  store ptr %a, ptr %a.addr, align 8
-  store ptr %b, ptr %b.addr, align 8
-  %0 = load ptr, ptr %b.addr, align 8
-  %1 = load i16, ptr %0, align 2
-  %conv = zext i16 %1 to i32
-  %sub = sub nsw i32 %conv, 8
-  %2 = load ptr, ptr %a.addr, align 8
-  %3 = load i16, ptr %2, align 2
-  %conv1 = zext i16 %3 to i32
-  %add = add nsw i32 %conv1, %sub
-  %conv2 = trunc i32 %add to i16
-  store i16 %conv2, ptr %2, align 2
+  %retval = alloca i32, align 4
+  %n.addr = alloca i32, align 4
+  store i32 %n, ptr %n.addr, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv3 = trunc i32 %call to i16
-  ret i16 %conv3
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
 }
 
 declare i32 @printf(ptr noundef, ...) #1
@@ -34,14 +23,9 @@ declare i32 @printf(ptr noundef, ...) #1
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i16, align 2
-  %y = alloca i16, align 2
   store i32 0, ptr %retval, align 4
-  store i16 0, ptr %x, align 2
-  store i16 10, ptr %y, align 2
-  %call = call zeroext i16 @showbug(ptr noundef %x, ptr noundef %y)
-  %conv = zext i16 %call to i32
-  %cmp = icmp ne i32 %conv, 0
+  %call = call i32 @f(i32 noundef -1)
+  %cmp = icmp ne i32 %call, -1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -49,6 +33,24 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @f(i32 noundef 1)
+  %cmp2 = icmp ne i32 %call1, 1
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @f(i32 noundef 0)
+  %cmp6 = icmp ne i32 %call5, 0
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #4
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
   call void @exit(i32 noundef 0) #5
   unreachable
 }

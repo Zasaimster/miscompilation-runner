@@ -1,35 +1,51 @@
-; 146738633065918736434610984618949982569
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/146738633065918736434610984618949982569.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/146738633065918736434610984618949982569.c"
+; 157391763130205417063835728438208437911
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157391763130205417063835728438208437911.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157391763130205417063835728438208437911.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@val = dso_local global i64 0, align 8
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local i64 @f1() #0 {
 entry:
-  %j = alloca i32, align 4
-  %i = alloca i64, align 8
-  store i32 0, ptr %j, align 4
-  store i64 1610612736, ptr %i, align 8
-  br label %do.body
+  ret i64 306
+}
 
-do.body:                                          ; preds = %do.cond, %entry
-  %0 = load i32, ptr %j, align 4
-  %shl = shl i32 %0, 1
-  store i32 %shl, ptr %j, align 4
-  %1 = load i64, ptr %i, align 8
-  %add = add nsw i64 %1, 268435456
-  store i64 %add, ptr %i, align 8
-  br label %do.cond
+; Function Attrs: noinline nounwind uwtable
+define dso_local i64 @f2() #0 {
+entry:
+  ret i64 1577058304
+}
 
-do.cond:                                          ; preds = %do.body
-  %2 = load i64, ptr %i, align 8
-  %cmp = icmp slt i64 %2, -1610612736
-  br i1 %cmp, label %do.body, label %do.end, !llvm.loop !6
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f3(i64 noundef %b) #0 {
+entry:
+  %b.addr = alloca i64, align 8
+  store i64 %b, ptr %b.addr, align 8
+  %0 = load i64, ptr %b.addr, align 8
+  store i64 %0, ptr @val, align 8
+  ret void
+}
 
-do.end:                                           ; preds = %do.cond
-  %3 = load i32, ptr %j, align 4
-  ret i32 %3
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f4() #0 {
+entry:
+  %v = alloca i64, align 8
+  %o = alloca i64, align 8
+  %call = call i64 @f1()
+  store i64 %call, ptr %v, align 8
+  %call1 = call i64 @f2()
+  store i64 %call1, ptr %o, align 8
+  %0 = load i64, ptr %v, align 8
+  %and = and i64 %0, 16777215
+  %1 = load i64, ptr %o, align 8
+  %and2 = and i64 %1, 4278190080
+  %or = or i64 %and, %and2
+  store i64 %or, ptr %v, align 8
+  %2 = load i64, ptr %v, align 8
+  call void @f3(i64 noundef %2)
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -37,8 +53,9 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 2
+  call void @f4()
+  %0 = load i64, ptr @val, align 8
+  %cmp = icmp ne i64 %0, 1577058610
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -71,5 +88,3 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

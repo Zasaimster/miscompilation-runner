@@ -1,23 +1,66 @@
-; 151591730771650001708179904739352833468
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151591730771650001708179904739352833468_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151591730771650001708179904739352833468.c"
+; 123514429966114695962263810368324149179
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123514429966114695962263810368324149179_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123514429966114695962263810368324149179.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [17 x i8] c"Done processing!\00", align 1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @one(i32 %a) #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  ret i32 0
+  ret i32 1
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @two(i32 noundef %a, i32 noundef %b) #0 {
+entry:
+  %cmp.not = icmp ne i32 %a, 1
+  %cmp1.not = icmp ne i32 %b, 2
+  %narrow = or i1 %cmp.not, %cmp1.not
+  %retval.0 = zext i1 %narrow to i32
+  ret i32 %retval.0
+}
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind }
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @three(i32 noundef %a, i32 noundef %b, i32 noundef %c) #0 {
+entry:
+  %cmp.not = icmp ne i32 %a, 1
+  %cmp1.not = icmp ne i32 %b, 2
+  %cmp4.not = icmp ne i32 %c, 3
+  %0 = or i1 %cmp1.not, %cmp4.not
+  %narrow = or i1 %cmp.not, %0
+  %retval.0 = zext i1 %narrow to i32
+  ret i32 %retval.0
+}
+
+; Function Attrs: nounwind uwtable
+define dso_local range(i32 0, 5) i32 @main() local_unnamed_addr #1 {
+entry:
+  %call = tail call i32 (ptr, i32, ...) @CALL(ptr noundef nonnull @one, i32 noundef 1) #3
+  %tobool.not = icmp eq i32 %call, 0
+  br i1 %tobool.not, label %if.end, label %return
+
+if.end:                                           ; preds = %entry
+  %call1 = tail call i32 (ptr, i32, i32, ...) @CALL(ptr noundef nonnull @two, i32 noundef 1, i32 noundef 2) #3
+  %tobool2.not = icmp eq i32 %call1, 0
+  br i1 %tobool2.not, label %if.end4, label %return
+
+if.end4:                                          ; preds = %if.end
+  %call5 = tail call i32 (ptr, i32, i32, i32, ...) @CALL(ptr noundef nonnull @three, i32 noundef 1, i32 noundef 2, i32 noundef 3) #3
+  %tobool6.not = icmp eq i32 %call5, 0
+  %. = select i1 %tobool6.not, i32 0, i32 4
+  br label %return
+
+return:                                           ; preds = %if.end4, %if.end, %entry
+  %retval.0 = phi i32 [ 2, %entry ], [ 3, %if.end ], [ %., %if.end4 ]
+  ret i32 %retval.0
+}
+
+declare i32 @CALL(...) local_unnamed_addr #2
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

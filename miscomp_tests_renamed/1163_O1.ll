@@ -1,37 +1,47 @@
-; 112619943568763822653870884456746418584
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112619943568763822653870884456746418584.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112619943568763822653870884456746418584.c"
+; 188438570600837768930836938014339921465
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188438570600837768930836938014339921465.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188438570600837768930836938014339921465.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [9 x i8] c"y is %d\0A\00", align 1
-@global = dso_local local_unnamed_addr global i32 0, align 4
+@g_5 = dso_local local_unnamed_addr global i8 0, align 1
+@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @bla(ptr noundef writeonly captures(none) initializes((0, 4)) %xa, ptr noundef captures(none) initializes((4, 8)) %xb) local_unnamed_addr #0 {
+define dso_local void @func_1() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @global, align 4, !tbaa !5
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %0)
-  %sub = getelementptr inbounds nuw i8, ptr %xb, i64 4
-  store i32 1, ptr %sub, align 4, !tbaa !9
-  store i32 8, ptr %xa, align 4, !tbaa !13
-  %1 = load i32, ptr %sub, align 4, !tbaa !9
-  ret i32 %1
+  store i8 0, ptr @g_5, align 1, !tbaa !5
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
 }
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @global, align 4, !tbaa !5
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %0)
+  store i8 0, ptr @g_5, align 1, !tbaa !5
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %0 = load i8, ptr @g_5, align 1, !tbaa !5
+  %cmp.not = icmp eq i8 %0, 0
+  br i1 %cmp.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  tail call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -42,11 +52,5 @@ attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buf
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!10, !6, i64 4}
-!10 = !{!"test2", !11, i64 0, !12, i64 4}
-!11 = !{!"float", !7, i64 0}
-!12 = !{!"test1", !6, i64 0, !6, i64 4}
-!13 = !{!12, !6, i64 0}
+!6 = !{!"omnipotent char", !7, i64 0}
+!7 = !{!"Simple C/C++ TBAA"}

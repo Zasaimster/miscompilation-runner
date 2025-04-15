@@ -1,150 +1,165 @@
-; 120979737257757435340107417609478090752
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/120979737257757435340107417609478090752.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/120979737257757435340107417609478090752.c"
+; 135726979936161002755725503149827756991
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135726979936161002755725503149827756991.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135726979936161002755725503149827756991.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
-@temporary_obstack = dso_local global ptr null, align 8
+%struct.epic_private = type { ptr, [1 x i32] }
+%struct.epic_rx_desc = type { i32 }
+
+@check_rx_ring = internal global [5 x i32] [i32 12, i32 14, i32 16, i32 18, i32 10], align 16
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
-  %ch = alloca i32, align 4
-  %call = call i32 (...) @uselessFunction()
-  store i32 %call, ptr %ch, align 4
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %retval = alloca i32, align 4
+  %ep = alloca %struct.epic_private, align 8
+  %rx_ring = alloca [5 x %struct.epic_rx_desc], align 16
+  %i = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  store i32 0, ptr %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %1 to i64
+  %arrayidx = getelementptr inbounds [5 x %struct.epic_rx_desc], ptr %rx_ring, i64 0, i64 %idxprom
+  %next = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx, i32 0, i32 0
+  store i32 0, ptr %next, align 4
+  %rx_skbuff = getelementptr inbounds nuw %struct.epic_private, ptr %ep, i32 0, i32 1
+  %2 = load i32, ptr %i, align 4
+  %idxprom1 = sext i32 %2 to i64
+  %arrayidx2 = getelementptr inbounds [1 x i32], ptr %rx_skbuff, i64 0, i64 %idxprom1
+  store i32 5, ptr %arrayidx2, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, ptr %i, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  %arraydecay = getelementptr inbounds [5 x %struct.epic_rx_desc], ptr %rx_ring, i64 0, i64 0
+  %rx_ring3 = getelementptr inbounds nuw %struct.epic_private, ptr %ep, i32 0, i32 0
+  store ptr %arraydecay, ptr %rx_ring3, align 8
+  call void @epic_init_ring(ptr noundef %ep)
+  store i32 0, ptr %i, align 4
+  br label %for.cond4
+
+for.cond4:                                        ; preds = %for.inc19, %for.end
+  %4 = load i32, ptr %i, align 4
+  %cmp5 = icmp slt i32 %4, 5
+  br i1 %cmp5, label %for.body6, label %for.end21
+
+for.body6:                                        ; preds = %for.cond4
+  %5 = load i32, ptr %i, align 4
+  %idxprom7 = sext i32 %5 to i64
+  %arrayidx8 = getelementptr inbounds [5 x %struct.epic_rx_desc], ptr %rx_ring, i64 0, i64 %idxprom7
+  %next9 = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx8, i32 0, i32 0
+  %6 = load i32, ptr %next9, align 4
+  %7 = load i32, ptr %i, align 4
+  %idxprom10 = sext i32 %7 to i64
+  %arrayidx11 = getelementptr inbounds [5 x i32], ptr @check_rx_ring, i64 0, i64 %idxprom10
+  %8 = load i32, ptr %arrayidx11, align 4
+  %cmp12 = icmp ne i32 %6, %8
+  br i1 %cmp12, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body6
+  call void @abort() #2
+  unreachable
+
+if.end:                                           ; preds = %for.body6
+  %rx_skbuff13 = getelementptr inbounds nuw %struct.epic_private, ptr %ep, i32 0, i32 1
+  %9 = load i32, ptr %i, align 4
+  %idxprom14 = sext i32 %9 to i64
+  %arrayidx15 = getelementptr inbounds [1 x i32], ptr %rx_skbuff13, i64 0, i64 %idxprom14
+  %10 = load i32, ptr %arrayidx15, align 4
+  %cmp16 = icmp ne i32 %10, 0
+  br i1 %cmp16, label %if.then17, label %if.end18
+
+if.then17:                                        ; preds = %if.end
+  call void @abort() #2
+  unreachable
+
+if.end18:                                         ; preds = %if.end
+  br label %for.inc19
+
+for.inc19:                                        ; preds = %if.end18
+  %11 = load i32, ptr %i, align 4
+  %inc20 = add nsw i32 %11, 1
+  store i32 %inc20, ptr %i, align 4
+  br label %for.cond4, !llvm.loop !8
+
+for.end21:                                        ; preds = %for.cond4
   ret i32 0
 }
 
-declare i32 @uselessFunction(...) #1
-
-declare i32 @printf(ptr noundef, ...) #1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @yylex() #0 {
+define internal void @epic_init_ring(ptr noundef %ep) #0 {
 entry:
-  %ch = alloca i32, align 4
+  %ep.addr = alloca ptr, align 8
+  %i = alloca i32, align 4
+  store ptr %ep, ptr %ep.addr, align 8
+  store i32 2, ptr %i, align 4
   br label %for.cond
 
-for.cond:                                         ; preds = %if.end3, %entry
-  %call = call i32 @input()
-  store i32 %call, ptr %ch, align 4
-  %0 = load i32, ptr %ch, align 4
-  %call1 = call i32 @ISALNUM(i32 noundef %0)
-  %tobool = icmp ne i32 %call1, 0
-  br i1 %tobool, label %if.then, label %if.else
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr %i, align 4
+  %cmp = icmp slt i32 %0, 5
+  br i1 %cmp, label %for.body, label %for.end
 
-if.then:                                          ; preds = %for.cond
-  %1 = load i32, ptr %ch, align 4
-  call void @obstack_1grow(ptr noundef @temporary_obstack, i32 noundef %1)
-  br label %if.end3
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, ptr %i, align 4
+  %add = add nsw i32 %1, 1
+  %mul = mul nsw i32 %add, 2
+  %add1 = add nsw i32 10, %mul
+  %2 = load ptr, ptr %ep.addr, align 8
+  %rx_ring = getelementptr inbounds nuw %struct.epic_private, ptr %2, i32 0, i32 0
+  %3 = load ptr, ptr %rx_ring, align 8
+  %4 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %4 to i64
+  %arrayidx = getelementptr inbounds %struct.epic_rx_desc, ptr %3, i64 %idxprom
+  %next = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx, i32 0, i32 0
+  store i32 %add1, ptr %next, align 4
+  %5 = load ptr, ptr %ep.addr, align 8
+  %rx_skbuff = getelementptr inbounds nuw %struct.epic_private, ptr %5, i32 0, i32 1
+  %6 = load i32, ptr %i, align 4
+  %idxprom2 = sext i32 %6 to i64
+  %arrayidx3 = getelementptr inbounds [1 x i32], ptr %rx_skbuff, i64 0, i64 %idxprom2
+  store i32 0, ptr %arrayidx3, align 4
+  br label %for.inc
 
-if.else:                                          ; preds = %for.cond
-  %2 = load i32, ptr %ch, align 4
-  %cmp = icmp ne i32 %2, 95
-  br i1 %cmp, label %if.then2, label %if.end
+for.inc:                                          ; preds = %for.body
+  %7 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %7, 1
+  store i32 %inc, ptr %i, align 4
+  br label %for.cond, !llvm.loop !9
 
-if.then2:                                         ; preds = %if.else
-  br label %for.end
-
-if.end:                                           ; preds = %if.else
-  br label %if.end3
-
-if.end3:                                          ; preds = %if.end, %if.then
-  br label %for.cond
-
-for.end:                                          ; preds = %if.then2
-  br label %do.body
-
-do.body:                                          ; preds = %do.cond, %for.end
-  %call4 = call i32 @input()
-  store i32 %call4, ptr %ch, align 4
-  %3 = load i32, ptr %ch, align 4
-  %call5 = call i32 @ISALNUM(i32 noundef %3)
-  %tobool6 = icmp ne i32 %call5, 0
-  br i1 %tobool6, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %do.body
-  %4 = load i32, ptr %ch, align 4
-  call void @obstack_1grow(ptr noundef @temporary_obstack, i32 noundef %4)
-  br label %if.end8
-
-if.end8:                                          ; preds = %if.then7, %do.body
-  br label %do.cond
-
-do.cond:                                          ; preds = %if.end8
-  %5 = load i32, ptr %ch, align 4
-  %cmp9 = icmp eq i32 %5, 95
-  br i1 %cmp9, label %do.body, label %do.end, !llvm.loop !6
-
-do.end:                                           ; preds = %do.cond
-  %6 = load i32, ptr %ch, align 4
-  ret i32 %6
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @input() #0 {
-entry:
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @ISALNUM(i32 noundef %ch) #0 {
-entry:
-  %ch.addr = alloca i32, align 4
-  store i32 %ch, ptr %ch.addr, align 4
-  %0 = load i32, ptr %ch.addr, align 4
-  %cmp = icmp sge i32 %0, 65
-  br i1 %cmp, label %land.lhs.true, label %lor.lhs.false
-
-land.lhs.true:                                    ; preds = %entry
-  %1 = load i32, ptr %ch.addr, align 4
-  %cmp1 = icmp sle i32 %1, 90
-  br i1 %cmp1, label %lor.end, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %land.lhs.true, %entry
-  %2 = load i32, ptr %ch.addr, align 4
-  %cmp2 = icmp sge i32 %2, 97
-  br i1 %cmp2, label %land.lhs.true3, label %lor.rhs
-
-land.lhs.true3:                                   ; preds = %lor.lhs.false
-  %3 = load i32, ptr %ch.addr, align 4
-  %cmp4 = icmp sle i32 %3, 122
-  br i1 %cmp4, label %lor.end, label %lor.rhs
-
-lor.rhs:                                          ; preds = %land.lhs.true3, %lor.lhs.false
-  %4 = load i32, ptr %ch.addr, align 4
-  %cmp5 = icmp sge i32 %4, 48
-  br i1 %cmp5, label %land.rhs, label %land.end
-
-land.rhs:                                         ; preds = %lor.rhs
-  %5 = load i32, ptr %ch.addr, align 4
-  %cmp6 = icmp sle i32 %5, 48
-  br label %land.end
-
-land.end:                                         ; preds = %land.rhs, %lor.rhs
-  %6 = phi i1 [ false, %lor.rhs ], [ %cmp6, %land.rhs ]
-  br label %lor.end
-
-lor.end:                                          ; preds = %land.end, %land.lhs.true3, %land.lhs.true
-  %7 = phi i1 [ true, %land.lhs.true3 ], [ true, %land.lhs.true ], [ %6, %land.end ]
-  %lor.ext = zext i1 %7 to i32
-  ret i32 %lor.ext
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal void @obstack_1grow(ptr noundef %ptr, i32 noundef %ch) #0 {
-entry:
-  %ptr.addr = alloca ptr, align 8
-  %ch.addr = alloca i32, align 4
-  store ptr %ptr, ptr %ptr.addr, align 8
-  store i32 %ch, ptr %ch.addr, align 4
+for.end:                                          ; preds = %for.cond
+  %8 = load ptr, ptr %ep.addr, align 8
+  %rx_ring4 = getelementptr inbounds nuw %struct.epic_private, ptr %8, i32 0, i32 0
+  %9 = load ptr, ptr %rx_ring4, align 8
+  %10 = load i32, ptr %i, align 4
+  %sub = sub nsw i32 %10, 1
+  %idxprom5 = sext i32 %sub to i64
+  %arrayidx6 = getelementptr inbounds %struct.epic_rx_desc, ptr %9, i64 %idxprom5
+  %next7 = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx6, i32 0, i32 0
+  store i32 10, ptr %next7, align 4
   ret void
 }
 
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -157,3 +172,5 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}
+!9 = distinct !{!9, !7}

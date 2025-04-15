@@ -1,88 +1,94 @@
-; 137763966440022207305620447987935568734
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137763966440022207305620447987935568734.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137763966440022207305620447987935568734.c"
+; 128470570715305362527827292809386700667
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128470570715305362527827292809386700667.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128470570715305362527827292809386700667.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+@b = dso_local local_unnamed_addr global { i32, i8, i8, i8, i8, i16, [2 x i8] } { i32 0, i8 0, i8 -128, i8 2, i8 0, i16 0, [2 x i8] zeroinitializer }, align 4
+@g = dso_local local_unnamed_addr global { i32, i8, i8, i8, i8, i16, [2 x i8] } { i32 8, i8 0, i8 -128, i8 2, i8 0, i16 0, [2 x i8] zeroinitializer }, align 4
+@h = dso_local local_unnamed_addr global i32 8, align 4
+@e = dso_local global <{ i8, [236 x i8] }> <{ i8 4, [236 x i8] zeroinitializer }>, align 16
+@d = dso_local global i16 0, align 2
+@f = dso_local local_unnamed_addr global ptr @d, align 8
+@i = dso_local local_unnamed_addr global [5 x i16] [i16 3, i16 0, i16 0, i16 0, i16 0], align 2
+@c = dso_local global i32 0, align 4
+@k = dso_local local_unnamed_addr global ptr @c, align 8
+@a = dso_local local_unnamed_addr global i32 0, align 4
+@j = dso_local local_unnamed_addr global i8 0, align 1
+@l = dso_local local_unnamed_addr global i16 0, align 2
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @fn1(i32 noundef %p1) local_unnamed_addr #0 {
 entry:
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %a) #5
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %b) #5
-  %call = tail call i32 (...) @func6() #5
-  store i32 20, ptr %b, align 4, !tbaa !5
-  br label %for.body
-
-for.body:                                         ; preds = %entry, %while.end
-  %i.022 = phi i32 [ 0, %entry ], [ %inc7, %while.end ]
-  %x.021 = phi i32 [ 0, %entry ], [ %inc6, %while.end ]
-  %pa.020 = phi ptr [ %a, %entry ], [ %b, %while.end ]
-  %cmp1 = icmp eq ptr %pa.020, %a
-  %b.a = select i1 %cmp1, ptr %b, ptr %a
-  br label %while.cond
-
-while.cond:                                       ; preds = %while.body, %for.body
-  %pa.2 = phi ptr [ %b.a, %for.body ], [ %b, %while.body ]
-  %x.1 = phi i32 [ %x.021, %for.body ], [ %inc, %while.body ]
-  %0 = load i32, ptr %pa.2, align 4, !tbaa !5
-  %dec = add nsw i32 %0, -1
-  store i32 %dec, ptr %pa.2, align 4, !tbaa !5
-  %tobool.not = icmp eq i32 %0, 0
-  br i1 %tobool.not, label %while.end, label %while.body
-
-while.body:                                       ; preds = %while.cond
-  %inc = add nsw i32 %x.1, 1
-  %cmp2 = icmp slt i32 %0, 4
-  br i1 %cmp2, label %while.end, label %while.cond, !llvm.loop !9
-
-while.end:                                        ; preds = %while.body, %while.cond
-  %x.2 = phi i32 [ %inc, %while.body ], [ %x.1, %while.cond ]
-  %inc6 = add nsw i32 %x.2, 1
-  %inc7 = add nuw nsw i32 %i.022, 1
-  %exitcond.not = icmp eq i32 %inc7, 10
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !12
-
-for.end:                                          ; preds = %while.end
-  %1 = load i32, ptr %b, align 4, !tbaa !5
-  %cmp8.not = icmp eq i32 %1, -5
-  br i1 %cmp8.not, label %lor.lhs.false, label %if.then12
-
-lor.lhs.false:                                    ; preds = %for.end
-  %2 = load i32, ptr %b, align 4, !tbaa !5
-  %cmp9 = icmp ne i32 %2, -5
-  %cmp11 = icmp ne i32 %inc6, 43
-  %or.cond = select i1 %cmp9, i1 true, i1 %cmp11
-  br i1 %or.cond, label %if.then12, label %if.end13
-
-if.then12:                                        ; preds = %lor.lhs.false, %for.end
-  call void @abort() #6
-  unreachable
-
-if.end13:                                         ; preds = %lor.lhs.false
-  call void @exit(i32 noundef 0) #6
-  unreachable
+  %sub = sub i32 0, %p1
+  ret i32 %sub
 }
 
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+; Function Attrs: mustprogress nofree norecurse nounwind willreturn memory(readwrite, argmem: none) uwtable
+define dso_local void @fn2(i8 noundef signext %p1) local_unnamed_addr #1 {
+entry:
+  %conv = sext i8 %p1 to i32
+  store i32 %conv, ptr @a, align 4, !tbaa !5
+  %0 = load volatile i8, ptr @e, align 16, !tbaa !9
+  ret void
+}
 
-declare i32 @func6(...) local_unnamed_addr #2
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, inaccessiblemem: none) uwtable
+define dso_local signext i16 @fn3() local_unnamed_addr #2 {
+entry:
+  %0 = load ptr, ptr @k, align 8, !tbaa !10
+  store i32 4, ptr %0, align 4, !tbaa !5
+  %1 = load ptr, ptr @f, align 8, !tbaa !13
+  %2 = load i16, ptr %1, align 2, !tbaa !15
+  ret i16 %2
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #3 {
+entry:
+  %0 = load i32, ptr @h, align 4, !tbaa !5
+  %tobool = icmp ne i32 %0, 0
+  %1 = load i8, ptr @j, align 1
+  %tobool1 = icmp ne i8 %1, 0
+  %2 = select i1 %tobool, i1 %tobool1, i1 false
+  %land.ext = zext i1 %2 to i32
+  %bf.load = load i32, ptr getelementptr inbounds nuw (i8, ptr @b, i64 4), align 4
+  %bf.lshr = lshr i32 %bf.load, 15
+  %bf.clear = and i32 %bf.lshr, 7
+  %cmp = icmp samesign uge i32 %bf.clear, %land.ext
+  %conv2.neg = sext i1 %cmp to i32
+  %bf.load3 = load i32, ptr getelementptr inbounds nuw (i8, ptr @g, i64 4), align 4
+  %bf.clear4 = and i32 %bf.load3, 32767
+  %cmp5 = icmp ult i32 %bf.clear4, %conv2.neg
+  %conv7 = zext i1 %cmp5 to i16
+  store i16 %conv7, ptr @l, align 2, !tbaa !15
+  store i16 3, ptr getelementptr inbounds nuw (i8, ptr @i, i64 8), align 2, !tbaa !15
+  %3 = load i32, ptr @b, align 4, !tbaa !17
+  %4 = shl i32 %3, 9
+  %conv.i = ashr i32 %4, 24
+  store i32 %conv.i, ptr @a, align 4, !tbaa !5
+  %5 = load volatile i8, ptr @e, align 16, !tbaa !9
+  %6 = and i32 %3, 8355840
+  %cmp9.not = icmp eq i32 %6, 8355840
+  br i1 %cmp9.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  tail call void @abort() #5
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret i32 0
+}
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #3
+declare void @abort() local_unnamed_addr #4
 
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #4
-
-attributes #0 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { nounwind }
-attributes #6 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nofree norecurse nounwind willreturn memory(readwrite, argmem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -96,7 +102,13 @@ attributes #6 = { noreturn nounwind }
 !6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = distinct !{!9, !10, !11}
-!10 = !{!"llvm.loop.mustprogress"}
-!11 = !{!"llvm.loop.unroll.disable"}
-!12 = distinct !{!12, !10, !11}
+!9 = !{!7, !7, i64 0}
+!10 = !{!11, !11, i64 0}
+!11 = !{!"p1 int", !12, i64 0}
+!12 = !{!"any pointer", !7, i64 0}
+!13 = !{!14, !14, i64 0}
+!14 = !{!"p1 short", !12, i64 0}
+!15 = !{!16, !16, i64 0}
+!16 = !{!"short", !7, i64 0}
+!17 = !{!18, !6, i64 0}
+!18 = !{!"", !6, i64 0, !6, i64 4, !6, i64 5, !16, i64 8}

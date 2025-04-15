@@ -1,32 +1,23 @@
-; 190963978980874426218795056849542381377
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190963978980874426218795056849542381377_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190963978980874426218795056849542381377.c"
+; 130515656871010087564605710488833800388
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/130515656871010087564605710488833800388_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/130515656871010087564605710488833800388.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@C = dso_local global x86_fp80 0xK40008000000000000000, align 16
-@U = dso_local global x86_fp80 0xK3FFF8000000000000000, align 16
-@Y2 = dso_local global x86_fp80 0xK4000C000000000000000, align 16
-@Y1 = dso_local global x86_fp80 0xK3FFF8000000000000000, align 16
-@X = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@Y = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@Z = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@T = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@R = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@S = dso_local global x86_fp80 0xK00000000000000000000, align 16
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca i32, align 4
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load x86_fp80, ptr @C, align 16
-  %1 = load x86_fp80, ptr @U, align 16
-  %add = fadd x86_fp80 %0, %1
-  %2 = load x86_fp80, ptr @Y2, align 16
-  %mul = fmul x86_fp80 %add, %2
-  store x86_fp80 %mul, ptr @X, align 16
-  ret i32 0
+  store i32 0, ptr %x, align 4
+  store ptr %x, ptr %p, align 8
+  %0 = load ptr, ptr %p, align 8
+  %arrayidx = getelementptr inbounds i32, ptr %0, i64 0
+  store i32 0, ptr %arrayidx, align 4
+  %1 = load i32, ptr %x, align 4
+  ret i32 %1
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

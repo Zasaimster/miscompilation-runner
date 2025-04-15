@@ -1,17 +1,38 @@
-; 174197382251437127781713865997205339382
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/174197382251437127781713865997205339382.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/174197382251437127781713865997205339382.c"
+; 177933320904933274101110472556573231331
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177933320904933274101110472556573231331.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177933320904933274101110472556573231331.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@foo = dso_local global [0 x [0 x i8]] zeroinitializer, align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %arr = alloca [20 x i32], align 16
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  ret i32 0
+  store ptr null, ptr %p, align 8
+  %0 = load ptr, ptr %p, align 8
+  %add.ptr = getelementptr inbounds i32, ptr %0, i64 1
+  store ptr %add.ptr, ptr %p, align 8
+  %1 = load ptr, ptr %p, align 8
+  store i32 123, ptr %1, align 4
+  %arrayidx = getelementptr inbounds [20 x i32], ptr %arr, i64 0, i64 1
+  %2 = load i32, ptr %arrayidx, align 4
+  %cmp = icmp ne i32 %2, 123
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %3 = load i32, ptr %retval, align 4
+  ret i32 %3
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

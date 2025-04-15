@@ -1,30 +1,28 @@
-; 13361962379749781684765549875901567042
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13361962379749781684765549875901567042_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13361962379749781684765549875901567042.c"
+; 158360430184918966641628907273839706045
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/158360430184918966641628907273839706045_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/158360430184918966641628907273839706045.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local <2 x float> @f(float noundef %a, float noundef %b) local_unnamed_addr #0 {
+define dso_local noundef float @g(ptr noundef readnone captures(none) %a, ptr noundef readnone captures(none) %b, i32 noundef %e, i32 noundef %c, float noundef %d) local_unnamed_addr #0 {
 entry:
-  %retval.sroa.0.4.vec.insert = insertelement <2 x float> <float 0.000000e+00, float poison>, float %b, i64 1
-  ret <2 x float> %retval.sroa.0.4.vec.insert
+  ret float 1.000000e+01
 }
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef float @f(ptr noundef readnone captures(none) %a, ptr noundef readnone captures(none) %b, i32 noundef %c, float noundef %d) local_unnamed_addr #0 {
 entry:
-  tail call void @abort() #3
-  unreachable
+  ret float 1.000000e+01
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  ret i32 0
+}
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="64" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="64" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

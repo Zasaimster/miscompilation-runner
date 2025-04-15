@@ -1,57 +1,69 @@
-; 142901724327512780316915356075372305796
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/142901724327512780316915356075372305796.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/142901724327512780316915356075372305796.c"
+; 119599941522588485305374428911667607501
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119599941522588485305374428911667607501.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119599941522588485305374428911667607501.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [16 x i8] c"Value of x: %d\0A\00", align 1
+@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef range(i32 5, 13) i32 @test_store_ccp(i32 noundef %i) local_unnamed_addr #0 {
+define dso_local void @check(i32 noundef %a) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %i)
-  %cmp = icmp slt i32 %call, 5
-  %cmp1 = icmp sgt i32 %i, 8
-  %0 = select i1 %cmp1, i32 5, i32 12
-  %add = select i1 %cmp, i32 12, i32 %0
-  ret i32 %add
-}
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local i32 @test_store_copy_prop(i32 noundef %i) local_unnamed_addr #2 {
-entry:
-  %cmp1 = icmp sgt i32 %i, 8
-  %.sroa.speculate.load.false.sroa.speculated = zext i1 %cmp1 to i32
-  %.sroa.speculated = add nsw i32 %i, %.sroa.speculate.load.false.sroa.speculated
-  ret i32 %.sroa.speculated
-}
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef 10)
-  %cmp.i = icmp slt i32 %call.i, 5
-  br i1 %cmp.i, label %if.then, label %if.end4
+  %cmp.not = icmp eq i32 %a, 1
+  br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
-  tail call void @abort() #4
+  tail call void @abort() #5
   unreachable
 
-if.end4:                                          ; preds = %entry
-  ret i32 0
+if.end:                                           ; preds = %entry
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #3
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @test(i32 noundef %a, i32 noundef %b) local_unnamed_addr #0 {
+entry:
+  %tobool.not = icmp ne i32 %a, 0
+  %cond = zext i1 %tobool.not to i32
+  %tobool1.not = icmp eq i32 %b, 0
+  %cond2 = select i1 %tobool1.not, i32 0, i32 2
+  %or = or disjoint i32 %cond2, %cond
+  %cmp.not.i = icmp eq i32 %or, 1
+  br i1 %cmp.not.i, label %check.exit, label %if.then.i
+
+if.then.i:                                        ; preds = %entry
+  tail call void @abort() #5
+  unreachable
+
+check.exit:                                       ; preds = %entry
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
+}
+
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  %puts.i.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  tail call void @exit(i32 noundef 0) #5
+  unreachable
+}
+
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #3
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #4
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree nounwind }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

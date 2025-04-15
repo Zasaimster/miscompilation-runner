@@ -1,21 +1,18 @@
-; 17269097194499479439247869285790347983
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17269097194499479439247869285790347983.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17269097194499479439247869285790347983.c"
+; 12918316878171335716410296946075432725
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12918316878171335716410296946075432725.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12918316878171335716410296946075432725.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@x = dso_local global { i8, i8, [2 x i8] } { i8 0, i8 67, [2 x i8] zeroinitializer }, align 4
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local i32 @foo(i32 noundef %x) #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %bf.load = load i16, ptr @x, align 4
-  %bf.shl = shl i16 %bf.load, 12
-  %bf.ashr = ashr i16 %bf.shl, 12
-  %bf.cast = sext i16 %bf.ashr to i32
-  %cmp = icmp ne i32 %bf.cast, 0
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %sub = sub nsw i32 0, %0
+  %sub1 = sub nsw i32 %sub, 100
+  %cmp = icmp sge i32 %sub1, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -23,35 +20,22 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %bf.load1 = load i16, ptr @x, align 4
-  %bf.shl2 = shl i16 %bf.load1, 4
-  %bf.ashr3 = ashr i16 %bf.shl2, 12
-  %bf.cast4 = sext i16 %bf.ashr3 to i32
-  %cmp5 = icmp ne i32 %bf.cast4, 3
-  br i1 %cmp5, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end7:                                          ; preds = %if.end
-  %bf.load8 = load i16, ptr @x, align 4
-  %bf.ashr9 = ashr i16 %bf.load8, 12
-  %bf.cast10 = sext i16 %bf.ashr9 to i32
-  %cmp11 = icmp ne i32 %bf.cast10, 4
-  br i1 %cmp11, label %if.then12, label %if.end13
-
-if.then12:                                        ; preds = %if.end7
-  call void @abort() #3
-  unreachable
-
-if.end13:                                         ; preds = %if.end7
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  %call = call i32 @foo(i32 noundef -3)
+  %call1 = call i32 @foo(i32 noundef -99)
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

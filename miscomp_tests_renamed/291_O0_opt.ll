@@ -1,92 +1,33 @@
-; 149457401698011054870325797386197216258
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/149457401698011054870325797386197216258_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/149457401698011054870325797386197216258.c"
+; 121244655703824684676633073992235963381
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121244655703824684676633073992235963381_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121244655703824684676633073992235963381.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [25 x i8] c"Main function executed.\0A\00", align 1
-@c = dso_local global i32 0, align 4
-@b = dso_local global i32 0, align 4
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local signext i8 @fn1() #0 {
-entry:
-  %d = alloca i8, align 1
-  %i = alloca i32, align 4
-  store i32 0, ptr %i, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %call = call i32 (...) @printHello()
-  %cmp = icmp slt i32 %call, 1
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  store i8 -15, ptr %d, align 1
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %0 = load i8, ptr %d, align 1
-  ret i8 %0
-}
-
-declare i32 @printHello(...) #1
-
-declare i32 @printf(ptr noundef, ...) #1
+@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
+@flag = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %e = alloca i8, align 1
-  %f = alloca i8, align 1
-  %g = alloca i32, align 4
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr @c, align 4
-  br label %for.cond
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %0 = load i32, ptr %x, align 4
+  %and = and i32 %0, -256
+  %tobool = icmp ne i32 %and, 0
+  br i1 %tobool, label %if.then, label %if.end
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr @c, align 4
-  %cmp = icmp slt i32 %0, 1
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  store i32 0, ptr @b, align 4
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %1 = load i32, ptr @c, align 4
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr @c, align 4
-  br label %for.cond, !llvm.loop !8
-
-for.end:                                          ; preds = %for.cond
-  %call = call signext i8 @fn1()
-  store i8 %call, ptr %e, align 1
-  %2 = load i8, ptr %e, align 1
-  %conv = sext i8 %2 to i32
-  %3 = load i32, ptr @b, align 4
-  %xor = xor i32 %conv, %3
-  %conv1 = trunc i32 %xor to i8
-  store i8 %conv1, ptr %f, align 1
-  %4 = load i8, ptr %f, align 1
-  %conv2 = sext i8 %4 to i32
-  store volatile i32 %conv2, ptr %g, align 4
-  %5 = load volatile i32, ptr %g, align 4
-  %cmp3 = icmp ne i32 %5, -15
-  br i1 %cmp3, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.end
+if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %for.end
+if.end:                                           ; preds = %entry
   ret i32 0
 }
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
@@ -105,6 +46,3 @@ attributes #3 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}

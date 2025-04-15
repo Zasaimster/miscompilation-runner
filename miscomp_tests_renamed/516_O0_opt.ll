@@ -1,128 +1,149 @@
-; 170024530087181069129528226263973591303
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170024530087181069129528226263973591303_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170024530087181069129528226263973591303.c"
+; 194969434787928591739336283243243333554
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194969434787928591739336283243243333554_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194969434787928591739336283243243333554.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Not happening\0A\00", align 1
+@d = dso_local global [1 x i8] zeroinitializer, align 1
+@i = dso_local global i32 0, align 4
+@cp = dso_local global ptr null, align 8
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
-  %c = alloca i32, align 4
-  %pa = alloca ptr, align 8
-  %pb = alloca ptr, align 8
-  %pc = alloca ptr, align 8
-  %ppa = alloca ptr, align 8
-  %ppb = alloca ptr, align 8
-  %ppc = alloca ptr, align 8
-  %i = alloca i32, align 4
+  %c = alloca [32 x i8], align 16
+  %p = alloca ptr, align 8
+  %j = alloca i32, align 4
   %x = alloca i32, align 4
   %y = alloca i32, align 4
-  %z = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 10, ptr %a, align 4
-  store i32 20, ptr %b, align 4
-  store i32 30, ptr %c, align 4
-  store ptr %a, ptr %pa, align 8
-  store ptr %b, ptr %pb, align 8
-  store ptr %c, ptr %pc, align 8
-  store ptr %pa, ptr %ppa, align 8
-  store ptr %pb, ptr %ppb, align 8
-  store ptr %pc, ptr %ppc, align 8
-  store i32 0, ptr %x, align 4
-  store i32 0, ptr %y, align 4
-  store i32 0, ptr %z, align 4
-  store i32 0, ptr %i, align 4
+  call void @llvm.memset.p0.i64(ptr align 16 %c, i8 0, i64 32, i1 false)
+  %0 = load volatile i32, ptr @i, align 4
+  %idx.ext = sext i32 %0 to i64
+  %add.ptr = getelementptr inbounds i8, ptr @d, i64 %idx.ext
+  store ptr %add.ptr, ptr %p, align 8
+  store i32 0, ptr %j, align 4
   br label %for.cond
 
 for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 10
+  %1 = load i32, ptr %j, align 4
+  %cmp = icmp slt i32 %1, 30
   br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
-  %1 = load ptr, ptr %pa, align 8
-  %cmp1 = icmp eq ptr %1, null
-  br i1 %cmp1, label %if.then, label %if.end
+  store i32 255, ptr %x, align 4
+  %2 = load ptr, ptr %p, align 8
+  %incdec.ptr = getelementptr inbounds nuw i8, ptr %2, i32 1
+  store ptr %incdec.ptr, ptr %p, align 8
+  %3 = load i8, ptr %incdec.ptr, align 1
+  %conv = zext i8 %3 to i32
+  store i32 %conv, ptr %y, align 4
+  %4 = load i32, ptr %j, align 4
+  switch i32 %4, label %sw.default [
+    i32 1, label %sw.bb
+    i32 2, label %sw.bb1
+    i32 25, label %sw.bb3
+  ]
 
-if.then:                                          ; preds = %for.body
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %if.end
+sw.bb:                                            ; preds = %for.body
+  %5 = load i32, ptr %x, align 4
+  %xor = xor i32 %5, 2
+  store i32 %xor, ptr %x, align 4
+  br label %sw.epilog
 
-if.end:                                           ; preds = %if.then, %for.body
-  br label %while.cond
+sw.bb1:                                           ; preds = %for.body
+  %6 = load i32, ptr %x, align 4
+  %xor2 = xor i32 %6, 4
+  store i32 %xor2, ptr %x, align 4
+  br label %sw.epilog
 
-while.cond:                                       ; preds = %if.end4, %if.end
-  %2 = load ptr, ptr %pa, align 8
-  %3 = load i32, ptr %2, align 4
-  %dec = add nsw i32 %3, -1
-  store i32 %dec, ptr %2, align 4
-  %tobool = icmp ne i32 %3, 0
-  br i1 %tobool, label %while.body, label %while.end
-
-while.body:                                       ; preds = %while.cond
-  %4 = load i32, ptr %x, align 4
-  %inc = add nsw i32 %4, 1
-  store i32 %inc, ptr %x, align 4
-  %5 = load ptr, ptr %pa, align 8
-  %6 = load i32, ptr %5, align 4
-  %cmp2 = icmp slt i32 %6, 3
-  br i1 %cmp2, label %if.then3, label %if.else
-
-if.then3:                                         ; preds = %while.body
-  br label %while.end
-
-if.else:                                          ; preds = %while.body
-  store ptr %b, ptr %pa, align 8
-  br label %if.end4
-
-if.end4:                                          ; preds = %if.else
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %if.then3, %while.cond
+sw.bb3:                                           ; preds = %for.body
   %7 = load i32, ptr %x, align 4
-  %inc5 = add nsw i32 %7, 1
-  store i32 %inc5, ptr %x, align 4
-  store ptr %b, ptr %pa, align 8
+  %xor4 = xor i32 %7, 1
+  store i32 %xor4, ptr %x, align 4
+  br label %sw.epilog
+
+sw.default:                                       ; preds = %for.body
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %sw.default, %sw.bb3, %sw.bb1, %sw.bb
+  %8 = load i32, ptr %y, align 4
+  %9 = load i32, ptr %x, align 4
+  %or = or i32 %8, %9
+  %conv5 = trunc i32 %or to i8
+  %10 = load i32, ptr %j, align 4
+  %idxprom = sext i32 %10 to i64
+  %arrayidx = getelementptr inbounds [32 x i8], ptr %c, i64 0, i64 %idxprom
+  store i8 %conv5, ptr %arrayidx, align 1
+  %11 = load ptr, ptr %p, align 8
+  store volatile ptr %11, ptr @cp, align 8
   br label %for.inc
 
-for.inc:                                          ; preds = %while.end
-  %8 = load i32, ptr %i, align 4
-  %inc6 = add nsw i32 %8, 1
-  store i32 %inc6, ptr %i, align 4
-  br label %for.cond, !llvm.loop !8
+for.inc:                                          ; preds = %sw.epilog
+  %12 = load i32, ptr %j, align 4
+  %inc = add nsw i32 %12, 1
+  store i32 %inc, ptr %j, align 4
+  br label %for.cond, !llvm.loop !6
 
 for.end:                                          ; preds = %for.cond
-  %9 = load ptr, ptr %pa, align 8
-  %10 = load i32, ptr %9, align 4
-  %cmp7 = icmp ne i32 %10, -5
-  br i1 %cmp7, label %if.then11, label %lor.lhs.false
+  %arrayidx6 = getelementptr inbounds [32 x i8], ptr %c, i64 0, i64 0
+  %13 = load i8, ptr %arrayidx6, align 16
+  %conv7 = zext i8 %13 to i32
+  %cmp8 = icmp ne i32 %conv7, 255
+  br i1 %cmp8, label %if.then, label %lor.lhs.false
 
 lor.lhs.false:                                    ; preds = %for.end
-  %11 = load ptr, ptr %pb, align 8
-  %12 = load i32, ptr %11, align 4
-  %cmp8 = icmp ne i32 %12, -5
-  br i1 %cmp8, label %if.then11, label %lor.lhs.false9
+  %arrayidx10 = getelementptr inbounds [32 x i8], ptr %c, i64 0, i64 1
+  %14 = load i8, ptr %arrayidx10, align 1
+  %conv11 = zext i8 %14 to i32
+  %cmp12 = icmp ne i32 %conv11, 253
+  br i1 %cmp12, label %if.then, label %lor.lhs.false14
 
-lor.lhs.false9:                                   ; preds = %lor.lhs.false
-  %13 = load i32, ptr %x, align 4
-  %cmp10 = icmp ne i32 %13, 43
-  br i1 %cmp10, label %if.then11, label %if.end12
+lor.lhs.false14:                                  ; preds = %lor.lhs.false
+  %arrayidx15 = getelementptr inbounds [32 x i8], ptr %c, i64 0, i64 2
+  %15 = load i8, ptr %arrayidx15, align 2
+  %conv16 = zext i8 %15 to i32
+  %cmp17 = icmp ne i32 %conv16, 251
+  br i1 %cmp17, label %if.then, label %lor.lhs.false19
 
-if.then11:                                        ; preds = %lor.lhs.false9, %lor.lhs.false, %for.end
+lor.lhs.false19:                                  ; preds = %lor.lhs.false14
+  %arrayidx20 = getelementptr inbounds [32 x i8], ptr %c, i64 0, i64 3
+  %16 = load i8, ptr %arrayidx20, align 1
+  %conv21 = zext i8 %16 to i32
+  %cmp22 = icmp ne i32 %conv21, 255
+  br i1 %cmp22, label %if.then, label %lor.lhs.false24
+
+lor.lhs.false24:                                  ; preds = %lor.lhs.false19
+  %arrayidx25 = getelementptr inbounds [32 x i8], ptr %c, i64 0, i64 4
+  %17 = load i8, ptr %arrayidx25, align 4
+  %conv26 = zext i8 %17 to i32
+  %cmp27 = icmp ne i32 %conv26, 255
+  br i1 %cmp27, label %if.then, label %lor.lhs.false29
+
+lor.lhs.false29:                                  ; preds = %lor.lhs.false24
+  %arrayidx30 = getelementptr inbounds [32 x i8], ptr %c, i64 0, i64 25
+  %18 = load i8, ptr %arrayidx30, align 1
+  %conv31 = zext i8 %18 to i32
+  %cmp32 = icmp ne i32 %conv31, 254
+  br i1 %cmp32, label %if.then, label %lor.lhs.false34
+
+lor.lhs.false34:                                  ; preds = %lor.lhs.false29
+  %19 = load volatile ptr, ptr @cp, align 8
+  %cmp35 = icmp ne ptr %19, getelementptr inbounds (i8, ptr @d, i64 30)
+  br i1 %cmp35, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false34, %lor.lhs.false29, %lor.lhs.false24, %lor.lhs.false19, %lor.lhs.false14, %lor.lhs.false, %for.end
   call void @abort() #4
   unreachable
 
-if.end12:                                         ; preds = %lor.lhs.false9
+if.end:                                           ; preds = %lor.lhs.false34
   call void @exit(i32 noundef 0) #5
   unreachable
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
@@ -131,7 +152,7 @@ declare void @abort() #2
 declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { noreturn nounwind }
@@ -148,4 +169,3 @@ attributes #5 = { noreturn }
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}

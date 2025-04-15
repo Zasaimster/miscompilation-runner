@@ -1,25 +1,58 @@
-; 143335812951740767030372194173998843110
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/143335812951740767030372194173998843110.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/143335812951740767030372194173998843110.c"
+; 134967742206728010175534499203344897902
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134967742206728010175534499203344897902.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134967742206728010175534499203344897902.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@.str = private unnamed_addr constant [6 x i8] c"abcde\00", align 1
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @func1() #0 {
+define dso_local ptr @foo(ptr noundef %buf, ptr noundef %p) #0 {
 entry:
-  %x = alloca i32, align 4
-  %y = alloca i32, align 4
-  %z = alloca i32, align 4
-  store i32 10, ptr %x, align 4
-  store i32 20, ptr %y, align 4
-  %0 = load i32, ptr %x, align 4
-  %1 = load i32, ptr %y, align 4
-  %add = add nsw i32 %0, %1
-  store i32 %add, ptr %z, align 4
-  ret void
+  %buf.addr = alloca ptr, align 8
+  %p.addr = alloca ptr, align 8
+  store ptr %buf, ptr %buf.addr, align 8
+  store ptr %p, ptr %p.addr, align 8
+  %0 = load ptr, ptr %buf.addr, align 8
+  %1 = load ptr, ptr %p.addr, align 8
+  %incdec.ptr = getelementptr inbounds nuw i8, ptr %1, i32 1
+  store ptr %incdec.ptr, ptr %p.addr, align 8
+  %call = call i32 (ptr, ptr, ...) @sprintf(ptr noundef %0, ptr noundef @.str, ptr noundef %1) #3
+  ret ptr null
 }
 
+; Function Attrs: nounwind
+declare i32 @sprintf(ptr noundef, ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %buf = alloca [6 x i8], align 1
+  store i32 0, ptr %retval, align 4
+  %arraydecay = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 0
+  %arrayidx = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 2
+  %call = call ptr @foo(ptr noundef %arraydecay, ptr noundef %arrayidx)
+  %arrayidx1 = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 3
+  %cmp = icmp ne ptr %call, %arrayidx1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret i32 0
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nounwind }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,19 +1,28 @@
-; 154924200158994231208232114838279373996
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/154924200158994231208232114838279373996_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/154924200158994231208232114838279373996.c"
+; 182518980584916479195126443199085244381
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182518980584916479195126443199085244381_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182518980584916479195126443199085244381.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@v = dso_local global i32 10, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local i64 @f(i64 noundef %x, i64 noundef %y) #0 {
+entry:
+  %x.addr = alloca i64, align 8
+  %y.addr = alloca i64, align 8
+  store i64 %x, ptr %x.addr, align 8
+  store i64 %y, ptr %y.addr, align 8
+  %0 = load i64, ptr %y.addr, align 8
+  %and = and i64 %0, 1
+  ret i64 %and
+}
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %v = alloca i32, align 4
-  store i32 5, ptr %v, align 4
-  %0 = load i32, ptr @v, align 4
-  %cmp = icmp ne i32 %0, 3
+  store i32 0, ptr %retval, align 4
+  %call = call i64 @f(i64 noundef 2, i64 noundef 14600926)
+  %cmp = icmp ne i64 %call, 14600926
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -21,22 +30,12 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  call void @exit(i32 noundef 0) #4
-  unreachable
-}
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

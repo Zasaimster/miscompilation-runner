@@ -1,71 +1,72 @@
-; 157658020400645697206218107397816664512
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157658020400645697206218107397816664512.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157658020400645697206218107397816664512.c"
+; 177827850325735871836411112195056343817
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177827850325735871836411112195056343817.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177827850325735871836411112195056343817.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@e = dso_local local_unnamed_addr global i32 1, align 4
-@c = dso_local local_unnamed_addr global i32 0, align 4
-@b = dso_local local_unnamed_addr global i32 0, align 4
-@d = dso_local local_unnamed_addr global i32 0, align 4
-@f = dso_local local_unnamed_addr global i32 0, align 4
-@g = dso_local local_unnamed_addr global i32 0, align 4
-@h = dso_local local_unnamed_addr global i32 0, align 4
-@j = dso_local local_unnamed_addr global i32 0, align 4
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+@b = dso_local local_unnamed_addr global i32 100, align 4
+@a = dso_local local_unnamed_addr global i32 0, align 4
+@e = dso_local local_unnamed_addr global i32 0, align 4
+@c = dso_local global i32 0, align 4
+@d = dso_local global i32 0, align 4
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %0 = load i32, ptr @c, align 4, !tbaa !5
-  %tobool.i = icmp ne i32 %0, 0
-  %1 = load i32, ptr @b, align 4
-  %tobool1.i = icmp ne i32 %1, 0
-  %2 = select i1 %tobool.i, i1 true, i1 %tobool1.i
-  %lor.ext.i = zext i1 %2 to i32
-  %3 = load i32, ptr @e, align 4, !tbaa !5
-  %rem.i = srem i32 %lor.ext.i, %3
-  store i32 %rem.i, ptr @g, align 4, !tbaa !5
-  %tobool2.i = icmp ne i32 %rem.i, 0
-  %4 = load i32, ptr @f, align 4
-  %tobool3.i = icmp ne i32 %4, 0
-  %or.cond.i = select i1 %tobool2.i, i1 true, i1 %tobool3.i
-  %or.cond9.i = select i1 %or.cond.i, i1 %tobool1.i, i1 false
-  br i1 %or.cond9.i, label %fn1.exit, label %if.end.i
+  %b.promoted = load i32, ptr @b, align 4, !tbaa !5
+  br label %for.body
 
-if.end.i:                                         ; preds = %entry
-  %5 = load i32, ptr @d, align 4, !tbaa !5
-  store i32 %5, ptr @e, align 4, !tbaa !5
-  %tobool5.not.i = icmp eq i32 %5, 0
-  %storemerge11.i = select i1 %tobool5.not.i, i32 -4, i32 -5
-  store i32 %storemerge11.i, ptr @c, align 4, !tbaa !5
-  store i32 %storemerge11.i, ptr @j, align 4, !tbaa !5
-  br label %fn1.exit
+for.body:                                         ; preds = %entry, %for.inc5
+  %f.018 = phi i32 [ 0, %entry ], [ %f.2, %for.inc5 ]
+  %storemerge17 = phi i32 [ 0, %entry ], [ %inc6, %for.inc5 ]
+  %and11416 = phi i32 [ %b.promoted, %entry ], [ %and1, %for.inc5 ]
+  %and = and i32 %f.018, 1
+  br label %for.body4
 
-fn1.exit:                                         ; preds = %entry, %if.end.i
-  %6 = load i32, ptr @c, align 4, !tbaa !5
-  %cmp.not = icmp eq i32 %6, -4
-  br i1 %cmp.not, label %if.end, label %if.then
+for.body4:                                        ; preds = %for.body, %for.inc
+  %f.113 = phi i32 [ %f.018, %for.body ], [ %f.2, %for.inc ]
+  %storemerge1112 = phi i32 [ 0, %for.body ], [ %inc, %for.inc ]
+  %0 = load volatile i32, ptr @c, align 4, !tbaa !5
+  %tobool.not = icmp eq i32 %0, 0
+  br i1 %tobool.not, label %for.inc, label %if.then
 
-if.then:                                          ; preds = %fn1.exit
-  tail call void @abort() #3
+if.then:                                          ; preds = %for.body4
+  %1 = load volatile i32, ptr @d, align 4, !tbaa !5
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body4, %if.then
+  %f.2 = phi i32 [ %1, %if.then ], [ %f.113, %for.body4 ]
+  %inc = add nuw nsw i32 %storemerge1112, 1
+  %exitcond.not = icmp eq i32 %inc, 6
+  br i1 %exitcond.not, label %for.inc5, label %for.body4, !llvm.loop !9
+
+for.inc5:                                         ; preds = %for.inc
+  %and1 = and i32 %and, %and11416
+  %inc6 = add nuw nsw i32 %storemerge17, 1
+  %cmp = icmp eq i32 %storemerge17, 0
+  br i1 %cmp, label %for.body, label %for.end7, !llvm.loop !12
+
+for.end7:                                         ; preds = %for.inc5
+  store i32 2, ptr @a, align 4, !tbaa !5
+  store i32 %and1, ptr @b, align 4, !tbaa !5
+  store i32 6, ptr @e, align 4, !tbaa !5
+  %cmp8.not = icmp eq i32 %and1, 0
+  br i1 %cmp8.not, label %if.end10, label %if.then9
+
+if.then9:                                         ; preds = %for.end7
+  tail call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %fn1.exit
+if.end10:                                         ; preds = %for.end7
   ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
-
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
-attributes #3 = { noreturn nounwind }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -79,3 +80,7 @@ attributes #3 = { noreturn nounwind }
 !6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}
+!12 = distinct !{!12, !10, !11}

@@ -1,75 +1,75 @@
-; 161709648857167326168744165851085637926
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161709648857167326168744165851085637926.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161709648857167326168744165851085637926.c"
+; 177214455484259700903770642061906437491
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177214455484259700903770642061906437491.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177214455484259700903770642061906437491.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@loop_1 = dso_local global i32 0, align 4
+@loop_2 = dso_local global i32 7, align 4
+@flag = dso_local global i32 0, align 4
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %b, i32 noundef %c) #0 {
+define dso_local i32 @test() #0 {
 entry:
-  %b.addr = alloca ptr, align 8
-  %c.addr = alloca i32, align 4
-  %v = alloca i64, align 8
-  store ptr %b, ptr %b.addr, align 8
-  store i32 %c, ptr %c.addr, align 4
-  store i64 0, ptr %v, align 8
-  %0 = load i32, ptr %c.addr, align 4
-  switch i32 %0, label %sw.default [
-    i32 100, label %sw.bb
-    i32 107, label %sw.bb3
-  ]
+  %i = alloca i32, align 4
+  %counter = alloca i32, align 4
+  store i32 0, ptr %counter, align 4
+  br label %while.cond
 
-sw.bb:                                            ; preds = %entry
-  %1 = load ptr, ptr %b.addr, align 8
-  %arrayidx = getelementptr inbounds i8, ptr %1, i64 0
-  %2 = load i8, ptr %arrayidx, align 1
-  %conv = zext i8 %2 to i64
-  %shl = shl i64 %conv, 8
-  %3 = load ptr, ptr %b.addr, align 8
-  %arrayidx1 = getelementptr inbounds i8, ptr %3, i64 1
-  %4 = load i8, ptr %arrayidx1, align 1
-  %conv2 = zext i8 %4 to i64
-  %add = add i64 %shl, %conv2
-  store i64 %add, ptr %v, align 8
-  %5 = load i64, ptr %v, align 8
-  %shr = lshr i64 %5, 9
-  store i64 %shr, ptr %v, align 8
-  br label %sw.epilog
+while.cond:                                       ; preds = %if.end, %entry
+  %0 = load i32, ptr @loop_1, align 4
+  %1 = load i32, ptr %counter, align 4
+  %cmp = icmp sgt i32 %0, %1
+  br i1 %cmp, label %while.body, label %while.end
 
-sw.bb3:                                           ; preds = %entry
-  %6 = load ptr, ptr %b.addr, align 8
-  %arrayidx4 = getelementptr inbounds i8, ptr %6, i64 3
-  %7 = load i8, ptr %arrayidx4, align 1
-  %conv5 = zext i8 %7 to i32
-  %shr6 = ashr i32 %conv5, 4
-  %conv7 = sext i32 %shr6 to i64
-  store i64 %conv7, ptr %v, align 8
-  br label %sw.epilog
+while.body:                                       ; preds = %while.cond
+  %2 = load i32, ptr @flag, align 4
+  %and = and i32 %2, 1
+  %tobool = icmp ne i32 %and, 0
+  br i1 %tobool, label %if.then, label %if.end
 
-sw.default:                                       ; preds = %entry
-  call void @abort() #3
-  unreachable
+if.then:                                          ; preds = %while.body
+  store i32 0, ptr %i, align 4
+  br label %for.cond
 
-sw.epilog:                                        ; preds = %sw.bb3, %sw.bb
-  ret i32 0
+for.cond:                                         ; preds = %for.inc, %if.then
+  %3 = load i32, ptr %i, align 4
+  %4 = load i32, ptr @loop_2, align 4
+  %cmp1 = icmp slt i32 %3, %4
+  br i1 %cmp1, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %5 = load i32, ptr %counter, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, ptr %counter, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load i32, ptr %i, align 4
+  %inc2 = add nsw i32 %6, 1
+  store i32 %inc2, ptr %i, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  br label %if.end
+
+if.end:                                           ; preds = %for.end, %while.body
+  %7 = load i32, ptr @flag, align 4
+  %inc3 = add nsw i32 %7, 1
+  store i32 %inc3, ptr @flag, align 4
+  br label %while.cond, !llvm.loop !8
+
+while.end:                                        ; preds = %while.cond
+  ret i32 1
 }
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %buf = alloca [4 x i8], align 1
   store i32 0, ptr %retval, align 4
-  %arrayidx = getelementptr inbounds [4 x i8], ptr %buf, i64 0, i64 0
-  store i8 -86, ptr %arrayidx, align 1
-  %arrayidx1 = getelementptr inbounds [4 x i8], ptr %buf, i64 0, i64 1
-  store i8 5, ptr %arrayidx1, align 1
-  %arraydecay = getelementptr inbounds [4 x i8], ptr %buf, i64 0, i64 0
-  %call = call i32 @f(ptr noundef %arraydecay, i32 noundef 100)
-  %cmp = icmp ne i32 %call, 85
+  %call = call i32 @test()
+  %cmp = icmp ne i32 %call, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -80,6 +80,9 @@ if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2
@@ -99,3 +102,6 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}

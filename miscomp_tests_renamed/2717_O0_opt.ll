@@ -1,29 +1,53 @@
-; 164090965876443094676542924254113017225
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164090965876443094676542924254113017225_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164090965876443094676542924254113017225.c"
+; 166054357448655720719313313305815123702
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/166054357448655720719313313305815123702_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/166054357448655720719313313305815123702.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  %sub = sub nsw i32 %0, 2
+  %1 = call i32 @llvm.abs.i32(i32 %sub, i1 true)
+  %mul = mul nsw i32 -2, %1
+  ret i32 %mul
+}
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.abs.i32(i32, i1 immarg) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %arr = alloca [0 x i32], align 4
   store i32 0, ptr %retval, align 4
-  %arrayidx = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 0
-  store i32 1, ptr %arrayidx, align 4
-  %arrayidx1 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 1
-  store i32 2, ptr %arrayidx1, align 4
-  %arrayidx2 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 0
-  %0 = load i32, ptr %arrayidx2, align 4
-  %arrayidx3 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 1
-  %1 = load i32, ptr %arrayidx3, align 4
-  %add = add nsw i32 %0, %1
-  %sub = sub nsw i32 %add, 3
-  ret i32 %sub
+  %call = call i32 @foo(i32 noundef 1)
+  %cmp = icmp ne i32 %call, -2
+  br i1 %cmp, label %if.then, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %call1 = call i32 @foo(i32 noundef 3)
+  %cmp2 = icmp ne i32 %call1, -2
+  br i1 %cmp2, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %lor.lhs.false
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

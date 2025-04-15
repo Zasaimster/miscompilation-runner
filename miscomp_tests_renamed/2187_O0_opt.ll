@@ -1,35 +1,38 @@
-; 102301003243010062839436975044060136188
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102301003243010062839436975044060136188_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102301003243010062839436975044060136188.c"
+; 172467777826129054015696372304345638400
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172467777826129054015696372304345638400_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172467777826129054015696372304345638400.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i32 -1, align 4
-@.str = private unnamed_addr constant [30 x i8] c"This function has dead code.\0A\00", align 1
+%struct.T = type { i32 }
+
+@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %b = alloca i32, align 4
+  %v = alloca %struct.T, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @a, align 4
-  %cmp = icmp eq i32 %0, 0
-  br i1 %cmp, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %entry
-  br label %cond.end
-
-cond.false:                                       ; preds = %entry
-  %1 = load i32, ptr @a, align 4
-  %sub = sub nsw i32 0, %1
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i32 [ 0, %cond.true ], [ %sub, %cond.false ]
-  store i32 %cond, ptr %b, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret i32 0
+  %x = getelementptr inbounds nuw %struct.T, ptr %v, i32 0, i32 0
+  store i32 %call, ptr %x, align 4
+  %x1 = getelementptr inbounds nuw %struct.T, ptr %v, i32 0, i32 0
+  %0 = load i32, ptr %x1, align 4
+  %cmp = icmp ne i32 %0, 2
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
 }
 
 declare i32 @printf(ptr noundef, ...) #1

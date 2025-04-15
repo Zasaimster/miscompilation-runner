@@ -1,61 +1,51 @@
-; 192630819722311062973643023178075828667
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192630819722311062973643023178075828667.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192630819722311062973643023178075828667.c"
+; 101064568016161225246736784870436372222
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101064568016161225246736784870436372222.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101064568016161225246736784870436372222.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@.str = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @big(i64 noundef %u) #0 {
+entry:
+  %u.addr = alloca i64, align 8
+  store i64 %u, ptr %u.addr, align 8
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @doit(i32 noundef %a, i32 noundef %b, ptr noundef %id) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  %id.addr = alloca ptr, align 8
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  store ptr %id, ptr %id.addr, align 8
+  %0 = load ptr, ptr %id.addr, align 8
+  %1 = load i8, ptr %0, align 1
+  %conv = sext i8 %1 to i64
+  call void @big(i64 noundef %conv)
+  %2 = load ptr, ptr %id.addr, align 8
+  %add.ptr = getelementptr inbounds i8, ptr %2, i64 1
+  store ptr %add.ptr, ptr %id.addr, align 8
+  %3 = load i32, ptr %a.addr, align 4
+  %conv1 = zext i32 %3 to i64
+  call void @big(i64 noundef %conv1)
+  %4 = load i32, ptr %b.addr, align 4
+  %conv2 = zext i32 %4 to i64
+  call void @big(i64 noundef %conv2)
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 5, ptr %x, align 4
-  %0 = load i32, ptr %x, align 4
-  %add = add nsw i32 %0, 0
-  store i32 %add, ptr %x, align 4
-  %1 = load i32, ptr %x, align 4
-  %add1 = add nsw i32 %1, 2
-  store i32 %add1, ptr %x, align 4
-  %2 = load i32, ptr %x, align 4
-  %cmp = icmp ne i32 %2, 4
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %3 = load i32, ptr %x, align 4
-  %sub = sub nsw i32 %3, 1
-  store i32 %sub, ptr %x, align 4
-  %4 = load i32, ptr %x, align 4
-  %cmp2 = icmp ne i32 %4, 3
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  store i32 2, ptr %retval, align 4
-  br label %return
-
-if.end4:                                          ; preds = %if.end
-  %5 = load i32, ptr %x, align 4
-  %mul = mul nsw i32 %5, 2
-  store i32 %mul, ptr %x, align 4
-  %6 = load i32, ptr %x, align 4
-  %cmp5 = icmp ne i32 %6, 6
-  br i1 %cmp5, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end4
-  store i32 3, ptr %retval, align 4
-  br label %return
-
-if.end7:                                          ; preds = %if.end4
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end7, %if.then6, %if.then3, %if.then
-  %7 = load i32, ptr %retval, align 4
-  ret i32 %7
+  call void @doit(i32 noundef 1, i32 noundef 1, ptr noundef @.str)
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

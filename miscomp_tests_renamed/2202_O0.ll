@@ -1,19 +1,28 @@
-; 142644858667746589412033917432605767168
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/142644858667746589412033917432605767168.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/142644858667746589412033917432605767168.c"
+; 128097119939329786209171889453551630656
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128097119939329786209171889453551630656.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128097119939329786209171889453551630656.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.s = type { i32, i32 }
-
-@v = dso_local global %struct.s zeroinitializer, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo(ptr noundef %p) #0 {
+entry:
+  %p.addr = alloca ptr, align 8
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  store ptr %p, ptr %p.addr, align 8
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  ret i32 42
+  store i32 1, ptr %a, align 4
+  call void @foo(ptr noundef %a)
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

@@ -1,37 +1,34 @@
-; 194920478303660570284458061948649041434
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194920478303660570284458061948649041434.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194920478303660570284458061948649041434.c"
+; 110458916580423353421960883629719329362
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110458916580423353421960883629719329362.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110458916580423353421960883629719329362.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str = private unnamed_addr constant [20 x i8] c"This is dead code.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %x) #0 {
+define dso_local i64 @f(i64 noundef %x, i64 noundef %y) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
+  %x.addr = alloca i64, align 8
+  %y.addr = alloca i64, align 8
+  store i64 %x, ptr %x.addr, align 8
+  store i64 %y, ptr %y.addr, align 8
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %cmp = icmp ne i32 %call, 0
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %cond.true, label %cond.false
 
-lor.lhs.false:                                    ; preds = %entry
-  %0 = load i32, ptr %x.addr, align 4
-  %cmp1 = icmp eq i32 %0, 0
-  br i1 %cmp1, label %if.then, label %if.end
+cond.true:                                        ; preds = %entry
+  %0 = load i64, ptr %y.addr, align 8
+  br label %cond.end
 
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
+cond.false:                                       ; preds = %entry
+  %1 = load i64, ptr %y.addr, align 8
+  %and = and i64 %1, 1
+  br label %cond.end
 
-if.end:                                           ; preds = %lor.lhs.false
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i64 [ %0, %cond.true ], [ %and, %cond.false ]
+  ret i64 %cond
 }
 
 declare i32 @printf(ptr noundef, ...) #1
@@ -41,9 +38,9 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 3)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %if.end
+  %call = call i64 @f(i64 noundef 2, i64 noundef 14600926)
+  %cmp = icmp ne i64 %call, 14600926
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #4

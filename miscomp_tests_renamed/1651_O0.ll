@@ -1,203 +1,127 @@
-; 117193727194934244791409550933703562514
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117193727194934244791409550933703562514.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117193727194934244791409550933703562514.c"
+; 132830825704478250071900226261554710431
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132830825704478250071900226261554710431.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132830825704478250071900226261554710431.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@.str.2 = private unnamed_addr constant [8 x i8] c"%d, %d\0A\00", align 1
+@expect = dso_local global [10 x i64] [i64 0, i64 1, i64 2, i64 3, i64 4, i64 4, i64 5, i64 6, i64 7, i64 9], align 16
+@stack_base = dso_local global ptr null, align 8
+@markstack_ptr = dso_local global ptr null, align 8
+@list = dso_local global [0 x i64] zeroinitializer, align 8
+@indices = dso_local global [10 x i32] zeroinitializer, align 16
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @doit() #0 {
+entry:
+  %src = alloca ptr, align 8
+  %dst = alloca ptr, align 8
+  %sp = alloca ptr, align 8
+  %diff = alloca i32, align 4
+  %shift = alloca i32, align 4
+  %count = alloca i32, align 4
+  %0 = load ptr, ptr @stack_base, align 8
+  %add.ptr = getelementptr inbounds i64, ptr %0, i64 5
+  store ptr %add.ptr, ptr %sp, align 8
+  store i32 2, ptr %diff, align 4
+  %1 = load i32, ptr %diff, align 4
+  %2 = load ptr, ptr @markstack_ptr, align 8
+  %arrayidx = getelementptr inbounds i32, ptr %2, i64 -1
+  %3 = load i32, ptr %arrayidx, align 4
+  %4 = load ptr, ptr @markstack_ptr, align 8
+  %arrayidx1 = getelementptr inbounds i32, ptr %4, i64 -2
+  %5 = load i32, ptr %arrayidx1, align 4
+  %sub = sub nsw i32 %3, %5
+  %sub2 = sub nsw i32 %1, %sub
+  store i32 %sub2, ptr %shift, align 4
+  %6 = load ptr, ptr %sp, align 8
+  %7 = load ptr, ptr @stack_base, align 8
+  %sub.ptr.lhs.cast = ptrtoint ptr %6 to i64
+  %sub.ptr.rhs.cast = ptrtoint ptr %7 to i64
+  %sub.ptr.sub = sub i64 %sub.ptr.lhs.cast, %sub.ptr.rhs.cast
+  %sub.ptr.div = sdiv exact i64 %sub.ptr.sub, 8
+  %8 = load ptr, ptr @markstack_ptr, align 8
+  %arrayidx3 = getelementptr inbounds i32, ptr %8, i64 -1
+  %9 = load i32, ptr %arrayidx3, align 4
+  %conv = sext i32 %9 to i64
+  %sub4 = sub nsw i64 %sub.ptr.div, %conv
+  %add = add nsw i64 %sub4, 2
+  %conv5 = trunc i64 %add to i32
+  store i32 %conv5, ptr %count, align 4
+  %10 = load ptr, ptr %sp, align 8
+  store ptr %10, ptr %src, align 8
+  %11 = load i32, ptr %shift, align 4
+  %12 = load ptr, ptr %sp, align 8
+  %idx.ext = sext i32 %11 to i64
+  %add.ptr6 = getelementptr inbounds i64, ptr %12, i64 %idx.ext
+  store ptr %add.ptr6, ptr %sp, align 8
+  store ptr %add.ptr6, ptr %dst, align 8
+  br label %while.cond
+
+while.cond:                                       ; preds = %while.body, %entry
+  %13 = load i32, ptr %count, align 4
+  %dec = add nsw i32 %13, -1
+  store i32 %dec, ptr %count, align 4
+  %tobool = icmp ne i32 %dec, 0
+  br i1 %tobool, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %14 = load ptr, ptr %src, align 8
+  %incdec.ptr = getelementptr inbounds i64, ptr %14, i32 -1
+  store ptr %incdec.ptr, ptr %src, align 8
+  %15 = load i64, ptr %14, align 8
+  %16 = load ptr, ptr %dst, align 8
+  %incdec.ptr7 = getelementptr inbounds i64, ptr %16, i32 -1
+  store ptr %incdec.ptr7, ptr %dst, align 8
+  store i64 %15, ptr %16, align 8
+  br label %while.cond, !llvm.loop !6
+
+while.end:                                        ; preds = %while.cond
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
-  %c = alloca i32, align 4
-  %d = alloca i32, align 4
-  %e = alloca i32, align 4
-  %f = alloca i32, align 4
-  %x = alloca i32, align 4
-  %y = alloca i32, align 4
+  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %a, align 4
-  store i32 34, ptr %b, align 4
-  store i32 56, ptr %c, align 4
-  store i32 78, ptr %d, align 4
-  store i32 0, ptr %e, align 4
-  store i32 1, ptr %f, align 4
-  %0 = load i32, ptr %c, align 4
-  %1 = load i32, ptr %d, align 4
-  %add = add nsw i32 %0, %1
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %add)
-  %2 = load i32, ptr %c, align 4
-  %3 = load i32, ptr %d, align 4
-  %add2 = add nsw i32 %2, %3
-  store i32 %add2, ptr %y, align 4
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %add2)
-  %4 = load i32, ptr %e, align 4
-  %tobool = icmp ne i32 %4, 0
-  br i1 %tobool, label %lor.end, label %lor.rhs
+  store i32 0, ptr %i, align 4
+  br label %for.cond
 
-lor.rhs:                                          ; preds = %entry
-  %5 = load i32, ptr %e, align 4
-  %tobool4 = icmp ne i32 %5, 0
-  br i1 %tobool4, label %land.rhs, label %land.end
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr %i, align 4
+  %cmp = icmp slt i32 %0, 10
+  br i1 %cmp, label %for.body, label %for.end
 
-land.rhs:                                         ; preds = %lor.rhs
-  %6 = load i32, ptr %f, align 4
-  %tobool5 = icmp ne i32 %6, 0
-  br label %land.end
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, ptr %i, align 4
+  %conv = sext i32 %1 to i64
+  %2 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %2 to i64
+  %arrayidx = getelementptr inbounds [0 x i64], ptr @list, i64 0, i64 %idxprom
+  store i64 %conv, ptr %arrayidx, align 8
+  br label %for.inc
 
-land.end:                                         ; preds = %land.rhs, %lor.rhs
-  %7 = phi i1 [ false, %lor.rhs ], [ %tobool5, %land.rhs ]
-  br label %lor.end
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, ptr %i, align 4
+  br label %for.cond, !llvm.loop !8
 
-lor.end:                                          ; preds = %land.end, %entry
-  %8 = phi i1 [ true, %entry ], [ %7, %land.end ]
-  %lor.ext = zext i1 %8 to i32
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext)
-  %9 = load i32, ptr %e, align 4
-  %tobool7 = icmp ne i32 %9, 0
-  br i1 %tobool7, label %lor.end13, label %lor.rhs8
-
-lor.rhs8:                                         ; preds = %lor.end
-  %10 = load i32, ptr %f, align 4
-  %tobool9 = icmp ne i32 %10, 0
-  br i1 %tobool9, label %land.rhs10, label %land.end12
-
-land.rhs10:                                       ; preds = %lor.rhs8
-  %11 = load i32, ptr %f, align 4
-  %tobool11 = icmp ne i32 %11, 0
-  br label %land.end12
-
-land.end12:                                       ; preds = %land.rhs10, %lor.rhs8
-  %12 = phi i1 [ false, %lor.rhs8 ], [ %tobool11, %land.rhs10 ]
-  br label %lor.end13
-
-lor.end13:                                        ; preds = %land.end12, %lor.end
-  %13 = phi i1 [ true, %lor.end ], [ %12, %land.end12 ]
-  %lor.ext14 = zext i1 %13 to i32
-  %call15 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext14)
-  %14 = load i32, ptr %e, align 4
-  %tobool16 = icmp ne i32 %14, 0
-  br i1 %tobool16, label %land.lhs.true, label %lor.rhs18
-
-land.lhs.true:                                    ; preds = %lor.end13
-  %15 = load i32, ptr %e, align 4
-  %tobool17 = icmp ne i32 %15, 0
-  br i1 %tobool17, label %lor.end20, label %lor.rhs18
-
-lor.rhs18:                                        ; preds = %land.lhs.true, %lor.end13
-  %16 = load i32, ptr %f, align 4
-  %tobool19 = icmp ne i32 %16, 0
-  br label %lor.end20
-
-lor.end20:                                        ; preds = %lor.rhs18, %land.lhs.true
-  %17 = phi i1 [ true, %land.lhs.true ], [ %tobool19, %lor.rhs18 ]
-  %lor.ext21 = zext i1 %17 to i32
-  %call22 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext21)
-  %18 = load i32, ptr %e, align 4
-  %tobool23 = icmp ne i32 %18, 0
-  br i1 %tobool23, label %land.lhs.true24, label %lor.rhs26
-
-land.lhs.true24:                                  ; preds = %lor.end20
-  %19 = load i32, ptr %f, align 4
-  %tobool25 = icmp ne i32 %19, 0
-  br i1 %tobool25, label %lor.end28, label %lor.rhs26
-
-lor.rhs26:                                        ; preds = %land.lhs.true24, %lor.end20
-  %20 = load i32, ptr %f, align 4
-  %tobool27 = icmp ne i32 %20, 0
-  br label %lor.end28
-
-lor.end28:                                        ; preds = %lor.rhs26, %land.lhs.true24
-  %21 = phi i1 [ true, %land.lhs.true24 ], [ %tobool27, %lor.rhs26 ]
-  %lor.ext29 = zext i1 %21 to i32
-  %call30 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext29)
-  %22 = load i32, ptr %a, align 4
-  %tobool31 = icmp ne i32 %22, 0
-  br i1 %tobool31, label %land.rhs32, label %land.end34
-
-land.rhs32:                                       ; preds = %lor.end28
-  %23 = load i32, ptr %f, align 4
-  %24 = load i32, ptr %f, align 4
-  %or = or i32 %23, %24
-  %tobool33 = icmp ne i32 %or, 0
-  br label %land.end34
-
-land.end34:                                       ; preds = %land.rhs32, %lor.end28
-  %25 = phi i1 [ false, %lor.end28 ], [ %tobool33, %land.rhs32 ]
-  %land.ext = zext i1 %25 to i32
-  %call35 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %land.ext)
-  %26 = load i32, ptr %a, align 4
-  %27 = load i32, ptr %b, align 4
-  %28 = load i32, ptr %c, align 4
-  %29 = load i32, ptr %d, align 4
-  %and = and i32 %28, %29
-  %xor = xor i32 %27, %and
-  %or36 = or i32 %26, %xor
-  %call37 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %or36)
-  %30 = load i32, ptr %a, align 4
-  %31 = load i32, ptr %a, align 4
-  %cmp = icmp eq i32 %30, %31
-  %conv = zext i1 %cmp to i32
-  %32 = load i32, ptr %a, align 4
-  %33 = load i32, ptr %b, align 4
-  %cmp38 = icmp eq i32 %32, %33
-  %conv39 = zext i1 %cmp38 to i32
-  %call40 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef %conv, i32 noundef %conv39)
-  %34 = load i32, ptr %a, align 4
-  %35 = load i32, ptr %a, align 4
-  %cmp41 = icmp ne i32 %34, %35
-  %conv42 = zext i1 %cmp41 to i32
-  %36 = load i32, ptr %a, align 4
-  %37 = load i32, ptr %b, align 4
-  %cmp43 = icmp ne i32 %36, %37
-  %conv44 = zext i1 %cmp43 to i32
-  %call45 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef %conv42, i32 noundef %conv44)
-  %38 = load i32, ptr %a, align 4
-  %39 = load i32, ptr %b, align 4
-  %cmp46 = icmp ne i32 %38, %39
-  br i1 %cmp46, label %land.rhs48, label %land.end51
-
-land.rhs48:                                       ; preds = %land.end34
-  %40 = load i32, ptr %c, align 4
-  %41 = load i32, ptr %d, align 4
-  %cmp49 = icmp ne i32 %40, %41
-  br label %land.end51
-
-land.end51:                                       ; preds = %land.rhs48, %land.end34
-  %42 = phi i1 [ false, %land.end34 ], [ %cmp49, %land.rhs48 ]
-  %land.ext52 = zext i1 %42 to i32
-  %call53 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %land.ext52)
-  %43 = load i32, ptr %a, align 4
-  %44 = load i32, ptr %b, align 4
-  %45 = load i32, ptr %c, align 4
-  %mul = mul nsw i32 %44, %45
-  %46 = load i32, ptr %f, align 4
-  %div = sdiv i32 %mul, %46
-  %add54 = add nsw i32 %43, %div
-  %call55 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %add54)
-  %47 = load i32, ptr %a, align 4
-  %48 = load i32, ptr %b, align 4
-  %49 = load i32, ptr %c, align 4
-  %mul56 = mul nsw i32 %48, %49
-  %50 = load i32, ptr %f, align 4
-  %div57 = sdiv i32 %mul56, %50
-  %add58 = add nsw i32 %47, %div57
-  %call59 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %add58)
-  %call60 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef 64)
-  %call61 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef 4)
+for.end:                                          ; preds = %for.cond
+  store ptr getelementptr inbounds (i32, ptr @indices, i64 9), ptr @markstack_ptr, align 8
+  %4 = load ptr, ptr @markstack_ptr, align 8
+  %arrayidx1 = getelementptr inbounds i32, ptr %4, i64 -1
+  store i32 2, ptr %arrayidx1, align 4
+  %5 = load ptr, ptr @markstack_ptr, align 8
+  %arrayidx2 = getelementptr inbounds i32, ptr %5, i64 -2
+  store i32 1, ptr %arrayidx2, align 4
+  store ptr getelementptr inbounds (i64, ptr @list, i64 2), ptr @stack_base, align 8
+  call void @doit()
   ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -208,3 +132,6 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}

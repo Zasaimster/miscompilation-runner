@@ -1,65 +1,30 @@
-; 185543249994830078545135065175925564632
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/185543249994830078545135065175925564632.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/185543249994830078545135065175925564632.c"
+; 184477531667024886439733338528112053692
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184477531667024886439733338528112053692.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184477531667024886439733338528112053692.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [5 x i8] c"End\0A\00", align 1
+%union.U = type { i32 }
+
+@u = internal global %union.U { i32 305419896 }, align 4
+@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %year = alloca i32, align 4
   store i32 0, ptr %retval, align 4
+  %bf.load = load i32, ptr @u, align 4
+  %bf.clear = and i32 %bf.load, 1048575
+  %sub = sub nsw i32 %bf.clear, 284280
+  ret i32 %sub
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @deadFunction() #0 {
+entry:
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %year, align 4
-  %0 = load i32, ptr %year, align 4
-  %rem = srem i32 %0, 400
-  %cmp = icmp eq i32 %rem, 0
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  %1 = load i32, ptr %year, align 4
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr %year, align 4
-  br label %if.end12
-
-if.else:                                          ; preds = %entry
-  %2 = load i32, ptr %year, align 4
-  %rem1 = srem i32 %2, 100
-  %cmp2 = icmp eq i32 %rem1, 0
-  br i1 %cmp2, label %if.then3, label %if.else5
-
-if.then3:                                         ; preds = %if.else
-  %3 = load i32, ptr %year, align 4
-  %inc4 = add nsw i32 %3, 1
-  store i32 %inc4, ptr %year, align 4
-  br label %if.end11
-
-if.else5:                                         ; preds = %if.else
-  %4 = load i32, ptr %year, align 4
-  %rem6 = srem i32 %4, 4
-  %cmp7 = icmp eq i32 %rem6, 0
-  br i1 %cmp7, label %if.then8, label %if.else10
-
-if.then8:                                         ; preds = %if.else5
-  %5 = load i32, ptr %year, align 4
-  %inc9 = add nsw i32 %5, 1
-  store i32 %inc9, ptr %year, align 4
-  br label %if.end
-
-if.else10:                                        ; preds = %if.else5
-  br label %if.end
-
-if.end:                                           ; preds = %if.else10, %if.then8
-  br label %if.end11
-
-if.end11:                                         ; preds = %if.end, %if.then3
-  br label %if.end12
-
-if.end12:                                         ; preds = %if.end11, %if.then
-  ret i32 0
+  ret void
 }
 
 declare i32 @printf(ptr noundef, ...) #1

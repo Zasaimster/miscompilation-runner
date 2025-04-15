@@ -1,13 +1,11 @@
-; 184335237353012376923455311377949036752
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184335237353012376923455311377949036752.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184335237353012376923455311377949036752.c"
+; 156527289413430371769901091707145956311
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/156527289413430371769901091707145956311.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/156527289413430371769901091707145956311.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.baz = type { i32, i32, i32, i32, i32 }
-
 ; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local void @bar(ptr noundef readnone captures(none) %x, i32 noundef %f, i32 noundef %g, i32 noundef %h, i32 noundef %i, i32 noundef %j) local_unnamed_addr #0 {
+define dso_local void @foo(i32 noundef %a, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
 entry:
   tail call void @abort() #2
   unreachable
@@ -17,7 +15,7 @@ entry:
 declare void @abort() local_unnamed_addr #1
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local void @foo(ptr noundef readnone byval(%struct.baz) align 8 captures(none) %x, ptr noundef readnone captures(none) %y) local_unnamed_addr #0 {
+define dso_local void @bar(i64 %x.coerce0, i32 %x.coerce1, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
 entry:
   tail call void @abort() #2
   unreachable

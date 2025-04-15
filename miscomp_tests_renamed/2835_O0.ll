@@ -1,46 +1,101 @@
-; 153847418802661683695795704049199060961
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153847418802661683695795704049199060961.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153847418802661683695795704049199060961.c"
+; 152712617636277273024868973942406327822
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152712617636277273024868973942406327822.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152712617636277273024868973942406327822.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i8 -4, align 1
-@.str = private unnamed_addr constant [7 x i8] c"Start\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo() #0 {
-entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = sext i32 %call to i64
-  %div = sdiv i64 %conv, 2
-  %conv1 = trunc i64 %div to i32
-  ret i32 %conv1
-}
-
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @bar() #0 {
-entry:
-  %0 = load i8, ptr @a, align 1
-  %conv = sext i8 %0 to i32
-  %conv1 = zext i32 %conv to i64
-  %rem = srem i64 %conv1, 5
-  %conv2 = trunc i64 %rem to i32
-  ret i32 %conv2
-}
+@C = dso_local global x86_fp80 0xK40008000000000000000, align 16
+@U = dso_local global x86_fp80 0xK3FFF8000000000000000, align 16
+@Y2 = dso_local global x86_fp80 0xK4000C000000000000000, align 16
+@Y1 = dso_local global x86_fp80 0xK3FFF8000000000000000, align 16
+@X = dso_local global x86_fp80 0xK00000000000000000000, align 16
+@Y = dso_local global x86_fp80 0xK00000000000000000000, align 16
+@Z = dso_local global x86_fp80 0xK00000000000000000000, align 16
+@T = dso_local global x86_fp80 0xK00000000000000000000, align 16
+@R = dso_local global x86_fp80 0xK00000000000000000000, align 16
+@S = dso_local global x86_fp80 0xK00000000000000000000, align 16
+@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %r = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo()
-  store i32 %call, ptr %r, align 4
-  %0 = load i32, ptr %r, align 4
-  %conv = sext i32 %0 to i64
-  %cmp = icmp ne i64 %conv, 2147483646
+  %0 = load x86_fp80, ptr @C, align 16
+  %1 = load x86_fp80, ptr @U, align 16
+  %add = fadd x86_fp80 %0, %1
+  %2 = load x86_fp80, ptr @Y2, align 16
+  %mul = fmul x86_fp80 %add, %2
+  store x86_fp80 %mul, ptr @X, align 16
+  %3 = load x86_fp80, ptr @C, align 16
+  %4 = load x86_fp80, ptr @U, align 16
+  %sub = fsub x86_fp80 %3, %4
+  %5 = load x86_fp80, ptr @U, align 16
+  %sub1 = fsub x86_fp80 %sub, %5
+  store x86_fp80 %sub1, ptr @Y, align 16
+  %6 = load x86_fp80, ptr @C, align 16
+  %7 = load x86_fp80, ptr @U, align 16
+  %add2 = fadd x86_fp80 %6, %7
+  %8 = load x86_fp80, ptr @U, align 16
+  %add3 = fadd x86_fp80 %add2, %8
+  store x86_fp80 %add3, ptr @Z, align 16
+  %9 = load x86_fp80, ptr @C, align 16
+  %10 = load x86_fp80, ptr @U, align 16
+  %sub4 = fsub x86_fp80 %9, %10
+  %11 = load x86_fp80, ptr @Y1, align 16
+  %mul5 = fmul x86_fp80 %sub4, %11
+  store x86_fp80 %mul5, ptr @T, align 16
+  %12 = load x86_fp80, ptr @X, align 16
+  %13 = load x86_fp80, ptr @Z, align 16
+  %14 = load x86_fp80, ptr @U, align 16
+  %add6 = fadd x86_fp80 %13, %14
+  %sub7 = fsub x86_fp80 %12, %add6
+  store x86_fp80 %sub7, ptr @X, align 16
+  %15 = load x86_fp80, ptr @Y, align 16
+  %16 = load x86_fp80, ptr @Y1, align 16
+  %mul8 = fmul x86_fp80 %15, %16
+  store x86_fp80 %mul8, ptr @R, align 16
+  %17 = load x86_fp80, ptr @Z, align 16
+  %18 = load x86_fp80, ptr @Y2, align 16
+  %mul9 = fmul x86_fp80 %17, %18
+  store x86_fp80 %mul9, ptr @S, align 16
+  %19 = load x86_fp80, ptr @T, align 16
+  %20 = load x86_fp80, ptr @Y, align 16
+  %sub10 = fsub x86_fp80 %19, %20
+  store x86_fp80 %sub10, ptr @T, align 16
+  %21 = load x86_fp80, ptr @U, align 16
+  %22 = load x86_fp80, ptr @Y, align 16
+  %sub11 = fsub x86_fp80 %21, %22
+  %23 = load x86_fp80, ptr @R, align 16
+  %add12 = fadd x86_fp80 %sub11, %23
+  store x86_fp80 %add12, ptr @Y, align 16
+  %24 = load x86_fp80, ptr @S, align 16
+  %25 = load x86_fp80, ptr @Z, align 16
+  %26 = load x86_fp80, ptr @U, align 16
+  %add13 = fadd x86_fp80 %25, %26
+  %27 = load x86_fp80, ptr @U, align 16
+  %add14 = fadd x86_fp80 %add13, %27
+  %sub15 = fsub x86_fp80 %24, %add14
+  store x86_fp80 %sub15, ptr @Z, align 16
+  %28 = load x86_fp80, ptr @Y2, align 16
+  %29 = load x86_fp80, ptr @U, align 16
+  %add16 = fadd x86_fp80 %28, %29
+  %30 = load x86_fp80, ptr @Y1, align 16
+  %mul17 = fmul x86_fp80 %add16, %30
+  store x86_fp80 %mul17, ptr @R, align 16
+  %31 = load x86_fp80, ptr @Y2, align 16
+  %32 = load x86_fp80, ptr @Y1, align 16
+  %mul18 = fmul x86_fp80 %31, %32
+  store x86_fp80 %mul18, ptr @Y1, align 16
+  %33 = load x86_fp80, ptr @R, align 16
+  %34 = load x86_fp80, ptr @Y2, align 16
+  %sub19 = fsub x86_fp80 %33, %34
+  store x86_fp80 %sub19, ptr @R, align 16
+  %35 = load x86_fp80, ptr @Y1, align 16
+  %sub20 = fsub x86_fp80 %35, 0xK3FFE8000000000000000
+  store x86_fp80 %sub20, ptr @Y1, align 16
+  %36 = load x86_fp80, ptr @Z, align 16
+  %cmp = fcmp une x86_fp80 %36, 0xK4001C000000000000000
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -48,31 +103,22 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call2 = call i32 @bar()
-  store i32 %call2, ptr %r, align 4
-  %1 = load i32, ptr %r, align 4
-  %conv3 = sext i32 %1 to i64
-  %cmp4 = icmp ne i64 %conv3, 2
-  br i1 %cmp4, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end
-  call void @abort() #4
-  unreachable
-
-if.end7:                                          ; preds = %if.end
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
   call void @exit(i32 noundef 0) #5
   unreachable
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare void @abort() #1
+
+declare i32 @printf(ptr noundef, ...) #2
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { noreturn nounwind }
 attributes #5 = { noreturn }

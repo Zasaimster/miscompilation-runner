@@ -1,61 +1,56 @@
-; 104058159980926288121230373037868804029
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104058159980926288121230373037868804029.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104058159980926288121230373037868804029.c"
+; 13340756728747375490905315285938300589
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13340756728747375490905315285938300589.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13340756728747375490905315285938300589.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i32 42, align 4
-@e = dso_local global i32 -1, align 4
-@f = dso_local global i16 0, align 2
-@b = dso_local global i16 0, align 2
+%struct.S = type { i16, [2 x i8] }
+
+@s = dso_local global %struct.S zeroinitializer, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %g = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @e, align 4
-  %conv = trunc i32 %0 to i16
-  store i16 %conv, ptr @f, align 2
-  %1 = load i16, ptr @b, align 2
-  %conv1 = sext i16 %1 to i32
-  %cmp = icmp slt i32 %conv1, 0
-  br i1 %cmp, label %cond.true, label %cond.false
+  %bf.load = load i16, ptr @s, align 4
+  %bf.clear = and i16 %bf.load, -1009
+  %bf.set = or i16 %bf.clear, 64
+  store i16 %bf.set, ptr @s, align 4
+  %bf.load1 = load i16, ptr @s, align 4
+  %bf.lshr = lshr i16 %bf.load1, 4
+  %bf.clear2 = and i16 %bf.lshr, 63
+  %bf.cast = zext i16 %bf.clear2 to i32
+  %0 = trunc i32 %bf.cast to i16
+  %bf.load3 = load i16, ptr @s, align 4
+  %bf.value = and i16 %0, 15
+  %bf.clear4 = and i16 %bf.load3, -16
+  %bf.set5 = or i16 %bf.clear4, %bf.value
+  store i16 %bf.set5, ptr @s, align 4
+  %bf.result.cast = zext i16 %bf.value to i32
+  %bf.load6 = load i16, ptr @s, align 4
+  %bf.clear7 = and i16 %bf.load6, 15
+  %bf.cast8 = zext i16 %bf.clear7 to i32
+  %1 = trunc i32 %bf.cast8 to i16
+  %bf.load9 = load i16, ptr @s, align 4
+  %bf.value10 = and i16 %1, 63
+  %bf.shl = shl i16 %bf.value10, 4
+  %bf.clear11 = and i16 %bf.load9, -1009
+  %bf.set12 = or i16 %bf.clear11, %bf.shl
+  store i16 %bf.set12, ptr @s, align 4
+  %bf.result.cast13 = zext i16 %bf.value10 to i32
+  %bf.load14 = load i16, ptr @s, align 4
+  %bf.lshr15 = lshr i16 %bf.load14, 4
+  %bf.clear16 = and i16 %bf.lshr15, 63
+  %bf.cast17 = zext i16 %bf.clear16 to i32
+  %cmp = icmp ne i32 %bf.cast17, 15
+  br i1 %cmp, label %if.then, label %if.end
 
-cond.true:                                        ; preds = %entry
-  br label %cond.end
-
-cond.false:                                       ; preds = %entry
-  %2 = load i16, ptr @f, align 2
-  %conv3 = sext i16 %2 to i32
-  %3 = load i16, ptr @b, align 2
-  %conv4 = sext i16 %3 to i32
-  %add = add nsw i32 %conv3, %conv4
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i32 [ 0, %cond.true ], [ %add, %cond.false ]
-  store i32 %cond, ptr %g, align 4
-  %4 = load i32, ptr %g, align 4
-  %and = and i32 %4, -4
-  %cmp5 = icmp slt i32 %and, 0
-  br i1 %cmp5, label %if.then, label %if.end
-
-if.then:                                          ; preds = %cond.end
-  store i32 0, ptr @a, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %cond.end
-  %5 = load i32, ptr @a, align 4
-  %tobool = icmp ne i32 %5, 0
-  br i1 %tobool, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %if.end
+if.then:                                          ; preds = %entry
   call void @abort() #2
   unreachable
 
-if.end8:                                          ; preds = %if.end
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

@@ -1,17 +1,34 @@
-; 179613183325585179964261207642437046641
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/179613183325585179964261207642437046641.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/179613183325585179964261207642437046641.c"
+; 164106332557215540420430966012768225455
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164106332557215540420430966012768225455.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164106332557215540420430966012768225455.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %x) #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  store i32 0, ptr %x.addr, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  ret i32 %0
+  %retval = alloca i32, align 4
+  %var = alloca i32, align 4
+  %call = call i32 @f()
+  store i32 %call, ptr %var, align 4
+  %0 = load i32, ptr %var, align 4
+  %div = sdiv i32 %0, 7
+  %cmp = icmp eq i32 %div, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i32, ptr %var, align 4
+  %div1 = sdiv i32 %1, 7
+  store i32 %div1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %2 = load i32, ptr %retval, align 4
+  ret i32 %2
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -19,8 +36,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 8)
-  %cmp = icmp ne i32 %call, 8
+  %call = call i32 @f()
+  %cmp = icmp ne i32 %call, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

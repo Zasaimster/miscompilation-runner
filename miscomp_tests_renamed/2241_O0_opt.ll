@@ -1,63 +1,47 @@
-; 138120742349474933649314402109732524171
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138120742349474933649314402109732524171_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138120742349474933649314402109732524171.c"
+; 193116519186403653533070127960504237235
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/193116519186403653533070127960504237235_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/193116519186403653533070127960504237235.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [6 x i8] c"a=%d\0A\00", align 1
-@.str.1 = private unnamed_addr constant [9 x i8] c"qfunc()\0A\00", align 1
-@.str.2 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @myfunc(i32 noundef %x) #0 {
+define dso_local i32 @fp(double noundef %a, i32 noundef %b) #0 {
 entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @vfunc(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
-  ret void
+  %retval = alloca i32, align 4
+  %a.addr = alloca double, align 8
+  %b.addr = alloca i32, align 4
+  store double %a, ptr %a.addr, align 8
+  store i32 %b, ptr %b.addr, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @qfunc() #0 {
-entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @zfunc() #0 {
-entry:
-  call void null()
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %f = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @myfunc(i32 noundef 3)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef %call)
-  %call2 = call i32 @myfunc(i32 noundef 4)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef %call2)
-  call void @vfunc(i32 noundef 1234)
-  call void @qfunc()
-  ret i32 0
+  store ptr @fp, ptr %f, align 8
+  %call = call i32 @fp(double noundef 3.300000e+01, i32 noundef 11)
+  %0 = load ptr, ptr %f, align 8
+  %call1 = call i32 %0(double noundef 3.300000e+01, i32 noundef 11)
+  call void @exit(i32 noundef 0) #3
+  unreachable
 }
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

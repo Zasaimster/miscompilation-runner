@@ -1,13 +1,13 @@
-; 125327992586121977856283483709827592505
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/125327992586121977856283483709827592505_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/125327992586121977856283483709827592505.c"
+; 139481226026593872521231040342924414438
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139481226026593872521231040342924414438_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139481226026593872521231040342924414438.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.anon = type { i8, [3 x i8] }
+%struct.anon = type { i32 }
 
 @.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@b = internal global [6 x %struct.anon] zeroinitializer, align 16
+@b = internal global [35 x %struct.anon] zeroinitializer, align 16
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
@@ -20,18 +20,17 @@ entry:
 
 for.cond:                                         ; preds = %for.inc, %entry
   %0 = load i32, ptr %c, align 4
-  %cmp = icmp slt i32 %0, 6
+  %cmp = icmp slt i32 %0, 7
   br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
   %1 = load i32, ptr %c, align 4
   %idxprom = sext i32 %1 to i64
-  %arrayidx = getelementptr inbounds [6 x %struct.anon], ptr @b, i64 0, i64 %idxprom
-  %bf.load = load i8, ptr %arrayidx, align 4
-  %bf.shl = shl i8 %bf.load, 3
-  %bf.ashr = ashr i8 %bf.shl, 3
-  %bf.cast = sext i8 %bf.ashr to i32
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %bf.cast)
+  %arrayidx = getelementptr inbounds [35 x %struct.anon], ptr @b, i64 0, i64 %idxprom
+  %bf.load = load i32, ptr %arrayidx, align 4
+  %bf.shl = shl i32 %bf.load, 2
+  %bf.ashr = ashr i32 %bf.shl, 2
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %bf.ashr)
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
@@ -41,7 +40,8 @@ for.inc:                                          ; preds = %for.body
   br label %for.cond, !llvm.loop !6
 
 for.end:                                          ; preds = %for.cond
-  ret i32 0
+  %3 = load i32, ptr %retval, align 4
+  ret i32 %3
 }
 
 declare i32 @printf(ptr noundef, ...) #1

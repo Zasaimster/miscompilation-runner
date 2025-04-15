@@ -1,59 +1,86 @@
-; 125945988978213092018980745435137999004
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/125945988978213092018980745435137999004.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/125945988978213092018980745435137999004.c"
+; 12378363906969379940198577575014053340
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12378363906969379940198577575014053340.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12378363906969379940198577575014053340.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 0, 1431655766) i32 @f(i32 noundef %x) local_unnamed_addr #0 {
+@buf = dso_local global [0 x i64] zeroinitializer, align 8
+
+; Function Attrs: nofree nosync nounwind memory(none) uwtable
+define dso_local ptr @foo(i64 noundef %n) local_unnamed_addr #0 {
 entry:
-  %conv = zext i32 %x to i64
-  %mul = mul nuw i64 %conv, 2863311531
-  %sum.shift = lshr i64 %mul, 33
-  %shr23 = trunc nuw nsw i64 %sum.shift to i32
-  ret i32 %shr23
+  %sub = add nsw i64 %n, -1
+  %call = tail call ptr @foo(i64 noundef %sub)
+  %0 = ptrtoint ptr %call to i64
+  %add = add i64 %0, 8
+  %1 = inttoptr i64 %add to ptr
+  ret ptr %1
 }
 
-; Function Attrs: nofree noreturn nounwind uwtable
+; Function Attrs: nofree nosync nounwind memory(none) uwtable
+define dso_local nonnull ptr @bar(i64 noundef %n) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp eq i64 %n, 0
+  br i1 %cmp, label %return, label %if.end
+
+if.end:                                           ; preds = %entry
+  %sub = add nsw i64 %n, -1
+  %call = tail call ptr @foo(i64 noundef %sub)
+  %add.ptr = getelementptr inbounds nuw i8, ptr %call, i64 8
+  br label %return
+
+return:                                           ; preds = %entry, %if.end
+  %retval.0 = phi ptr [ %add.ptr, %if.end ], [ @buf, %entry ]
+  ret ptr %retval.0
+}
+
+; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
   br label %for.body
 
-for.cond:                                         ; preds = %for.body
+for.cond:                                         ; preds = %bar.exit
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  %exitcond.not = icmp eq i64 %indvars.iv.next, 10000
+  %exitcond.not = icmp eq i64 %indvars.iv.next, 27
   br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !5
 
 for.body:                                         ; preds = %entry, %for.cond
   %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %for.cond ]
-  %mul.i = mul nuw nsw i64 %indvars.iv, 2863311531
-  %sum.shift.i = lshr i64 %mul.i, 33
-  %shr23.i = trunc nuw nsw i64 %sum.shift.i to i32
-  %0 = trunc nuw nsw i64 %indvars.iv to i32
-  %div = udiv i32 %0, 3
-  %cmp1.not = icmp eq i32 %div, %shr23.i
-  br i1 %cmp1.not, label %for.cond, label %if.then
+  %call = tail call ptr @foo(i64 noundef %indvars.iv)
+  %add.ptr = getelementptr inbounds nuw i64, ptr @buf, i64 %indvars.iv
+  %cmp1.not = icmp eq ptr %call, %add.ptr
+  br i1 %cmp1.not, label %lor.lhs.false, label %if.then
 
-if.then:                                          ; preds = %for.body
-  tail call void @abort() #4
+lor.lhs.false:                                    ; preds = %for.body
+  %cmp.i = icmp eq i64 %indvars.iv, 0
+  br i1 %cmp.i, label %bar.exit, label %if.end.i
+
+if.end.i:                                         ; preds = %lor.lhs.false
+  %sub.i = add nsw i64 %indvars.iv, -1
+  %call.i = tail call ptr @foo(i64 noundef %sub.i)
+  %add.ptr.i = getelementptr inbounds nuw i8, ptr %call.i, i64 8
+  br label %bar.exit
+
+bar.exit:                                         ; preds = %lor.lhs.false, %if.end.i
+  %retval.0.i = phi ptr [ %add.ptr.i, %if.end.i ], [ @buf, %lor.lhs.false ]
+  %cmp7.not = icmp eq ptr %retval.0.i, %add.ptr
+  br i1 %cmp7.not, label %for.cond, label %if.then
+
+if.then:                                          ; preds = %bar.exit, %for.body
+  tail call void @abort() #3
   unreachable
 
 for.end:                                          ; preds = %for.cond
-  tail call void @exit(i32 noundef 0) #4
-  unreachable
+  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #2
 
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #3
-
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { nofree nosync nounwind memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

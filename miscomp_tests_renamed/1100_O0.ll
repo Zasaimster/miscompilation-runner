@@ -1,91 +1,54 @@
-; 106790815947214886401104348236615516685
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106790815947214886401104348236615516685.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106790815947214886401104348236615516685.c"
+; 122773876614058167523454693907222715060
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122773876614058167523454693907222715060.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122773876614058167523454693907222715060.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
+@.str.1 = private unnamed_addr constant [12 x i8] c"Dead code.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @ts(i32 noundef %a) #0 {
+define dso_local i32 @f() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
-  %cmp = icmp slt i32 %call, 1000
-  br i1 %cmp, label %land.lhs.true, label %if.else
+  %var = alloca i32, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  store i32 %call, ptr %var, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %cmp = icmp eq i32 %call1, 1
+  br i1 %cmp, label %if.then, label %if.end
 
-land.lhs.true:                                    ; preds = %entry
-  %call1 = call i32 (...) @example9()
-  %cmp2 = icmp sgt i32 %call1, 2000
-  br i1 %cmp2, label %if.then, label %if.else
-
-if.then:                                          ; preds = %land.lhs.true
-  store i32 1, ptr %retval, align 4
+if.then:                                          ; preds = %entry
+  %0 = load i32, ptr %var, align 4
+  %div = sdiv i32 %0, 7
+  store i32 %div, ptr %retval, align 4
   br label %return
 
-if.else:                                          ; preds = %land.lhs.true, %entry
+if.end:                                           ; preds = %entry
   store i32 0, ptr %retval, align 4
   br label %return
 
-return:                                           ; preds = %if.else, %if.then
+return:                                           ; preds = %if.end, %if.then
   %1 = load i32, ptr %retval, align 4
   ret i32 %1
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
-declare i32 @example9(...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @tu(i32 noundef %a) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %cmp = icmp ult i32 %0, 1000
-  br i1 %cmp, label %land.lhs.true, label %if.else
-
-land.lhs.true:                                    ; preds = %entry
-  %1 = load i32, ptr %a.addr, align 4
-  %cmp1 = icmp ugt i32 %1, 2000
-  br i1 %cmp1, label %if.then, label %if.else
-
-if.then:                                          ; preds = %land.lhs.true
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.else:                                          ; preds = %land.lhs.true, %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.else, %if.then
-  %2 = load i32, ptr %retval, align 4
-  ret i32 %2
-}
-
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @ts(i32 noundef 0)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %lor.lhs.false
+  %call = call i32 @f()
+  %cmp = icmp ne i32 %call, 1
+  br i1 %cmp, label %if.then, label %if.end
 
-lor.lhs.false:                                    ; preds = %entry
-  %call1 = call i32 @tu(i32 noundef 0)
-  %tobool2 = icmp ne i32 %call1, 0
-  br i1 %tobool2, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
+if.then:                                          ; preds = %entry
   call void @abort() #4
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }

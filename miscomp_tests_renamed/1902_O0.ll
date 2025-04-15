@@ -1,24 +1,35 @@
-; 136620019250868069812409642595483972577
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136620019250868069812409642595483972577.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136620019250868069812409642595483972577.c"
+; 141641195784936599393090371966308002002
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141641195784936599393090371966308002002.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141641195784936599393090371966308002002.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.a = type { i64, i64 }
-
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@c = internal global %struct.a zeroinitializer, align 4
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str.1 = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %Count = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %bf.load = load volatile i64, ptr getelementptr inbounds nuw (%struct.a, ptr @c, i32 0, i32 1), align 4
-  %bf.shl = shl i64 %bf.load, 14
-  %bf.ashr = ashr i64 %bf.shl, 46
-  %bf.cast = trunc i64 %bf.ashr to i32
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %bf.cast)
+  store i32 0, ptr %Count, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %if.end, %entry
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %0 = load i32, ptr %Count, align 4
+  %cmp = icmp sge i32 %0, 10
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.cond
+  br label %for.end
+
+if.end:                                           ; preds = %for.cond
+  br label %for.cond
+
+for.end:                                          ; preds = %if.then
   ret i32 0
 }
 

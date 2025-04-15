@@ -1,69 +1,110 @@
-; 11028509046753451186118865564652106575
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11028509046753451186118865564652106575.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11028509046753451186118865564652106575.c"
+; 171920199949958847994462330388438374173
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171920199949958847994462330388438374173.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171920199949958847994462330388438374173.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@.str = private unnamed_addr constant [4 x i8] c"foo\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"bar\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @bar(ptr noundef %x, i32 noundef %y, ptr noundef %z) #0 {
+entry:
+  %x.addr = alloca ptr, align 8
+  %y.addr = alloca i32, align 4
+  %z.addr = alloca ptr, align 8
+  store ptr %x, ptr %x.addr, align 8
+  store i32 %y, ptr %y.addr, align 4
+  store ptr %z, ptr %z.addr, align 8
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i64 @foo(i32 noundef %x, ptr noundef %y) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca ptr, align 8
+  %a = alloca i64, align 8
+  store i32 %x, ptr %x.addr, align 4
+  store ptr %y, ptr %y.addr, align 8
+  %0 = load i32, ptr %x.addr, align 4
+  switch i32 %0, label %sw.default [
+    i32 10, label %sw.bb
+    i32 11, label %sw.bb1
+    i32 12, label %sw.bb2
+    i32 13, label %sw.bb3
+    i32 14, label %sw.bb4
+  ]
+
+sw.bb:                                            ; preds = %entry
+  %1 = load ptr, ptr %y.addr, align 8
+  %2 = load i64, ptr %1, align 8
+  store i64 %2, ptr %a, align 8
+  br label %sw.epilog
+
+sw.bb1:                                           ; preds = %entry
+  %3 = load ptr, ptr %y.addr, align 8
+  %4 = load i64, ptr %3, align 8
+  store i64 %4, ptr %a, align 8
+  br label %sw.epilog
+
+sw.bb2:                                           ; preds = %entry
+  %5 = load ptr, ptr %y.addr, align 8
+  %6 = load i64, ptr %5, align 8
+  store i64 %6, ptr %a, align 8
+  br label %sw.epilog
+
+sw.bb3:                                           ; preds = %entry
+  %7 = load ptr, ptr %y.addr, align 8
+  %8 = load i64, ptr %7, align 8
+  store i64 %8, ptr %a, align 8
+  br label %sw.epilog
+
+sw.bb4:                                           ; preds = %entry
+  %9 = load ptr, ptr %y.addr, align 8
+  %10 = load i64, ptr %9, align 8
+  store i64 %10, ptr %a, align 8
+  br label %sw.epilog
+
+sw.default:                                       ; preds = %entry
+  call void @bar(ptr noundef @.str, i32 noundef 1, ptr noundef @.str.1)
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %sw.default, %sw.bb4, %sw.bb3, %sw.bb2, %sw.bb1, %sw.bb
+  ret i64 0
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
+  %i = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @b(i8 noundef zeroext 1, i32 noundef -3639044, i32 noundef -12215549)
-  store i32 %call, ptr %x, align 4
-  %0 = load i32, ptr %x, align 4
-  %cmp = icmp ne i32 %0, -651063088
+  store i64 24, ptr %i, align 8
+  %call = call i64 @foo(i32 noundef 13, ptr noundef %i)
+  %cmp = icmp ne i64 %call, 24
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #2
+  call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @b(i8 noundef zeroext %d, i32 noundef %e, i32 noundef %g) #0 {
-entry:
-  %d.addr = alloca i8, align 1
-  %e.addr = alloca i32, align 4
-  %g.addr = alloca i32, align 4
-  store i8 %d, ptr %d.addr, align 1
-  store i32 %e, ptr %e.addr, align 4
-  store i32 %g, ptr %g.addr, align 4
-  br label %do.body
-
-do.body:                                          ; preds = %do.cond, %entry
-  %0 = load i32, ptr %e.addr, align 4
-  %add = add i32 %0, 0
-  store i32 %add, ptr %e.addr, align 4
-  %1 = load i8, ptr %d.addr, align 1
-  %dec = add i8 %1, -1
-  store i8 %dec, ptr %d.addr, align 1
-  br label %do.cond
-
-do.cond:                                          ; preds = %do.body
-  %2 = load i8, ptr %d.addr, align 1
-  %conv = zext i8 %2 to i32
-  %3 = load i32, ptr %e.addr, align 4
-  %conv1 = trunc i32 %3 to i8
-  %conv2 = zext i8 %conv1 to i32
-  %cmp = icmp sge i32 %conv, %conv2
-  br i1 %cmp, label %do.body, label %do.end, !llvm.loop !6
-
-do.end:                                           ; preds = %do.cond
-  %4 = load i32, ptr %e.addr, align 4
-  ret i32 %4
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -74,5 +115,3 @@ attributes #2 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

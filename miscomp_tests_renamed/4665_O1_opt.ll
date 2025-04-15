@@ -1,81 +1,121 @@
-; 165575211822884241287709542069602721211
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/165575211822884241287709542069602721211_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/165575211822884241287709542069602721211.c"
+; 199108877683209885707156230250682679272
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/199108877683209885707156230250682679272_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/199108877683209885707156230250682679272.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local i32 @f(i32 noundef %n, i24 %x.coerce, i24 %y.coerce, i24 %z.coerce, i64 noundef %l) local_unnamed_addr #0 {
 entry:
-  %x1 = alloca i32, align 4
-  %x2 = alloca i64, align 8
-  %x3 = alloca i32, align 4
-  %x4 = alloca i32, align 4
-  %x5 = alloca i32, align 4
-  %x6 = alloca i64, align 8
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x1)
-  store volatile i32 0, ptr %x1, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %x2)
-  store volatile i64 0, ptr %x2, align 8, !tbaa !9
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x3)
-  store volatile i32 0, ptr %x3, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x4)
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  store volatile i32 %call, ptr %x4, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x5)
-  store volatile i32 1, ptr %x5, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %x6)
-  store volatile i64 1, ptr %x6, align 8, !tbaa !9
-  %x1.0.x1.0.x1.0.x1.0. = load volatile i32, ptr %x1, align 4, !tbaa !5
-  %conv = sext i32 %x1.0.x1.0.x1.0.x1.0. to i64
-  %x2.0.x2.0.x2.0.x2.0. = load volatile i64, ptr %x2, align 8, !tbaa !9
-  %x3.0.x3.0.x3.0.x3.0. = load volatile i32, ptr %x3, align 4, !tbaa !5
-  %sh_prom = zext nneg i32 %x3.0.x3.0.x3.0.x3.0. to i64
-  %shl = shl i64 %x2.0.x2.0.x2.0.x2.0., %sh_prom
-  %mul = mul nsw i64 %shl, %conv
-  %x4.0.x4.0.x4.0.x4.0. = load volatile i32, ptr %x4, align 4, !tbaa !5
-  %x5.0.x5.0.x5.0.x5.0. = load volatile i32, ptr %x5, align 4, !tbaa !5
-  %mul1 = mul nsw i32 %x5.0.x5.0.x5.0.x5.0., %x4.0.x4.0.x4.0.x4.0.
-  %conv2 = sext i32 %mul1 to i64
-  %div = sdiv i64 %mul, %conv2
-  %x6.0.x6.0.x6.0.x6.0. = load volatile i64, ptr %x6, align 8, !tbaa !9
-  %add = add nsw i64 %x6.0.x6.0.x6.0.x6.0., %div
-  %cmp.not = icmp eq i64 %add, 1
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %0 = and i24 %x.coerce, 65280
+  %cmp.not = icmp eq i24 %0, 5120
   br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
-  tail call void @abort() #4
+  tail call void @abort() #5
   unreachable
 
 if.end:                                           ; preds = %entry
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %x6)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x5)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x4)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x3)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %x2)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x1)
-  ret i32 0
+  %x.sroa.2.0.extract.shift.mask = and i24 %x.coerce, -65536
+  %cmp3.not = icmp eq i24 %x.sroa.2.0.extract.shift.mask, 1966080
+  br i1 %cmp3.not, label %if.end6, label %if.then5
+
+if.then5:                                         ; preds = %if.end
+  tail call void @abort() #5
+  unreachable
+
+if.end6:                                          ; preds = %if.end
+  %1 = and i24 %y.coerce, 255
+  %cmp8.not = icmp eq i24 %1, 11
+  br i1 %cmp8.not, label %if.end11, label %if.then10
+
+if.then10:                                        ; preds = %if.end6
+  tail call void @abort() #5
+  unreachable
+
+if.end11:                                         ; preds = %if.end6
+  %2 = and i24 %y.coerce, 65280
+  %cmp14.not = icmp eq i24 %2, 5376
+  br i1 %cmp14.not, label %if.end17, label %if.then16
+
+if.then16:                                        ; preds = %if.end11
+  tail call void @abort() #5
+  unreachable
+
+if.end17:                                         ; preds = %if.end11
+  %y.sroa.3.0.extract.shift.mask = and i24 %y.coerce, -65536
+  %cmp20.not = icmp eq i24 %y.sroa.3.0.extract.shift.mask, 2031616
+  br i1 %cmp20.not, label %if.end23, label %if.then22
+
+if.then22:                                        ; preds = %if.end17
+  tail call void @abort() #5
+  unreachable
+
+if.end23:                                         ; preds = %if.end17
+  %3 = and i24 %z.coerce, 255
+  %cmp26.not = icmp eq i24 %3, 12
+  br i1 %cmp26.not, label %if.end29, label %if.then28
+
+if.then28:                                        ; preds = %if.end23
+  tail call void @abort() #5
+  unreachable
+
+if.end29:                                         ; preds = %if.end23
+  %4 = and i24 %z.coerce, 65280
+  %cmp32.not = icmp eq i24 %4, 5632
+  br i1 %cmp32.not, label %if.end35, label %if.then34
+
+if.then34:                                        ; preds = %if.end29
+  tail call void @abort() #5
+  unreachable
+
+if.end35:                                         ; preds = %if.end29
+  %z.sroa.3.0.extract.shift.mask = and i24 %z.coerce, -65536
+  %cmp38.not = icmp eq i24 %z.sroa.3.0.extract.shift.mask, 2097152
+  br i1 %cmp38.not, label %if.end41, label %if.then40
+
+if.then40:                                        ; preds = %if.end35
+  tail call void @abort() #5
+  unreachable
+
+if.end41:                                         ; preds = %if.end35
+  %cmp42.not = icmp eq i64 %l, 123
+  br i1 %cmp42.not, label %if.end45, label %if.then44
+
+if.then44:                                        ; preds = %if.end41
+  tail call void @abort() #5
+  unreachable
+
+if.end45:                                         ; preds = %if.end41
+  ret i32 undef
 }
 
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  tail call void @exit(i32 noundef 0) #5
+  unreachable
+}
+
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #3
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #2
-
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #3
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #4
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree nounwind }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -85,9 +125,3 @@ attributes #4 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!10, !10, i64 0}
-!10 = !{!"long long", !7, i64 0}

@@ -1,110 +1,95 @@
-; 150324279674130745020981501372787247016
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150324279674130745020981501372787247016.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150324279674130745020981501372787247016.c"
+; 122837178285140754210427105200797126060
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122837178285140754210427105200797126060.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122837178285140754210427105200797126060.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@masktab = dso_local local_unnamed_addr global [6 x i16] [i16 1, i16 2, i16 3, i16 4, i16 5, i16 0], align 2
-@psd = dso_local local_unnamed_addr global [6 x i16] [i16 50, i16 40, i16 30, i16 20, i16 10, i16 0], align 2
-@bndpsd = dso_local local_unnamed_addr global [6 x i16] [i16 1, i16 2, i16 3, i16 4, i16 5, i16 0], align 2
+@f3.x = internal unnamed_addr global i32 0, align 4
 
-; Function Attrs: nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
-define dso_local void @ba_compute_psd(i16 noundef signext %start) local_unnamed_addr #0 {
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @ff(i32 noundef %fname, i32 noundef %part, i32 noundef %nparts) local_unnamed_addr #0 {
 entry:
-  %conv = sext i16 %start to i32
-  %add = add nsw i32 %conv, 1
-  %idxprom = sext i16 %start to i64
-  %arrayidx = getelementptr inbounds [6 x i16], ptr @masktab, i64 0, i64 %idxprom
-  %0 = load i16, ptr %arrayidx, align 2, !tbaa !5
-  %idxprom2 = sext i32 %add to i64
-  %arrayidx3 = getelementptr inbounds [6 x i16], ptr @psd, i64 0, i64 %idxprom2
-  %1 = load i16, ptr %arrayidx3, align 2, !tbaa !5
-  %idxprom4 = sext i16 %0 to i64
-  %arrayidx5 = getelementptr inbounds [6 x i16], ptr @bndpsd, i64 0, i64 %idxprom4
-  store i16 %1, ptr %arrayidx5, align 2, !tbaa !5
-  %cmp25 = icmp slt i16 %start, 2
-  br i1 %cmp25, label %for.body.lr.ph, label %for.end
+  %f3.x.promoted = load i32, ptr @f3.x, align 4, !tbaa !5
+  %tobool1.not = icmp eq i32 %nparts, 0
+  br label %while.cond
 
-for.body.lr.ph:                                   ; preds = %entry
-  %inc = add nsw i32 %conv, 2
-  %arrayidx5.promoted = load i16, ptr %arrayidx5, align 2, !tbaa !5
-  %2 = sext i16 %start to i64
-  %3 = add nsw i64 %2, 2
-  br label %for.body
+while.cond:                                       ; preds = %while.body, %entry
+  %lnot.ext.i12 = phi i32 [ %lnot.ext.i, %while.body ], [ %f3.x.promoted, %entry ]
+  %tobool.not.i = icmp eq i32 %lnot.ext.i12, 0
+  %lnot.ext.i = zext i1 %tobool.not.i to i32
+  br i1 %tobool.not.i, label %while.body, label %while.end
 
-for.body:                                         ; preds = %for.body.lr.ph, %for.body
-  %indvars.iv = phi i64 [ %3, %for.body.lr.ph ], [ %indvars.iv.next, %for.body ]
-  %4 = phi i16 [ %arrayidx5.promoted, %for.body.lr.ph ], [ %add.i, %for.body ]
-  %i.027 = phi i32 [ %inc, %for.body.lr.ph ], [ %inc15, %for.body ]
-  %arrayidx11 = getelementptr inbounds [6 x i16], ptr @psd, i64 0, i64 %indvars.iv
-  %5 = load i16, ptr %arrayidx11, align 2, !tbaa !5
-  %add.i = add i16 %5, %4
-  %indvars.iv.next = add nsw i64 %indvars.iv, 1
-  %inc15 = add nsw i32 %i.027, 1
-  %exitcond.not = icmp eq i32 %inc15, 4
-  br i1 %exitcond.not, label %for.cond.for.end_crit_edge, label %for.body, !llvm.loop !9
+while.body:                                       ; preds = %while.cond
+  br i1 %tobool1.not, label %while.cond, label %land.lhs.true, !llvm.loop !9
 
-for.cond.for.end_crit_edge:                       ; preds = %for.body
-  store i16 %add.i, ptr %arrayidx5, align 2, !tbaa !5
-  br label %for.end
+land.lhs.true:                                    ; preds = %while.body
+  store i32 %lnot.ext.i, ptr @f3.x, align 4, !tbaa !5
+  tail call void @abort() #5
+  unreachable
 
-for.end:                                          ; preds = %for.cond.for.end_crit_edge, %entry
+while.end:                                        ; preds = %while.cond
+  store i32 %lnot.ext.i, ptr @f3.x, align 4, !tbaa !5
+  %tobool8.not = icmp eq i32 %nparts, 0
+  br i1 %tobool8.not, label %if.end10, label %if.then9
+
+if.then9:                                         ; preds = %while.end
+  tail call void @abort() #5
+  unreachable
+
+if.end10:                                         ; preds = %while.end
   ret void
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) uwtable
-define dso_local signext i16 @logadd(ptr noundef readonly captures(none) %a, ptr noundef readonly captures(none) %b) local_unnamed_addr #1 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+define dso_local range(i32 0, 2) i32 @f3() local_unnamed_addr #1 {
 entry:
-  %0 = load i16, ptr %a, align 2, !tbaa !5
-  %1 = load i16, ptr %b, align 2, !tbaa !5
-  %add = add i16 %1, %0
-  ret i16 %add
+  %0 = load i32, ptr @f3.x, align 4, !tbaa !5
+  %tobool.not = icmp eq i32 %0, 0
+  %lnot.ext = zext i1 %tobool.not to i32
+  store i32 %lnot.ext, ptr @f3.x, align 4, !tbaa !5
+  ret i32 %lnot.ext
 }
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @f2() local_unnamed_addr #2 {
 entry:
-  %0 = load i16, ptr @masktab, align 2, !tbaa !5
-  %1 = load i16, ptr getelementptr inbounds nuw (i8, ptr @psd, i64 2), align 2, !tbaa !5
-  %idxprom4.i = sext i16 %0 to i64
-  %arrayidx5.i = getelementptr inbounds [6 x i16], ptr @bndpsd, i64 0, i64 %idxprom4.i
-  store i16 %1, ptr %arrayidx5.i, align 2, !tbaa !5
-  br label %for.body.i
-
-for.body.i:                                       ; preds = %for.body.i, %entry
-  %indvars.iv.i = phi i64 [ 2, %entry ], [ %indvars.iv.next.i, %for.body.i ]
-  %2 = phi i16 [ %1, %entry ], [ %add.i.i, %for.body.i ]
-  %i.027.i = phi i32 [ 2, %entry ], [ %inc15.i, %for.body.i ]
-  %arrayidx11.i = getelementptr inbounds nuw [6 x i16], ptr @psd, i64 0, i64 %indvars.iv.i
-  %3 = load i16, ptr %arrayidx11.i, align 2, !tbaa !5
-  %add.i.i = add i16 %3, %2
-  %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
-  %inc15.i = add nuw nsw i32 %i.027.i, 1
-  %exitcond.not.i = icmp eq i32 %inc15.i, 4
-  br i1 %exitcond.not.i, label %ba_compute_psd.exit, label %for.body.i, !llvm.loop !9
-
-ba_compute_psd.exit:                              ; preds = %for.body.i
-  store i16 %add.i.i, ptr %arrayidx5.i, align 2, !tbaa !5
-  %4 = load i16, ptr getelementptr inbounds nuw (i8, ptr @bndpsd, i64 2), align 2, !tbaa !5
-  %cmp.not = icmp eq i16 %4, 140
-  br i1 %cmp.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %ba_compute_psd.exit
-  tail call void @abort() #4
+  tail call void @abort() #5
   unreachable
+}
 
-if.end:                                           ; preds = %ba_compute_psd.exit
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local void @f1() local_unnamed_addr #2 {
+entry:
+  tail call void @abort() #5
+  unreachable
+}
+
+; Function Attrs: nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #3 {
+entry:
+  %f3.x.promoted.i = load i32, ptr @f3.x, align 4, !tbaa !5
+  br label %while.cond.i
+
+while.cond.i:                                     ; preds = %while.cond.i, %entry
+  %lnot.ext.i12.i = phi i32 [ %f3.x.promoted.i, %entry ], [ %lnot.ext.i.i, %while.cond.i ]
+  %tobool.not.i.i = icmp eq i32 %lnot.ext.i12.i, 0
+  %lnot.ext.i.i = zext i1 %tobool.not.i.i to i32
+  br i1 %tobool.not.i.i, label %while.cond.i, label %ff.exit
+
+ff.exit:                                          ; preds = %while.cond.i
+  store i32 %lnot.ext.i.i, ptr @f3.x, align 4, !tbaa !5
   ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #3
+declare void @abort() local_unnamed_addr #4
 
-attributes #0 = { nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -115,7 +100,7 @@ attributes #4 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"short", !7, i64 0}
+!6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
 !9 = distinct !{!9, !10, !11}

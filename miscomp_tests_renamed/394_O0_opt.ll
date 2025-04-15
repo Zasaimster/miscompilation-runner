@@ -1,59 +1,69 @@
-; 1020218262971838676759482144114840090
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/1020218262971838676759482144114840090_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/1020218262971838676759482144114840090.c"
+; 128743475928438049602553408475089910484
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128743475928438049602553408475089910484_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128743475928438049602553408475089910484.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [10 x i8] c"a is: %d\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  %x = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store i32 0, ptr %x, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
-  %cmp = icmp sgt i32 %call, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %x, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %1 = load i32, ptr %a.addr, align 4
-  %cmp1 = icmp slt i32 %1, 0
-  br i1 %cmp1, label %if.then2, label %if.end3
-
-if.then2:                                         ; preds = %if.end
-  store i32 1, ptr %x, align 4
-  br label %if.end3
-
-if.end3:                                          ; preds = %if.then2, %if.end
-  %2 = load i32, ptr %x, align 4
-  ret i32 %2
-}
-
-declare i32 @printf(ptr noundef, ...) #1
+@.str = private unnamed_addr constant [3 x i8] c"\7F\FF\00", align 1
+@.str.1 = private unnamed_addr constant [16 x i8] c"I am not used!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %hicount = alloca i32, align 4
+  %c = alloca ptr, align 8
+  %str = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 1)
-  %cmp = icmp ne i32 %call, 1
-  br i1 %cmp, label %if.then, label %if.end
+  store i32 0, ptr %hicount, align 4
+  store ptr @.str, ptr %str, align 8
+  %0 = load ptr, ptr %str, align 8
+  store ptr %0, ptr %c, align 8
+  br label %for.cond
 
-if.then:                                          ; preds = %entry
+for.cond:                                         ; preds = %for.inc, %entry
+  %1 = load ptr, ptr %c, align 8
+  %2 = load i8, ptr %1, align 1
+  %tobool = icmp ne i8 %2, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %3 = load ptr, ptr %c, align 8
+  %4 = load i8, ptr %3, align 1
+  %conv = zext i8 %4 to i32
+  %cmp = icmp ult i32 %conv, 128
+  br i1 %cmp, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.body
+  %5 = load i32, ptr %hicount, align 4
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, ptr %hicount, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %6 = load ptr, ptr %c, align 8
+  %incdec.ptr = getelementptr inbounds nuw i8, ptr %6, i32 1
+  store ptr %incdec.ptr, ptr %c, align 8
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %7 = load i32, ptr %hicount, align 4
+  %cmp2 = icmp ne i32 %7, 1
+  br i1 %cmp2, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %for.end
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end5:                                          ; preds = %for.end
   ret i32 0
 }
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
@@ -72,3 +82,5 @@ attributes #3 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}

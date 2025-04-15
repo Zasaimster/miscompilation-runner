@@ -1,20 +1,24 @@
-; 185706763292869016172647414982141392619
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/185706763292869016172647414982141392619_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/185706763292869016172647414982141392619.c"
+; 179497547196726835212613605861451818361
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/179497547196726835212613605861451818361_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/179497547196726835212613605861451818361.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@loop_1 = dso_local global i32 100, align 4
-@loop_2 = dso_local global i32 7, align 4
-@flag = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [7 x i32] [i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 0], align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @test() #0 {
+define dso_local i32 @foo() #0 {
 entry:
-  %counter = alloca i32, align 4
-  store i32 0, ptr %counter, align 4
-  store i32 5, ptr @loop_1, align 4
-  ret i32 1
+  %call = call i32 @f(ptr noundef @.str)
+  ret i32 %call
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @f(ptr noundef %x) #0 {
+entry:
+  %x.addr = alloca ptr, align 8
+  store ptr %x, ptr %x.addr, align 8
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -22,8 +26,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @test()
-  %cmp = icmp ne i32 %call, 1
+  %call = call i32 @foo()
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -31,6 +35,15 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @foo()
+  %cmp2 = icmp ne i32 %call1, 1
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }

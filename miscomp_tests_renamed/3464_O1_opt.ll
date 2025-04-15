@@ -1,22 +1,22 @@
-; 176036957724609701668883527688445684339
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176036957724609701668883527688445684339_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176036957724609701668883527688445684339.c"
+; 12086774709385541896654637186800108829
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12086774709385541896654637186800108829_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12086774709385541896654637186800108829.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: nounwind uwtable
-define dso_local range(i32 0, 2) i32 @main() local_unnamed_addr #0 {
+define dso_local range(i32 -2147483648, 2147483646) i32 @main() local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #3
+  %call = tail call i32 (...) @compute() #3
   %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp.not = icmp ne i32 %call1, 3
-  %. = zext i1 %cmp.not to i32
-  ret i32 %.
+  %xor = xor i32 %call1, 3
+  %sub = add nsw i32 %xor, -2
+  ret i32 %sub
 }
 
-declare i32 @calculateSquare(...) local_unnamed_addr #1
+declare i32 @compute(...) local_unnamed_addr #1
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #2

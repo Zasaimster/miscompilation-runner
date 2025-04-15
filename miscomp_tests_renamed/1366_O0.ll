@@ -1,18 +1,20 @@
-; 104998252991759580350416672085731386953
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104998252991759580350416672085731386953.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104998252991759580350416672085731386953.c"
+; 1358683082451620241436117940094729833
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/1358683082451620241436117940094729833.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/1358683082451620241436117940094729833.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Program runs!\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @check(i32 noundef %a) #0 {
+define dso_local i32 @f(i32 noundef %0) #0 {
 entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
+  %retval = alloca i32, align 4
+  %c.addr = alloca i8, align 1
+  %c = trunc i32 %0 to i8
+  store i8 %c, ptr %c.addr, align 1
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %cmp = icmp ne i32 %call, 1
+  %cmp = icmp ne i32 %call, 255
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -20,7 +22,8 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret void
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
 }
 
 declare i32 @printf(ptr noundef, ...) #1
@@ -29,31 +32,11 @@ declare i32 @printf(ptr noundef, ...) #1
 declare void @abort() #2
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @test(i32 noundef %a, i32 noundef %b) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store i32 %b, ptr %b.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %tobool = icmp ne i32 %0, 0
-  %1 = zext i1 %tobool to i64
-  %cond = select i1 %tobool, i32 1, i32 0
-  %2 = load i32, ptr %b.addr, align 4
-  %tobool1 = icmp ne i32 %2, 0
-  %3 = zext i1 %tobool1 to i64
-  %cond2 = select i1 %tobool1, i32 2, i32 0
-  %or = or i32 %cond, %cond2
-  call void @check(i32 noundef %or)
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @test(i32 noundef 1, i32 noundef 0)
+  %call = call i32 @f(i32 noundef -1)
   call void @exit(i32 noundef 0) #5
   unreachable
 }

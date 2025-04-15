@@ -1,19 +1,24 @@
-; 171575671111548989621784777420472095710
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171575671111548989621784777420472095710_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171575671111548989621784777420472095710.c"
+; 173511190156883811631969417276279938884
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173511190156883811631969417276279938884_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173511190156883811631969417276279938884.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+%struct.test = type { i16 }
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i16 noundef zeroext %x) #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %x.addr = alloca i16, align 2
-  %y = alloca i16, align 2
-  store i16 %x, ptr %x.addr, align 2
-  store i16 0, ptr %y, align 2
-  %0 = load i16, ptr %y, align 2
-  %conv = zext i16 %0 to i32
-  ret i32 %conv
+  %a = alloca i32, align 4
+  %p = alloca ptr, align 8
+  %call = call i32 @f()
+  store i32 %call, ptr %a, align 4
+  store ptr %a, ptr %p, align 8
+  %0 = load ptr, ptr %p, align 8
+  %x = getelementptr inbounds nuw %struct.test, ptr %0, i32 0, i32 0
+  store i16 1, ptr %x, align 2
+  %1 = load i32, ptr %a, align 4
+  ret i32 %1
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -21,8 +26,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i16 noundef zeroext 0)
-  %cmp = icmp ne i32 %call, 0
+  %call = call i32 @f()
+  %cmp = icmp eq i32 %call, 10
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -30,42 +35,6 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i32 @foo(i16 noundef zeroext 32767)
-  %cmp2 = icmp ne i32 %call1, 0
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #2
-  unreachable
-
-if.end4:                                          ; preds = %if.end
-  %call5 = call i32 @foo(i16 noundef zeroext -32768)
-  %cmp6 = icmp ne i32 %call5, 0
-  br i1 %cmp6, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %if.end4
-  call void @abort() #2
-  unreachable
-
-if.end8:                                          ; preds = %if.end4
-  %call9 = call i32 @foo(i16 noundef zeroext -32767)
-  %cmp10 = icmp ne i32 %call9, 1
-  br i1 %cmp10, label %if.then11, label %if.end12
-
-if.then11:                                        ; preds = %if.end8
-  call void @abort() #2
-  unreachable
-
-if.end12:                                         ; preds = %if.end8
-  %call13 = call i32 @foo(i16 noundef zeroext -1)
-  %cmp14 = icmp ne i32 %call13, 32767
-  br i1 %cmp14, label %if.then15, label %if.end16
-
-if.then15:                                        ; preds = %if.end12
-  call void @abort() #2
-  unreachable
-
-if.end16:                                         ; preds = %if.end12
   ret i32 0
 }
 

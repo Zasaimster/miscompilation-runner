@@ -1,48 +1,109 @@
-; 170149049721326995454042110068202266673
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170149049721326995454042110068202266673_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170149049721326995454042110068202266673.c"
+; 129819390552895420877793778691183490393
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129819390552895420877793778691183490393_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129819390552895420877793778691183490393.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@s_c_s = dso_local global { i8, i8, i16 } { i8 97, i8 0, i16 13 }, align 2
-@s_c_i = dso_local global { i8, [3 x i8], i32 } { i8 98, [3 x i8] zeroinitializer, i32 14 }, align 4
-@s_s_i = dso_local global { i16, [2 x i8], i32 } { i16 15, [2 x i8] zeroinitializer, i32 16 }, align 4
-@s_c_f = dso_local global { i8, [3 x i8], float } { i8 99, [3 x i8] zeroinitializer, float 1.700000e+01 }, align 4
-@s_s_f = dso_local global { i16, [2 x i8], float } { i16 18, [2 x i8] zeroinitializer, float 1.900000e+01 }, align 4
-@s_c_d = dso_local global { i8, [7 x i8], double } { i8 100, [7 x i8] zeroinitializer, double 2.000000e+01 }, align 8
-@s_s_d = dso_local global { i16, [6 x i8], double } { i16 21, [6 x i8] zeroinitializer, double 2.200000e+01 }, align 8
-@s_i_d = dso_local global { i32, [4 x i8], double } { i32 23, [4 x i8] zeroinitializer, double 2.400000e+01 }, align 8
-@s_f_d = dso_local global { float, [4 x i8], double } { float 2.500000e+01, [4 x i8] zeroinitializer, double 2.600000e+01 }, align 8
-@s_c_ld = dso_local global { i8, [15 x i8], x86_fp80 } { i8 101, [15 x i8] zeroinitializer, x86_fp80 0xK4003D800000000000000 }, align 16
-@s_s_ld = dso_local global { i16, [14 x i8], x86_fp80 } { i16 28, [14 x i8] zeroinitializer, x86_fp80 0xK4003E800000000000000 }, align 16
-@s_i_ld = dso_local global { i32, [12 x i8], x86_fp80 } { i32 30, [12 x i8] zeroinitializer, x86_fp80 0xK4003F800000000000000 }, align 16
-@s_f_ld = dso_local global { float, [12 x i8], x86_fp80 } { float 3.200000e+01, [12 x i8] zeroinitializer, x86_fp80 0xK40048400000000000000 }, align 16
-@s_d_ld = dso_local global { double, [8 x i8], x86_fp80 } { double 3.400000e+01, [8 x i8] zeroinitializer, x86_fp80 0xK40048C00000000000000 }, align 16
+%struct.B = type { %struct.C, ptr }
+%struct.C = type { %struct.D, i64, i64, i64, i64, i64 }
+%struct.D = type { i32, ptr }
+
+@y = dso_local global %struct.B zeroinitializer, align 8
+@x = dso_local global %struct.B zeroinitializer, align 8
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo(ptr noundef %x, ptr noundef %y) #0 {
+entry:
+  %x.addr = alloca ptr, align 8
+  %y.addr = alloca ptr, align 8
+  store ptr %x, ptr %x.addr, align 8
+  store ptr %y, ptr %y.addr, align 8
+  %0 = load ptr, ptr %y.addr, align 8
+  %b2 = getelementptr inbounds nuw %struct.B, ptr %0, i32 0, i32 1
+  %1 = load ptr, ptr %b2, align 8
+  %cmp = icmp ne ptr %1, null
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
+  %2 = load ptr, ptr %x.addr, align 8
+  %b1 = getelementptr inbounds nuw %struct.B, ptr %2, i32 0, i32 0
+  %c3 = getelementptr inbounds nuw %struct.C, ptr %b1, i32 0, i32 2
+  %3 = load i64, ptr %c3, align 8
+  %cmp1 = icmp eq i64 %3, -1
+  br i1 %cmp1, label %if.then2, label %if.end14
+
+if.then2:                                         ; preds = %if.end
+  %4 = load ptr, ptr %y.addr, align 8
+  %b13 = getelementptr inbounds nuw %struct.B, ptr %4, i32 0, i32 0
+  %c34 = getelementptr inbounds nuw %struct.C, ptr %b13, i32 0, i32 2
+  %5 = load i64, ptr %c34, align 8
+  %6 = load ptr, ptr %x.addr, align 8
+  %b15 = getelementptr inbounds nuw %struct.B, ptr %6, i32 0, i32 0
+  %c36 = getelementptr inbounds nuw %struct.C, ptr %b15, i32 0, i32 2
+  store i64 %5, ptr %c36, align 8
+  %7 = load ptr, ptr %y.addr, align 8
+  %b17 = getelementptr inbounds nuw %struct.B, ptr %7, i32 0, i32 0
+  %c4 = getelementptr inbounds nuw %struct.C, ptr %b17, i32 0, i32 3
+  %8 = load i64, ptr %c4, align 8
+  %9 = load ptr, ptr %x.addr, align 8
+  %b18 = getelementptr inbounds nuw %struct.B, ptr %9, i32 0, i32 0
+  %c49 = getelementptr inbounds nuw %struct.C, ptr %b18, i32 0, i32 3
+  store i64 %8, ptr %c49, align 8
+  %10 = load ptr, ptr %y.addr, align 8
+  %b110 = getelementptr inbounds nuw %struct.B, ptr %10, i32 0, i32 0
+  %c311 = getelementptr inbounds nuw %struct.C, ptr %b110, i32 0, i32 2
+  store i64 -1, ptr %c311, align 8
+  %11 = load ptr, ptr %y.addr, align 8
+  %b112 = getelementptr inbounds nuw %struct.B, ptr %11, i32 0, i32 0
+  %c413 = getelementptr inbounds nuw %struct.C, ptr %b112, i32 0, i32 3
+  store i64 0, ptr %c413, align 8
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.then2, %if.end
+  %12 = load ptr, ptr %y.addr, align 8
+  %b115 = getelementptr inbounds nuw %struct.B, ptr %12, i32 0, i32 0
+  %c316 = getelementptr inbounds nuw %struct.C, ptr %b115, i32 0, i32 2
+  %13 = load i64, ptr %c316, align 8
+  %cmp17 = icmp ne i64 %13, -1
+  br i1 %cmp17, label %if.then18, label %if.end19
+
+if.then18:                                        ; preds = %if.end14
+  call void @abort() #3
+  unreachable
+
+if.end19:                                         ; preds = %if.end14
+  ret void
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i8, ptr @s_c_s, align 2
-  %conv = sext i8 %0 to i32
-  %cmp = icmp ne i32 %conv, 97
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #2
+  store i32 6, ptr @y, align 8
+  store i64 145, ptr getelementptr inbounds nuw (%struct.C, ptr @y, i32 0, i32 2), align 8
+  store i64 2448, ptr getelementptr inbounds nuw (%struct.C, ptr @y, i32 0, i32 3), align 8
+  store i64 -1, ptr getelementptr inbounds nuw (%struct.C, ptr @x, i32 0, i32 2), align 8
+  call void @foo(ptr noundef @x, ptr noundef @y)
+  call void @exit(i32 noundef 0) #4
   unreachable
-
-if.end:                                           ; preds = %entry
-  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

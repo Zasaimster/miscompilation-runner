@@ -1,24 +1,35 @@
-; 146542552860459797029501002810385167297
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/146542552860459797029501002810385167297_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/146542552860459797029501002810385167297.c"
+; 129356828579212063954621060278697563403
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129356828579212063954621060278697563403_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129356828579212063954621060278697563403.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [6 x i8] c"hello\00", align 1
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(i64 noundef %x) #0 {
+entry:
+  %x.addr = alloca i64, align 8
+  store i64 %x, ptr %x.addr, align 8
+  %0 = load i64, ptr %x.addr, align 8
+  %cmp = icmp slt i64 %0, -2147483648
+  %lor.ext = zext i1 %cmp to i32
+  ret i32 %lor.ext
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (i32, ptr, ...) @test(i32 noundef 5, ptr noundef @.str)
-  ret i32 0
+  call void @exit(i32 noundef 0) #2
+  unreachable
 }
 
-declare i32 @test(...) #1
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

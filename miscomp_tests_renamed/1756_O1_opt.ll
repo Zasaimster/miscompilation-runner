@@ -1,28 +1,70 @@
-; 106328532099529918911635060498002267408
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106328532099529918911635060498002267408_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106328532099529918911635060498002267408.c"
+; 168330320407327255816447251933825012122
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168330320407327255816447251933825012122_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168330320407327255816447251933825012122.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nounwind uwtable
-define dso_local noundef i32 @f() local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @test1(i32 noundef %x) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (...) @example2() #2
-  ret i32 1
+  %x.off = add i32 %x, -20
+  %cmp = icmp ult i32 %x.off, 10
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
 }
 
-declare i32 @example2(...) local_unnamed_addr #1
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @test2(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %x.off = add i32 %x, 9
+  %cmp = icmp ult i32 %x.off, 19
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
+}
 
-; Function Attrs: nounwind uwtable
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @test3(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %x.off = add i32 %x, 29
+  %cmp = icmp ult i32 %x.off, 10
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @test4(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %x.off = add i32 %x, 29
+  %cmp = icmp ult i32 %x.off, 10
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @test5(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %x.off = add i32 %x, 9
+  %cmp = icmp ult i32 %x.off, 19
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @test6(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %x.off = add i32 %x, -20
+  %cmp = icmp ult i32 %x.off, 10
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call.i = tail call i32 (...) @example2() #2
   ret i32 0
 }
 
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

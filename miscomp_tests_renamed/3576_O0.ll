@@ -1,31 +1,100 @@
-; 155895682534465893262249685780107794109
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155895682534465893262249685780107794109.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155895682534465893262249685780107794109.c"
+; 187018312695356881766753877286088881812
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187018312695356881766753877286088881812.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187018312695356881766753877286088881812.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i16 -1, align 2
-@c = dso_local global i8 0, align 1
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@d = dso_local global i32 1, align 4
+@f = dso_local global i32 1, align 4
+@e = dso_local global i32 0, align 4
+@c = dso_local global i32 0, align 4
+@a = dso_local global i32 0, align 4
 @b = dso_local global i32 0, align 4
+@k = dso_local global i32 0, align 4
+@j = dso_local global i8 0, align 1
+@g = dso_local global i8 0, align 1
+@.str = private unnamed_addr constant [24 x i8] c"This will never print.\0A\00", align 1
+@h = dso_local global i32 0, align 4
+@i = dso_local global i32 0, align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @fn1() #0 {
+entry:
+  %l = alloca i32, align 4
+  store i32 0, ptr @e, align 4
+  store i32 0, ptr @c, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %if.end15, %entry
+  %0 = load i32, ptr @a, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %for.cond
+  %1 = load i32, ptr @b, align 4
+  %tobool1 = icmp ne i32 %1, 0
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %for.cond
+  %2 = phi i1 [ false, %for.cond ], [ %tobool1, %land.rhs ]
+  %land.ext = zext i1 %2 to i32
+  store i32 %land.ext, ptr @k, align 4
+  %3 = load i32, ptr @k, align 4
+  %mul = mul nsw i32 %3, 54
+  %conv = trunc i32 %mul to i8
+  store i8 %conv, ptr @j, align 1
+  %4 = load i8, ptr @j, align 1
+  %conv2 = sext i8 %4 to i32
+  %mul3 = mul nsw i32 %conv2, 147
+  %conv4 = trunc i32 %mul3 to i8
+  store i8 %conv4, ptr @g, align 1
+  %5 = load i8, ptr @g, align 1
+  %conv5 = sext i8 %5 to i32
+  %not = xor i32 %conv5, -1
+  %conv6 = sext i32 %not to i64
+  %6 = load i32, ptr @e, align 4
+  %conv7 = sext i32 %6 to i64
+  %add = add nsw i64 %conv6, %conv7
+  %tobool8 = icmp ne i64 %add, 0
+  br i1 %tobool8, label %land.rhs9, label %land.end10
+
+land.rhs9:                                        ; preds = %land.end
+  br label %land.end10
+
+land.end10:                                       ; preds = %land.rhs9, %land.end
+  %7 = phi i1 [ false, %land.end ], [ true, %land.rhs9 ]
+  %land.ext11 = zext i1 %7 to i32
+  store i32 %land.ext11, ptr %l, align 4
+  %8 = load i32, ptr @d, align 4
+  %cmp = icmp sgt i32 %8, 10
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %land.end10
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %land.end10
+  %9 = load i32, ptr @f, align 4
+  %tobool13 = icmp ne i32 %9, 0
+  br i1 %tobool13, label %if.then14, label %if.end15
+
+if.then14:                                        ; preds = %if.end
+  ret void
+
+if.end15:                                         ; preds = %if.end
+  br label %for.cond
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i16, ptr @a, align 2
-  %conv = trunc i16 %0 to i8
-  store i8 %conv, ptr @c, align 1
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %1 = load i16, ptr @a, align 2
-  %conv1 = sext i16 %1 to i32
-  %2 = load i8, ptr @c, align 1
-  %conv2 = sext i8 %2 to i32
-  %or = or i32 %conv1, %conv2
-  store i32 %or, ptr @b, align 4
-  %3 = load i32, ptr @b, align 4
-  %cmp = icmp ne i32 %3, -1
+  call void @fn1()
+  %0 = load i32, ptr @c, align 4
+  %cmp = icmp ne i32 %0, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -35,8 +104,6 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %entry
   ret i32 0
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

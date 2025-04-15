@@ -1,67 +1,39 @@
-; 172495272157473684194381062999593060178
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172495272157473684194381062999593060178.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172495272157473684194381062999593060178.c"
+; 135208792867442180921723115094855836339
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135208792867442180921723115094855836339.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135208792867442180921723115094855836339.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@a = dso_local local_unnamed_addr global i8 6, align 1
+@b = dso_local local_unnamed_addr global i32 0, align 4
+@c = dso_local local_unnamed_addr global i32 0, align 4
+
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @test_endianness() local_unnamed_addr #0 {
+define dso_local void @doNothing() local_unnamed_addr #0 {
 entry:
-  ret i32 1
+  ret void
 }
 
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
-
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
-
-; Function Attrs: nofree norecurse nounwind memory(inaccessiblemem: readwrite) uwtable
-define dso_local range(i32 0, 2) i32 @test_endianness_vol() local_unnamed_addr #2 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  %dw.sroa.0 = alloca i64, align 8
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %dw.sroa.0)
-  store volatile i64 4621819117588971520, ptr %dw.sroa.0, align 8, !tbaa !5
-  %dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0. = load volatile i64, ptr %dw.sroa.0, align 8, !tbaa !5
-  %cmp.not = icmp ne i64 %dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0., 0
-  %cond = zext i1 %cmp.not to i32
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %dw.sroa.0)
-  ret i32 %cond
+  %0 = load i8, ptr @a, align 1, !tbaa !5
+  %tobool.not.i = icmp ne i8 %0, 0
+  br i1 %tobool.not.i, label %land.rhs.i, label %fn1.exit
+
+land.rhs.i:                                       ; preds = %entry
+  %conv.i = zext i8 %0 to i32
+  store i32 %conv.i, ptr @b, align 4, !tbaa !8
+  br label %fn1.exit
+
+fn1.exit:                                         ; preds = %entry, %land.rhs.i
+  %land.ext.i = zext i1 %tobool.not.i to i32
+  store i32 %land.ext.i, ptr @c, align 4, !tbaa !8
+  ret i32 0
 }
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #3 {
-entry:
-  %dw.sroa.0.i = alloca i64, align 8
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %dw.sroa.0.i)
-  store volatile i64 4621819117588971520, ptr %dw.sroa.0.i, align 8, !tbaa !5
-  %dw.sroa.0.i.0.dw.sroa.0.i.0.dw.sroa.0.i.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0..i = load volatile i64, ptr %dw.sroa.0.i, align 8, !tbaa !5
-  %cmp.not.i.not = icmp eq i64 %dw.sroa.0.i.0.dw.sroa.0.i.0.dw.sroa.0.i.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0.dw.sroa.0.0..i, 0
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %dw.sroa.0.i)
-  br i1 %cmp.not.i.not, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  tail call void @abort() #6
-  unreachable
-
-if.end:                                           ; preds = %entry
-  tail call void @exit(i32 noundef 0) #6
-  unreachable
-}
-
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #4
-
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #5
 
 attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { nofree norecurse nounwind memory(inaccessiblemem: readwrite) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #6 = { noreturn nounwind }
+attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -74,3 +46,5 @@ attributes #6 = { noreturn nounwind }
 !5 = !{!6, !6, i64 0}
 !6 = !{!"omnipotent char", !7, i64 0}
 !7 = !{!"Simple C/C++ TBAA"}
+!8 = !{!9, !9, i64 0}
+!9 = !{!"int", !6, i64 0}

@@ -1,12 +1,12 @@
-; 195768428811666409150989059672611121931
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195768428811666409150989059672611121931_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195768428811666409150989059672611121931.c"
+; 124903808605513863057475152045731516034
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/124903808605513863057475152045731516034_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/124903808605513863057475152045731516034.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 %struct.foo = type { i32 }
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"X is negative\0A\00", align 1
 
 ; Function Attrs: nounwind uwtable
 define dso_local void @gcc_crash(ptr noundef captures(none) %p) local_unnamed_addr #0 {

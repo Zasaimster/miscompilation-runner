@@ -1,29 +1,24 @@
-; 112289160386076882347947176484852055981
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112289160386076882347947176484852055981_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112289160386076882347947176484852055981.c"
+; 182702345575929667302448486414480826099
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182702345575929667302448486414480826099_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182702345575929667302448486414480826099.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-%struct.anon = type { i64 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %h = alloca %struct.anon, align 8
+  %v = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %status = getelementptr inbounds nuw %struct.anon, ptr %h, i32 0, i32 0
-  store i64 20, ptr %status, align 8
-  call void @exit(i32 noundef 0) #2
-  unreachable
+  store i32 100, ptr %v, align 4
+  %call = call i32 (...) @anotherDummyFunc()
+  ret i32 %call
 }
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #1
+declare i32 @anotherDummyFunc(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

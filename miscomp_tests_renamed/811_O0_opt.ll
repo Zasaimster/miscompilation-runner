@@ -1,127 +1,55 @@
-; 189021405863865330027038027871178521712
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189021405863865330027038027871178521712_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189021405863865330027038027871178521712.c"
+; 111343877049746319217566345239925601990
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111343877049746319217566345239925601990_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111343877049746319217566345239925601990.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @fail1() #0 {
-entry:
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @fail2() #0 {
-entry:
-  call void @abort() #3
-  unreachable
-}
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @fail3() #0 {
-entry:
-  call void @abort() #3
-  unreachable
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @fail4() #0 {
-entry:
-  call void @abort() #3
-  unreachable
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(i64 noundef %x) #0 {
-entry:
-  %x.addr = alloca i64, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %x.addr, align 8
-  switch i64 %0, label %sw.default [
-    i64 -6, label %sw.bb
-    i64 0, label %sw.bb1
-    i64 1, label %sw.bb2
-    i64 2, label %sw.bb2
-    i64 3, label %sw.bb3
-    i64 4, label %sw.bb3
-    i64 5, label %sw.bb3
-  ]
-
-sw.bb:                                            ; preds = %entry
-  call void @fail1()
-  br label %sw.epilog
-
-sw.bb1:                                           ; preds = %entry
-  call void @fail2()
-  br label %sw.epilog
-
-sw.bb2:                                           ; preds = %entry, %entry
-  br label %sw.epilog
-
-sw.bb3:                                           ; preds = %entry, %entry, %entry
-  call void @fail3()
-  br label %sw.epilog
-
-sw.default:                                       ; preds = %entry
-  call void @fail4()
-  br label %sw.epilog
-
-sw.epilog:                                        ; preds = %sw.default, %sw.bb3, %sw.bb2, %sw.bb1, %sw.bb
-  %1 = load i64, ptr %x.addr, align 8
-  switch i64 %1, label %sw.default8 [
-    i64 -3, label %sw.bb4
-    i64 0, label %sw.bb5
-    i64 4, label %sw.bb5
-    i64 1, label %sw.bb6
-    i64 3, label %sw.bb6
-    i64 2, label %sw.bb7
-    i64 8, label %sw.bb7
-  ]
-
-sw.bb4:                                           ; preds = %sw.epilog
-  call void @fail1()
-  br label %sw.epilog9
-
-sw.bb5:                                           ; preds = %sw.epilog, %sw.epilog
-  call void @fail2()
-  br label %sw.epilog9
-
-sw.bb6:                                           ; preds = %sw.epilog, %sw.epilog
-  br label %sw.epilog9
-
-sw.bb7:                                           ; preds = %sw.epilog, %sw.epilog
-  call void @abort() #3
-  unreachable
-
-sw.default8:                                      ; preds = %sw.epilog
-  call void @fail4()
-  br label %sw.epilog9
-
-sw.epilog9:                                       ; preds = %sw.default8, %sw.bb6, %sw.bb5, %sw.bb4
-  ret void
-}
+@l = dso_local global i64 -2, align 8
+@.str = private unnamed_addr constant [11 x i8] c"Loop done\0A\00", align 1
+@s = dso_local global i16 0, align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %t = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  call void @foo(i64 noundef 1)
-  call void @exit(i32 noundef 0) #4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = sext i32 %call to i64
+  store i64 %conv, ptr %t, align 8
+  %call1 = call i32 (...) @example8()
+  %conv2 = trunc i32 %call1 to i16
+  store i16 %conv2, ptr @s, align 2
+  %0 = load i16, ptr @s, align 2
+  %conv3 = zext i16 %0 to i32
+  %cmp = icmp ne i32 %conv3, 65534
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #5
   unreachable
 }
 
+declare i32 @printf(ptr noundef, ...) #1
+
+declare i32 @example8(...) #1
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
+declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

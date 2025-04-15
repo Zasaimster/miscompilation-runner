@@ -1,57 +1,68 @@
-; 166079851731967137969934050307429313216
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/166079851731967137969934050307429313216_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/166079851731967137969934050307429313216.c"
+; 135739429085366020681682798416882764408
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135739429085366020681682798416882764408_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135739429085366020681682798416882764408.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@str = private unnamed_addr constant [31 x i8] c"This function is never called.\00", align 1
+@.str = private unnamed_addr constant [25 x i8] c"This won't be compiled.\0A\00", align 1
+@g_5 = dso_local local_unnamed_addr global i8 0, align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main(i32 noundef %h) local_unnamed_addr #0 {
+define dso_local void @func_1() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %for.cond1.preheader
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  br label %for.cond
 
-for.cond1.preheader:                              ; preds = %for.inc25, %entry
-  %d.040 = phi i32 [ 0, %entry ], [ %inc26, %for.inc25 ]
-  br label %for.cond4.preheader
+for.cond:                                         ; preds = %for.cond, %entry
+  %storemerge.in = phi i32 [ %call, %entry ], [ %sub, %for.cond ]
+  %conv1 = and i32 %storemerge.in, 255
+  %cmp = icmp samesign ugt i32 %conv1, 3
+  %sub = add nsw i32 %conv1, -5
+  br i1 %cmp, label %for.cond, label %for.end, !llvm.loop !5
 
-for.cond4.preheader:                              ; preds = %for.inc22, %for.cond1.preheader
-  %e.039 = phi i32 [ 0, %for.cond1.preheader ], [ %inc23, %for.inc22 ]
-  br label %for.body6
-
-for.body6:                                        ; preds = %for.body6, %for.cond4.preheader
-  %f.038 = phi i32 [ 0, %for.cond4.preheader ], [ %inc, %for.body6 ]
-  %call11 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef 0)
-  %call20 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef 0)
-  %inc = add nuw nsw i32 %f.038, 1
-  %exitcond.not = icmp eq i32 %inc, 10
-  br i1 %exitcond.not, label %for.inc22, label %for.body6, !llvm.loop !5
-
-for.inc22:                                        ; preds = %for.body6
-  %inc23 = add nuw nsw i32 %e.039, 1
-  %exitcond41.not = icmp eq i32 %inc23, 3
-  br i1 %exitcond41.not, label %for.inc25, label %for.cond4.preheader, !llvm.loop !8
-
-for.inc25:                                        ; preds = %for.inc22
-  %inc26 = add nuw nsw i32 %d.040, 1
-  %exitcond42.not = icmp eq i32 %inc26, 6
-  br i1 %exitcond42.not, label %for.end27, label %for.cond1.preheader, !llvm.loop !9
-
-for.end27:                                        ; preds = %for.inc25
-  ret i32 0
+for.end:                                          ; preds = %for.cond
+  %storemerge.le = trunc i32 %storemerge.in to i8
+  store i8 %storemerge.le, ptr @g_5, align 1, !tbaa !8
+  ret void
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  br label %for.cond.i
+
+for.cond.i:                                       ; preds = %for.cond.i, %entry
+  %storemerge.in.i = phi i32 [ %call.i, %entry ], [ %sub.i, %for.cond.i ]
+  %conv1.i = and i32 %storemerge.in.i, 255
+  %cmp.i = icmp samesign ugt i32 %conv1.i, 3
+  %sub.i = add nsw i32 %conv1.i, -5
+  br i1 %cmp.i, label %for.cond.i, label %func_1.exit, !llvm.loop !5
+
+func_1.exit:                                      ; preds = %for.cond.i
+  %storemerge.le.i = trunc i32 %storemerge.in.i to i8
+  store i8 %storemerge.le.i, ptr @g_5, align 1, !tbaa !8
+  %cmp.not = icmp eq i8 %storemerge.le.i, 0
+  br i1 %cmp.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %func_1.exit
+  tail call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %func_1.exit
+  ret i32 0
+}
+
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #2
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -64,5 +75,6 @@ attributes #2 = { nofree nounwind }
 !5 = distinct !{!5, !6, !7}
 !6 = !{!"llvm.loop.mustprogress"}
 !7 = !{!"llvm.loop.unroll.disable"}
-!8 = distinct !{!8, !6, !7}
-!9 = distinct !{!9, !6, !7}
+!8 = !{!9, !9, i64 0}
+!9 = !{!"omnipotent char", !10, i64 0}
+!10 = !{!"Simple C/C++ TBAA"}

@@ -1,42 +1,32 @@
-; 169097550821470368112711314266072211044
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169097550821470368112711314266072211044.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169097550821470368112711314266072211044.c"
+; 142266085610404428703233793517341924621
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/142266085610404428703233793517341924621.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/142266085610404428703233793517341924621.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.anon = type { i32 }
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %u = alloca %union.anon, align 4
+  %c = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %u, align 4
-  store i32 3, ptr %u, align 4
-  %0 = load i32, ptr %u, align 4
-  %cmp = icmp ne i32 %0, 3
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  br label %do.body
 
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load i32, ptr %u, align 4
-  %cmp1 = icmp ne i32 %1, 3
-  br i1 %cmp1, label %if.then, label %if.end
+do.body:                                          ; preds = %entry
+  br label %do.end
 
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %lor.lhs.false
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %2 = load i32, ptr %retval, align 4
-  ret i32 %2
+do.end:                                           ; preds = %do.body
+  %0 = load i32, ptr %c, align 4
+  ret i32 %0
 }
 
+declare i32 @printf(ptr noundef, ...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,94 +1,126 @@
-; 161352115749418602472728578646191141187
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161352115749418602472728578646191141187_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161352115749418602472728578646191141187.c"
+; 105161721358768495325372172769185424649
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105161721358768495325372172769185424649_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105161721358768495325372172769185424649.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.WorkEntrySType = type { ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr }
-%struct.ShrPcPteSType = type { %struct.ShrPcStatsSType }
-%struct.ShrPcStatsSType = type { i32, i32, %struct.ShrPcCommonStatSType, %union.ShrPcStatUnion }
-%struct.ShrPcCommonStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64 }
-%union.ShrPcStatUnion = type { %struct.ShrPcGemStatSType }
-%struct.ShrPcGemStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, [40 x i64] }
+%struct.object = type { ptr, i64 }
 
-@Local1 = dso_local global ptr null, align 8
-@Local2 = dso_local global ptr null, align 8
-@Local3 = dso_local global ptr null, align 8
-@RDbf1 = dso_local global ptr null, align 8
-@RDbf2 = dso_local global ptr null, align 8
-@RDbf3 = dso_local global ptr null, align 8
-@IntVc1 = dso_local global ptr null, align 8
-@IntVc2 = dso_local global ptr null, align 8
-@IntCode3 = dso_local global ptr null, align 8
-@IntCode4 = dso_local global ptr null, align 8
-@IntCode5 = dso_local global ptr null, align 8
-@IntCode6 = dso_local global ptr null, align 8
-@Lom1 = dso_local global ptr null, align 8
-@Lom2 = dso_local global ptr null, align 8
-@Lom3 = dso_local global ptr null, align 8
-@Lom4 = dso_local global ptr null, align 8
-@Lom5 = dso_local global ptr null, align 8
-@Lom6 = dso_local global ptr null, align 8
-@Lom7 = dso_local global ptr null, align 8
-@Lom8 = dso_local global ptr null, align 8
-@Lom9 = dso_local global ptr null, align 8
-@Lom10 = dso_local global ptr null, align 8
-@RDbf11 = dso_local global ptr null, align 8
-@RDbf12 = dso_local global ptr null, align 8
-@Workspace = dso_local global %struct.WorkEntrySType zeroinitializer, align 8
-@MyPte = dso_local global %struct.ShrPcPteSType zeroinitializer, align 8
+@nil = dso_local global i32 0, align 4
+@cons1 = dso_local global [2 x %struct.object] [%struct.object { ptr @nil, i64 0 }, %struct.object { ptr @nil, i64 0 }], align 16
+@cons2 = dso_local global [2 x %struct.object] [%struct.object { ptr @cons1, i64 64 }, %struct.object { ptr @nil, i64 0 }], align 16
+@__const.main.x = private unnamed_addr constant %struct.object { ptr @cons2, i64 64 }, align 8
+@__const.main.y = private unnamed_addr constant %struct.object { ptr @nil, i64 0 }, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @InitCache(i32 noundef %sessionId) #0 {
+define dso_local { ptr, i64 } @bar(ptr %blah.coerce0, i64 %blah.coerce1) #0 {
 entry:
-  %sessionId.addr = alloca i32, align 4
-  store i32 %sessionId, ptr %sessionId.addr, align 4
-  %0 = load i32, ptr %sessionId.addr, align 4
-  %conv = sext i32 %0 to i64
-  call void @initPte(ptr noundef null, i64 noundef %conv)
-  ret void
+  %retval = alloca %struct.object, align 8
+  %blah = alloca %struct.object, align 8
+  %0 = getelementptr inbounds nuw { ptr, i64 }, ptr %blah, i32 0, i32 0
+  store ptr %blah.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { ptr, i64 }, ptr %blah, i32 0, i32 1
+  store i64 %blah.coerce1, ptr %1, align 8
+  %2 = load { ptr, i64 }, ptr %retval, align 8
+  ret { ptr, i64 } %2
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define internal void @initPte(ptr noundef %shrpcPtr, i64 noundef %sessionId) #0 {
+define dso_local { ptr, i64 } @foo(ptr %x.coerce0, i64 %x.coerce1, ptr %y.coerce0, i64 %y.coerce1) #0 {
 entry:
-  %shrpcPtr.addr = alloca ptr, align 8
-  %sessionId.addr = alloca i64, align 8
-  %ptePtr = alloca ptr, align 8
-  store ptr %shrpcPtr, ptr %shrpcPtr.addr, align 8
-  store i64 %sessionId, ptr %sessionId.addr, align 8
-  store ptr @MyPte, ptr %ptePtr, align 8
-  %0 = load ptr, ptr %ptePtr, align 8
-  %stats = getelementptr inbounds nuw %struct.ShrPcPteSType, ptr %0, i32 0, i32 0
-  %1 = load i64, ptr %sessionId.addr, align 8
-  call void @setStatPointers(ptr noundef %stats, i64 noundef %1)
-  ret void
+  %retval = alloca %struct.object, align 8
+  %x = alloca %struct.object, align 8
+  %y = alloca %struct.object, align 8
+  %z = alloca %struct.object, align 8
+  %tmp = alloca %struct.object, align 8
+  %0 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 0
+  store ptr %x.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 1
+  store i64 %x.coerce1, ptr %1, align 8
+  %2 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 0
+  store ptr %y.coerce0, ptr %2, align 8
+  %3 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 1
+  store i64 %y.coerce1, ptr %3, align 8
+  %addr = getelementptr inbounds nuw %struct.object, ptr %x, i32 0, i32 0
+  %4 = load ptr, ptr %addr, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %z, ptr align 8 %4, i64 16, i1 false)
+  %type = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 1
+  %5 = load i64, ptr %type, align 8
+  %and = and i64 %5, 64
+  %tobool = icmp ne i64 %and, 0
+  br i1 %tobool, label %if.then, label %if.end7
+
+if.then:                                          ; preds = %entry
+  %addr1 = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 0
+  %6 = load ptr, ptr %addr1, align 8
+  %add.ptr = getelementptr inbounds nuw i8, ptr %6, i64 16
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %y, ptr align 8 %add.ptr, i64 16, i1 false)
+  %addr2 = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 0
+  %7 = load ptr, ptr %addr2, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %z, ptr align 8 %7, i64 16, i1 false)
+  %type3 = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 1
+  %8 = load i64, ptr %type3, align 8
+  %and4 = and i64 %8, 64
+  %tobool5 = icmp ne i64 %and4, 0
+  br i1 %tobool5, label %if.then6, label %if.end
+
+if.then6:                                         ; preds = %if.then
+  %9 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 0
+  %10 = load ptr, ptr %9, align 8
+  %11 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 1
+  %12 = load i64, ptr %11, align 8
+  %call = call { ptr, i64 } @bar(ptr %10, i64 %12)
+  %13 = getelementptr inbounds nuw { ptr, i64 }, ptr %tmp, i32 0, i32 0
+  %14 = extractvalue { ptr, i64 } %call, 0
+  store ptr %14, ptr %13, align 8
+  %15 = getelementptr inbounds nuw { ptr, i64 }, ptr %tmp, i32 0, i32 1
+  %16 = extractvalue { ptr, i64 } %call, 1
+  store i64 %16, ptr %15, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %y, ptr align 8 %tmp, i64 16, i1 false)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then6, %if.then
+  br label %if.end7
+
+if.end7:                                          ; preds = %if.end, %entry
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %retval, ptr align 8 %y, i64 16, i1 false)
+  %17 = load { ptr, i64 }, ptr %retval, align 8
+  ret { ptr, i64 } %17
 }
 
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
+  %x = alloca %struct.object, align 8
+  %y = alloca %struct.object, align 8
+  %three = alloca %struct.object, align 8
   store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  call void @InitCache(i32 noundef 5)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %x, ptr align 8 @__const.main.x, i64 16, i1 false)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %y, ptr align 8 @__const.main.y, i64 16, i1 false)
+  %0 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 0
+  %1 = load ptr, ptr %0, align 8
+  %2 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 1
+  %3 = load i64, ptr %2, align 8
+  %4 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 0
+  %5 = load ptr, ptr %4, align 8
+  %6 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 1
+  %7 = load i64, ptr %6, align 8
+  %call = call { ptr, i64 } @foo(ptr %1, i64 %3, ptr %5, i64 %7)
+  %8 = getelementptr inbounds nuw { ptr, i64 }, ptr %three, i32 0, i32 0
+  %9 = extractvalue { ptr, i64 } %call, 0
+  store ptr %9, ptr %8, align 8
+  %10 = getelementptr inbounds nuw { ptr, i64 }, ptr %three, i32 0, i32 1
+  %11 = extractvalue { ptr, i64 } %call, 1
+  store i64 %11, ptr %10, align 8
   ret i32 0
 }
 
-; Function Attrs: noinline nounwind uwtable
-define internal void @setStatPointers(ptr noundef %statsPtr, i64 noundef %sessionId) #0 {
-entry:
-  %statsPtr.addr = alloca ptr, align 8
-  %sessionId.addr = alloca i64, align 8
-  store ptr %statsPtr, ptr %statsPtr.addr, align 8
-  store i64 %sessionId, ptr %sessionId.addr, align 8
-  ret void
-}
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

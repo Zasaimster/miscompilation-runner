@@ -1,16 +1,19 @@
-; 122152571960306474740084218502299994627
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122152571960306474740084218502299994627_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122152571960306474740084218502299994627.c"
+; 145750415597423057411832371590497041887
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145750415597423057411832371590497041887_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145750415597423057411832371590497041887.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.rtx_def = type { i32 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
+  %r = alloca ptr, align 8
+  %s = alloca %struct.rtx_def, align 4
   store i32 0, ptr %retval, align 4
-  store i32 50, ptr %x, align 4
+  store ptr %s, ptr %r, align 8
   ret i32 0
 }
 

@@ -1,22 +1,54 @@
-; 186992540208274936631822933049780096321
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/186992540208274936631822933049780096321.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/186992540208274936631822933049780096321.c"
+; 111847654430744497191166434677888107414
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111847654430744497191166434677888107414.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111847654430744497191166434677888107414.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @main() #0 {
+define dso_local void @f(i64 noundef %i) #0 {
 entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
+  %i.addr = alloca i64, align 8
+  store i64 %i, ptr %i.addr, align 8
+  %0 = load i64, ptr %i.addr, align 8
+  %conv = trunc i64 %0 to i8
+  %conv1 = sext i8 %conv to i32
+  %cmp = icmp slt i32 %conv1, 0
+  br i1 %cmp, label %if.then, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load i64, ptr %i.addr, align 8
+  %conv3 = trunc i64 %1 to i8
+  %conv4 = sext i8 %conv3 to i32
+  %cmp5 = icmp eq i32 %conv4, 0
+  br i1 %cmp5, label %if.then, label %if.else
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #3
+  unreachable
+
+if.else:                                          ; preds = %lor.lhs.false
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  call void @f(i64 noundef 4294967041)
+  ret i32 0
+}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

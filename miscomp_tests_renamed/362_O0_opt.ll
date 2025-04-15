@@ -1,157 +1,80 @@
-; 166429151764779486116754705199963025853
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/166429151764779486116754705199963025853_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/166429151764779486116754705199963025853.c"
+; 172171287377326615189035339950568963875
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172171287377326615189035339950568963875_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172171287377326615189035339950568963875.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.epic_private = type { ptr, [0 x i32] }
-%struct.epic_rx_desc = type { i32 }
+@g0 = dso_local global i64 0, align 8
+@g1 = dso_local global i64 0, align 8
+@a = dso_local global i32 0, align 4
+@b = dso_local global i128 0, align 16
+@d = dso_local global i32 0, align 4
+@c = dso_local global i32 0, align 4
 
-@check_rx_ring = internal global [5 x i32] [i32 12, i32 14, i32 16, i32 18, i32 10], align 16
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @store(i64 noundef %a0, i64 noundef %a1) #0 {
+entry:
+  %a0.addr = alloca i64, align 8
+  %a1.addr = alloca i64, align 8
+  store i64 %a0, ptr %a0.addr, align 8
+  store i64 %a1, ptr %a1.addr, align 8
+  store i64 84347, ptr @g0, align 8
+  %0 = load i64, ptr %a1.addr, align 8
+  store i64 %0, ptr @g1, align 8
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo() #0 {
+entry:
+  %x = alloca i128, align 16
+  %0 = load i32, ptr @a, align 4
+  %conv = sext i32 %0 to i128
+  %1 = load i128, ptr @b, align 16
+  %add = add i128 %1, %conv
+  store i128 %add, ptr @b, align 16
+  %2 = load i32, ptr @d, align 4
+  %cmp = icmp ne i32 %2, 84347
+  %conv1 = zext i1 %cmp to i32
+  store i32 %conv1, ptr @c, align 4
+  %3 = load i32, ptr @c, align 4
+  %conv2 = sext i32 %3 to i128
+  %4 = load i128, ptr @b, align 16
+  %div = udiv i128 %4, %conv2
+  store i128 %div, ptr @b, align 16
+  %5 = load i128, ptr @b, align 16
+  store i128 %5, ptr %x, align 16
+  %6 = load i128, ptr %x, align 16
+  %shr = lshr i128 %6, 0
+  %conv3 = trunc i128 %shr to i64
+  %7 = load i128, ptr %x, align 16
+  %shr4 = lshr i128 %7, 64
+  %conv5 = trunc i128 %shr4 to i64
+  call void @store(i64 noundef %conv3, i64 noundef %conv5)
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %ep = alloca %struct.epic_private, align 8
-  %rx_ring = alloca [5 x %struct.epic_rx_desc], align 16
-  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %i, align 4
-  br label %for.cond
+  call void @foo()
+  %0 = load i64, ptr @g0, align 8
+  %cmp = icmp ne i64 %0, 0
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 5
-  br i1 %cmp, label %for.body, label %for.end
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load i64, ptr @g1, align 8
+  %cmp1 = icmp ne i64 %1, 0
+  br i1 %cmp1, label %if.then, label %if.end
 
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4
-  %idxprom = sext i32 %1 to i64
-  %arrayidx = getelementptr inbounds [5 x %struct.epic_rx_desc], ptr %rx_ring, i64 0, i64 %idxprom
-  %next = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx, i32 0, i32 0
-  store i32 0, ptr %next, align 4
-  %rx_skbuff = getelementptr inbounds nuw %struct.epic_private, ptr %ep, i32 0, i32 1
-  %2 = load i32, ptr %i, align 4
-  %idxprom1 = sext i32 %2 to i64
-  %arrayidx2 = getelementptr inbounds [0 x i32], ptr %rx_skbuff, i64 0, i64 %idxprom1
-  store i32 5, ptr %arrayidx2, align 4
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %3 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %3, 1
-  store i32 %inc, ptr %i, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %arraydecay = getelementptr inbounds [5 x %struct.epic_rx_desc], ptr %rx_ring, i64 0, i64 0
-  %rx_ring3 = getelementptr inbounds nuw %struct.epic_private, ptr %ep, i32 0, i32 0
-  store ptr %arraydecay, ptr %rx_ring3, align 8
-  call void @epic_init_ring(ptr noundef %ep)
-  store i32 0, ptr %i, align 4
-  br label %for.cond4
-
-for.cond4:                                        ; preds = %for.inc19, %for.end
-  %4 = load i32, ptr %i, align 4
-  %cmp5 = icmp slt i32 %4, 5
-  br i1 %cmp5, label %for.body6, label %for.end21
-
-for.body6:                                        ; preds = %for.cond4
-  %5 = load i32, ptr %i, align 4
-  %idxprom7 = sext i32 %5 to i64
-  %arrayidx8 = getelementptr inbounds [5 x %struct.epic_rx_desc], ptr %rx_ring, i64 0, i64 %idxprom7
-  %next9 = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx8, i32 0, i32 0
-  %6 = load i32, ptr %next9, align 4
-  %7 = load i32, ptr %i, align 4
-  %idxprom10 = sext i32 %7 to i64
-  %arrayidx11 = getelementptr inbounds [5 x i32], ptr @check_rx_ring, i64 0, i64 %idxprom10
-  %8 = load i32, ptr %arrayidx11, align 4
-  %cmp12 = icmp ne i32 %6, %8
-  br i1 %cmp12, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body6
+if.then:                                          ; preds = %lor.lhs.false, %entry
   call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %for.body6
-  %rx_skbuff13 = getelementptr inbounds nuw %struct.epic_private, ptr %ep, i32 0, i32 1
-  %9 = load i32, ptr %i, align 4
-  %idxprom14 = sext i32 %9 to i64
-  %arrayidx15 = getelementptr inbounds [0 x i32], ptr %rx_skbuff13, i64 0, i64 %idxprom14
-  %10 = load i32, ptr %arrayidx15, align 4
-  %cmp16 = icmp ne i32 %10, 0
-  br i1 %cmp16, label %if.then17, label %if.end18
-
-if.then17:                                        ; preds = %if.end
-  call void @abort() #2
-  unreachable
-
-if.end18:                                         ; preds = %if.end
-  br label %for.inc19
-
-for.inc19:                                        ; preds = %if.end18
-  %11 = load i32, ptr %i, align 4
-  %inc20 = add nsw i32 %11, 1
-  store i32 %inc20, ptr %i, align 4
-  br label %for.cond4, !llvm.loop !8
-
-for.end21:                                        ; preds = %for.cond4
+if.end:                                           ; preds = %lor.lhs.false
   ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal void @epic_init_ring(ptr noundef %ep) #0 {
-entry:
-  %ep.addr = alloca ptr, align 8
-  %i = alloca i32, align 4
-  store ptr %ep, ptr %ep.addr, align 8
-  store i32 0, ptr %i, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 5
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4
-  %add = add nsw i32 %1, 1
-  %mul = mul nsw i32 %add, 2
-  %add1 = add nsw i32 10, %mul
-  %2 = load ptr, ptr %ep.addr, align 8
-  %rx_ring = getelementptr inbounds nuw %struct.epic_private, ptr %2, i32 0, i32 0
-  %3 = load ptr, ptr %rx_ring, align 8
-  %4 = load i32, ptr %i, align 4
-  %idxprom = sext i32 %4 to i64
-  %arrayidx = getelementptr inbounds %struct.epic_rx_desc, ptr %3, i64 %idxprom
-  %next = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx, i32 0, i32 0
-  store i32 %add1, ptr %next, align 4
-  %5 = load ptr, ptr %ep.addr, align 8
-  %rx_skbuff = getelementptr inbounds nuw %struct.epic_private, ptr %5, i32 0, i32 1
-  %6 = load i32, ptr %i, align 4
-  %idxprom2 = sext i32 %6 to i64
-  %arrayidx3 = getelementptr inbounds [0 x i32], ptr %rx_skbuff, i64 0, i64 %idxprom2
-  store i32 0, ptr %arrayidx3, align 4
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %7 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %7, 1
-  store i32 %inc, ptr %i, align 4
-  br label %for.cond, !llvm.loop !9
-
-for.end:                                          ; preds = %for.cond
-  %8 = load ptr, ptr %ep.addr, align 8
-  %rx_ring4 = getelementptr inbounds nuw %struct.epic_private, ptr %8, i32 0, i32 0
-  %9 = load ptr, ptr %rx_ring4, align 8
-  %10 = load i32, ptr %i, align 4
-  %sub = sub nsw i32 %10, 1
-  %idxprom5 = sext i32 %sub to i64
-  %arrayidx6 = getelementptr inbounds %struct.epic_rx_desc, ptr %9, i64 %idxprom5
-  %next7 = getelementptr inbounds nuw %struct.epic_rx_desc, ptr %arrayidx6, i32 0, i32 0
-  store i32 10, ptr %next7, align 4
-  ret void
 }
 
 ; Function Attrs: noreturn nounwind
@@ -170,7 +93,3 @@ attributes #2 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}
-!9 = distinct !{!9, !7}

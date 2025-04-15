@@ -1,59 +1,80 @@
-; 169371918202713324392648982073378525728
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169371918202713324392648982073378525728.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169371918202713324392648982073378525728.c"
+; 157409140573133299686694430257400901134
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157409140573133299686694430257400901134.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157409140573133299686694430257400901134.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.rtx_def = type { i32 }
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %call = call i32 @baz(i32 noundef 2147483647)
+  %add = add nsw i32 %call, 1
+  %cmp = icmp slt i32 %add, 2147483647
+  %conv = zext i1 %cmp to i32
+  %0 = load i32, ptr %x.addr, align 4
+  %cmp1 = icmp slt i32 %conv, %0
+  %conv2 = zext i1 %cmp1 to i32
+  ret i32 %conv2
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @bar(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %add = add i32 %0, 1
+  %add1 = add nsw i32 %add, 1
+  ret i32 %add1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @baz(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %add = add i32 %0, 1
+  ret i32 %add
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %tmp = alloca [5 x i32], align 16
-  %r = alloca ptr, align 8
-  %s = alloca %struct.rtx_def, align 4
-  %p = alloca ptr, align 8
-  %q = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store ptr null, ptr %r, align 8
-  %0 = load ptr, ptr %r, align 8
-  %code = getelementptr inbounds nuw %struct.rtx_def, ptr %0, i32 0, i32 0
-  store i32 39, ptr %code, align 4
-  %arraydecay = getelementptr inbounds [5 x i32], ptr %tmp, i64 0, i64 0
-  store ptr %arraydecay, ptr %p, align 8
-  %1 = load ptr, ptr %p, align 8
-  %add.ptr = getelementptr inbounds i32, ptr %1, i64 1
-  store ptr %add.ptr, ptr %q, align 8
-  %2 = load ptr, ptr %q, align 8
-  store i32 0, ptr %2, align 4
-  %arrayidx = getelementptr inbounds [5 x i32], ptr %tmp, i64 0, i64 1
-  store i32 39, ptr %arrayidx, align 4
-  %3 = load ptr, ptr %q, align 8
-  %4 = load i32, ptr %3, align 4
-  %cmp = icmp ne i32 %4, 39
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 @foo(i32 noundef 2147483647)
+  %call1 = call i32 @bar(i32 noundef 2147483647)
+  %cmp = icmp slt i32 %call1, 2147483647
+  %conv = zext i1 %cmp to i32
+  %cmp2 = icmp ne i32 %call, %conv
+  br i1 %cmp2, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
-  call void @abort() #3
+lor.lhs.false:                                    ; preds = %entry
+  %call4 = call i32 @foo(i32 noundef 2147483647)
+  %call5 = call i32 @baz(i32 noundef 2147483647)
+  %add = add nsw i32 %call5, 1
+  %cmp6 = icmp slt i32 %add, 2147483647
+  %conv7 = zext i1 %cmp6 to i32
+  %cmp8 = icmp ne i32 %call4, %conv7
+  br i1 %cmp8, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
-  unreachable
+if.end:                                           ; preds = %lor.lhs.false
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

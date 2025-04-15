@@ -1,31 +1,28 @@
-; 170066768070139057586333462795023082370
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170066768070139057586333462795023082370.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170066768070139057586333462795023082370.c"
+; 123895288659815349829984366760961383635
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123895288659815349829984366760961383635.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123895288659815349829984366760961383635.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str.1 = private unnamed_addr constant [26 x i8] c"Size of float: %zu bytes\0A\00", align 1
+@.str.2 = private unnamed_addr constant [27 x i8] c"Size of double: %zu bytes\0A\00", align 1
+@.str.3 = private unnamed_addr constant [24 x i8] c"Size of char: %zu byte\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
+  %intType = alloca i32, align 4
+  %floatType = alloca float, align 4
+  %doubleType = alloca double, align 8
+  %charType = alloca i8, align 1
   store i32 0, ptr %retval, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %x, align 4
-  %0 = load i32, ptr %x, align 4
-  %mul = mul nsw i32 %0, 10
-  store i32 %mul, ptr %x, align 4
-  %1 = load i32, ptr %x, align 4
-  %div = sdiv i32 %1, 2
-  store i32 %div, ptr %x, align 4
-  %2 = load i32, ptr %x, align 4
-  %rem = srem i32 %2, 3
-  store i32 %rem, ptr %x, align 4
-  %3 = load i32, ptr %x, align 4
-  %sub = sub nsw i32 %3, 2
-  ret i32 %sub
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i64 noundef 4)
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i64 noundef 8)
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3, i64 noundef 1)
+  ret i32 0
 }
 
 declare i32 @printf(ptr noundef, ...) #1

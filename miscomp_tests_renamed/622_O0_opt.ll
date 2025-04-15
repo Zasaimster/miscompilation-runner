@@ -1,19 +1,23 @@
-; 118930325931689468832546850101846884350
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/118930325931689468832546850101846884350_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/118930325931689468832546850101846884350.c"
+; 162110702346281278512918948171981929427
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/162110702346281278512918948171981929427_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/162110702346281278512918948171981929427.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@x = dso_local global i64 -1, align 8
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @example2() #0 {
+define dso_local i32 @main() #0 {
 entry:
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
-  store i32 5, ptr %a, align 4
-  %0 = load i32, ptr %a, align 4
-  %mul = mul nsw i32 %0, 2
-  store i32 %mul, ptr %b, align 4
-  ret void
+  %retval = alloca i32, align 4
+  %b = alloca i64, align 8
+  store i32 0, ptr %retval, align 4
+  %0 = load i64, ptr @x, align 8
+  %cmp = icmp ne i64 %0, -1
+  %conv = zext i1 %cmp to i32
+  %conv1 = sext i32 %conv to i64
+  store i64 %conv1, ptr %b, align 8
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

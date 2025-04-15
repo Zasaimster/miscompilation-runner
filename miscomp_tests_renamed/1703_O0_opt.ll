@@ -1,40 +1,47 @@
-; 185013265990799095768196428440634711423
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/185013265990799095768196428440634711423_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/185013265990799095768196428440634711423.c"
+; 103135471994265054762589120553565282254
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103135471994265054762589120553565282254_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103135471994265054762589120553565282254.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [17 x i8] c"Function called\0A\00", align 1
-@.str.1 = private unnamed_addr constant [15 x i8] c"it's all good\0A\00", align 1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @factorial(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  ret i32 %0
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
+  %Count = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %a, align 4
+  store i32 1, ptr %Count, align 4
   br label %for.cond
 
 for.cond:                                         ; preds = %for.inc, %entry
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %cmp = icmp slt i32 %call, 2
+  %0 = load i32, ptr %Count, align 4
+  %cmp = icmp sle i32 %0, 10
   br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
-  %0 = load i32, ptr %a, align 4
-  store i32 %0, ptr %b, align 4
+  %1 = load i32, ptr %Count, align 4
+  %call = call i32 @factorial(i32 noundef %1)
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %call)
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
-  %1 = load i32, ptr %a, align 4
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr %a, align 4
+  %2 = load i32, ptr %Count, align 4
+  %inc = add nsw i32 %2, 1
+  store i32 %inc, ptr %Count, align 4
   br label %for.cond, !llvm.loop !6
 
 for.end:                                          ; preds = %for.cond
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
   ret i32 0
 }
 

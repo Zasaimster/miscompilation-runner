@@ -1,44 +1,55 @@
-; 133853984555355972427066213501234195363
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133853984555355972427066213501234195363.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133853984555355972427066213501234195363.c"
+; 104960984399144682392164505813280909503
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104960984399144682392164505813280909503.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104960984399144682392164505813280909503.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [9 x i8] c"Positive\00", align 1
-
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @f(i32 noundef returned %b, i32 noundef %c) local_unnamed_addr #0 {
+define dso_local void @foo(i32 noundef %a, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
 entry:
-  %or.cond = icmp ugt i32 %b, 1
-  %cmp3 = icmp ne i32 %c, 0
-  %or.cond4 = and i1 %or.cond, %cmp3
-  br i1 %or.cond4, label %if.then, label %if.end
+  %cmp.not = icmp eq i32 %a, 4
+  br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %if.end
+  tail call void @abort() #4
+  unreachable
 
-if.end:                                           ; preds = %if.then, %entry
-  ret i32 %b
+if.end:                                           ; preds = %entry
+  ret void
+}
+
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @bar(i64 %x.coerce0, i32 %x.coerce1, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
+entry:
+  %x.sroa.1.0.extract.shift.mask = and i64 %x.coerce0, -4294967296
+  %cmp.not.i = icmp eq i64 %x.sroa.1.0.extract.shift.mask, 17179869184
+  br i1 %cmp.not.i, label %foo.exit, label %if.then.i
+
+if.then.i:                                        ; preds = %entry
+  tail call void @abort() #4
+  unreachable
+
+foo.exit:                                         ; preds = %entry
+  ret void
 }
 
 ; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
   tail call void @exit(i32 noundef 0) #4
   unreachable
 }
 
 ; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #2
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #3
+declare void @exit(i32 noundef) local_unnamed_addr #3
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree nounwind }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}

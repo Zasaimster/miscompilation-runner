@@ -1,59 +1,59 @@
-; 152478811691517948593753027685218096898
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152478811691517948593753027685218096898.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152478811691517948593753027685218096898.c"
+; 195761346210598219970305207282112157177
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195761346210598219970305207282112157177.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195761346210598219970305207282112157177.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+%struct.A = type { i32 }
+
+@f = dso_local global i32 1, align 4
+@__const.foo.h = private unnamed_addr constant [70 x %struct.A] [%struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }], align 16
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i64 noundef %x) #0 {
+define dso_local i32 @foo() #0 {
 entry:
-  %x.addr = alloca i64, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %x.addr, align 8
-  %sub = sub nsw i64 %0, 2147483648
-  %cmp = icmp sgt i64 %sub, 4294967295
-  br i1 %cmp, label %lor.end, label %lor.rhs
-
-lor.rhs:                                          ; preds = %entry
-  %1 = load i64, ptr %x.addr, align 8
-  %cmp1 = icmp slt i64 %1, -2147483648
-  br label %lor.end
-
-lor.end:                                          ; preds = %lor.rhs, %entry
-  %2 = phi i1 [ true, %entry ], [ %cmp1, %lor.rhs ]
-  %lor.ext = zext i1 %2 to i32
-  ret i32 %lor.ext
+  %retval = alloca %struct.A, align 4
+  %h = alloca [70 x %struct.A], align 16
+  call void @llvm.memcpy.p0.p0.i64(ptr align 16 %h, ptr align 16 @__const.foo.h, i64 280, i1 false)
+  %arrayidx = getelementptr inbounds [70 x %struct.A], ptr %h, i64 0, i64 24
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %retval, ptr align 16 %arrayidx, i64 4, i1 false)
+  %coerce.dive = getelementptr inbounds nuw %struct.A, ptr %retval, i32 0, i32 0
+  %0 = load i32, ptr %coerce.dive, align 4
+  ret i32 %0
 }
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %i = alloca %struct.A, align 4
+  %j = alloca %struct.A, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i64 noundef 0)
-  %cmp = icmp ne i32 %call, 0
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 @foo()
+  %coerce.dive = getelementptr inbounds nuw %struct.A, ptr %i, i32 0, i32 0
+  store i32 %call, ptr %coerce.dive, align 4
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %j, ptr align 4 %i, i64 4, i1 false)
+  %b = getelementptr inbounds nuw %struct.A, ptr %j, i32 0, i32 0
+  %0 = load i32, ptr %b, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %land.rhs, label %land.end
 
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
+land.rhs:                                         ; preds = %entry
+  store i32 0, ptr @f, align 4
+  br label %land.end
 
-if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
-  unreachable
+land.end:                                         ; preds = %land.rhs, %entry
+  %1 = phi i1 [ false, %entry ], [ false, %land.rhs ]
+  %land.ext = zext i1 %1 to i32
+  %2 = load i32, ptr @f, align 4
+  ret i32 %2
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

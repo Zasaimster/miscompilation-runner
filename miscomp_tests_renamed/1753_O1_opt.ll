@@ -1,32 +1,53 @@
-; 136147128543312847034846189030387755881
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136147128543312847034846189030387755881_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136147128543312847034846189030387755881.c"
+; 145567330158638308143129023838246366556
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145567330158638308143129023838246366556_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145567330158638308143129023838246366556.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@val = dso_local local_unnamed_addr global i64 0, align 8
+
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 0, 2) i32 @f(i64 noundef %x) local_unnamed_addr #0 {
+define dso_local noundef i64 @f1() local_unnamed_addr #0 {
 entry:
-  %0 = add i64 %x, -4294967296
-  %1 = icmp ult i64 %0, -6442450944
-  %lor.ext = zext i1 %1 to i32
-  ret i32 %lor.ext
+  ret i64 306
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i64 @f2() local_unnamed_addr #0 {
+entry:
+  ret i64 1577058304
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
+define dso_local void @f3(i64 noundef %b) local_unnamed_addr #1 {
+entry:
+  store i64 %b, ptr @val, align 8, !tbaa !5
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
+define dso_local void @f4() local_unnamed_addr #1 {
+entry:
+  store i64 1577058610, ptr @val, align 8, !tbaa !5
+  ret void
 }
 
 ; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
-  tail call void @exit(i32 noundef 0) #3
+  store i64 1577058610, ptr @val, align 8, !tbaa !5
+  tail call void @exit(i32 noundef 0) #4
   unreachable
 }
 
 ; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #2
+declare void @exit(i32 noundef) local_unnamed_addr #3
 
 attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -36,3 +57,7 @@ attributes #3 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"long", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C/C++ TBAA"}

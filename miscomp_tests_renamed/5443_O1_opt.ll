@@ -1,16 +1,27 @@
-; 148298791180721920680817090548519575483
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/148298791180721920680817090548519575483_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/148298791180721920680817090548519575483.c"
+; 147230362929444971654740954835593884229
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/147230362929444971654740954835593884229_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/147230362929444971654740954835593884229.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
+%union.anon = type { %struct.anon }
+%struct.anon = type { [4 x i8], [4 x i8] }
+
+@u = dso_local local_unnamed_addr constant %union.anon { %struct.anon { [4 x i8] c"1234", [4 x i8] c"567\00" } }, align 1
+@str = private unnamed_addr constant [29 x i8] c"This function has dead code.\00", align 1
+
+; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   ret i32 0
 }
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

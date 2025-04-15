@@ -1,58 +1,81 @@
-; 10576167894051640612981967821274587618
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10576167894051640612981967821274587618_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10576167894051640612981967821274587618.c"
+; 176531152422357215490062265020372368961
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176531152422357215490062265020372368961_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176531152422357215490062265020372368961.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [17 x i8] c"Function called\0A\00", align 1
-@.str.1 = private unnamed_addr constant [3 x i8] c"a\0A\00", align 1
-@.str.2 = private unnamed_addr constant [3 x i8] c"b\0A\00", align 1
-@.str.3 = private unnamed_addr constant [3 x i8] c"c\0A\00", align 1
-@.str.4 = private unnamed_addr constant [3 x i8] c"d\0A\00", align 1
-@.str.5 = private unnamed_addr constant [3 x i8] c"e\0A\00", align 1
-@.str.6 = private unnamed_addr constant [3 x i8] c"f\0A\00", align 1
-@.str.7 = private unnamed_addr constant [3 x i8] c"g\0A\00", align 1
-@.str.8 = private unnamed_addr constant [3 x i8] c"h\0A\00", align 1
-@.str.9 = private unnamed_addr constant [3 x i8] c"i\0A\00", align 1
-@.str.10 = private unnamed_addr constant [3 x i8] c"j\0A\00", align 1
-@.str.11 = private unnamed_addr constant [3 x i8] c"k\0A\00", align 1
-@.str.12 = private unnamed_addr constant [3 x i8] c"l\0A\00", align 1
-@.str.13 = private unnamed_addr constant [3 x i8] c"m\0A\00", align 1
-@.str.14 = private unnamed_addr constant [3 x i8] c"n\0A\00", align 1
-@.str.15 = private unnamed_addr constant [3 x i8] c"o\0A\00", align 1
-@.str.16 = private unnamed_addr constant [3 x i8] c"p\0A\00", align 1
-@.str.17 = private unnamed_addr constant [3 x i8] c"q\0A\00", align 1
-@.str.18 = private unnamed_addr constant [3 x i8] c"r\0A\00", align 1
-@.str.19 = private unnamed_addr constant [3 x i8] c"s\0A\00", align 1
-@.str.20 = private unnamed_addr constant [3 x i8] c"t\0A\00", align 1
+@.str = private unnamed_addr constant [17 x i8] c"Loop completed!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %arr = alloca [2 x [4 x i8]], align 1
+  %p = alloca ptr, align 8
+  %q = alloca ptr, align 8
+  %v = alloca [4 x i32], align 16
   store i32 0, ptr %retval, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3)
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.4)
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.5)
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.6)
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.7)
-  %call8 = call i32 (ptr, ...) @printf(ptr noundef @.str.8)
-  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str.9)
-  %call10 = call i32 (ptr, ...) @printf(ptr noundef @.str.10)
-  %call11 = call i32 (ptr, ...) @printf(ptr noundef @.str.11)
-  %call12 = call i32 (ptr, ...) @printf(ptr noundef @.str.12)
-  %call13 = call i32 (ptr, ...) @printf(ptr noundef @.str.13)
-  %call14 = call i32 (ptr, ...) @printf(ptr noundef @.str.14)
-  %call15 = call i32 (ptr, ...) @printf(ptr noundef @.str.15)
-  %call16 = call i32 (ptr, ...) @printf(ptr noundef @.str.16)
-  %call17 = call i32 (ptr, ...) @printf(ptr noundef @.str.17)
-  %call18 = call i32 (ptr, ...) @printf(ptr noundef @.str.18)
-  %call19 = call i32 (ptr, ...) @printf(ptr noundef @.str.19)
-  %call20 = call i32 (ptr, ...) @printf(ptr noundef @.str.20)
-  ret i32 0
+  %arrayidx = getelementptr inbounds [2 x [4 x i8]], ptr %arr, i64 0, i64 1
+  %arrayidx1 = getelementptr inbounds [4 x i8], ptr %arrayidx, i64 0, i64 3
+  store ptr %arrayidx1, ptr %q, align 8
+  %arrayidx2 = getelementptr inbounds [2 x [4 x i8]], ptr %arr, i64 0, i64 1
+  %arrayidx3 = getelementptr inbounds [4 x i8], ptr %arrayidx2, i64 0, i64 3
+  store i8 2, ptr %arrayidx3, align 1
+  %arrayidx4 = getelementptr inbounds [4 x i32], ptr %v, i64 0, i64 0
+  store i32 2, ptr %arrayidx4, align 16
+  %arrayidx5 = getelementptr inbounds [2 x [4 x i8]], ptr %arr, i64 0, i64 1
+  %arrayidx6 = getelementptr inbounds [4 x i8], ptr %arrayidx5, i64 0, i64 3
+  %0 = load i8, ptr %arrayidx6, align 1
+  %conv = sext i8 %0 to i32
+  %cmp = icmp ne i32 %conv, 2
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %1 = load ptr, ptr %p, align 8
+  %arrayidx8 = getelementptr inbounds [4 x i8], ptr %1, i64 1
+  %arrayidx9 = getelementptr inbounds [4 x i8], ptr %arrayidx8, i64 0, i64 3
+  %2 = load i8, ptr %arrayidx9, align 1
+  %conv10 = sext i8 %2 to i32
+  %cmp11 = icmp ne i32 %conv10, 2
+  br i1 %cmp11, label %if.then13, label %if.end14
+
+if.then13:                                        ; preds = %if.end
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end14:                                         ; preds = %if.end
+  %3 = load ptr, ptr %q, align 8
+  %4 = load i8, ptr %3, align 1
+  %conv15 = sext i8 %4 to i32
+  %cmp16 = icmp ne i32 %conv15, 2
+  br i1 %cmp16, label %if.then18, label %if.end19
+
+if.then18:                                        ; preds = %if.end14
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end19:                                         ; preds = %if.end14
+  %arraydecay = getelementptr inbounds [4 x i32], ptr %v, i64 0, i64 0
+  %5 = load i32, ptr %arraydecay, align 16
+  %cmp20 = icmp ne i32 %5, 2
+  br i1 %cmp20, label %if.then22, label %if.end23
+
+if.then22:                                        ; preds = %if.end19
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end23:                                         ; preds = %if.end19
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end23, %if.then22, %if.then18, %if.then13, %if.then
+  %6 = load i32, ptr %retval, align 4
+  ret i32 %6
 }
 
 declare i32 @printf(ptr noundef, ...) #1

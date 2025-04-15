@@ -1,46 +1,28 @@
-; 176036957724609701668883527688445684339
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176036957724609701668883527688445684339.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176036957724609701668883527688445684339.c"
+; 12086774709385541896654637186800108829
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12086774709385541896654637186800108829.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12086774709385541896654637186800108829.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.anon = type { i32 }
-
-@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %u = alloca %union.anon, align 4
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
-  store i32 %call, ptr %u, align 4
+  %call = call i32 (...) @compute()
+  store i32 %call, ptr %x, align 4
   %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call1, ptr %u, align 4
-  %0 = load i32, ptr %u, align 4
-  %cmp = icmp ne i32 %0, 3
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load i32, ptr %u, align 4
-  %cmp2 = icmp ne i32 %1, 3
-  br i1 %cmp2, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %lor.lhs.false
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %2 = load i32, ptr %retval, align 4
-  ret i32 %2
+  %xor = xor i32 %call1, 3
+  store i32 %xor, ptr %x, align 4
+  %0 = load i32, ptr %x, align 4
+  %sub = sub nsw i32 %0, 2
+  ret i32 %sub
 }
 
-declare i32 @calculateSquare(...) #1
+declare i32 @compute(...) #1
 
 declare i32 @printf(ptr noundef, ...) #1
 

@@ -1,22 +1,22 @@
-; 164965623096433728826809927979577141919
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164965623096433728826809927979577141919_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164965623096433728826809927979577141919.c"
+; 198279449930070807995908816706848980177
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/198279449930070807995908816706848980177_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/198279449930070807995908816706848980177.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nounwind uwtable
-define dso_local range(i32 -2147483648, 2147483645) i32 @main() local_unnamed_addr #0 {
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (i32, i32, ...) @ADD(i32 noundef 1, i32 noundef 2) #2
-  %sub = add nsw i32 %call, -3
-  ret i32 %sub
+  tail call void @exit(i32 noundef 0) #2
+  unreachable
 }
 
-declare i32 @ADD(...) local_unnamed_addr #1
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #1
 
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nounwind }
+attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

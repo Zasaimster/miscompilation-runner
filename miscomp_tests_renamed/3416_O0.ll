@@ -1,68 +1,121 @@
-; 199795346704813518860577973788928123332
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/199795346704813518860577973788928123332.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/199795346704813518860577973788928123332.c"
+; 159972887583008951059517169486754623427
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159972887583008951059517169486754623427.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159972887583008951059517169486754623427.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
-@g_3 = dso_local global i16 0, align 2
+@a = dso_local global i16 1, align 2
+@b = dso_local global i32 0, align 4
+@g = dso_local global ptr @b, align 8
+@f = dso_local global i16 0, align 2
+@c = dso_local global i32 0, align 4
+@d = dso_local global i32 0, align 4
+@h = dso_local global i32 0, align 4
+@i = dso_local global i32 0, align 4
+@j = dso_local global i32 0, align 4
+@e = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %l_2 = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 -1, ptr %l_2, align 4
-  br label %for.cond
+  %0 = load i16, ptr @a, align 2
+  %conv = trunc i16 %0 to i8
+  %call = call i32 @foo(i8 noundef signext %conv)
+  %1 = load ptr, ptr @g, align 8
+  store i32 %call, ptr %1, align 4
+  %2 = load i16, ptr @a, align 2
+  %conv1 = sext i16 %2 to i32
+  %cmp = icmp ne i32 %conv1, 0
+  br i1 %cmp, label %if.then, label %if.end
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %cmp = icmp ne i32 %call, 0
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %0 = load i32, ptr %l_2, align 4
-  %1 = load i16, ptr @g_3, align 2
-  %conv = sext i16 %1 to i32
-  %or = or i32 %conv, %0
-  %conv1 = trunc i32 %or to i16
-  store i16 %conv1, ptr @g_3, align 2
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %call2 = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
-  %sub = sub nsw i32 %call2, 1
-  %conv3 = trunc i32 %sub to i8
-  %conv4 = zext i8 %conv3 to i32
-  store i32 %conv4, ptr %l_2, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %2 = load i16, ptr @g_3, align 2
-  %conv5 = sext i16 %2 to i32
-  %cmp6 = icmp ne i32 %conv5, -1
-  br i1 %cmp6, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.end
-  call void @abort() #3
+if.then:                                          ; preds = %entry
+  call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %for.end
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @foo(i8 noundef signext %p) #0 {
+entry:
+  %p.addr = alloca i8, align 1
+  %k = alloca i32, align 4
+  %l = alloca ptr, align 8
+  store i8 %p, ptr %p.addr, align 1
+  store i32 0, ptr @c, align 4
+  br label %for.cond
 
-declare i32 @calculateSquare(...) #1
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr @c, align 4
+  %cmp = icmp slt i32 %0, 2
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  store i32 0, ptr @j, align 4
+  br i1 false, label %lor.end, label %lor.rhs
+
+lor.rhs:                                          ; preds = %for.body
+  %1 = load i8, ptr %p.addr, align 1
+  %conv = sext i8 %1 to i32
+  %tobool = icmp ne i32 %conv, 0
+  br label %lor.end
+
+lor.end:                                          ; preds = %lor.rhs, %for.body
+  %2 = phi i1 [ true, %for.body ], [ %tobool, %lor.rhs ]
+  %lor.ext = zext i1 %2 to i32
+  store i32 %lor.ext, ptr @i, align 4
+  %3 = load i32, ptr @i, align 4
+  %4 = load i8, ptr %p.addr, align 1
+  %conv1 = sext i8 %4 to i32
+  %mul = mul nsw i32 %3, %conv1
+  store i32 %mul, ptr %k, align 4
+  %5 = load i32, ptr @e, align 4
+  %6 = load i32, ptr %k, align 4
+  %cmp2 = icmp ult i32 %5, %6
+  br i1 %cmp2, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.end
+  store ptr @f, ptr %l, align 8
+  %7 = load i32, ptr @d, align 4
+  %tobool4 = icmp ne i32 %7, 0
+  br i1 %tobool4, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %if.then
+  %8 = load i32, ptr @h, align 4
+  %tobool5 = icmp ne i32 %8, 0
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %if.then
+  %9 = phi i1 [ false, %if.then ], [ %tobool5, %land.rhs ]
+  %land.ext = zext i1 %9 to i32
+  %conv6 = trunc i32 %land.ext to i16
+  store i16 %conv6, ptr @a, align 2
+  %10 = load ptr, ptr %l, align 8
+  store i16 0, ptr %10, align 2
+  br label %if.end
+
+if.end:                                           ; preds = %land.end, %lor.end
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %11 = load i32, ptr @c, align 4
+  %inc = add nsw i32 %11, 1
+  store i32 %inc, ptr @c, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
+}
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,63 +1,51 @@
-; 137278373844000962522295402669455766210
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137278373844000962522295402669455766210_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137278373844000962522295402669455766210.c"
+; 170787197824792698150518293893514525465
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170787197824792698150518293893514525465_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170787197824792698150518293893514525465.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local void @foo(ptr noundef readonly captures(none) %x, i32 noundef %y) local_unnamed_addr #0 {
-entry:
-  %cmp9 = icmp sgt i32 %y, 0
-  br i1 %cmp9, label %for.body.preheader, label %for.end
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
-for.body.preheader:                               ; preds = %entry
-  %wide.trip.count = zext nneg i32 %y to i64
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %0 = alloca [1000 x i8], align 16
   br label %for.body
 
-for.body:                                         ; preds = %cleanup, %for.body.preheader
-  %indvars.iv = phi i64 [ 0, %for.body.preheader ], [ %indvars.iv.next, %cleanup ]
-  %c.011 = phi i32 [ undef, %for.body.preheader ], [ %c.1, %cleanup ]
-  %b.010 = phi i32 [ 0, %for.body.preheader ], [ %b.1, %cleanup ]
-  %arrayidx = getelementptr inbounds nuw i32, ptr %x, i64 %indvars.iv
-  %0 = load i32, ptr %arrayidx, align 4, !tbaa !5
-  %cmp1.not = icmp eq i32 %0, 0
-  br i1 %cmp1.not, label %cleanup, label %if.end
+for.body:                                         ; preds = %for.body, %entry
+  %j.06 = phi i32 [ 0, %entry ], [ %add, %for.body ]
+  %i.05 = phi i32 [ 0, %entry ], [ %inc, %for.body ]
+  call void @llvm.lifetime.start.p0(i64 1000, ptr nonnull %0)
+  %call.i = call i32 (ptr, ptr, ...) @sprintf(ptr noundef nonnull dereferenceable(1) %0, ptr noundef nonnull dereferenceable(1) @.str, i32 noundef range(i32 -2147483648, 10000) %i.05) #3
+  %1 = load i8, ptr %0, align 16, !tbaa !5
+  %conv.i = sext i8 %1 to i32
+  call void @llvm.lifetime.end.p0(i64 1000, ptr nonnull %0)
+  %add = add nsw i32 %j.06, %conv.i
+  %inc = add nuw nsw i32 %i.05, 1
+  %exitcond.not = icmp eq i32 %inc, 10000
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !8
 
-if.end:                                           ; preds = %for.body
-  %tobool.not = icmp eq i32 %b.010, 0
-  %cmp2.not = icmp sgt i32 %0, %c.011
-  %or.cond = select i1 %tobool.not, i1 true, i1 %cmp2.not
-  br i1 %or.cond, label %cleanup, label %if.then3
-
-if.then3:                                         ; preds = %if.end
-  tail call void @abort() #3
-  unreachable
-
-cleanup:                                          ; preds = %if.end, %for.body
-  %b.1 = phi i32 [ %b.010, %for.body ], [ 1, %if.end ]
-  %c.1 = phi i32 [ %c.011, %for.body ], [ %0, %if.end ]
-  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  %or.cond14 = select i1 %cmp1.not, i1 true, i1 %exitcond.not
-  br i1 %or.cond14, label %for.end, label %for.body, !llvm.loop !9
-
-for.end:                                          ; preds = %cleanup, %entry
-  ret void
-}
-
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
-entry:
+for.end:                                          ; preds = %for.body
+  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %add)
   ret i32 0
 }
 
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @sprintf(ptr noalias noundef writeonly captures(none), ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #2
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #2
+
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #3 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -68,9 +56,8 @@ attributes #3 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = distinct !{!9, !10, !11}
-!10 = !{!"llvm.loop.mustprogress"}
-!11 = !{!"llvm.loop.unroll.disable"}
+!6 = !{!"omnipotent char", !7, i64 0}
+!7 = !{!"Simple C/C++ TBAA"}
+!8 = distinct !{!8, !9, !10}
+!9 = !{!"llvm.loop.mustprogress"}
+!10 = !{!"llvm.loop.unroll.disable"}

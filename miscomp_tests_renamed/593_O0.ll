@@ -1,53 +1,106 @@
-; 128454186999991123306009386965851460025
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128454186999991123306009386965851460025.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128454186999991123306009386965851460025.c"
+; 133017272660753592177695997575790008998
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133017272660753592177695997575790008998.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133017272660753592177695997575790008998.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+%struct.struc = type { i8, [3 x i8] }
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @bar() #0 {
+define dso_local ptr @dummy(ptr noundef %a, ptr noundef %b) #0 {
 entry:
-  ret i64 0
+  %a.addr = alloca ptr, align 8
+  %b.addr = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  store ptr %b, ptr %b.addr, align 8
+  %0 = load ptr, ptr %a.addr, align 8
+  store i32 1, ptr %0, align 4
+  %1 = load ptr, ptr %b.addr, align 8
+  store ptr inttoptr (i64 7 to ptr), ptr %1, align 8
+  ret ptr inttoptr (i64 1 to ptr)
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @bogus(ptr noundef %insn, ptr noundef %thread, ptr noundef %delay_list) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %nStyle = alloca i64, align 8
-  store i32 0, ptr %retval, align 4
-  %call = call i64 @bar()
-  store i64 %call, ptr %nStyle, align 8
-  %0 = load i64, ptr %nStyle, align 8
-  %and = and i64 %0, 32768
-  %tobool = icmp ne i64 %and, 0
+  %insn.addr = alloca ptr, align 8
+  %thread.addr = alloca ptr, align 8
+  %delay_list.addr = alloca ptr, align 8
+  %new_thread = alloca ptr, align 8
+  %must_annul = alloca i32, align 4
+  store ptr %insn, ptr %insn.addr, align 8
+  store ptr %thread, ptr %thread.addr, align 8
+  store ptr %delay_list, ptr %delay_list.addr, align 8
+  %call = call ptr @dummy(ptr noundef %must_annul, ptr noundef %new_thread)
+  store ptr %call, ptr %delay_list.addr, align 8
+  %0 = load ptr, ptr %delay_list.addr, align 8
+  %cmp = icmp eq ptr %0, null
+  br i1 %cmp, label %land.lhs.true, label %if.end
+
+land.lhs.true:                                    ; preds = %entry
+  %1 = load ptr, ptr %new_thread, align 8
+  %tobool = icmp ne ptr %1, null
   br i1 %tobool, label %if.then, label %if.end
 
-if.then:                                          ; preds = %entry
-  %1 = load i64, ptr %nStyle, align 8
-  %or = or i64 %1, 65536
-  store i64 %or, ptr %nStyle, align 8
+if.then:                                          ; preds = %land.lhs.true
+  %2 = load ptr, ptr %new_thread, align 8
+  store ptr %2, ptr %thread.addr, align 8
   br label %if.end
 
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load i64, ptr %nStyle, align 8
-  %cmp = icmp ne i64 %2, 98304
-  br i1 %cmp, label %if.then1, label %if.end2
+if.end:                                           ; preds = %if.then, %land.lhs.true, %entry
+  %3 = load ptr, ptr %delay_list.addr, align 8
+  %tobool1 = icmp ne ptr %3, null
+  br i1 %tobool1, label %land.lhs.true2, label %if.end5
 
-if.then1:                                         ; preds = %if.end
-  call void @abort() #2
+land.lhs.true2:                                   ; preds = %if.end
+  %4 = load i32, ptr %must_annul, align 4
+  %tobool3 = icmp ne i32 %4, 0
+  br i1 %tobool3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %land.lhs.true2
+  %5 = load ptr, ptr %insn.addr, align 8
+  %bf.load = load i8, ptr %5, align 4
+  %bf.clear = and i8 %bf.load, -2
+  %bf.set = or i8 %bf.clear, 1
+  store i8 %bf.set, ptr %5, align 4
+  br label %if.end5
+
+if.end5:                                          ; preds = %if.then4, %land.lhs.true2, %if.end
+  %6 = load ptr, ptr %new_thread, align 8
+  %7 = load ptr, ptr %thread.addr, align 8
+  %cmp6 = icmp ne ptr %6, %7
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end5
+  call void @abort() #3
   unreachable
 
-if.end2:                                          ; preds = %if.end
-  ret i32 0
+if.end8:                                          ; preds = %if.end5
+  ret void
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %baz = alloca %struct.struc, align 4
+  store i32 0, ptr %retval, align 4
+  call void @bogus(ptr noundef %baz, ptr noundef inttoptr (i64 7 to ptr), ptr noundef null)
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

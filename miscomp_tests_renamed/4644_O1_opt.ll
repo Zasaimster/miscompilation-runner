@@ -1,36 +1,31 @@
-; 196909738651358610432519805982903330358
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196909738651358610432519805982903330358_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196909738651358610432519805982903330358.c"
+; 173650226460152034075632947952048684018
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173650226460152034075632947952048684018_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173650226460152034075632947952048684018.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef signext i16 @foo(i64 noundef %x) local_unnamed_addr #0 {
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @foo(i8 noundef zeroext %x, i64 noundef %y) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %conv = trunc i32 %call to i16
-  ret i16 %conv
+  %call = tail call i32 (...) @pointlessFunction() #2
+  %conv = zext i8 %x to i64
+  %add = add i64 %y, %conv
+  %conv1 = trunc i64 %add to i32
+  ret i32 %conv1
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+declare i32 @pointlessFunction(...) local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind uwtable
+; Function Attrs: nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %call.i = tail call i32 (...) @pointlessFunction() #2
   ret i32 0
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
-
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

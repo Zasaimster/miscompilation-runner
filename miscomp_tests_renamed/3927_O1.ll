@@ -1,121 +1,23 @@
-; 199108877683209885707156230250682679272
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/199108877683209885707156230250682679272.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/199108877683209885707156230250682679272.c"
+; 101512550697559399056032255567057433175
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101512550697559399056032255567057433175.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101512550697559399056032255567057433175.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+@str = private unnamed_addr constant [28 x i8] c"long long constant test ok.\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @f(i32 noundef %n, i24 %x.coerce, i24 %y.coerce, i24 %z.coerce, i64 noundef %l) local_unnamed_addr #0 {
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
   %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %0 = and i24 %x.coerce, 65280
-  %cmp.not = icmp eq i24 %0, 5120
-  br i1 %cmp.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  tail call void @abort() #5
-  unreachable
-
-if.end:                                           ; preds = %entry
-  %x.sroa.2.0.extract.shift.mask = and i24 %x.coerce, -65536
-  %cmp3.not = icmp eq i24 %x.sroa.2.0.extract.shift.mask, 1966080
-  br i1 %cmp3.not, label %if.end6, label %if.then5
-
-if.then5:                                         ; preds = %if.end
-  tail call void @abort() #5
-  unreachable
-
-if.end6:                                          ; preds = %if.end
-  %1 = and i24 %y.coerce, 255
-  %cmp8.not = icmp eq i24 %1, 11
-  br i1 %cmp8.not, label %if.end11, label %if.then10
-
-if.then10:                                        ; preds = %if.end6
-  tail call void @abort() #5
-  unreachable
-
-if.end11:                                         ; preds = %if.end6
-  %2 = and i24 %y.coerce, 65280
-  %cmp14.not = icmp eq i24 %2, 5376
-  br i1 %cmp14.not, label %if.end17, label %if.then16
-
-if.then16:                                        ; preds = %if.end11
-  tail call void @abort() #5
-  unreachable
-
-if.end17:                                         ; preds = %if.end11
-  %y.sroa.3.0.extract.shift.mask = and i24 %y.coerce, -65536
-  %cmp20.not = icmp eq i24 %y.sroa.3.0.extract.shift.mask, 2031616
-  br i1 %cmp20.not, label %if.end23, label %if.then22
-
-if.then22:                                        ; preds = %if.end17
-  tail call void @abort() #5
-  unreachable
-
-if.end23:                                         ; preds = %if.end17
-  %3 = and i24 %z.coerce, 255
-  %cmp26.not = icmp eq i24 %3, 12
-  br i1 %cmp26.not, label %if.end29, label %if.then28
-
-if.then28:                                        ; preds = %if.end23
-  tail call void @abort() #5
-  unreachable
-
-if.end29:                                         ; preds = %if.end23
-  %4 = and i24 %z.coerce, 65280
-  %cmp32.not = icmp eq i24 %4, 5632
-  br i1 %cmp32.not, label %if.end35, label %if.then34
-
-if.then34:                                        ; preds = %if.end29
-  tail call void @abort() #5
-  unreachable
-
-if.end35:                                         ; preds = %if.end29
-  %z.sroa.3.0.extract.shift.mask = and i24 %z.coerce, -65536
-  %cmp38.not = icmp eq i24 %z.sroa.3.0.extract.shift.mask, 2097152
-  br i1 %cmp38.not, label %if.end41, label %if.then40
-
-if.then40:                                        ; preds = %if.end35
-  tail call void @abort() #5
-  unreachable
-
-if.end41:                                         ; preds = %if.end35
-  %cmp42.not = icmp eq i64 %l, 123
-  br i1 %cmp42.not, label %if.end45, label %if.then44
-
-if.then44:                                        ; preds = %if.end41
-  tail call void @abort() #5
-  unreachable
-
-if.end45:                                         ; preds = %if.end41
-  ret i32 undef
+  ret i32 0
 }
-
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
-entry:
-  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  tail call void @exit(i32 noundef 0) #5
-  unreachable
-}
-
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #3
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #4
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { nofree nounwind }
-attributes #5 = { noreturn nounwind }
+attributes #1 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

@@ -1,27 +1,38 @@
-; 117928627746271324409118152290967131585
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117928627746271324409118152290967131585.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117928627746271324409118152290967131585.c"
+; 147411092300894836728982838161303065679
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/147411092300894836728982838161303065679.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/147411092300894836728982838161303065679.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %cp, ptr noundef %end) #0 {
-entry:
-  %cp.addr = alloca ptr, align 8
-  %end.addr = alloca ptr, align 8
-  store ptr %cp, ptr %cp.addr, align 8
-  store ptr %end, ptr %end.addr, align 8
-  ret i32 3
-}
+%struct.rtx_def = type { i32 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %tmp = alloca [2 x i32], align 4
+  %r = alloca ptr, align 8
+  %s = alloca %struct.rtx_def, align 4
+  %p = alloca ptr, align 8
+  %q = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(ptr noundef null, ptr noundef inttoptr (i64 1 to ptr))
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.end, label %if.then
+  store ptr %s, ptr %r, align 8
+  %0 = load ptr, ptr %r, align 8
+  %code = getelementptr inbounds nuw %struct.rtx_def, ptr %0, i32 0, i32 0
+  store i32 39, ptr %code, align 4
+  %arraydecay = getelementptr inbounds [2 x i32], ptr %tmp, i64 0, i64 0
+  store ptr %arraydecay, ptr %p, align 8
+  %1 = load ptr, ptr %p, align 8
+  %add.ptr = getelementptr inbounds i32, ptr %1, i64 1
+  store ptr %add.ptr, ptr %q, align 8
+  %2 = load ptr, ptr %q, align 8
+  store i32 0, ptr %2, align 4
+  %arrayidx = getelementptr inbounds [2 x i32], ptr %tmp, i64 0, i64 1
+  store i32 39, ptr %arrayidx, align 4
+  %3 = load ptr, ptr %q, align 8
+  %4 = load i32, ptr %3, align 4
+  %cmp = icmp ne i32 %4, 39
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

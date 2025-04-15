@@ -1,6 +1,6 @@
-; 161121661459360209875613993519684589220
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161121661459360209875613993519684589220.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161121661459360209875613993519684589220.c"
+; 158928695017185542255165187232899250136
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/158928695017185542255165187232899250136.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/158928695017185542255165187232899250136.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,9 +8,10 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %c = alloca i8, align 1
+  %l = alloca i64, align 8
+  %n = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i8 0, ptr %c, align 1
+  store i64 4398046511104, ptr %l, align 8
   ret i32 0
 }
 

@@ -1,42 +1,29 @@
-; 181657959007860180780395696781470241663
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/181657959007860180780395696781470241663_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/181657959007860180780395696781470241663.c"
+; 123122576402778782149701046326801702570
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123122576402778782149701046326801702570_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123122576402778782149701046326801702570.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %b, i32 noundef %c) #0 {
+define dso_local i32 @f(i32 noundef %a) #0 {
 entry:
-  %b.addr = alloca i32, align 4
-  %c.addr = alloca i32, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 %c, ptr %c.addr, align 4
-  %0 = load i32, ptr %b.addr, align 4
-  %cmp = icmp ne i32 %0, 1
-  br i1 %cmp, label %land.lhs.true, label %if.end
-
-land.lhs.true:                                    ; preds = %entry
-  %1 = load i32, ptr %c.addr, align 4
-  %cmp1 = icmp ne i32 %1, 0
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %land.lhs.true
-  store i32 0, ptr %b.addr, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %land.lhs.true, %entry
-  %2 = load i32, ptr %b.addr, align 4
-  ret i32 %2
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  ret i32 1
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
 entry:
   %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 1, i32 noundef 2)
+  store i32 %argc, ptr %argc.addr, align 4
+  store ptr %argv, ptr %argv.addr, align 8
+  %call = call i32 @f(i32 noundef -2)
   %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.end, label %if.then
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

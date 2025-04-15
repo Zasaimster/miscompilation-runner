@@ -1,31 +1,64 @@
-; 138220662400832821074699499576414852475
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138220662400832821074699499576414852475.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138220662400832821074699499576414852475.c"
+; 127732165166889913660352275985505200999
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/127732165166889913660352275985505200999.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/127732165166889913660352275985505200999.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [16 x i8] c"Value of a: %d\0A\00", align 1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"a=%d\0A\00", align 1
+@str = private unnamed_addr constant [8 x i8] c"qfunc()\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @f(i64 noundef %x) local_unnamed_addr #0 {
+define dso_local i32 @myfunc(i32 noundef %x) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i64 noundef %x)
-  ret i32 undef
+  %call = tail call i32 @myfunc(i32 noundef 3)
+  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %call)
+  %mul = mul nsw i32 %call1, %x
+  ret i32 %mul
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @vfunc(i32 noundef %a) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 @f(i64 noundef 0)
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %a)
+  ret void
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @qfunc() local_unnamed_addr #0 {
+entry:
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable
+define dso_local void @zfunc() local_unnamed_addr #2 {
+entry:
   unreachable
 }
 
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %call = tail call i32 @myfunc(i32 noundef 3)
+  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %call)
+  %call2 = tail call i32 @myfunc(i32 noundef 4)
+  %call3 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %call2)
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef 1234)
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret i32 0
+}
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #3
+
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

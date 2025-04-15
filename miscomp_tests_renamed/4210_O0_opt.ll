@@ -1,53 +1,30 @@
-; 13590890810046086175532037911007930454
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13590890810046086175532037911007930454_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13590890810046086175532037911007930454.c"
+; 141276238821463515196691448684968264391
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141276238821463515196691448684968264391_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141276238821463515196691448684968264391.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %0 = load i32, ptr %i.addr, align 4
-  %sub = sub nsw i32 %0, 2
-  %1 = call i32 @llvm.abs.i32(i32 %sub, i1 true)
-  %mul = mul nsw i32 -2, %1
-  ret i32 %mul
-}
-
-; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
-declare i32 @llvm.abs.i32(i32, i1 immarg) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca i32, align 4
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 1)
-  %cmp = icmp ne i32 %call, -2
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %call1 = call i32 @foo(i32 noundef 3)
-  %cmp2 = icmp ne i32 %call1, -2
-  br i1 %cmp2, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
-  ret i32 0
+  store i32 4, ptr %x, align 4
+  %0 = load ptr, ptr %p, align 8
+  %1 = load i32, ptr %0, align 4
+  %conv = sext i32 %1 to i64
+  %2 = inttoptr i64 %conv to ptr
+  store ptr %2, ptr %p, align 8
+  %3 = load ptr, ptr %p, align 8
+  store i32 0, ptr %3, align 4
+  %4 = load ptr, ptr %p, align 8
+  %5 = load i32, ptr %4, align 4
+  ret i32 %5
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

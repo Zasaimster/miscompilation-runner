@@ -1,131 +1,281 @@
-; 15334322044786145767538339663526052284
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/15334322044786145767538339663526052284.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/15334322044786145767538339663526052284.c"
+; 18648690019797487892772824222586752716
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/18648690019797487892772824222586752716.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/18648690019797487892772824222586752716.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@v = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(i8 noundef signext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  %y = alloca i32, align 4
+  store i8 %x, ptr %x.addr, align 1
+  store i32 0, ptr %y, align 4
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %conv)
+  switch i32 %call, label %sw.epilog [
+    i32 0, label %sw.bb
+    i32 1, label %sw.bb2
+    i32 2, label %sw.bb3
+    i32 3, label %sw.bb4
+    i32 4, label %sw.bb5
+    i32 5, label %sw.bb6
+    i32 6, label %sw.bb7
+    i32 7, label %sw.bb8
+    i32 8, label %sw.bb9
+    i32 9, label %sw.bb10
+    i32 10, label %sw.bb11
+    i32 11, label %sw.bb12
+    i32 12, label %sw.bb13
+    i32 13, label %sw.bb14
+    i32 14, label %sw.bb15
+    i32 15, label %sw.bb16
+    i32 16, label %sw.bb17
+    i32 17, label %sw.bb18
+    i32 18, label %sw.bb19
+    i32 19, label %sw.bb20
+    i32 20, label %sw.bb21
+    i32 21, label %sw.bb22
+    i32 22, label %sw.bb23
+    i32 23, label %sw.bb24
+    i32 24, label %sw.bb25
+    i32 25, label %sw.bb26
+    i32 26, label %sw.bb27
+    i32 27, label %sw.bb28
+    i32 28, label %sw.bb29
+    i32 29, label %sw.bb30
+    i32 30, label %sw.bb31
+    i32 31, label %sw.bb32
+    i32 32, label %sw.bb33
+    i32 98, label %sw.bb34
+    i32 -62, label %sw.bb35
+  ]
+
+sw.bb:                                            ; preds = %entry
+  %call1 = call i32 (...) @example3()
+  store i32 %call1, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb2:                                           ; preds = %entry
+  store i32 7, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb3:                                           ; preds = %entry
+  store i32 2, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb4:                                           ; preds = %entry
+  store i32 19, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb5:                                           ; preds = %entry
+  store i32 5, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb6:                                           ; preds = %entry
+  store i32 17, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb7:                                           ; preds = %entry
+  store i32 31, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb8:                                           ; preds = %entry
+  store i32 8, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb9:                                           ; preds = %entry
+  store i32 28, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb10:                                          ; preds = %entry
+  store i32 16, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb11:                                          ; preds = %entry
+  store i32 31, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb12:                                          ; preds = %entry
+  store i32 12, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb13:                                          ; preds = %entry
+  store i32 15, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb14:                                          ; preds = %entry
+  store i32 111, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb15:                                          ; preds = %entry
+  store i32 17, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb16:                                          ; preds = %entry
+  store i32 10, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb17:                                          ; preds = %entry
+  store i32 31, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb18:                                          ; preds = %entry
+  store i32 7, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb19:                                          ; preds = %entry
+  store i32 2, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb20:                                          ; preds = %entry
+  store i32 19, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb21:                                          ; preds = %entry
+  store i32 5, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb22:                                          ; preds = %entry
+  store i32 107, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb23:                                          ; preds = %entry
+  store i32 31, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb24:                                          ; preds = %entry
+  store i32 8, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb25:                                          ; preds = %entry
+  store i32 28, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb26:                                          ; preds = %entry
+  store i32 106, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb27:                                          ; preds = %entry
+  store i32 31, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb28:                                          ; preds = %entry
+  store i32 102, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb29:                                          ; preds = %entry
+  store i32 105, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb30:                                          ; preds = %entry
+  store i32 111, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb31:                                          ; preds = %entry
+  store i32 17, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb32:                                          ; preds = %entry
+  store i32 10, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb33:                                          ; preds = %entry
+  store i32 31, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb34:                                          ; preds = %entry
+  store i32 18, ptr %y, align 4
+  br label %sw.epilog
+
+sw.bb35:                                          ; preds = %entry
+  store i32 19, ptr %y, align 4
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %entry, %sw.bb35, %sw.bb34, %sw.bb33, %sw.bb32, %sw.bb31, %sw.bb30, %sw.bb29, %sw.bb28, %sw.bb27, %sw.bb26, %sw.bb25, %sw.bb24, %sw.bb23, %sw.bb22, %sw.bb21, %sw.bb20, %sw.bb19, %sw.bb18, %sw.bb17, %sw.bb16, %sw.bb15, %sw.bb14, %sw.bb13, %sw.bb12, %sw.bb11, %sw.bb10, %sw.bb9, %sw.bb8, %sw.bb7, %sw.bb6, %sw.bb5, %sw.bb4, %sw.bb3, %sw.bb2, %sw.bb
+  %1 = load i32, ptr %y, align 4
+  ret i32 %1
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+declare i32 @example3(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
-  ret i32 0
-}
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  %call = call i32 @foo(i8 noundef signext 98)
+  %cmp = icmp ne i32 %call, 18
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @h1() #0 {
-entry:
-  ret i32 0
-}
+lor.lhs.false:                                    ; preds = %entry
+  %call1 = call i32 @foo(i8 noundef signext 97)
+  %cmp2 = icmp ne i32 %call1, 0
+  br i1 %cmp2, label %if.then, label %lor.lhs.false3
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @h2(ptr noundef %e) #0 {
-entry:
-  %e.addr = alloca ptr, align 8
-  store ptr %e, ptr %e.addr, align 8
-  %0 = load ptr, ptr %e.addr, align 8
-  %cmp = icmp ne ptr %0, @v
-  br i1 %cmp, label %if.then, label %if.end
+lor.lhs.false3:                                   ; preds = %lor.lhs.false
+  %call4 = call i32 @foo(i8 noundef signext 99)
+  %cmp5 = icmp ne i32 %call4, 0
+  br i1 %cmp5, label %if.then, label %if.end
 
-if.then:                                          ; preds = %entry
-  call void @abort() #2
+if.then:                                          ; preds = %lor.lhs.false3, %lor.lhs.false, %entry
+  call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %lor.lhs.false3
+  %call6 = call i32 @foo(i8 noundef signext -62)
+  %cmp7 = icmp ne i32 %call6, 19
+  br i1 %cmp7, label %if.then14, label %lor.lhs.false8
+
+lor.lhs.false8:                                   ; preds = %if.end
+  %call9 = call i32 @foo(i8 noundef signext -63)
+  %cmp10 = icmp ne i32 %call9, 0
+  br i1 %cmp10, label %if.then14, label %lor.lhs.false11
+
+lor.lhs.false11:                                  ; preds = %lor.lhs.false8
+  %call12 = call i32 @foo(i8 noundef signext -61)
+  %cmp13 = icmp ne i32 %call12, 0
+  br i1 %cmp13, label %if.then14, label %if.end15
+
+if.then14:                                        ; preds = %lor.lhs.false11, %lor.lhs.false8, %if.end
+  call void @abort() #3
+  unreachable
+
+if.end15:                                         ; preds = %lor.lhs.false11
+  %call16 = call i32 @foo(i8 noundef signext 28)
+  %cmp17 = icmp ne i32 %call16, 105
+  br i1 %cmp17, label %if.then24, label %lor.lhs.false18
+
+lor.lhs.false18:                                  ; preds = %if.end15
+  %call19 = call i32 @foo(i8 noundef signext 27)
+  %cmp20 = icmp ne i32 %call19, 102
+  br i1 %cmp20, label %if.then24, label %lor.lhs.false21
+
+lor.lhs.false21:                                  ; preds = %lor.lhs.false18
+  %call22 = call i32 @foo(i8 noundef signext 29)
+  %cmp23 = icmp ne i32 %call22, 111
+  br i1 %cmp23, label %if.then24, label %if.end25
+
+if.then24:                                        ; preds = %lor.lhs.false21, %lor.lhs.false18, %if.end15
+  call void @abort() #3
+  unreachable
+
+if.end25:                                         ; preds = %lor.lhs.false21
   ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @g(ptr noundef %c) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %c.addr = alloca ptr, align 8
-  %i = alloca i32, align 4
-  %b = alloca i32, align 4
-  store ptr %c, ptr %c.addr, align 8
-  br label %do.body
-
-do.body:                                          ; preds = %do.cond, %entry
-  %call = call i32 @h1()
-  store i32 %call, ptr %i, align 4
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp eq i32 %0, -1
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %do.body
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.else:                                          ; preds = %do.body
-  %1 = load i32, ptr %i, align 4
-  %cmp1 = icmp eq i32 %1, 1
-  br i1 %cmp1, label %if.then2, label %if.end
-
-if.then2:                                         ; preds = %if.else
-  %call3 = call i32 @h1()
-  br label %if.end
-
-if.end:                                           ; preds = %if.then2, %if.else
-  br label %if.end4
-
-if.end4:                                          ; preds = %if.end
-  br label %do.cond
-
-do.cond:                                          ; preds = %if.end4
-  %2 = load i32, ptr %i, align 4
-  %cmp5 = icmp eq i32 %2, 1
-  br i1 %cmp5, label %do.body, label %do.end, !llvm.loop !6
-
-do.end:                                           ; preds = %do.cond
-  br label %do.body6
-
-do.body6:                                         ; preds = %do.cond8, %do.end
-  %call7 = call i32 @h2(ptr noundef @v)
-  store i32 %call7, ptr %b, align 4
-  br label %do.cond8
-
-do.cond8:                                         ; preds = %do.body6
-  %3 = load i32, ptr %i, align 4
-  %cmp9 = icmp eq i32 %3, 5
-  br i1 %cmp9, label %do.body6, label %do.end10, !llvm.loop !8
-
-do.end10:                                         ; preds = %do.cond8
-  %4 = load i32, ptr %i, align 4
-  %cmp11 = icmp ne i32 %4, 2
-  br i1 %cmp11, label %if.then12, label %if.end13
-
-if.then12:                                        ; preds = %do.end10
-  %5 = load i32, ptr %b, align 4
-  store i32 %5, ptr %retval, align 4
-  br label %return
-
-if.end13:                                         ; preds = %do.end10
-  %6 = load ptr, ptr %c.addr, align 8
-  store i8 97, ptr %6, align 1
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end13, %if.then12, %if.then
-  %7 = load i32, ptr %retval, align 4
-  ret i32 %7
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
-entry:
-  %retval = alloca i32, align 4
-  %c = alloca i8, align 1
-  %call = call i32 @g(ptr noundef %c)
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
-}
+declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -136,6 +286,3 @@ attributes #2 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}

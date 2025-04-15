@@ -1,94 +1,150 @@
-; 168691327671723399535692508403404340473
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168691327671723399535692508403404340473.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168691327671723399535692508403404340473.c"
+; 187056912110996325640402897660990557779
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187056912110996325640402897660990557779.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187056912110996325640402897660990557779.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = internal unnamed_addr constant [2 x i32] [i32 3, i32 2], align 4
+@.str = private unnamed_addr constant [25 x i8] c"Main function executed.\0A\00", align 1
+@str.1 = private unnamed_addr constant [24 x i8] c"Main function executed.\00", align 1
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local void @foo(ptr noundef readonly captures(none) %x, i32 noundef %y) local_unnamed_addr #0 {
+; Function Attrs: nounwind uwtable
+define dso_local range(i32 0, 2) i32 @doit(i32 noundef %sel, i32 noundef %n, ptr noundef captures(none) %p) local_unnamed_addr #0 {
 entry:
-  %cmp9 = icmp sgt i32 %y, 0
-  br i1 %cmp9, label %for.body.preheader, label %for.end
+  %call = tail call i32 (...) @printHello() #6
+  %conv = sext i32 %call to i64
+  %0 = inttoptr i64 %conv to ptr
+  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %conv2 = sext i32 %call1 to i64
+  %1 = inttoptr i64 %conv2 to ptr
+  switch i32 %sel, label %sw.default [
+    i32 0, label %do.body.preheader
+    i32 1, label %do.body5.preheader
+    i32 2, label %do.body14.preheader
+  ]
 
-for.body.preheader:                               ; preds = %entry
-  %wide.trip.count = zext nneg i32 %y to i64
-  br label %for.body
+do.body14.preheader:                              ; preds = %entry
+  %p.promoted = load i64, ptr %p, align 8, !tbaa !5
+  br label %do.body14
 
-for.body:                                         ; preds = %cleanup, %for.body.preheader
-  %indvars.iv = phi i64 [ 0, %for.body.preheader ], [ %indvars.iv.next, %cleanup ]
-  %c.011 = phi i32 [ undef, %for.body.preheader ], [ %c.1, %cleanup ]
-  %b.010 = phi i32 [ 0, %for.body.preheader ], [ %b.1, %cleanup ]
-  %arrayidx = getelementptr inbounds nuw i32, ptr %x, i64 %indvars.iv
-  %0 = load i32, ptr %arrayidx, align 4, !tbaa !5
-  %cmp1.not = icmp eq i32 %0, 0
-  br i1 %cmp1.not, label %cleanup, label %if.end
+do.body5.preheader:                               ; preds = %entry
+  %.promoted = load i64, ptr %1, align 8, !tbaa !9
+  br label %do.body5
 
-if.end:                                           ; preds = %for.body
-  %tobool.not = icmp eq i32 %b.010, 0
-  %cmp2.not = icmp sgt i32 %0, %c.011
-  %or.cond = select i1 %tobool.not, i1 true, i1 %cmp2.not
-  br i1 %or.cond, label %cleanup, label %if.then3
+do.body.preheader:                                ; preds = %entry
+  %.promoted35 = load i32, ptr %0, align 4, !tbaa !11
+  br label %do.body
 
-if.then3:                                         ; preds = %if.end
-  tail call void @abort() #2
+do.body:                                          ; preds = %do.body.preheader, %do.body
+  %2 = phi i32 [ %add, %do.body ], [ %.promoted35, %do.body.preheader ]
+  %n.addr.0 = phi i32 [ %dec, %do.body ], [ %n, %do.body.preheader ]
+  %add = shl nsw i32 %2, 1
+  %dec = add nsw i32 %n.addr.0, -1
+  %tobool.not = icmp eq i32 %dec, 0
+  br i1 %tobool.not, label %do.end, label %do.body, !llvm.loop !13
+
+do.end:                                           ; preds = %do.body
+  store i32 %add, ptr %0, align 4, !tbaa !11
+  %cmp = icmp eq i32 %2, 0
+  br label %cleanup
+
+do.body5:                                         ; preds = %do.body5.preheader, %do.body5
+  %3 = phi i64 [ %add6, %do.body5 ], [ %.promoted, %do.body5.preheader ]
+  %n.addr.1 = phi i32 [ %dec8, %do.body5 ], [ %n, %do.body5.preheader ]
+  %add6 = shl nsw i64 %3, 1
+  %dec8 = add nsw i32 %n.addr.1, -1
+  %tobool9.not = icmp eq i32 %dec8, 0
+  br i1 %tobool9.not, label %do.end10, label %do.body5, !llvm.loop !16
+
+do.end10:                                         ; preds = %do.body5
+  store i64 %add6, ptr %1, align 8, !tbaa !9
+  %cmp11 = icmp eq i64 %3, 0
+  br label %cleanup
+
+do.body14:                                        ; preds = %do.body14.preheader, %do.body14
+  %add1534 = phi i64 [ %add15, %do.body14 ], [ %p.promoted, %do.body14.preheader ]
+  %n.addr.2 = phi i32 [ %dec17, %do.body14 ], [ %n, %do.body14.preheader ]
+  %add15 = shl nsw i64 %add1534, 1
+  %dec17 = add nsw i32 %n.addr.2, -1
+  %tobool18.not = icmp eq i32 %dec17, 0
+  br i1 %tobool18.not, label %do.end19, label %do.body14, !llvm.loop !17
+
+do.end19:                                         ; preds = %do.body14
+  store i64 %add15, ptr %p, align 8, !tbaa !5
+  %cmp20 = icmp eq i64 %add1534, 0
+  br label %cleanup
+
+sw.default:                                       ; preds = %entry
+  tail call void @abort() #7
   unreachable
 
-cleanup:                                          ; preds = %if.end, %for.body
-  %b.1 = phi i32 [ %b.010, %for.body ], [ 1, %if.end ]
-  %c.1 = phi i32 [ %c.011, %for.body ], [ %0, %if.end ]
-  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  %or.cond14 = select i1 %cmp1.not, i1 true, i1 %exitcond.not
-  br i1 %or.cond14, label %for.end, label %for.body, !llvm.loop !9
-
-for.end:                                          ; preds = %cleanup, %entry
-  ret void
+cleanup:                                          ; preds = %do.end19, %do.end10, %do.end
+  %retval.0.in = phi i1 [ %cmp20, %do.end19 ], [ %cmp11, %do.end10 ], [ %cmp, %do.end ]
+  %retval.0 = zext i1 %retval.0.in to i32
+  ret i32 %retval.0
 }
+
+declare i32 @printHello(...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #2
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+declare void @abort() local_unnamed_addr #3
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #4 {
 entry:
-  br label %for.body.i
+  %call.i = tail call i32 (...) @printHello() #6
+  %conv.i = sext i32 %call.i to i64
+  %0 = inttoptr i64 %conv.i to ptr
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.1)
+  %.promoted35.i = load i32, ptr %0, align 4, !tbaa !11
+  br label %do.body.i
 
-for.body.i:                                       ; preds = %cleanup.i, %entry
-  %indvars.iv.i = phi i64 [ 0, %entry ], [ %indvars.iv.next.i, %cleanup.i ]
-  %c.011.i = phi i32 [ undef, %entry ], [ %c.1.i, %cleanup.i ]
-  %b.010.i = phi i32 [ 0, %entry ], [ %b.1.i, %cleanup.i ]
-  %arrayidx.i = getelementptr inbounds nuw i32, ptr @a, i64 %indvars.iv.i
-  %0 = load i32, ptr %arrayidx.i, align 4, !tbaa !5
-  %cmp1.not.i = icmp eq i32 %0, 0
-  br i1 %cmp1.not.i, label %cleanup.i, label %if.end.i
+do.body.i:                                        ; preds = %do.body.i, %entry
+  %1 = phi i32 [ %add.i, %do.body.i ], [ %.promoted35.i, %entry ]
+  %n.addr.0.i = phi i32 [ %dec.i, %do.body.i ], [ 5, %entry ]
+  %add.i = shl nsw i32 %1, 1
+  %dec.i = add nsw i32 %n.addr.0.i, -1
+  %tobool.not.i = icmp eq i32 %dec.i, 0
+  br i1 %tobool.not.i, label %doit.exit, label %do.body.i, !llvm.loop !13
 
-if.end.i:                                         ; preds = %for.body.i
-  %tobool.not.i = icmp eq i32 %b.010.i, 0
-  %cmp2.not.i = icmp sgt i32 %0, %c.011.i
-  %or.cond.i = select i1 %tobool.not.i, i1 true, i1 %cmp2.not.i
-  br i1 %or.cond.i, label %cleanup.i, label %if.then3.i
+doit.exit:                                        ; preds = %do.body.i
+  store i32 %add.i, ptr %0, align 4, !tbaa !11
+  %call.i9 = tail call i32 (...) @printHello() #6
+  %call1.i11 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %conv2.i12 = sext i32 %call1.i11 to i64
+  %2 = inttoptr i64 %conv2.i12 to ptr
+  %.promoted.i = load i64, ptr %2, align 8, !tbaa !9
+  br label %do.body5.i
 
-if.then3.i:                                       ; preds = %if.end.i
-  tail call void @abort() #2
+do.body5.i:                                       ; preds = %do.body5.i, %doit.exit
+  %3 = phi i64 [ %add6.i, %do.body5.i ], [ %.promoted.i, %doit.exit ]
+  %n.addr.1.i = phi i32 [ %dec8.i, %do.body5.i ], [ 5, %doit.exit ]
+  %add6.i = shl nsw i64 %3, 1
+  %dec8.i = add nsw i32 %n.addr.1.i, -1
+  %tobool9.not.i = icmp eq i32 %dec8.i, 0
+  br i1 %tobool9.not.i, label %doit.exit14, label %do.body5.i, !llvm.loop !16
+
+doit.exit14:                                      ; preds = %do.body5.i
+  store i64 %add6.i, ptr %2, align 8, !tbaa !9
+  %call.i15 = tail call i32 (...) @printHello() #6
+  %puts22 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.1)
+  tail call void @abort() #7
   unreachable
-
-cleanup.i:                                        ; preds = %if.end.i, %for.body.i
-  %b.1.i = phi i32 [ %b.010.i, %for.body.i ], [ 1, %if.end.i ]
-  %c.1.i = phi i32 [ %c.011.i, %for.body.i ], [ %0, %if.end.i ]
-  %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
-  %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 2
-  %or.cond14.i = select i1 %cmp1.not.i, i1 true, i1 %exitcond.not.i
-  br i1 %or.cond14.i, label %foo.exit, label %for.body.i, !llvm.loop !9
-
-foo.exit:                                         ; preds = %cleanup.i
-  ret i32 0
 }
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #5
+
+attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { nofree nounwind }
+attributes #6 = { nounwind }
+attributes #7 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -99,9 +155,15 @@ attributes #2 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
+!6 = !{!"long long", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = distinct !{!9, !10, !11}
-!10 = !{!"llvm.loop.mustprogress"}
-!11 = !{!"llvm.loop.unroll.disable"}
+!9 = !{!10, !10, i64 0}
+!10 = !{!"long", !7, i64 0}
+!11 = !{!12, !12, i64 0}
+!12 = !{!"int", !7, i64 0}
+!13 = distinct !{!13, !14, !15}
+!14 = !{!"llvm.loop.mustprogress"}
+!15 = !{!"llvm.loop.unroll.disable"}
+!16 = distinct !{!16, !14, !15}
+!17 = distinct !{!17, !14, !15}

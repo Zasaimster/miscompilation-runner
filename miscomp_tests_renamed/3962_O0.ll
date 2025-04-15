@@ -1,6 +1,6 @@
-; 198365802077802011598771146571712789575
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/198365802077802011598771146571712789575.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/198365802077802011598771146571712789575.c"
+; 164090965876443094676542924254113017225
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164090965876443094676542924254113017225.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164090965876443094676542924254113017225.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,17 +8,22 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %arr = alloca [0 x i32], align 4
   store i32 0, ptr %retval, align 4
-  call void @abort() #2
-  unreachable
+  %arrayidx = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 0
+  store i32 1, ptr %arrayidx, align 4
+  %arrayidx1 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 1
+  store i32 2, ptr %arrayidx1, align 4
+  %arrayidx2 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 0
+  %0 = load i32, ptr %arrayidx2, align 4
+  %arrayidx3 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 1
+  %1 = load i32, ptr %arrayidx3, align 4
+  %add = add nsw i32 %0, %1
+  %sub = sub nsw i32 %add, 3
+  ret i32 %sub
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

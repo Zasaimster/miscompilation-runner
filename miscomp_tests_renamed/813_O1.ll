@@ -1,23 +1,29 @@
-; 152448286278093765580692719744378345414
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152448286278093765580692719744378345414.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152448286278093765580692719744378345414.c"
+; 124798789518458418214222605963777617078
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/124798789518458418214222605963777617078.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/124798789518458418214222605963777617078.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: nounwind uwtable
-define dso_local range(i32 0, 2) i32 @main() local_unnamed_addr #0 {
+define dso_local i32 @f(i32 noundef %x) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (...) @uselessFunction() #2
-  %cmp.not = icmp ne i32 %call, 0
-  %. = zext i1 %cmp.not to i32
-  ret i32 %.
+  %call = tail call i32 (...) @func4() #3
+  ret i32 poison
 }
 
-declare i32 @uselessFunction(...) local_unnamed_addr #1
+declare i32 @func4(...) local_unnamed_addr #1
+
+; Function Attrs: noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  %call.i = tail call i32 (...) @func4() #3
+  unreachable
+}
 
 attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nounwind }
+attributes #2 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

@@ -1,42 +1,26 @@
-; 195656586326845498386092600857575336369
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195656586326845498386092600857575336369.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195656586326845498386092600857575336369.c"
+; 16743293446603902125656184265252878414
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/16743293446603902125656184265252878414.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/16743293446603902125656184265252878414.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-%struct.S = type { i32, i32 }
-
-@.str = private unnamed_addr constant [21 x i8] c"Count is completed.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s = alloca %struct.S, align 4
+  %x = alloca i32, align 4
   %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store ptr %s, ptr %p, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %x = getelementptr inbounds nuw %struct.S, ptr %s, i32 0, i32 0
-  store i32 %call, ptr %x, align 4
+  store i32 0, ptr %x, align 4
+  store ptr %x, ptr %p, align 8
   %0 = load ptr, ptr %p, align 8
-  %y = getelementptr inbounds nuw %struct.S, ptr %0, i32 0, i32 1
-  store i32 2, ptr %y, align 4
-  %1 = load ptr, ptr %p, align 8
-  %y1 = getelementptr inbounds nuw %struct.S, ptr %1, i32 0, i32 1
-  %2 = load i32, ptr %y1, align 4
-  %3 = load ptr, ptr %p, align 8
-  %x2 = getelementptr inbounds nuw %struct.S, ptr %3, i32 0, i32 0
-  %4 = load i32, ptr %x2, align 4
-  %add = add nsw i32 %2, %4
-  %sub = sub nsw i32 %add, 3
-  ret i32 %sub
+  %arrayidx = getelementptr inbounds i32, ptr %0, i64 0
+  store i32 0, ptr %arrayidx, align 4
+  %1 = load i32, ptr %x, align 4
+  ret i32 %1
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

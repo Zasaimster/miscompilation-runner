@@ -1,36 +1,43 @@
-; 184477531667024886439733338528112053692
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184477531667024886439733338528112053692_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184477531667024886439733338528112053692.c"
+; 100039845901005101760139835694806100663
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/100039845901005101760139835694806100663_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/100039845901005101760139835694806100663.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.U = type { i32 }
-
-@u = internal global %union.U { i32 305419896 }, align 4
-@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
+@foo = dso_local global [1 x ptr] [ptr inttoptr (i64 10 to ptr)], align 8
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %bf.load = load i32, ptr @u, align 4
-  %bf.clear = and i32 %bf.load, 1048575
-  %sub = sub nsw i32 %bf.clear, 284280
-  ret i32 %sub
+  %0 = load ptr, ptr @foo, align 8
+  %arrayidx = getelementptr inbounds i8, ptr %0, i64 0
+  %1 = load i8, ptr %arrayidx, align 1
+  %conv = sext i8 %1 to i32
+  %cmp = icmp ne i32 %conv, 88
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @deadFunction() #0 {
-entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
-}
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

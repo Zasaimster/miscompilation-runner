@@ -1,63 +1,36 @@
-; 187950106873601635577862941378824534499
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187950106873601635577862941378824534499_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187950106873601635577862941378824534499.c"
+; 146863017416173930404343945909417015901
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/146863017416173930404343945909417015901_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/146863017416173930404343945909417015901.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.foo = type { i32, i32, i32, ptr, float }
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f1(ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %p, i32 noundef %n, ...) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %p.addr = alloca ptr, align 8
-  %n.addr = alloca i32, align 4
-  store ptr %p, ptr %p.addr, align 8
-  store i32 %n, ptr %n.addr, align 4
-  %call = call i32 (...) @uselessFunction()
-  %0 = load ptr, ptr %p.addr, align 8
-  %i = getelementptr inbounds nuw %struct.foo, ptr %0, i32 0, i32 0
-  %1 = load i32, ptr %i, align 8
-  %cmp = icmp ne i32 %call, %1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %2 = load ptr, ptr %p.addr, align 8
-  %j = getelementptr inbounds nuw %struct.foo, ptr %2, i32 0, i32 1
-  %3 = load i32, ptr %j, align 4
-  %4 = load i32, ptr %n.addr, align 4
-  %add = add nsw i32 %3, %4
-  store i32 %add, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %5 = load i32, ptr %retval, align 4
-  ret i32 %5
-}
-
-declare i32 @uselessFunction(...) #1
+@a = dso_local global i8 0, align 1
+@b = dso_local global i32 0, align 4
+@c = dso_local global i32 0, align 4
+@d = dso_local global i16 0, align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %f = alloca %struct.foo, align 8
+  %e = alloca i32, align 4
+  %timeout = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %j = getelementptr inbounds nuw %struct.foo, ptr %f, i32 0, i32 1
-  store i32 1, ptr %j, align 4
-  %i = getelementptr inbounds nuw %struct.foo, ptr %f, i32 0, i32 0
-  store i32 1, ptr %i, align 8
-  %call = call i32 (ptr, ptr, i32, ...) @f1(ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %f, i32 noundef 2)
-  %call1 = call i32 (ptr, ptr, i32, ...) @f1(ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %f, i32 noundef 2, i32 noundef 1, ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %f)
+  store i32 2, ptr %e, align 4
+  store i32 0, ptr %timeout, align 4
   ret i32 0
+
+die:                                              ; No predecessors!
+  call void @abort() #2
+  unreachable
 }
 
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

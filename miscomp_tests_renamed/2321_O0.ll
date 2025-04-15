@@ -1,22 +1,45 @@
-; 17657428510502277200547469843738243008
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17657428510502277200547469843738243008.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17657428510502277200547469843738243008.c"
+; 116080464282450400314806865039958883883
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/116080464282450400314806865039958883883.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/116080464282450400314806865039958883883.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@fp = internal global ptr null, align 8
-@.str = private unnamed_addr constant [29 x i8] c"This will never be printed.\0A\00", align 1
+@a = dso_local global i8 0, align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo() #0 {
+entry:
+  %call = call i32 (i32, i32, ...) @show(i32 noundef 10, i32 noundef 20)
+  %conv = sext i32 %call to i64
+  %div = sdiv i64 %conv, 2
+  %conv1 = trunc i64 %div to i32
+  ret i32 %conv1
+}
+
+declare i32 @show(...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @bar() #0 {
+entry:
+  %0 = load i8, ptr @a, align 1
+  %conv = sext i8 %0 to i32
+  %conv1 = zext i32 %conv to i64
+  %rem = srem i64 %conv1, 5
+  %conv2 = trunc i64 %rem to i32
+  ret i32 %conv2
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %r = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store ptr @f, ptr @fp, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %0 = load ptr, ptr @fp, align 8
-  %call1 = call double %0(float noundef 1.000000e+00)
-  %cmp = fcmp une double %call1, 1.000000e+00
+  %call = call i32 @foo()
+  store i32 %call, ptr %r, align 4
+  %0 = load i32, ptr %r, align 4
+  %conv = sext i32 %0 to i64
+  %cmp = icmp ne i64 %conv, 2147483646
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -24,21 +47,21 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call2 = call i32 @bar()
+  store i32 %call2, ptr %r, align 4
+  %1 = load i32, ptr %r, align 4
+  %conv3 = sext i32 %1 to i64
+  %cmp4 = icmp ne i64 %conv3, 2
+  br i1 %cmp4, label %if.then6, label %if.end7
+
+if.then6:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
+
+if.end7:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-; Function Attrs: noinline nounwind uwtable
-define internal double @f(float noundef %a) #0 {
-entry:
-  %a.addr = alloca float, align 4
-  store float %a, ptr %a.addr, align 4
-  %0 = load float, ptr %a.addr, align 4
-  %conv = fpext float %0 to double
-  ret double %conv
-}
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

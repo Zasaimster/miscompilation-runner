@@ -1,62 +1,48 @@
-; 150929585642545471539607571065427050980
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150929585642545471539607571065427050980.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150929585642545471539607571065427050980.c"
+; 149466249793953342365449297209983042626
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/149466249793953342365449297209983042626.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/149466249793953342365449297209983042626.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@henry.fred = internal unnamed_addr global i32 4567, align 4
-@.str = private unnamed_addr constant [11 x i8] c"Value: %d\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@fred = internal unnamed_addr global i1 false, align 4
+%struct.four_quarters = type { i16, i16, i16, i16 }
+
+@.str = private unnamed_addr constant [16 x i8] c"Value of x: %d\0A\00", align 1
+@b = dso_local local_unnamed_addr global i32 0, align 4
+@a = dso_local local_unnamed_addr global i32 0, align 4
+@x = dso_local local_unnamed_addr global %struct.four_quarters zeroinitializer, align 2
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local void @henry() local_unnamed_addr #0 {
+define dso_local void @f(i64 %j.coerce) local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @henry.fred, align 4, !tbaa !5
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %0)
-  %1 = load i32, ptr @henry.fred, align 4, !tbaa !5
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr @henry.fred, align 4, !tbaa !5
+  %j.sroa.2.0.extract.shift = lshr i64 %j.coerce, 48
+  %j.sroa.2.0.extract.trunc = trunc nuw nsw i64 %j.sroa.2.0.extract.shift to i32
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i64 %j.coerce)
+  store i32 %call, ptr @b, align 4, !tbaa !5
+  store i32 %j.sroa.2.0.extract.trunc, ptr @a, align 4, !tbaa !5
   ret void
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
-  %.b4 = load i1, ptr @fred, align 4
-  %0 = select i1 %.b4, i32 8901, i32 1234
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %0)
-  %1 = load i32, ptr @henry.fred, align 4, !tbaa !5
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %1)
-  %2 = load i32, ptr @henry.fred, align 4, !tbaa !5
-  %inc.i = add nsw i32 %2, 1
-  store i32 %inc.i, ptr @henry.fred, align 4, !tbaa !5
-  %call.i5 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %inc.i)
-  %3 = load i32, ptr @henry.fred, align 4, !tbaa !5
-  %inc.i6 = add nsw i32 %3, 1
-  store i32 %inc.i6, ptr @henry.fred, align 4, !tbaa !5
-  %call.i7 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %inc.i6)
-  %4 = load i32, ptr @henry.fred, align 4, !tbaa !5
-  %inc.i8 = add nsw i32 %4, 1
-  store i32 %inc.i8, ptr @henry.fred, align 4, !tbaa !5
-  %call.i9 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %inc.i8)
-  %5 = load i32, ptr @henry.fred, align 4, !tbaa !5
-  %inc.i10 = add nsw i32 %5, 1
-  store i32 %inc.i10, ptr @henry.fred, align 4, !tbaa !5
-  %.b = load i1, ptr @fred, align 4
-  %6 = select i1 %.b, i32 8901, i32 1234
-  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %6)
-  store i1 true, ptr @fred, align 4
-  %call2 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef 8901)
-  %call3 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef 2345)
-  ret i32 0
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i64 10696049115004928)
+  store i32 %call.i, ptr @b, align 4, !tbaa !5
+  store i32 38, ptr @a, align 4, !tbaa !5
+  tail call void @exit(i32 noundef 0) #4
+  unreachable
 }
+
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #3
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

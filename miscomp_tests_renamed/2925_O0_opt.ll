@@ -1,51 +1,59 @@
-; 197033794237355451163289749815714824706
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197033794237355451163289749815714824706_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197033794237355451163289749815714824706.c"
+; 188423447799733620467770364493918592277
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188423447799733620467770364493918592277_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188423447799733620467770364493918592277.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@j = dso_local global i32 0, align 4
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @func6() #0 {
-entry:
-  %ch = alloca i8, align 1
-  store i8 65, ptr %ch, align 1
-  %0 = load i8, ptr %ch, align 1
-  %conv = sext i8 %0 to i32
-  %add = add nsw i32 %conv, 1
-  %conv1 = trunc i32 %add to i8
-  store i8 %conv1, ptr %ch, align 1
-  ret void
-}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %buf = alloca [0 x i8], align 1
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (i32, ...) @bla(i32 noundef 0)
-  %0 = load i32, ptr @j, align 4
-  %tobool = icmp ne i32 %0, 0
-  br i1 %tobool, label %if.end, label %if.then
+  %arraydecay = getelementptr inbounds [0 x i8], ptr %buf, i64 0, i64 0
+  store ptr %arraydecay, ptr %p, align 8
+  %arraydecay1 = getelementptr inbounds [0 x i8], ptr %buf, i64 0, i64 0
+  %call = call i64 @strlen(ptr noundef %arraydecay1) #3
+  %conv = trunc i64 %call to i8
+  %0 = load ptr, ptr %p, align 8
+  %incdec.ptr = getelementptr inbounds nuw i8, ptr %0, i32 1
+  store ptr %incdec.ptr, ptr %p, align 8
+  store i8 %conv, ptr %0, align 1
+  %arrayidx = getelementptr inbounds [0 x i8], ptr %buf, i64 0, i64 0
+  %1 = load i8, ptr %arrayidx, align 1
+  %conv2 = sext i8 %1 to i32
+  %cmp = icmp ne i32 %conv2, 10
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
-  call void @abort() #3
+lor.lhs.false:                                    ; preds = %entry
+  %2 = load ptr, ptr %p, align 8
+  %arraydecay4 = getelementptr inbounds [0 x i8], ptr %buf, i64 0, i64 0
+  %sub.ptr.lhs.cast = ptrtoint ptr %2 to i64
+  %sub.ptr.rhs.cast = ptrtoint ptr %arraydecay4 to i64
+  %sub.ptr.sub = sub i64 %sub.ptr.lhs.cast, %sub.ptr.rhs.cast
+  %cmp5 = icmp ne i64 %sub.ptr.sub, 1
+  br i1 %cmp5, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #4
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %lor.lhs.false
   ret i32 0
 }
 
-declare i32 @bla(...) #1
+; Function Attrs: nounwind
+declare i64 @strlen(ptr noundef) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #3 = { nounwind }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

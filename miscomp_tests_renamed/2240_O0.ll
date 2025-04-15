@@ -1,77 +1,48 @@
-; 140236750638012191201223557872604756280
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/140236750638012191201223557872604756280.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/140236750638012191201223557872604756280.c"
+; 170149049721326995454042110068202266673
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170149049721326995454042110068202266673.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170149049721326995454042110068202266673.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d \00", align 1
-@.str.1 = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
+@s_c_s = dso_local global { i8, i8, i16 } { i8 97, i8 0, i16 13 }, align 2
+@s_c_i = dso_local global { i8, [3 x i8], i32 } { i8 98, [3 x i8] zeroinitializer, i32 14 }, align 4
+@s_s_i = dso_local global { i16, [2 x i8], i32 } { i16 15, [2 x i8] zeroinitializer, i32 16 }, align 4
+@s_c_f = dso_local global { i8, [3 x i8], float } { i8 99, [3 x i8] zeroinitializer, float 1.700000e+01 }, align 4
+@s_s_f = dso_local global { i16, [2 x i8], float } { i16 18, [2 x i8] zeroinitializer, float 1.900000e+01 }, align 4
+@s_c_d = dso_local global { i8, [7 x i8], double } { i8 100, [7 x i8] zeroinitializer, double 2.000000e+01 }, align 8
+@s_s_d = dso_local global { i16, [6 x i8], double } { i16 21, [6 x i8] zeroinitializer, double 2.200000e+01 }, align 8
+@s_i_d = dso_local global { i32, [4 x i8], double } { i32 23, [4 x i8] zeroinitializer, double 2.400000e+01 }, align 8
+@s_f_d = dso_local global { float, [4 x i8], double } { float 2.500000e+01, [4 x i8] zeroinitializer, double 2.600000e+01 }, align 8
+@s_c_ld = dso_local global { i8, [15 x i8], x86_fp80 } { i8 101, [15 x i8] zeroinitializer, x86_fp80 0xK4003D800000000000000 }, align 16
+@s_s_ld = dso_local global { i16, [14 x i8], x86_fp80 } { i16 28, [14 x i8] zeroinitializer, x86_fp80 0xK4003E800000000000000 }, align 16
+@s_i_ld = dso_local global { i32, [12 x i8], x86_fp80 } { i32 30, [12 x i8] zeroinitializer, x86_fp80 0xK4003F800000000000000 }, align 16
+@s_f_ld = dso_local global { float, [12 x i8], x86_fp80 } { float 3.200000e+01, [12 x i8] zeroinitializer, x86_fp80 0xK40048400000000000000 }, align 16
+@s_d_ld = dso_local global { double, [8 x i8], x86_fp80 } { double 3.400000e+01, [8 x i8] zeroinitializer, x86_fp80 0xK40048C00000000000000 }, align 16
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %rows = alloca i32, align 4
-  %i = alloca i32, align 4
-  %j = alloca i32, align 4
-  %number = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (...) @printHello()
-  store i32 %call, ptr %rows, align 4
-  store i32 1, ptr %number, align 4
-  store i32 1, ptr %i, align 4
-  br label %for.cond
+  %0 = load i8, ptr @s_c_s, align 2
+  %conv = sext i8 %0 to i32
+  %cmp = icmp ne i32 %conv, 97
+  br i1 %cmp, label %if.then, label %if.end
 
-for.cond:                                         ; preds = %for.inc7, %entry
-  %0 = load i32, ptr %i, align 4
-  %1 = load i32, ptr %rows, align 4
-  %cmp = icmp sle i32 %0, %1
-  br i1 %cmp, label %for.body, label %for.end9
+if.then:                                          ; preds = %entry
+  call void @abort() #2
+  unreachable
 
-for.body:                                         ; preds = %for.cond
-  store i32 1, ptr %j, align 4
-  br label %for.cond1
-
-for.cond1:                                        ; preds = %for.inc, %for.body
-  %2 = load i32, ptr %j, align 4
-  %3 = load i32, ptr %i, align 4
-  %cmp2 = icmp sle i32 %2, %3
-  br i1 %cmp2, label %for.body3, label %for.end
-
-for.body3:                                        ; preds = %for.cond1
-  %4 = load i32, ptr %number, align 4
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %4)
-  %5 = load i32, ptr %number, align 4
-  %inc = add nsw i32 %5, 1
-  store i32 %inc, ptr %number, align 4
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body3
-  %6 = load i32, ptr %j, align 4
-  %inc5 = add nsw i32 %6, 1
-  store i32 %inc5, ptr %j, align 4
-  br label %for.cond1, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond1
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  br label %for.inc7
-
-for.inc7:                                         ; preds = %for.end
-  %7 = load i32, ptr %i, align 4
-  %inc8 = add nsw i32 %7, 1
-  store i32 %inc8, ptr %i, align 4
-  br label %for.cond, !llvm.loop !8
-
-for.end9:                                         ; preds = %for.cond
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
-declare i32 @printHello(...) #1
-
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -82,6 +53,3 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}

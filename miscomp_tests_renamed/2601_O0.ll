@@ -1,42 +1,34 @@
-; 1776503683020941369102574392412510553
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/1776503683020941369102574392412510553.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/1776503683020941369102574392412510553.c"
+; 117279845579200385616368986304419127482
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117279845579200385616368986304419127482.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117279845579200385616368986304419127482.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i32 0, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  %1 = load i32, ptr %i.addr, align 4
+  %add = add nsw i32 %0, %1
+  ret i32 %add
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @a, align 4
-  %conv = sext i32 %0 to i64
-  store i64 %conv, ptr %s, align 8
-  %1 = load i64, ptr %s, align 8
-  %cmp = icmp slt i64 %1, 0
-  br i1 %cmp, label %if.then, label %if.else
+  %call = call i32 @foo(i32 noundef 1073741823)
+  %cmp = icmp ne i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  store i64 -2147483648, ptr %s, align 8
-  br label %if.end
-
-if.else:                                          ; preds = %entry
-  store i64 2147483647, ptr %s, align 8
-  br label %if.end
-
-if.end:                                           ; preds = %if.else, %if.then
-  %2 = load i64, ptr %s, align 8
-  %cmp2 = icmp slt i64 %2, 0
-  br i1 %cmp2, label %if.then4, label %if.end5
-
-if.then4:                                         ; preds = %if.end
   call void @abort() #2
   unreachable
 
-if.end5:                                          ; preds = %if.end
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

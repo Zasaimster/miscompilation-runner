@@ -1,62 +1,120 @@
-; 172947921992056242455312213771603252622
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172947921992056242455312213771603252622.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172947921992056242455312213771603252622.c"
+; 183632178124835198291609367912786218099
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/183632178124835198291609367912786218099.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/183632178124835198291609367912786218099.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.2 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@str = private unnamed_addr constant [29 x i8] c"This function has dead code.\00", align 1
-@str.3 = private unnamed_addr constant [4 x i8] c"joe\00", align 1
+@str = private unnamed_addr constant [29 x i8] c"This function is never used.\00", align 1
+@str.2 = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @fred() local_unnamed_addr #0 {
+define dso_local void @fail1() local_unnamed_addr #0 {
 entry:
   %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  ret i32 0
-}
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @joe() local_unnamed_addr #0 {
-entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.3)
-  ret i32 1
+  ret void
 }
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local void @fail2() local_unnamed_addr #0 {
 entry:
-  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call3 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 0)
-  %puts.i60 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %puts.i61 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.3)
-  %call8 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 1)
-  %puts.i62 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.3)
-  %puts.i63 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call16 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 0)
-  %puts.i64 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.3)
-  %call24 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 1)
-  %puts.i65 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call32 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 0)
-  %puts.i66 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %puts.i67 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.3)
-  %call41 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 1)
-  %puts.i68 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.3)
-  %puts.i69 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call50 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 0)
-  %puts.i70 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.3)
-  %call59 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i32 noundef 1)
-  ret i32 0
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.2)
+  ret void
 }
 
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local void @fail3() local_unnamed_addr #1 {
+entry:
+  tail call void @abort() #6
+  unreachable
+}
+
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #2
+
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local void @fail4() local_unnamed_addr #1 {
+entry:
+  tail call void @abort() #6
+  unreachable
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @foo(i64 noundef %x) local_unnamed_addr #0 {
+entry:
+  switch i64 %x, label %sw.default [
+    i64 -6, label %sw.epilog
+    i64 0, label %sw.bb1
+    i64 5, label %sw.bb3
+    i64 4, label %sw.bb3
+    i64 3, label %sw.bb3
+    i64 1, label %sw.epilog9
+    i64 2, label %sw.bb7
+  ]
+
+sw.bb1:                                           ; preds = %entry
+  br label %sw.epilog
+
+sw.bb3:                                           ; preds = %entry, %entry, %entry
+  tail call void @abort() #6
+  unreachable
+
+sw.default:                                       ; preds = %entry
+  tail call void @abort() #6
+  unreachable
+
+sw.epilog:                                        ; preds = %entry, %sw.bb1
+  %str.2.sink = phi ptr [ @str.2, %sw.bb1 ], [ @str, %entry ]
+  %puts.i11 = tail call i32 @puts(ptr nonnull dereferenceable(1) %str.2.sink)
+  switch i64 %x, label %sw.default8 [
+    i64 -3, label %sw.epilog9.sink.split
+    i64 0, label %sw.bb5
+    i64 4, label %sw.bb5
+    i64 1, label %sw.epilog9
+    i64 3, label %sw.epilog9
+    i64 2, label %sw.bb7
+    i64 8, label %sw.bb7
+  ]
+
+sw.bb5:                                           ; preds = %sw.epilog, %sw.epilog
+  br label %sw.epilog9.sink.split
+
+sw.bb7:                                           ; preds = %entry, %sw.epilog, %sw.epilog
+  tail call void @abort() #6
+  unreachable
+
+sw.default8:                                      ; preds = %sw.epilog
+  tail call void @abort() #6
+  unreachable
+
+sw.epilog9.sink.split:                            ; preds = %sw.epilog, %sw.bb5
+  %str.2.sink15 = phi ptr [ @str.2, %sw.bb5 ], [ @str, %sw.epilog ]
+  %puts.i13 = tail call i32 @puts(ptr nonnull dereferenceable(1) %str.2.sink15)
+  br label %sw.epilog9
+
+sw.epilog9:                                       ; preds = %sw.epilog9.sink.split, %entry, %sw.epilog, %sw.epilog
+  ret void
+}
+
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #3 {
+entry:
+  tail call void @exit(i32 noundef 0) #6
+  unreachable
+}
+
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #4
+
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #5
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { nofree nounwind }
+attributes #6 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

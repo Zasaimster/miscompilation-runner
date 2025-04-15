@@ -1,112 +1,93 @@
-; 119062570694533553434746043378532202461
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119062570694533553434746043378532202461_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119062570694533553434746043378532202461.c"
+; 110333201547586207886537073289497279750
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110333201547586207886537073289497279750_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110333201547586207886537073289497279750.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"X is negative\0A\00", align 1
+%struct.s = type { i16, i64, i16 }
+
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %i) #0 {
+define dso_local void @foo(ptr dead_on_unwind noalias writable sret(%struct.s) align 8 %agg.result, ptr noundef byval(%struct.s) align 8 %s) #0 {
 entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
+  %i2 = getelementptr inbounds nuw %struct.s, ptr %s, i32 0, i32 1
+  %0 = load i64, ptr %i2, align 8
+  %inc = add nsw i64 %0, 1
+  store i64 %inc, ptr %i2, align 8
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %entry
-  %0 = load i32, ptr %i.addr, align 4
-  br label %cond.end
-
-cond.false:                                       ; preds = %entry
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i32 [ %0, %cond.true ], [ 4, %cond.false ]
-  ret i32 %cond
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %agg.result, ptr align 8 %s, i64 24, i1 false)
+  ret void
 }
 
 declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %s = alloca %struct.s, align 8
+  %.compoundliteral = alloca %struct.s, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef -1)
-  %cmp = icmp ne i32 %call, 4
-  br i1 %cmp, label %if.then, label %if.end
+  %i1 = getelementptr inbounds nuw %struct.s, ptr %.compoundliteral, i32 0, i32 0
+  store i16 1000, ptr %i1, align 8
+  %0 = getelementptr i8, ptr %.compoundliteral, i64 2
+  call void @llvm.memset.p0.i64(ptr align 2 %0, i8 0, i64 6, i1 false)
+  %i2 = getelementptr inbounds nuw %struct.s, ptr %.compoundliteral, i32 0, i32 1
+  store i64 2000, ptr %i2, align 8
+  %i3 = getelementptr inbounds nuw %struct.s, ptr %.compoundliteral, i32 0, i32 2
+  store i16 3000, ptr %i3, align 8
+  %1 = getelementptr i8, ptr %.compoundliteral, i64 18
+  call void @llvm.memset.p0.i64(ptr align 2 %1, i8 0, i64 6, i1 false)
+  call void @foo(ptr dead_on_unwind writable sret(%struct.s) align 8 %s, ptr noundef byval(%struct.s) align 8 %.compoundliteral)
+  %i11 = getelementptr inbounds nuw %struct.s, ptr %s, i32 0, i32 0
+  %2 = load i16, ptr %i11, align 8
+  %conv = sext i16 %2 to i32
+  %cmp = icmp ne i32 %conv, 1000
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
-  call void @abort() #3
+lor.lhs.false:                                    ; preds = %entry
+  %i23 = getelementptr inbounds nuw %struct.s, ptr %s, i32 0, i32 1
+  %3 = load i64, ptr %i23, align 8
+  %cmp4 = icmp ne i64 %3, 2001
+  br i1 %cmp4, label %if.then, label %lor.lhs.false6
+
+lor.lhs.false6:                                   ; preds = %lor.lhs.false
+  %i37 = getelementptr inbounds nuw %struct.s, ptr %s, i32 0, i32 2
+  %4 = load i16, ptr %i37, align 8
+  %conv8 = sext i16 %4 to i32
+  %cmp9 = icmp ne i32 %conv8, 3000
+  br i1 %cmp9, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false6, %lor.lhs.false, %entry
+  call void @abort() #6
   unreachable
 
-if.end:                                           ; preds = %entry
-  %call1 = call i32 @foo(i32 noundef 0)
-  %cmp2 = icmp ne i32 %call1, 0
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
+if.end:                                           ; preds = %lor.lhs.false6
+  call void @exit(i32 noundef 0) #7
   unreachable
-
-if.end4:                                          ; preds = %if.end
-  %call5 = call i32 @foo(i32 noundef 1)
-  %cmp6 = icmp ne i32 %call5, 1
-  br i1 %cmp6, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %if.end4
-  call void @abort() #3
-  unreachable
-
-if.end8:                                          ; preds = %if.end4
-  %call9 = call i32 @foo(i32 noundef 2)
-  %cmp10 = icmp ne i32 %call9, 2
-  br i1 %cmp10, label %if.then11, label %if.end12
-
-if.then11:                                        ; preds = %if.end8
-  call void @abort() #3
-  unreachable
-
-if.end12:                                         ; preds = %if.end8
-  %call13 = call i32 @foo(i32 noundef 3)
-  %cmp14 = icmp ne i32 %call13, 3
-  br i1 %cmp14, label %if.then15, label %if.end16
-
-if.then15:                                        ; preds = %if.end12
-  call void @abort() #3
-  unreachable
-
-if.end16:                                         ; preds = %if.end12
-  %call17 = call i32 @foo(i32 noundef 4)
-  %cmp18 = icmp ne i32 %call17, 4
-  br i1 %cmp18, label %if.then19, label %if.end20
-
-if.then19:                                        ; preds = %if.end16
-  call void @abort() #3
-  unreachable
-
-if.end20:                                         ; preds = %if.end16
-  %call21 = call i32 @foo(i32 noundef 5)
-  %cmp22 = icmp ne i32 %call21, 4
-  br i1 %cmp22, label %if.then23, label %if.end24
-
-if.then23:                                        ; preds = %if.end20
-  call void @abort() #3
-  unreachable
-
-if.end24:                                         ; preds = %if.end20
-  ret i32 0
 }
 
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #3
+
 ; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare void @abort() #4
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #5
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+attributes #3 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #4 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #6 = { noreturn nounwind }
+attributes #7 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

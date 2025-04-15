@@ -1,38 +1,42 @@
-; 197281838978732621200254566987220412353
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197281838978732621200254566987220412353.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197281838978732621200254566987220412353.c"
+; 124556271186737018008679016337993322718
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/124556271186737018008679016337993322718.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/124556271186737018008679016337993322718.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@array = dso_local global [10 x i32] [i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1], align 16
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str = private unnamed_addr constant [23 x i8] c"This won't be called.\0A\00", align 1
+@.str.1 = private unnamed_addr constant [3 x i8] c"xy\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local signext i8 @foo(ptr noundef %bar) #0 {
+entry:
+  %bar.addr = alloca ptr, align 8
+  store ptr %bar, ptr %bar.addr, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = trunc i32 %call to i8
+  ret i8 %conv
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
-  %j = alloca i32, align 4
-  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %label
-
-label:                                            ; preds = %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp ne i32 %0, 1
+  %call = call signext i8 @foo(ptr noundef @.str.1)
+  %conv = sext i8 %call to i32
+  %cmp = icmp ne i32 %conv, 121
   br i1 %cmp, label %if.then, label %if.end
 
-if.then:                                          ; preds = %label
+if.then:                                          ; preds = %entry
   call void @abort() #4
   unreachable
 
-if.end:                                           ; preds = %label
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

@@ -1,37 +1,64 @@
-; 155742129056036632970698281495661441204
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155742129056036632970698281495661441204.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155742129056036632970698281495661441204.c"
+; 198124377674500581324285544806926970275
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/198124377674500581324285544806926970275.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/198124377674500581324285544806926970275.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @f(ptr noundef %p) #0 {
+define dso_local i32 @sub1(i32 noundef %i) #0 {
 entry:
-  %p.addr = alloca ptr, align 8
-  %a = alloca i64, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %incdec.ptr = getelementptr inbounds nuw i64, ptr %0, i32 1
-  store ptr %incdec.ptr, ptr %p.addr, align 8
-  %1 = load i64, ptr %0, align 8
-  %shr = lshr i64 %1, 24
-  store i64 %shr, ptr %a, align 8
-  %2 = load ptr, ptr %p.addr, align 8
-  %3 = load i64, ptr %a, align 8
-  %add.ptr = getelementptr inbounds nuw i64, ptr %2, i64 %3
-  ret ptr %add.ptr
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  %1 = load i32, ptr %i.addr, align 4
+  %sub = sub nsw i32 5, %1
+  %sub1 = sub nsw i32 %0, %sub
+  ret i32 %sub1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @sub2(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  %1 = load i32, ptr %i.addr, align 4
+  %add = add nsw i32 5, %1
+  %add1 = add nsw i32 %0, %add
+  ret i32 %add1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @sub3(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  %1 = load i32, ptr %i.addr, align 4
+  %add = add nsw i32 5, %1
+  %sub = sub nsw i32 %0, %add
+  ret i32 %sub
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @sub4(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  %1 = load i32, ptr %i.addr, align 4
+  %sub = sub nsw i32 5, %1
+  %add = add nsw i32 %0, %sub
+  ret i32 %add
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  store i64 2147483648, ptr %x, align 8
-  %call = call ptr @f(ptr noundef %x)
-  %add.ptr = getelementptr inbounds i64, ptr %x, i64 129
-  %cmp = icmp ne ptr %call, %add.ptr
+  %call = call i32 @sub1(i32 noundef 20)
+  %cmp = icmp ne i32 %call, 35
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -39,6 +66,33 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @sub2(i32 noundef 20)
+  %cmp2 = icmp ne i32 %call1, 45
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @sub3(i32 noundef 20)
+  %cmp6 = icmp ne i32 %call5, -5
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #3
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
+  %call9 = call i32 @sub4(i32 noundef 20)
+  %cmp10 = icmp ne i32 %call9, 5
+  br i1 %cmp10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  call void @abort() #3
+  unreachable
+
+if.end12:                                         ; preds = %if.end8
   call void @exit(i32 noundef 0) #4
   unreachable
 }

@@ -1,34 +1,53 @@
-; 123244433179873353207624851002198101948
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123244433179873353207624851002198101948_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123244433179873353207624851002198101948.c"
+; 160908701213943266380673929774891435897
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/160908701213943266380673929774891435897_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/160908701213943266380673929774891435897.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+%struct.three_char_t = type <{ i8, i16 }>
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %b, i32 noundef %c) #0 {
+define dso_local zeroext i8 @my_set_a() #0 {
 entry:
-  %b.addr = alloca i32, align 4
-  %c.addr = alloca i32, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 %c, ptr %c.addr, align 4
-  %0 = load i32, ptr %b.addr, align 4
-  ret i32 %0
+  ret i8 -85
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local zeroext i16 @my_set_b() #0 {
+entry:
+  ret i16 4660
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %three_char = alloca %struct.three_char_t, align 1
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 1, i32 noundef 2)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.end, label %if.then
+  %call = call zeroext i8 @my_set_a()
+  %a = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 0
+  store i8 %call, ptr %a, align 1
+  %call1 = call zeroext i16 @my_set_b()
+  %b = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 1
+  store i16 %call1, ptr %b, align 1
+  %a2 = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 0
+  %0 = load i8, ptr %a2, align 1
+  %conv = zext i8 %0 to i32
+  %cmp = icmp ne i32 %conv, 171
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
+lor.lhs.false:                                    ; preds = %entry
+  %b4 = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 1
+  %1 = load i16, ptr %b4, align 1
+  %conv5 = zext i16 %1 to i32
+  %cmp6 = icmp ne i32 %conv5, 4660
+  br i1 %cmp6, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %lor.lhs.false
   call void @exit(i32 noundef 0) #4
   unreachable
 }

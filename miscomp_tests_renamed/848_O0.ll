@@ -1,41 +1,24 @@
-; 180020907743809467811740888287449653901
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/180020907743809467811740888287449653901.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/180020907743809467811740888287449653901.c"
+; 121286570514012039195488321139781548337
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121286570514012039195488321139781548337.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121286570514012039195488321139781548337.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@__const.main.buf = private unnamed_addr constant [16 x i8] c"1234567890\00\00\00\00\00\00", align 16
+@.str = private unnamed_addr constant [30 x i8] c"This function is never used.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %buf = alloca [16 x i8], align 16
-  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  call void @llvm.memcpy.p0.p0.i64(ptr align 16 %buf, ptr align 16 @__const.main.buf, i64 16, i1 false)
-  %arraydecay = getelementptr inbounds [16 x i8], ptr %buf, i64 0, i64 0
-  store ptr %arraydecay, ptr %p, align 8
-  %arraydecay1 = getelementptr inbounds [16 x i8], ptr %buf, i64 0, i64 0
-  %call = call i64 @strlen(ptr noundef %arraydecay1) #3
-  %conv = trunc i64 %call to i8
-  %0 = load ptr, ptr %p, align 8
-  %incdec.ptr = getelementptr inbounds nuw i8, ptr %0, i32 1
-  store ptr %incdec.ptr, ptr %p, align 8
-  store i8 %conv, ptr %0, align 1
-  ret i32 42
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  ret i32 0
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
-
-; Function Attrs: nounwind
-declare i64 @strlen(ptr noundef) #2
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

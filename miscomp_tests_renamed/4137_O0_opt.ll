@@ -1,60 +1,101 @@
-; 13870559137869711128937774501685127683
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13870559137869711128937774501685127683_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13870559137869711128937774501685127683.c"
+; 168774026913356887980798911553624016535
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168774026913356887980798911553624016535_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168774026913356887980798911553624016535.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [10 x i8] c"Finished\0A\00", align 1
+@x = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [16 x i8] c"Value of x: %d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %u = alloca i32, align 4
-  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 -1, ptr %i, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %u, align 4
-  %0 = load i32, ptr %u, align 4
-  %cmp = icmp ne i32 %0, 1
-  br i1 %cmp, label %if.then, label %if.end
+  %0 = load i32, ptr @x, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  switch i32 %call, label %sw.epilog [
+    i32 0, label %sw.bb
+  ]
 
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
+sw.bb:                                            ; preds = %entry
+  br label %sw.epilog
 
-if.end:                                           ; preds = %entry
-  %1 = load i32, ptr %i, align 4
-  %call1 = call i32 (i32, i32, ...) @MAX(i32 noundef %1, i32 noundef 0)
-  %2 = load i32, ptr %i, align 4
-  %call2 = call i32 (i32, i32, ...) @MIN(i32 noundef %call1, i32 noundef %2)
-  store i32 %call2, ptr %u, align 4
-  %3 = load i32, ptr %u, align 4
-  %cmp3 = icmp ne i32 %3, 0
-  br i1 %cmp3, label %if.then4, label %if.end5
+sw.epilog:                                        ; preds = %sw.bb, %entry
+  %1 = load i32, ptr @x, align 4
+  switch i32 %1, label %sw.epilog3 [
+    i32 0, label %sw.bb1
+  ]
 
-if.then4:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
+sw.bb1:                                           ; preds = %sw.epilog
+  %2 = load i32, ptr @x, align 4
+  switch i32 %2, label %sw.default [
+    i32 0, label %sw.bb2
+  ]
 
-if.end5:                                          ; preds = %if.end
-  ret i32 0
+sw.bb2:                                           ; preds = %sw.bb1
+  br label %next
+
+sw.default:                                       ; preds = %sw.bb1
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.epilog3:                                       ; preds = %sw.epilog
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+next:                                             ; preds = %sw.bb2
+  %3 = load i32, ptr @x, align 4
+  switch i32 %3, label %sw.epilog5 [
+    i32 1, label %sw.bb4
+  ]
+
+sw.bb4:                                           ; preds = %next
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.epilog5:                                       ; preds = %next
+  %4 = load i32, ptr @x, align 4
+  switch i32 %4, label %sw.epilog7 [
+    i32 1, label %sw.bb6
+  ]
+
+foo:                                              ; No predecessors!
+  br label %sw.bb6
+
+sw.bb6:                                           ; preds = %foo, %sw.epilog5
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.epilog7:                                       ; preds = %sw.epilog5
+  %5 = load i32, ptr @x, align 4
+  switch i32 %5, label %sw.default10 [
+    i32 0, label %sw.bb8
+    i32 1, label %sw.bb9
+  ]
+
+sw.bb8:                                           ; preds = %sw.epilog7
+  %6 = load i32, ptr @x, align 4
+  store i32 %6, ptr %retval, align 4
+  br label %return
+
+sw.bb9:                                           ; preds = %sw.epilog7
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.default10:                                     ; preds = %sw.epilog7
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %sw.default10, %sw.bb9, %sw.bb8, %sw.bb6, %sw.bb4, %sw.epilog3, %sw.default
+  %7 = load i32, ptr %retval, align 4
+  ret i32 %7
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
-declare i32 @MIN(...) #1
-
-declare i32 @MAX(...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,67 +1,44 @@
-; 105012100521793284321673806908060285325
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105012100521793284321673806908060285325.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105012100521793284321673806908060285325.c"
+; 189630731183203757502211772388786903965
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189630731183203757502211772388786903965.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189630731183203757502211772388786903965.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-%struct.ziggy = type { i32, i32, i32 }
-
-@.str = private unnamed_addr constant [8 x i8] c"a = %d\0A\00", align 1
-@bolshevic = dso_local global %struct.ziggy zeroinitializer, align 4
-@.str.1 = private unnamed_addr constant [18 x i8] c"bolshevic.a = %d\0A\00", align 1
-@.str.2 = private unnamed_addr constant [18 x i8] c"bolshevic.b = %d\0A\00", align 1
-@.str.3 = private unnamed_addr constant [18 x i8] c"bolshevic.c = %d\0A\00", align 1
-@.str.4 = private unnamed_addr constant [14 x i8] c"tsar->a = %d\0A\00", align 1
-@.str.5 = private unnamed_addr constant [14 x i8] c"tsar->b = %d\0A\00", align 1
-@.str.6 = private unnamed_addr constant [14 x i8] c"tsar->c = %d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %b = alloca ptr, align 8
-  %c = alloca i32, align 4
-  %tsar = alloca ptr, align 8
+  %i = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  store i32 10, ptr %a, align 4
-  store ptr null, ptr %b, align 8
-  %0 = load ptr, ptr %b, align 8
-  %1 = load i32, ptr %0, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %1)
-  store i32 12, ptr @bolshevic, align 4
-  store i32 34, ptr getelementptr inbounds nuw (%struct.ziggy, ptr @bolshevic, i32 0, i32 1), align 4
-  store i32 56, ptr getelementptr inbounds nuw (%struct.ziggy, ptr @bolshevic, i32 0, i32 2), align 4
-  %2 = load i32, ptr @bolshevic, align 4
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %2)
-  %3 = load i32, ptr getelementptr inbounds nuw (%struct.ziggy, ptr @bolshevic, i32 0, i32 1), align 4
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef %3)
-  %4 = load i32, ptr getelementptr inbounds nuw (%struct.ziggy, ptr @bolshevic, i32 0, i32 2), align 4
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3, i32 noundef %4)
-  store ptr @bolshevic, ptr %tsar, align 8
-  %5 = load ptr, ptr %tsar, align 8
-  %a4 = getelementptr inbounds nuw %struct.ziggy, ptr %5, i32 0, i32 0
-  %6 = load i32, ptr %a4, align 4
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i32 noundef %6)
-  %7 = load ptr, ptr %tsar, align 8
-  %b6 = getelementptr inbounds nuw %struct.ziggy, ptr %7, i32 0, i32 1
-  %8 = load i32, ptr %b6, align 4
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.5, i32 noundef %8)
-  %9 = load ptr, ptr %tsar, align 8
-  %c8 = getelementptr inbounds nuw %struct.ziggy, ptr %9, i32 0, i32 2
-  %10 = load i32, ptr %c8, align 4
-  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str.6, i32 noundef %10)
-  store ptr getelementptr inbounds nuw (%struct.ziggy, ptr @bolshevic, i32 0, i32 1), ptr %b, align 8
-  %11 = load ptr, ptr %b, align 8
-  %12 = load i32, ptr %11, align 4
-  %call10 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef %12)
-  ret i32 0
+  store i64 1, ptr %i, align 8
+  %0 = load i64, ptr %i, align 8
+  %mul = mul nsw i64 %0, 2
+  %add = add nsw i64 %mul, 1
+  store i64 %add, ptr %i, align 8
+  %1 = load i64, ptr %i, align 8
+  %cmp = icmp ne i64 %1, 3
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

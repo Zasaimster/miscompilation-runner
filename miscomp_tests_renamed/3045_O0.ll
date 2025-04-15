@@ -1,35 +1,33 @@
-; 130032147515208057450737730914449470657
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/130032147515208057450737730914449470657.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/130032147515208057450737730914449470657.c"
+; 174580969088996188607744888225224297463
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/174580969088996188607744888225224297463.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/174580969088996188607744888225224297463.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local x86_fp80 @ll_to_ld(i64 noundef %n) #0 {
-entry:
-  %n.addr = alloca i64, align 8
-  store i64 %n, ptr %n.addr, align 8
-  ret x86_fp80 0xK00000000000000000000
-}
+@f.values = internal global [1 x i16] [i16 -27904], align 2
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @ld_to_ll(x86_fp80 noundef %n) #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %n.addr = alloca x86_fp80, align 16
-  store x86_fp80 %n, ptr %n.addr, align 16
-  %0 = load x86_fp80, ptr %n.addr, align 16
-  %conv = fptosi x86_fp80 %0 to i64
-  ret i64 %conv
+  %token = alloca i16, align 2
+  %count = alloca i32, align 4
+  %0 = load i16, ptr @f.values, align 2
+  store i16 %0, ptr %token, align 2
+  %1 = load i16, ptr %token, align 2
+  %conv = zext i16 %1 to i32
+  %shr = ashr i32 %conv, 8
+  store i32 %shr, ptr %count, align 4
+  %2 = load i32, ptr %count, align 4
+  ret i32 %2
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %n = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %call = call x86_fp80 @ll_to_ld(i64 noundef 10)
-  %cmp = fcmp une x86_fp80 %call, 0xK4002A000000000000000
+  %call = call i32 @f()
+  %cmp = icmp ne i32 %call, 147
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -37,15 +35,6 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i64 @ld_to_ll(x86_fp80 noundef 0xK4002A000000000000000)
-  %cmp2 = icmp ne i64 %call1, 10
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }

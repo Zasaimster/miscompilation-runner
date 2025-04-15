@@ -1,37 +1,42 @@
-; 102991814264433512545673303152379369011
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102991814264433512545673303152379369011.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102991814264433512545673303152379369011.c"
+; 111734671158435167447331258558953861986
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111734671158435167447331258558953861986.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111734671158435167447331258558953861986.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %p) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
-}
+%struct.S = type { i32, i32 }
+
+@s = dso_local global %struct.S { i32 0, i32 42 }, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %c = alloca i8, align 1
-  %c2 = alloca i8, align 1
-  %i = alloca i32, align 4
-  %pc = alloca ptr, align 8
-  %pc2 = alloca ptr, align 8
-  %pi = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %i, align 4
-  store ptr %c, ptr %pc, align 8
-  store ptr %c2, ptr %pc2, align 8
-  store ptr %i, ptr %pi, align 8
-  %0 = load ptr, ptr %pc2, align 8
-  store i8 1, ptr %0, align 1
-  ret i32 0
+  %0 = load i32, ptr @s, align 4
+  %cmp = icmp ne i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %1 = load i32, ptr getelementptr inbounds nuw (%struct.S, ptr @s, i32 0, i32 1), align 4
+  %cmp1 = icmp ne i32 %1, 2
+  br i1 %cmp1, label %if.then2, label %if.end3
+
+if.then2:                                         ; preds = %if.end
+  store i32 2, ptr %retval, align 4
+  br label %return
+
+if.end3:                                          ; preds = %if.end
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end3, %if.then2, %if.then
+  %2 = load i32, ptr %retval, align 4
+  ret i32 %2
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

@@ -1,44 +1,48 @@
-; 152365046786408836601563711715066528153
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152365046786408836601563711715066528153.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152365046786408836601563711715066528153.c"
+; 180811374335903923993779812826450188722
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/180811374335903923993779812826450188722.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/180811374335903923993779812826450188722.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @f(i64 noundef %x) #0 {
+define dso_local i32 @f(ptr noundef %b, i32 noundef %c) #0 {
 entry:
-  %x.addr = alloca i64, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %x.addr, align 8
-  %div = sdiv i64 %0, 10000000000
-  ret i64 %div
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %call = call i64 @f(i64 noundef 10000000000)
-  %cmp = icmp ne i64 %call, 1
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %call1 = call i64 @f(i64 noundef 100000000000)
-  %cmp2 = icmp ne i64 %call1, 10
-  br i1 %cmp2, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
+  %b.addr = alloca ptr, align 8
+  %c.addr = alloca i32, align 4
+  %v = alloca i64, align 8
+  store ptr %b, ptr %b.addr, align 8
+  store i32 %c, ptr %c.addr, align 4
+  store i64 1, ptr %v, align 8
   call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
-  call void @exit(i32 noundef 0) #4
   unreachable
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %buf = alloca [4 x i8], align 1
+  store i32 0, ptr %retval, align 4
+  %arrayidx = getelementptr inbounds [4 x i8], ptr %buf, i64 0, i64 0
+  store i8 -86, ptr %arrayidx, align 1
+  %arrayidx1 = getelementptr inbounds [4 x i8], ptr %buf, i64 0, i64 1
+  store i8 5, ptr %arrayidx1, align 1
+  %arraydecay = getelementptr inbounds [4 x i8], ptr %buf, i64 0, i64 0
+  %call = call i32 @f(ptr noundef %arraydecay, i32 noundef 100)
+  %cmp = icmp ne i32 %call, 85
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

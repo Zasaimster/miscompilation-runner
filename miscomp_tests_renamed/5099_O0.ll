@@ -1,20 +1,19 @@
-; 195981809847023554447478208409365938409
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195981809847023554447478208409365938409.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195981809847023554447478208409365938409.c"
+; 139923528477578492721250939873231798818
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139923528477578492721250939873231798818.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139923528477578492721250939873231798818.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [7 x i8] c"Hello\0A\00", align 1
+@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %c = alloca i8, align 1
   store i32 0, ptr %retval, align 4
+  store i8 97, ptr %c, align 1
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str)
   ret i32 0
 }
 

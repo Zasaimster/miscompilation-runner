@@ -1,6 +1,6 @@
-; 177708527274574853422433254358209083984
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177708527274574853422433254358209083984.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177708527274574853422433254358209083984.c"
+; 159886497706938859409574411178711738783
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159886497706938859409574411178711738783.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159886497706938859409574411178711738783.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,8 +8,19 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %arr = alloca [0 x i32], align 4
   store i32 0, ptr %retval, align 4
-  ret i32 0
+  %arrayidx = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 0
+  store i32 1, ptr %arrayidx, align 4
+  %arrayidx1 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 1
+  store i32 2, ptr %arrayidx1, align 4
+  %arrayidx2 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 0
+  %0 = load i32, ptr %arrayidx2, align 4
+  %arrayidx3 = getelementptr inbounds [0 x i32], ptr %arr, i64 0, i64 1
+  %1 = load i32, ptr %arrayidx3, align 4
+  %add = add nsw i32 %0, %1
+  %sub = sub nsw i32 %add, 3
+  ret i32 %sub
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

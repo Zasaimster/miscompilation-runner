@@ -1,53 +1,52 @@
-; 115958935589388547008815985675217333471
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/115958935589388547008815985675217333471.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/115958935589388547008815985675217333471.c"
+; 130107829580609317073696194124395032977
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/130107829580609317073696194124395032977.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/130107829580609317073696194124395032977.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.four_quarters = type { i16, i16, i16, i16 }
-
-@b = dso_local global i32 0, align 4
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
-@a = dso_local global i32 0, align 4
-@x = dso_local global %struct.four_quarters zeroinitializer, align 2
+@.str = private unnamed_addr constant [30 x i8] c"This function is never used.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f(i64 %j.coerce) #0 {
+define dso_local i64 @signed_poly(i64 noundef %sum, i64 noundef %x) #0 {
 entry:
-  %j = alloca %struct.four_quarters, align 2
-  store i64 %j.coerce, ptr %j, align 2
-  %b2 = getelementptr inbounds nuw %struct.four_quarters, ptr %j, i32 0, i32 2
-  %0 = load i16, ptr %b2, align 2
-  %conv = zext i16 %0 to i32
-  store i32 %conv, ptr @b, align 4
+  %sum.addr = alloca i64, align 8
+  %x.addr = alloca i64, align 8
+  store i64 %sum, ptr %sum.addr, align 8
+  store i64 %x, ptr %x.addr, align 8
+  %0 = load i64, ptr %sum.addr, align 8
+  %add = add nsw i64 %0, 0
+  store i64 %add, ptr %sum.addr, align 8
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %b3 = getelementptr inbounds nuw %struct.four_quarters, ptr %j, i32 0, i32 3
-  %1 = load i16, ptr %b3, align 2
-  %conv1 = zext i16 %1 to i32
-  store i32 %conv1, ptr @a, align 4
-  ret void
+  %conv = sext i32 %call to i64
+  ret i64 %conv
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
+define dso_local i64 @unsigned_poly(i64 noundef %sum, i64 noundef %x) #0 {
+entry:
+  %sum.addr = alloca i64, align 8
+  %x.addr = alloca i64, align 8
+  store i64 %sum, ptr %sum.addr, align 8
+  store i64 %x, ptr %x.addr, align 8
+  %0 = load i64, ptr %sum.addr, align 8
+  %1 = load i64, ptr %x.addr, align 8
+  %mul = mul i64 %0, %1
+  %2 = load i64, ptr %sum.addr, align 8
+  %add = add i64 %2, %mul
+  store i64 %add, ptr %sum.addr, align 8
+  %3 = load i64, ptr %sum.addr, align 8
+  ret i64 %3
+}
+
+; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca %struct.four_quarters, align 2
   store i32 0, ptr %retval, align 4
-  %b2 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 2
-  store i16 0, ptr %b2, align 2
-  %b1 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 1
-  store i16 0, ptr %b1, align 2
-  %b0 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 0
-  store i16 0, ptr %b0, align 2
-  %b3 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 3
-  store i16 38, ptr %b3, align 2
-  %0 = load i64, ptr %x, align 2
-  call void @f(i64 %0)
-  %1 = load i32, ptr @a, align 4
-  %cmp = icmp ne i32 %1, 38
+  %call = call i64 @signed_poly(i64 noundef 2, i64 noundef -3)
+  %cmp = icmp ne i64 %call, -4
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -55,6 +54,15 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i64 @unsigned_poly(i64 noundef 2, i64 noundef 3)
+  %cmp2 = icmp ne i64 %call1, 8
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
+
+if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #5
   unreachable
 }

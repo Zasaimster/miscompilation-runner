@@ -1,61 +1,37 @@
-; 106388644341645462444980990263825258824
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106388644341645462444980990263825258824.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106388644341645462444980990263825258824.c"
+; 163314426144259453426279493155757641383
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/163314426144259453426279493155757641383.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/163314426144259453426279493155757641383.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.foo = type { i16, [2 x i8] }
-
-@foo = dso_local global %struct.foo zeroinitializer, align 4
-@oldfoo = dso_local global i32 0, align 4
-@.str = private unnamed_addr constant [20 x i8] c"Running program...\0A\00", align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @bar(i32 noundef %k) #0 {
+define dso_local i32 @calculateSquare(i32 noundef %x) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %k.addr = alloca i32, align 4
-  store i32 %k, ptr %k.addr, align 4
-  %bf.load = load i16, ptr @foo, align 4
-  %bf.lshr = lshr i16 %bf.load, 12
-  %bf.cast = zext i16 %bf.lshr to i32
-  store i32 %bf.cast, ptr @oldfoo, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %0 = load i32, ptr %k.addr, align 4
-  %1 = trunc i32 %0 to i16
-  %bf.load1 = load i16, ptr @foo, align 4
-  %bf.value = and i16 %1, 15
-  %bf.shl = shl i16 %bf.value, 12
-  %bf.clear = and i16 %bf.load1, 4095
-  %bf.set = or i16 %bf.clear, %bf.shl
-  store i16 %bf.set, ptr @foo, align 4
-  %bf.result.cast = zext i16 %bf.value to i32
-  %2 = load i32, ptr %k.addr, align 4
-  %tobool = icmp ne i32 %2, 0
-  br i1 %tobool, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  store i32 2, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %3 = load i32, ptr %retval, align 4
-  ret i32 %3
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %1 = load i32, ptr %x.addr, align 4
+  %mul = mul nsw i32 %0, %1
+  ret i32 %mul
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noinline nounwind uwtable
+define dso_local i64 @bar(i64 noundef %a) #0 {
+entry:
+  %a.addr = alloca i64, align 8
+  store i64 %a, ptr %a.addr, align 8
+  %0 = load i64, ptr %a.addr, align 8
+  %xor = xor i64 %0, 4294901760
+  ret i64 %xor
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @bar(i32 noundef 1)
-  %cmp = icmp ne i32 %call, 1
+  %call = call i32 (i32, ...) @foo(i32 noundef 0)
+  %cmp = icmp ne i32 %call, 65535
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -63,9 +39,20 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i64 @bar(i64 noundef 0)
+  %cmp2 = icmp ne i64 %call1, 4294901760
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
+
+if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #5
   unreachable
 }
+
+declare i32 @foo(...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

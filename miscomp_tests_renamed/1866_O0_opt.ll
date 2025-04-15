@@ -1,47 +1,18 @@
-; 133478963624309889290031548233536980431
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133478963624309889290031548233536980431_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133478963624309889290031548233536980431.c"
+; 166750398465825059260725642877283777763
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/166750398465825059260725642877283777763_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/166750398465825059260725642877283777763.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [21 x i8] c"Before Early Return\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f1(ptr noundef %p) #0 {
-entry:
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %1 = load i8, ptr %0, align 1
-  %conv = sext i8 %1 to i32
-  %add = add nsw i32 %conv, 1
-  ret i32 %add
-}
+@.str = private unnamed_addr constant [18 x i8] c"Done processing!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s = alloca i8, align 1
   store i32 0, ptr %retval, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = trunc i32 %call to i8
-  store i8 %conv, ptr %s, align 1
-  %call1 = call i32 @f1(ptr noundef %s)
-  %cmp = icmp ne i32 %call1, 2
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
+  ret i32 0
 }
 
 declare i32 @printf(ptr noundef, ...) #1

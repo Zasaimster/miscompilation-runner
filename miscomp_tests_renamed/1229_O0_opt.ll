@@ -1,30 +1,42 @@
-; 187562329440197839797659809961837189223
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187562329440197839797659809961837189223_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187562329440197839797659809961837189223.c"
+; 112309082645496911563656102332994543223
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112309082645496911563656102332994543223_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112309082645496911563656102332994543223.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i64 1311768464867721216, align 8
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @func(i32 noundef %unusedParam) #0 {
+entry:
+  %unusedParam.addr = alloca i32, align 4
+  store i32 %unusedParam, ptr %unusedParam.addr, align 4
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f(i64 noundef %a) #0 {
+define dso_local i64 @ReadNumber() #0 {
 entry:
-  %a.addr = alloca i64, align 8
-  store i64 %a, ptr %a.addr, align 8
-  ret void
+  ret i64 10092544
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %tmp = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load i64, ptr @a, align 8
-  call void @f(i64 noundef %0)
+  %call = call i64 @ReadNumber()
+  %and = and i64 %call, 16711680
+  %shr = lshr i64 %and, 16
+  store i64 %shr, ptr %tmp, align 8
+  %0 = load i64, ptr %tmp, align 8
+  %call1 = call i32 (i64, ...) @DisplayNumber(i64 noundef %0)
   ret i32 0
 }
 
+declare i32 @DisplayNumber(...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

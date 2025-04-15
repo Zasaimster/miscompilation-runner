@@ -1,146 +1,76 @@
-; 192207205496864517893960488552015781924
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192207205496864517893960488552015781924.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192207205496864517893960488552015781924.c"
+; 101215527804914186486108758529236167334
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101215527804914186486108758529236167334.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101215527804914186486108758529236167334.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@expect = dso_local global [0 x i64] zeroinitializer, align 8
-@stack_base = dso_local global ptr null, align 8
-@markstack_ptr = dso_local global ptr null, align 8
-@list = dso_local global [5 x i64] zeroinitializer, align 16
-@indices = dso_local global [10 x i32] zeroinitializer, align 16
+%struct.F = type { i32, i32 }
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @doit() #0 {
-entry:
-  %src = alloca ptr, align 8
-  %dst = alloca ptr, align 8
-  %sp = alloca ptr, align 8
-  %diff = alloca i32, align 4
-  %shift = alloca i32, align 4
-  %count = alloca i32, align 4
-  %0 = load ptr, ptr @stack_base, align 8
-  %add.ptr = getelementptr inbounds i64, ptr %0, i64 5
-  store ptr %add.ptr, ptr %sp, align 8
-  store i32 2, ptr %diff, align 4
-  %1 = load i32, ptr %diff, align 4
-  %2 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx = getelementptr inbounds i32, ptr %2, i64 -1
-  %3 = load i32, ptr %arrayidx, align 4
-  %4 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx1 = getelementptr inbounds i32, ptr %4, i64 -2
-  %5 = load i32, ptr %arrayidx1, align 4
-  %sub = sub nsw i32 %3, %5
-  %sub2 = sub nsw i32 %1, %sub
-  store i32 %sub2, ptr %shift, align 4
-  %6 = load ptr, ptr %sp, align 8
-  %7 = load ptr, ptr @stack_base, align 8
-  %sub.ptr.lhs.cast = ptrtoint ptr %6 to i64
-  %sub.ptr.rhs.cast = ptrtoint ptr %7 to i64
-  %sub.ptr.sub = sub i64 %sub.ptr.lhs.cast, %sub.ptr.rhs.cast
-  %sub.ptr.div = sdiv exact i64 %sub.ptr.sub, 8
-  %8 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx3 = getelementptr inbounds i32, ptr %8, i64 -1
-  %9 = load i32, ptr %arrayidx3, align 4
-  %conv = sext i32 %9 to i64
-  %sub4 = sub nsw i64 %sub.ptr.div, %conv
-  %add = add nsw i64 %sub4, 2
-  %conv5 = trunc i64 %add to i32
-  store i32 %conv5, ptr %count, align 4
-  %10 = load ptr, ptr %sp, align 8
-  store ptr %10, ptr %src, align 8
-  %11 = load i32, ptr %shift, align 4
-  %12 = load ptr, ptr %sp, align 8
-  %idx.ext = sext i32 %11 to i64
-  %add.ptr6 = getelementptr inbounds i64, ptr %12, i64 %idx.ext
-  store ptr %add.ptr6, ptr %sp, align 8
-  store ptr %add.ptr6, ptr %dst, align 8
-  br label %while.cond
-
-while.cond:                                       ; preds = %while.body, %entry
-  %13 = load i32, ptr %count, align 4
-  %dec = add nsw i32 %13, -1
-  store i32 %dec, ptr %count, align 4
-  %tobool = icmp ne i32 %dec, 0
-  br i1 %tobool, label %while.body, label %while.end
-
-while.body:                                       ; preds = %while.cond
-  %14 = load ptr, ptr %src, align 8
-  %incdec.ptr = getelementptr inbounds i64, ptr %14, i32 -1
-  store ptr %incdec.ptr, ptr %src, align 8
-  %15 = load i64, ptr %14, align 8
-  %16 = load ptr, ptr %dst, align 8
-  %incdec.ptr7 = getelementptr inbounds i64, ptr %16, i32 -1
-  store ptr %incdec.ptr7, ptr %dst, align 8
-  store i64 %15, ptr %16, align 8
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %while.cond
-  ret void
-}
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
+  %timeout = alloca i32, align 4
+  %x = alloca i32, align 4
+  %i = alloca %struct.F, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %i, align 4
-  br label %for.cond
+  store i32 0, ptr %timeout, align 4
+  store i32 0, ptr %x, align 4
+  br label %while.cond
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 10
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4
-  %conv = sext i32 %1 to i64
-  %2 = load i32, ptr %i, align 4
-  %idxprom = sext i32 %2 to i64
-  %arrayidx = getelementptr inbounds [5 x i64], ptr @list, i64 0, i64 %idxprom
-  store i64 %conv, ptr %arrayidx, align 8
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %3 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %3, 1
-  store i32 %inc, ptr %i, align 4
-  br label %for.cond, !llvm.loop !8
-
-for.end:                                          ; preds = %for.cond
-  store ptr getelementptr inbounds (i32, ptr @indices, i64 9), ptr @markstack_ptr, align 8
-  %4 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx1 = getelementptr inbounds i32, ptr %4, i64 -1
-  store i32 2, ptr %arrayidx1, align 4
-  %5 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx2 = getelementptr inbounds i32, ptr %5, i64 -2
-  store i32 1, ptr %arrayidx2, align 4
-  store ptr getelementptr inbounds (i64, ptr @list, i64 2), ptr @stack_base, align 8
-  call void @doit()
-  %call = call i32 @memcmp(ptr noundef @expect, ptr noundef @list, i64 noundef 40) #3
+while.cond:                                       ; preds = %if.end6, %entry
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
   %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %if.end
+  br i1 %tobool, label %while.body, label %while.end
 
-if.then:                                          ; preds = %for.end
-  call void @abort() #4
-  unreachable
+while.body:                                       ; preds = %while.cond
+  %x1 = getelementptr inbounds nuw %struct.F, ptr %i, i32 0, i32 0
+  %0 = load i32, ptr %x, align 4
+  %inc = add nsw i32 %0, 1
+  store i32 %inc, ptr %x, align 4
+  store i32 %0, ptr %x1, align 4
+  %y = getelementptr inbounds nuw %struct.F, ptr %i, i32 0, i32 1
+  store i32 0, ptr %y, align 4
+  %x2 = getelementptr inbounds nuw %struct.F, ptr %i, i32 0, i32 0
+  %1 = load i32, ptr %x2, align 4
+  %cmp = icmp sgt i32 %1, 0
+  br i1 %cmp, label %if.then, label %if.end
 
-if.end:                                           ; preds = %for.end
+if.then:                                          ; preds = %while.body
+  br label %while.end
+
+if.end:                                           ; preds = %while.body
+  %2 = load i32, ptr %timeout, align 4
+  %inc3 = add nsw i32 %2, 1
+  store i32 %inc3, ptr %timeout, align 4
+  %cmp4 = icmp sgt i32 %inc3, 5
+  br i1 %cmp4, label %if.then5, label %if.end6
+
+if.then5:                                         ; preds = %if.end
+  br label %die
+
+if.end6:                                          ; preds = %if.end
+  br label %while.cond, !llvm.loop !6
+
+while.end:                                        ; preds = %if.then, %while.cond
   ret i32 0
+
+die:                                              ; preds = %if.then5
+  call void @abort() #3
+  unreachable
 }
 
-; Function Attrs: nounwind
-declare i32 @memcmp(ptr noundef, ptr noundef, i64 noundef) #1
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nounwind }
-attributes #4 = { noreturn nounwind }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -153,4 +83,3 @@ attributes #4 = { noreturn nounwind }
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}

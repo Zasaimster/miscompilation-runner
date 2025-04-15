@@ -1,23 +1,43 @@
-; 176264537085343283836509637036498319502
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176264537085343283836509637036498319502_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176264537085343283836509637036498319502.c"
+; 128895513831323184431541863527875259214
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128895513831323184431541863527875259214_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128895513831323184431541863527875259214.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %p = alloca ptr, align 8
+  %x = alloca float, align 4
+  %y = alloca float, align 4
+  %z = alloca float, align 4
+  %r = alloca float, align 4
   store i32 0, ptr %retval, align 4
-  store ptr null, ptr %p, align 8
-  %0 = load ptr, ptr %p, align 8
-  %call = call i32 @strlen(ptr noundef %0)
-  %sub = sub nsw i32 %call, 5
-  ret i32 %sub
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = sitofp i32 %call to float
+  store float %conv, ptr %x, align 4
+  %0 = load float, ptr %x, align 4
+  %add = fadd float %0, 1.000000e+00
+  store float %add, ptr %y, align 4
+  %1 = load float, ptr %x, align 4
+  %sub = fsub float %1, 1.000000e+00
+  store float %sub, ptr %z, align 4
+  %2 = load float, ptr %y, align 4
+  %3 = load float, ptr %z, align 4
+  %sub1 = fsub float %2, %3
+  store float %sub1, ptr %r, align 4
+  %4 = load float, ptr %r, align 4
+  %cmp = fcmp oeq float %4, 0.000000e+00
+  %conv2 = zext i1 %cmp to i32
+  %call3 = call i32 (i32, ...) @assert(i32 noundef %conv2)
+  ret i32 0
 }
 
-declare i32 @strlen(ptr noundef) #1
+declare i32 @printf(ptr noundef, ...) #1
+
+declare i32 @assert(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

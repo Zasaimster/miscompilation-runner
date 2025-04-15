@@ -1,43 +1,69 @@
-; 19734306846827359901008970586625883859
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/19734306846827359901008970586625883859.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/19734306846827359901008970586625883859.c"
+; 140230655713335194800141602549019097429
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/140230655713335194800141602549019097429.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/140230655713335194800141602549019097429.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @func4() local_unnamed_addr #0 {
+@.str = private unnamed_addr constant [16 x i8] c"I am not used!\0A\00", align 1
+@str = private unnamed_addr constant [14 x i8] c"Program runs!\00", align 1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @fpEq(double noundef %x, double noundef %y) local_unnamed_addr #0 {
 entry:
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %conv = sitofp i32 %call to double
+  %cmp = fcmp une double %y, %conv
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
   ret void
 }
 
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: noreturn nounwind uwtable
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @fpTest(double noundef %x, double noundef %y) local_unnamed_addr #0 {
+entry:
+  %mul = fmul double %x, 1.000000e+02
+  %div = fdiv double %mul, %y
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %conv.i = sitofp i32 %call.i to double
+  %cmp.i = fcmp une double %div, %conv.i
+  br i1 %cmp.i, label %if.then.i, label %fpEq.exit
+
+if.then.i:                                        ; preds = %entry
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  br label %fpEq.exit
+
+fpEq.exit:                                        ; preds = %entry, %if.then.i
+  ret void
+}
+
+; Function Attrs: nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
-  %eval = alloca i32, align 4
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %eval) #5
-  %call = call i32 (double, ptr, ...) @test(double noundef 3.000000e+00, ptr noundef nonnull %eval) #5
-  %call1 = call i32 (double, ptr, ...) @test(double noundef 3.500000e+00, ptr noundef nonnull %eval) #5
-  %call2 = call i32 (double, ptr, ...) @test(double noundef 4.000000e+00, ptr noundef nonnull %eval) #5
-  %call3 = call i32 (double, ptr, ...) @test(double noundef 5.000000e+00, ptr noundef nonnull %eval) #5
-  call void @exit(i32 noundef 0) #6
+  tail call void @fpTest(double noundef 3.570000e+01, double noundef 4.500000e+01)
+  tail call void @exit(i32 noundef 0) #5
   unreachable
 }
 
-declare i32 @test(...) local_unnamed_addr #3
-
 ; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #4
+declare void @exit(i32 noundef) local_unnamed_addr #3
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { nounwind }
-attributes #6 = { noreturn nounwind }
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #4
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree nounwind }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

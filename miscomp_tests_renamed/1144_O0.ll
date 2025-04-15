@@ -1,16 +1,15 @@
-; 145780194898113745382896473520328380016
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145780194898113745382896473520328380016.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145780194898113745382896473520328380016.c"
+; 115083091783318908938970736516007486914
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/115083091783318908938970736516007486914.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/115083091783318908938970736516007486914.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i64 noundef %a) #0 {
+define dso_local i32 @f(i32 noundef %b) #0 {
 entry:
-  %a.addr = alloca i64, align 8
-  store i64 %a, ptr %a.addr, align 8
-  %call = call i32 @f(i64 noundef 2147483648)
-  ret i32 %call
+  %b.addr = alloca i32, align 4
+  store i32 %b, ptr %b.addr, align 4
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -18,15 +17,24 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i64 noundef 2147483648)
-  %cmp = icmp eq i32 %call, 0
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 @f(i32 noundef 9)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @f(i32 noundef -9)
+  %tobool2 = icmp ne i32 %call1, 0
+  br i1 %tobool2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }

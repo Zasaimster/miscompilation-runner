@@ -1,15 +1,39 @@
-; 194092059984123881502596817419536329354
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194092059984123881502596817419536329354_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194092059984123881502596817419536329354.c"
+; 180625804299626592789826354961286540774
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/180625804299626592789826354961286540774_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/180625804299626592789826354961286540774.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %i) #0 {
+define dso_local i32 @add(i32 noundef %a, i32 noundef %b, i32 noundef %c, i32 noundef %d, i32 noundef %e, i32 noundef %f, i32 noundef %g, i32 noundef %h, i32 noundef %i, i32 noundef %j, i32 noundef %k, i32 noundef %l, i32 noundef %m) #0 {
 entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  %c.addr = alloca i32, align 4
+  %d.addr = alloca i32, align 4
+  %e.addr = alloca i32, align 4
+  %f.addr = alloca i32, align 4
+  %g.addr = alloca i32, align 4
+  %h.addr = alloca i32, align 4
   %i.addr = alloca i32, align 4
+  %j.addr = alloca i32, align 4
+  %k.addr = alloca i32, align 4
+  %l.addr = alloca i32, align 4
+  %m.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  store i32 %c, ptr %c.addr, align 4
+  store i32 %d, ptr %d.addr, align 4
+  store i32 %e, ptr %e.addr, align 4
+  store i32 %f, ptr %f.addr, align 4
+  store i32 %g, ptr %g.addr, align 4
+  store i32 %h, ptr %h.addr, align 4
   store i32 %i, ptr %i.addr, align 4
-  ret i32 10
+  store i32 %j, ptr %j.addr, align 4
+  store i32 %k, ptr %k.addr, align 4
+  store i32 %l, ptr %l.addr, align 4
+  store i32 %m, ptr %m.addr, align 4
+  ret i32 20
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -17,16 +41,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 1073741823)
-  %cmp = icmp ne i32 %call, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
   call void @abort() #2
   unreachable
-
-if.end:                                           ; preds = %entry
-  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind

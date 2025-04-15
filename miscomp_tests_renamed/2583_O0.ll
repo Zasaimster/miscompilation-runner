@@ -1,29 +1,45 @@
-; 149490370351959078254201325849606936687
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/149490370351959078254201325849606936687.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/149490370351959078254201325849606936687.c"
+; 108037156924133920948190730987726471853
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108037156924133920948190730987726471853.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108037156924133920948190730987726471853.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [14 x i8] c"I'm not used\0A\00", align 1
-@glob_dbl = dso_local global double 0.000000e+00, align 8
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @notUsed() #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
+  %retval = alloca i32, align 4
+  %var = alloca i32, align 4
+  %call = call i32 (...) @unusedFunction()
+  store i32 %call, ptr %var, align 4
+  %0 = load i32, ptr %var, align 4
+  %div = sdiv i32 %0, 7
+  %cmp = icmp eq i32 %div, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i32, ptr %var, align 4
+  %div1 = sdiv i32 %1, 7
+  store i32 %div1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %2 = load i32, ptr %retval, align 4
+  ret i32 %2
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+declare i32 @unusedFunction(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, double, ...) @f(ptr noundef null, double noundef 5.510000e+01)
-  %0 = load double, ptr @glob_dbl, align 8
-  %cmp = fcmp une double %0, 5.510000e+01
+  %call = call i32 @f()
+  %cmp = icmp ne i32 %call, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -34,8 +50,6 @@ if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @f(...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

@@ -1,86 +1,70 @@
-; 11457862165452638039816494449826914379
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11457862165452638039816494449826914379_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11457862165452638039816494449826914379.c"
+; 191713472377524283340395405612533219191
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191713472377524283340395405612533219191_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191713472377524283340395405612533219191.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [16 x i8] c"Value of x: %d\0A\00", align 1
-@.str.1 = private unnamed_addr constant [10 x i8] c"%d %d %d\0A\00", align 1
+%struct.block = type { i64, i64, ptr, ptr, i8, i32, [1 x %struct.symbol] }
+%struct.symbol = type { i32, ptr }
+%struct.blockvector = type { i32, [2 x ptr] }
+%struct.symtab = type { ptr }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local ptr @blockvector_for_pc_sect(i64 noundef %pc, ptr noundef %symtab) #0 {
+entry:
+  %pc.addr = alloca i64, align 8
+  %symtab.addr = alloca ptr, align 8
+  store i64 %pc, ptr %pc.addr, align 8
+  store ptr %symtab, ptr %symtab.addr, align 8
+  ret ptr null
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
-  %y = alloca i32, align 4
-  %z = alloca i32, align 4
+  %a = alloca %struct.block, align 8
+  %b = alloca %struct.block, align 8
+  %bv = alloca %struct.blockvector, align 8
+  %s = alloca %struct.symtab, align 8
+  %ret = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %x, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc11, %entry
-  %0 = load i32, ptr %x, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
-  %cmp = icmp slt i32 %call, 2
-  br i1 %cmp, label %for.body, label %for.end13
-
-for.body:                                         ; preds = %for.cond
-  store i32 0, ptr %y, align 4
-  br label %for.cond1
-
-for.cond1:                                        ; preds = %for.inc8, %for.body
-  %1 = load i32, ptr %y, align 4
-  %cmp2 = icmp slt i32 %1, 3
-  br i1 %cmp2, label %for.body3, label %for.end10
-
-for.body3:                                        ; preds = %for.cond1
-  store i32 0, ptr %z, align 4
-  br label %for.cond4
-
-for.cond4:                                        ; preds = %for.inc, %for.body3
-  %2 = load i32, ptr %z, align 4
-  %cmp5 = icmp slt i32 %2, 3
-  br i1 %cmp5, label %for.body6, label %for.end
-
-for.body6:                                        ; preds = %for.cond4
-  %3 = load i32, ptr %x, align 4
-  %4 = load i32, ptr %y, align 4
-  %5 = load i32, ptr %z, align 4
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %3, i32 noundef %4, i32 noundef %5)
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body6
-  %6 = load i32, ptr %z, align 4
-  %inc = add nsw i32 %6, 1
-  store i32 %inc, ptr %z, align 4
-  br label %for.cond4, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond4
-  br label %for.inc8
-
-for.inc8:                                         ; preds = %for.end
-  %7 = load i32, ptr %y, align 4
-  %inc9 = add nsw i32 %7, 1
-  store i32 %inc9, ptr %y, align 4
-  br label %for.cond1, !llvm.loop !8
-
-for.end10:                                        ; preds = %for.cond1
-  br label %for.inc11
-
-for.inc11:                                        ; preds = %for.end10
-  %8 = load i32, ptr %x, align 4
-  %inc12 = add nsw i32 %8, 1
-  store i32 %inc12, ptr %x, align 4
-  br label %for.cond, !llvm.loop !9
-
-for.end13:                                        ; preds = %for.cond
+  call void @llvm.memset.p0.i64(ptr align 8 %a, i8 0, i64 56, i1 false)
+  %0 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 1
+  store i64 65536, ptr %0, align 8
+  %1 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 4
+  store i8 1, ptr %1, align 8
+  %2 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 6
+  store i32 20, ptr %2, align 4
+  call void @llvm.memset.p0.i64(ptr align 8 %b, i8 0, i64 56, i1 false)
+  %3 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 0
+  store i64 65536, ptr %3, align 8
+  %4 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 1
+  store i64 131072, ptr %4, align 8
+  %5 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 4
+  store i8 1, ptr %5, align 8
+  %6 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 6
+  store i32 20, ptr %6, align 4
+  %nblocks = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 0
+  store i32 2, ptr %nblocks, align 8
+  %7 = getelementptr i8, ptr %bv, i64 4
+  call void @llvm.memset.p0.i64(ptr align 4 %7, i8 0, i64 4, i1 false)
+  %block = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 1
+  store ptr %a, ptr %block, align 8
+  %arrayinit.element = getelementptr inbounds ptr, ptr %block, i64 1
+  store ptr %b, ptr %arrayinit.element, align 8
+  %blockvector = getelementptr inbounds nuw %struct.symtab, ptr %s, i32 0, i32 0
+  store ptr %bv, ptr %blockvector, align 8
+  %call = call ptr @blockvector_for_pc_sect(i64 noundef 1280, ptr noundef %s)
+  store ptr %call, ptr %ret, align 8
   ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -91,7 +75,3 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}
-!9 = distinct !{!9, !7}

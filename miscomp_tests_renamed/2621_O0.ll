@@ -1,43 +1,54 @@
-; 197172686374461204470251112865557508623
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197172686374461204470251112865557508623.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197172686374461204470251112865557508623.c"
+; 134059429361569940141264011431989151327
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134059429361569940141264011431989151327.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134059429361569940141264011431989151327.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+%struct.baz = type { i32, i32, i32, i32, i32 }
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(ptr noundef %p) #0 {
+define dso_local void @func1() #0 {
 entry:
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %1 = load i32, ptr %0, align 4
-  %and = and i32 %1, 255
-  %conv = trunc i32 %and to i8
-  %conv1 = sext i8 %conv to i32
-  %cmp = icmp eq i32 %conv1, 18
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  br label %if.end
-
-if.else:                                          ; preds = %entry
-  %call = call i32 (...) @anotherDummyFunc()
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %if.else
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  %z = alloca i32, align 4
+  store i32 10, ptr %x, align 4
+  store i32 20, ptr %y, align 4
+  %0 = load i32, ptr %x, align 4
+  %1 = load i32, ptr %y, align 4
+  %add = add nsw i32 %0, %1
+  store i32 %add, ptr %z, align 4
   ret void
 }
 
-declare i32 @anotherDummyFunc(...) #1
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo(ptr noundef byval(%struct.baz) align 8 %x, ptr noundef %y) #0 {
+entry:
+  %y.addr = alloca ptr, align 8
+  store ptr %y, ptr %y.addr, align 8
+  %call = call i32 (ptr, i32, i32, i32, i32, i32, ...) @bar(ptr noundef %x, i32 noundef 6, i32 noundef 7, i32 noundef 8, i32 noundef 9, i32 noundef 10)
+  ret void
+}
+
+declare i32 @bar(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
+  %x = alloca %struct.baz, align 8
   store i32 0, ptr %retval, align 4
-  store i32 196625, ptr %i, align 4
-  call void @foo(ptr noundef %i)
+  %a = getelementptr inbounds nuw %struct.baz, ptr %x, i32 0, i32 0
+  store i32 1, ptr %a, align 4
+  %b = getelementptr inbounds nuw %struct.baz, ptr %x, i32 0, i32 1
+  store i32 2, ptr %b, align 4
+  %c = getelementptr inbounds nuw %struct.baz, ptr %x, i32 0, i32 2
+  store i32 3, ptr %c, align 4
+  %d = getelementptr inbounds nuw %struct.baz, ptr %x, i32 0, i32 3
+  store i32 4, ptr %d, align 4
+  %e = getelementptr inbounds nuw %struct.baz, ptr %x, i32 0, i32 4
+  store i32 5, ptr %e, align 4
+  call void @foo(ptr noundef byval(%struct.baz) align 8 %x, ptr noundef null)
   call void @exit(i32 noundef 0) #3
   unreachable
 }

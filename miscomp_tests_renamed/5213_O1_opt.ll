@@ -1,10 +1,8 @@
-; 125561190086472424485098447026139500142
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/125561190086472424485098447026139500142_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/125561190086472424485098447026139500142.c"
+; 123624197728646091432551165158568354293
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123624197728646091432551165158568354293_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123624197728646091432551165158568354293.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@k = dso_local local_unnamed_addr global i32 0, align 4
 
 ; Function Attrs: nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {

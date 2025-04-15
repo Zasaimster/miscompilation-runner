@@ -1,71 +1,81 @@
-; 111610542337653401242093166569472576183
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111610542337653401242093166569472576183_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111610542337653401242093166569472576183.c"
+; 121208606590724369038288248278474961193
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121208606590724369038288248278474961193_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121208606590724369038288248278474961193.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.foo = type { i32, i32 }
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(ptr noundef %bar) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %bar.addr = alloca ptr, align 8
+  store ptr %bar, ptr %bar.addr, align 8
+  %0 = load ptr, ptr %bar.addr, align 8
+  store i32 8, ptr %0, align 4
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
+}
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @bar(ptr noundef %k, i32 noundef %k2, i32 noundef %f, i32 noundef %f2) #0 {
+define dso_local i32 @bugger() #0 {
 entry:
-  %k.addr = alloca ptr, align 8
-  %k2.addr = alloca i32, align 4
-  %f.addr = alloca i32, align 4
-  %f2.addr = alloca i32, align 4
-  %p = alloca ptr, align 8
-  store ptr %k, ptr %k.addr, align 8
-  store i32 %k2, ptr %k2.addr, align 4
-  store i32 %f, ptr %f.addr, align 4
-  store i32 %f2, ptr %f2.addr, align 4
-  %0 = load i32, ptr %f.addr, align 4
-  %tobool = icmp ne i32 %0, 0
-  br i1 %tobool, label %if.then, label %if.else
+  %oldDepth = alloca i32, align 4
+  %newDepth = alloca i32, align 4
+  %0 = load i32, ptr %oldDepth, align 4
+  switch i32 %0, label %sw.default [
+    i32 8, label %sw.bb
+    i32 500, label %sw.bb
+    i32 5000, label %sw.bb1
+  ]
 
-if.then:                                          ; preds = %entry
-  %1 = load ptr, ptr %k.addr, align 8
-  %i = getelementptr inbounds nuw %struct.foo, ptr %1, i32 0, i32 0
-  store ptr %i, ptr %p, align 8
-  br label %if.end
+sw.bb:                                            ; preds = %entry, %entry
+  store i32 8, ptr %newDepth, align 4
+  br label %sw.epilog
 
-if.else:                                          ; preds = %entry
-  %2 = load ptr, ptr %k.addr, align 8
-  %j = getelementptr inbounds nuw %struct.foo, ptr %2, i32 0, i32 1
-  store ptr %j, ptr %p, align 8
-  br label %if.end
+sw.bb1:                                           ; preds = %entry
+  store i32 500, ptr %newDepth, align 4
+  br label %sw.epilog
 
-if.end:                                           ; preds = %if.else, %if.then
-  ret i32 0
+sw.default:                                       ; preds = %entry
+  store i32 17, ptr %newDepth, align 4
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %sw.default, %sw.bb1, %sw.bb
+  %1 = load i32, ptr %newDepth, align 4
+  %2 = load i32, ptr %oldDepth, align 4
+  %sub2 = sub nsw i32 %1, %2
+  ret i32 %sub2
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %k = alloca %struct.foo, align 4
   store i32 0, ptr %retval, align 4
-  %i = getelementptr inbounds nuw %struct.foo, ptr %k, i32 0, i32 0
-  store i32 0, ptr %i, align 4
-  %j = getelementptr inbounds nuw %struct.foo, ptr %k, i32 0, i32 1
-  store i32 1, ptr %j, align 4
-  %call = call i32 @bar(ptr noundef %k, i32 noundef 1, i32 noundef 1, i32 noundef 1)
-  %cmp = icmp ne i32 %call, 1
+  %call = call i32 @bugger()
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #2
+  call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret i32 0
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,8 +1,31 @@
-; 135358503929763460608701315123067863384
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135358503929763460608701315123067863384_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135358503929763460608701315123067863384.c"
+; 111372407847745151703954520661696379448
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111372407847745151703954520661696379448_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111372407847745151703954520661696379448.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.anon = type { i32, [4 x %struct.slot] }
+%struct.slot = type { [0 x i32] }
+
+@s = dso_local global %struct.anon zeroinitializer, align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @x() #0 {
+entry:
+  %toggle = alloca i32, align 4
+  %r = alloca i32, align 4
+  store i32 0, ptr %toggle, align 4
+  %0 = load i32, ptr %toggle, align 4
+  %tobool = icmp ne i32 %0, 0
+  %lnot = xor i1 %tobool, true
+  %lnot.ext = zext i1 %lnot to i32
+  %idxprom = sext i32 %lnot.ext to i64
+  %arrayidx = getelementptr inbounds [0 x i32], ptr getelementptr inbounds nuw (%struct.anon, ptr @s, i32 0, i32 1), i64 0, i64 %idxprom
+  %1 = load i32, ptr %arrayidx, align 4
+  store i32 %1, ptr %r, align 4
+  %2 = load i32, ptr %r, align 4
+  ret i32 %2
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {

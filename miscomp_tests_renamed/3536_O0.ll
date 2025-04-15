@@ -1,87 +1,68 @@
-; 103318331145511091135553920706536676812
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103318331145511091135553920706536676812.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103318331145511091135553920706536676812.c"
+; 150598504957599807114704292609703299555
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150598504957599807114704292609703299555.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150598504957599807114704292609703299555.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@aim_callhandler.i = internal global i32 0, align 4
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @aim_callhandler(i32 noundef %sess, i32 noundef %conn, i16 noundef zeroext %family, i16 noundef zeroext %type) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %sess.addr = alloca i32, align 4
-  %conn.addr = alloca i32, align 4
-  %family.addr = alloca i16, align 2
-  %type.addr = alloca i16, align 2
-  store i32 %sess, ptr %sess.addr, align 4
-  store i32 %conn, ptr %conn.addr, align 4
-  store i16 %family, ptr %family.addr, align 2
-  store i16 %type, ptr %type.addr, align 2
-  %0 = load i32, ptr %conn.addr, align 4
-  %tobool = icmp ne i32 %0, 0
-  br i1 %tobool, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %call = call i32 (...) @deadFunction()
-  %cmp = icmp eq i32 %call, 65535
-  br i1 %cmp, label %if.then1, label %if.end2
-
-if.then1:                                         ; preds = %if.end
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.end2:                                          ; preds = %if.end
-  %1 = load i32, ptr @aim_callhandler.i, align 4
-  %cmp3 = icmp sge i32 %1, 1
-  br i1 %cmp3, label %if.then4, label %if.end5
-
-if.then4:                                         ; preds = %if.end2
-  call void @abort() #4
-  unreachable
-
-if.end5:                                          ; preds = %if.end2
-  %2 = load i32, ptr @aim_callhandler.i, align 4
-  %inc = add nsw i32 %2, 1
-  store i32 %inc, ptr @aim_callhandler.i, align 4
-  %3 = load i32, ptr %sess.addr, align 4
-  %4 = load i32, ptr %conn.addr, align 4
-  %5 = load i16, ptr %family.addr, align 2
-  %call6 = call i32 @aim_callhandler(i32 noundef %3, i32 noundef %4, i16 noundef zeroext %5, i16 noundef zeroext -1)
-  store i32 %call6, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end5, %if.then1, %if.then
-  %6 = load i32, ptr %retval, align 4
-  ret i32 %6
-}
-
-declare i32 @deadFunction(...) #1
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
+@.str = private unnamed_addr constant [23 x i8] c"This won't be called.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %i = alloca i64, align 8
+  %ca = alloca i8, align 1
   store i32 0, ptr %retval, align 4
-  %call = call i32 @aim_callhandler(i32 noundef 0, i32 noundef 1, i16 noundef zeroext 0, i16 noundef zeroext 0)
+  store i64 -2147483648, ptr %i, align 8
+  store i8 1, ptr %ca, align 1
+  %0 = load i64, ptr %i, align 8
+  %1 = load i8, ptr %ca, align 1
+  %conv = sext i8 %1 to i32
+  %sh_prom = zext i32 %conv to i64
+  %shr = ashr i64 %0, %sh_prom
+  %cmp = icmp ne i64 %shr, -1073741824
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  %2 = load i64, ptr %i, align 8
+  %3 = load i64, ptr %i, align 8
+  %div = sdiv i64 %3, -2000000000
+  %shr2 = ashr i64 %2, %div
+  %cmp3 = icmp ne i64 %shr2, -1073741824
+  br i1 %cmp3, label %if.then5, label %if.end6
+
+if.then5:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
+
+if.end6:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #5
   unreachable
 }
 
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #3
+declare void @exit(i32 noundef) #2
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @deadFunction() #0 {
+entry:
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  ret void
+}
+
+declare i32 @printf(ptr noundef, ...) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { noreturn nounwind }
 attributes #5 = { noreturn }
 

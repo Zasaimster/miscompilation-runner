@@ -1,32 +1,38 @@
-; 188518397780281878985887016951385686578
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188518397780281878985887016951385686578_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188518397780281878985887016951385686578.c"
+; 164505179025619587327290937156230916607
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164505179025619587327290937156230916607_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164505179025619587327290937156230916607.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
+@.str = private unnamed_addr constant [20 x i8] c"This code is dead.\0A\00", align 1
+@.str.1 = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %x) #0 {
+define dso_local i32 @test(i32 noundef %arg) #0 {
 entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %cmp = icmp ult i32 %0, 5
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  store i32 4, ptr %x.addr, align 4
-  br label %if.end
-
-if.else:                                          ; preds = %entry
-  store i32 8, ptr %x.addr, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.else, %if.then
+  %retval = alloca i32, align 4
+  %arg.addr = alloca i32, align 4
+  store i32 %arg, ptr %arg.addr, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %1 = load i32, ptr %x.addr, align 4
-  ret i32 %1
+  %cmp = icmp sgt i32 %call, 0
+  br i1 %cmp, label %if.then, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %cmp2 = icmp eq i32 %call1, 0
+  br i1 %cmp2, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %lor.lhs.false
+  store i32 -1, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
 }
 
 declare i32 @printf(ptr noundef, ...) #1
@@ -36,8 +42,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 8)
-  %cmp = icmp ne i32 %call, 8
+  %call = call i32 @test(i32 noundef 0)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -45,6 +51,15 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @test(i32 noundef -1)
+  %cmp2 = icmp ne i32 %call1, -1
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
+
+if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #5
   unreachable
 }

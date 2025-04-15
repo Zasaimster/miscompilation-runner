@@ -1,21 +1,40 @@
-; 112211473714976012672515278734027094811
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112211473714976012672515278734027094811.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112211473714976012672515278734027094811.c"
+; 182767052863847160343334849441813306770
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182767052863847160343334849441813306770.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182767052863847160343334849441813306770.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@fp = internal global ptr null, align 8
+%union.T = type { i64 }
+%struct.anon = type { i8, i8, i8, i8 }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(i64 %u.coerce) #0 {
+entry:
+  %u = alloca %union.T, align 8
+  %coerce.dive = getelementptr inbounds nuw %union.T, ptr %u, i32 0, i32 0
+  store i64 %u.coerce, ptr %coerce.dive, align 8
+  ret i32 0
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %u = alloca %union.T, align 8
   store i32 0, ptr %retval, align 4
-  store ptr null, ptr @fp, align 8
-  %0 = load ptr, ptr @fp, align 8
-  %call = call double %0(float noundef 1.000000e+00)
-  %cmp = fcmp une double %call, 1.000000e+00
-  br i1 %cmp, label %if.then, label %if.end
+  %b1 = getelementptr inbounds nuw %struct.anon, ptr %u, i32 0, i32 2
+  store i8 2, ptr %b1, align 2
+  %b2 = getelementptr inbounds nuw %struct.anon, ptr %u, i32 0, i32 1
+  store i8 2, ptr %b2, align 1
+  %b0 = getelementptr inbounds nuw %struct.anon, ptr %u, i32 0, i32 3
+  store i8 -1, ptr %b0, align 1
+  %b3 = getelementptr inbounds nuw %struct.anon, ptr %u, i32 0, i32 0
+  store i8 -1, ptr %b3, align 8
+  %coerce.dive = getelementptr inbounds nuw %union.T, ptr %u, i32 0, i32 0
+  %0 = load i64, ptr %coerce.dive, align 8
+  %call = call i32 @f(i64 %0)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

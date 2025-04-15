@@ -1,52 +1,26 @@
-; 164371708899444429339779040562434212210
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164371708899444429339779040562434212210_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164371708899444429339779040562434212210.c"
+; 105109365152837831863296169096807668633
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105109365152837831863296169096807668633_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105109365152837831863296169096807668633.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Not happening\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %x) #0 {
-entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %or = or i32 %call, 255
-  ret i32 %or
-}
-
-declare i32 @printf(ptr noundef, ...) #1
+%union.aun = type { [8 x i8] }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca %union.aun, align 1
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 50)
-  %cmp = icmp ne i32 %call, 13055
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %call1 = call i32 @foo(i32 noundef 372)
-  %cmp2 = icmp ne i32 %call1, 29951
-  br i1 %cmp2, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
+  call void @llvm.memset.p0.i64(ptr align 1 %a, i8 0, i64 8, i1 false)
   ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

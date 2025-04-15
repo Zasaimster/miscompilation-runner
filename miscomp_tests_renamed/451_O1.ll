@@ -1,14 +1,16 @@
-; 147162853166213763242002773600576347320
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/147162853166213763242002773600576347320.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/147162853166213763242002773600576347320.c"
+; 187023019116725609369381757546627171471
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187023019116725609369381757546627171471.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187023019116725609369381757546627171471.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: nounwind uwtable
-define dso_local i32 @f(ptr noundef readnone captures(none) %p) local_unnamed_addr #0 {
+define dso_local i32 @f(i32 noundef %n) local_unnamed_addr #0 {
 entry:
   %call = tail call i32 (...) @deadFunction() #5
-  ret i32 %call
+  %n.lobit.neg = ashr i32 %n, 31
+  %sub = add i32 %call, %n.lobit.neg
+  ret i32 %sub
 }
 
 declare i32 @deadFunction(...) local_unnamed_addr #1
@@ -17,14 +19,32 @@ declare i32 @deadFunction(...) local_unnamed_addr #1
 define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
   %call.i = tail call i32 (...) @deadFunction() #5
-  %tobool.not = icmp eq i32 %call.i, 0
-  br i1 %tobool.not, label %if.then, label %if.end
+  %cmp.not = icmp eq i32 %call.i, 0
+  br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
   tail call void @abort() #6
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call.i9 = tail call i32 (...) @deadFunction() #5
+  %cmp2.not = icmp eq i32 %call.i9, 1
+  br i1 %cmp2.not, label %if.end4, label %if.then3
+
+if.then3:                                         ; preds = %if.end
+  tail call void @abort() #6
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call.i11 = tail call i32 (...) @deadFunction() #5
+  %cmp6.not = icmp eq i32 %call.i11, 0
+  br i1 %cmp6.not, label %if.end8, label %if.then7
+
+if.then7:                                         ; preds = %if.end4
+  tail call void @abort() #6
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
   tail call void @exit(i32 noundef 0) #6
   unreachable
 }

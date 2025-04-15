@@ -1,28 +1,32 @@
-; 194200264726682597115491842533646870347
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194200264726682597115491842533646870347_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194200264726682597115491842533646870347.c"
+; 102170622716687535895689650594477857821
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102170622716687535895689650594477857821_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102170622716687535895689650594477857821.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [16 x i8] c"Loop finished.\0A\00", align 1
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(i32 noundef %number_of_digits_to_use) #0 {
+entry:
+  %number_of_digits_to_use.addr = alloca i32, align 4
+  store i32 %number_of_digits_to_use, ptr %number_of_digits_to_use.addr, align 4
+  %call = call i32 (...) @func5()
+  %0 = load i32, ptr %number_of_digits_to_use.addr, align 4
+  %mul = mul i32 %0, 3321928
+  %div = udiv i32 %mul, 1000000
+  %add = add i32 %div, 1
+  %div1 = udiv i32 %add, 16
+  ret i32 %div1
+}
+
+declare i32 @func5(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i64, align 8
-  %ca = alloca i8, align 1
   store i32 0, ptr %retval, align 4
-  store i64 -2147483648, ptr %i, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = trunc i32 %call to i8
-  store i8 %conv, ptr %ca, align 1
-  %0 = load i64, ptr %i, align 8
-  %1 = load i8, ptr %ca, align 1
-  %conv1 = sext i8 %1 to i32
-  %sh_prom = zext i32 %conv1 to i64
-  %shr = ashr i64 %0, %sh_prom
-  %cmp = icmp ne i64 %shr, -1073741824
+  %call = call i32 @f(i32 noundef 11)
+  %cmp = icmp ne i32 %call, 2
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -30,23 +34,9 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %2 = load i64, ptr %i, align 8
-  %3 = load i64, ptr %i, align 8
-  %div = sdiv i64 %3, -2000000000
-  %shr3 = ashr i64 %2, %div
-  %cmp4 = icmp ne i64 %shr3, -1073741824
-  br i1 %cmp4, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end
-  call void @abort() #4
-  unreachable
-
-if.end7:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

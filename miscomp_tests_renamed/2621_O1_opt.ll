@@ -1,51 +1,63 @@
-; 197172686374461204470251112865557508623
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197172686374461204470251112865557508623_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197172686374461204470251112865557508623.c"
+; 134059429361569940141264011431989151327
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134059429361569940141264011431989151327_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134059429361569940141264011431989151327.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nounwind uwtable
-define dso_local void @foo(ptr noundef readonly captures(none) %p) local_unnamed_addr #0 {
+%struct.baz = type { i32, i32, i32, i32, i32 }
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @func1() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr %p, align 4, !tbaa !5
-  %sext.mask = and i32 %0, 255
-  %cmp = icmp eq i32 %sext.mask, 18
-  br i1 %cmp, label %if.end, label %if.else
-
-if.else:                                          ; preds = %entry
-  %call = tail call i32 (...) @anotherDummyFunc() #5
-  br label %if.end
-
-if.end:                                           ; preds = %if.else, %entry
   ret void
 }
 
-declare i32 @anotherDummyFunc(...) local_unnamed_addr #1
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+
+; Function Attrs: nounwind uwtable
+define dso_local void @foo(ptr noundef byval(%struct.baz) align 8 %x, ptr noundef readnone captures(none) %y) local_unnamed_addr #2 {
+entry:
+  %call = call i32 (ptr, i32, i32, i32, i32, i32, ...) @bar(ptr noundef nonnull %x, i32 noundef 6, i32 noundef 7, i32 noundef 8, i32 noundef 9, i32 noundef 10) #6
+  ret void
+}
+
+declare i32 @bar(...) local_unnamed_addr #3
 
 ; Function Attrs: noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
+define dso_local noundef i32 @main() local_unnamed_addr #4 {
 entry:
-  %i = alloca i32, align 4
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %i) #5
-  store i32 196625, ptr %i, align 4, !tbaa !5
-  call void @foo(ptr noundef nonnull %i)
-  tail call void @exit(i32 noundef 0) #6
+  %x1 = alloca %struct.baz, align 8
+  call void @llvm.lifetime.start.p0(i64 20, ptr nonnull %x1)
+  store i32 1, ptr %x1, align 8
+  %x.sroa.3.0.x1.sroa_idx = getelementptr inbounds nuw i8, ptr %x1, i64 4
+  store i32 2, ptr %x.sroa.3.0.x1.sroa_idx, align 4
+  %x.sroa.4.0.x1.sroa_idx = getelementptr inbounds nuw i8, ptr %x1, i64 8
+  store i32 3, ptr %x.sroa.4.0.x1.sroa_idx, align 8
+  %x.sroa.5.0.x1.sroa_idx = getelementptr inbounds nuw i8, ptr %x1, i64 12
+  store i32 4, ptr %x.sroa.5.0.x1.sroa_idx, align 4
+  %x.sroa.6.0.x1.sroa_idx = getelementptr inbounds nuw i8, ptr %x1, i64 16
+  store i32 5, ptr %x.sroa.6.0.x1.sroa_idx, align 8
+  %call.i = call i32 (ptr, i32, i32, i32, i32, i32, ...) @bar(ptr noundef nonnull align 8 %x1, i32 noundef 6, i32 noundef 7, i32 noundef 8, i32 noundef 9, i32 noundef 10) #6
+  call void @llvm.lifetime.end.p0(i64 20, ptr nonnull %x1)
+  call void @exit(i32 noundef 0) #7
   unreachable
 }
 
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #3
-
 ; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #4
+declare void @exit(i32 noundef) local_unnamed_addr #5
 
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { nounwind }
-attributes #6 = { noreturn nounwind }
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #6 = { nounwind }
+attributes #7 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -55,7 +67,3 @@ attributes #6 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}

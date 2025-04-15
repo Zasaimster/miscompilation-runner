@@ -1,14 +1,51 @@
-; 122891679441841604410244086802889677842
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122891679441841604410244086802889677842.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122891679441841604410244086802889677842.c"
+; 13638388543510035398949897014165852779
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13638388543510035398949897014165852779.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13638388543510035398949897014165852779.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local float @g(ptr noundef %a, ptr noundef %b, i32 noundef %e, i32 noundef %c, float noundef %d) #0 {
+entry:
+  %a.addr = alloca ptr, align 8
+  %b.addr = alloca ptr, align 8
+  %e.addr = alloca i32, align 4
+  %c.addr = alloca i32, align 4
+  %d.addr = alloca float, align 4
+  store ptr %a, ptr %a.addr, align 8
+  store ptr %b, ptr %b.addr, align 8
+  store i32 %e, ptr %e.addr, align 4
+  store i32 %c, ptr %c.addr, align 4
+  store float %d, ptr %d.addr, align 4
+  %0 = load float, ptr %d.addr, align 4
+  ret float %0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local float @f(ptr noundef %a, ptr noundef %b, i32 noundef %c, float noundef %d) #0 {
+entry:
+  %a.addr = alloca ptr, align 8
+  %b.addr = alloca ptr, align 8
+  %c.addr = alloca i32, align 4
+  %d.addr = alloca float, align 4
+  store ptr %a, ptr %a.addr, align 8
+  store ptr %b, ptr %b.addr, align 8
+  store i32 %c, ptr %c.addr, align 4
+  store float %d, ptr %d.addr, align 4
+  %0 = load ptr, ptr %a.addr, align 8
+  %1 = load ptr, ptr %b.addr, align 8
+  %2 = load i32, ptr %c.addr, align 4
+  %3 = load float, ptr %d.addr, align 4
+  %call = call float @g(ptr noundef %0, ptr noundef %1, i32 noundef 0, i32 noundef %2, float noundef %3)
+  ret float %call
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
+  %call = call float @f(ptr noundef null, ptr noundef null, i32 noundef 1, float noundef 1.000000e+00)
   ret i32 0
 }
 

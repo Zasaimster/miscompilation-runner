@@ -1,97 +1,104 @@
-; 184465444097906597319200422333866650645
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184465444097906597319200422333866650645_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184465444097906597319200422333866650645.c"
+; 125525412395822159195258507087804089167
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/125525412395822159195258507087804089167_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/125525412395822159195258507087804089167.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.IOGBounds = type { i16, i16, i16, i16 }
-
-@expectedwidth = dso_local global i32 50, align 4
-@global_vramPtr = dso_local global ptr inttoptr (i64 40960 to ptr), align 8
-@global_bounds = dso_local global %struct.IOGBounds { i16 100, i16 150, i16 100, i16 150 }, align 2
-@global_saveRect = dso_local global %struct.IOGBounds { i16 75, i16 175, i16 75, i16 175 }, align 2
-@.str = private unnamed_addr constant [19 x i8] c"Hello, optimizer!\0A\00", align 1
+%union.anon = type { double, [16 x i8] }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %vramPtr = alloca ptr, align 8
-  %width = alloca i32, align 4
-  %saveRect = alloca %struct.IOGBounds, align 2
-  %bounds = alloca %struct.IOGBounds, align 2
+  %x = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  call void @llvm.memcpy.p0.p0.i64(ptr align 2 %saveRect, ptr align 2 @global_saveRect, i64 8, i1 false)
-  call void @llvm.memcpy.p0.p0.i64(ptr align 2 %bounds, ptr align 2 @global_bounds, i64 8, i1 false)
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %maxx = getelementptr inbounds nuw %struct.IOGBounds, ptr %saveRect, i32 0, i32 1
-  %0 = load i16, ptr %maxx, align 2
-  %conv = sext i16 %0 to i32
-  %maxx1 = getelementptr inbounds nuw %struct.IOGBounds, ptr %bounds, i32 0, i32 1
-  %1 = load i16, ptr %maxx1, align 2
-  %conv2 = sext i16 %1 to i32
-  %cmp = icmp sgt i32 %conv, %conv2
+  %call = call double @minus_zero()
+  store double %call, ptr %x, align 8
+  %0 = load double, ptr %x, align 8
+  %call1 = call double @asin(double noundef %0)
+  store double %call1, ptr %x, align 8
+  %1 = load double, ptr %x, align 8
+  %cmp = fcmp une double %1, 0.000000e+00
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %maxx4 = getelementptr inbounds nuw %struct.IOGBounds, ptr %bounds, i32 0, i32 1
-  %2 = load i16, ptr %maxx4, align 2
-  %maxx5 = getelementptr inbounds nuw %struct.IOGBounds, ptr %saveRect, i32 0, i32 1
-  store i16 %2, ptr %maxx5, align 2
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %3 = load ptr, ptr @global_vramPtr, align 8
-  %miny = getelementptr inbounds nuw %struct.IOGBounds, ptr %saveRect, i32 0, i32 2
-  %4 = load i16, ptr %miny, align 2
-  %conv6 = sext i16 %4 to i32
-  %miny7 = getelementptr inbounds nuw %struct.IOGBounds, ptr %bounds, i32 0, i32 2
-  %5 = load i16, ptr %miny7, align 2
-  %conv8 = sext i16 %5 to i32
-  %sub = sub nsw i32 %conv6, %conv8
-  %idx.ext = sext i32 %sub to i64
-  %add.ptr = getelementptr inbounds i32, ptr %3, i64 %idx.ext
-  store ptr %add.ptr, ptr %vramPtr, align 8
-  %maxx9 = getelementptr inbounds nuw %struct.IOGBounds, ptr %saveRect, i32 0, i32 1
-  %6 = load i16, ptr %maxx9, align 2
-  %conv10 = sext i16 %6 to i32
-  %minx = getelementptr inbounds nuw %struct.IOGBounds, ptr %saveRect, i32 0, i32 0
-  %7 = load i16, ptr %minx, align 2
-  %conv11 = sext i16 %7 to i32
-  %sub12 = sub nsw i32 %conv10, %conv11
-  store i32 %sub12, ptr %width, align 4
-  %8 = load i32, ptr %width, align 4
-  %9 = load i32, ptr @expectedwidth, align 4
-  %cmp13 = icmp ne i32 %8, %9
-  br i1 %cmp13, label %if.then15, label %if.end16
-
-if.then15:                                        ; preds = %if.end
-  call void @abort() #5
+  call void @abort() #3
   unreachable
 
-if.end16:                                         ; preds = %if.end
-  call void @exit(i32 noundef 0) #6
-  unreachable
+if.end:                                           ; preds = %entry
+  ret i32 0
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
+; Function Attrs: noinline nounwind uwtable
+define internal double @minus_zero() #0 {
+entry:
+  %__x = alloca %union.anon, align 8
+  %arrayidx = getelementptr inbounds [5 x i32], ptr %__x, i64 0, i64 0
+  store i32 0, ptr %arrayidx, align 8
+  %arrayidx1 = getelementptr inbounds [5 x i32], ptr %__x, i64 0, i64 1
+  store i32 -2147483648, ptr %arrayidx1, align 4
+  %0 = load double, ptr %__x, align 8
+  ret double %0
+}
 
-declare i32 @printf(ptr noundef, ...) #2
+; Function Attrs: noinline nounwind uwtable
+define internal double @asin(double noundef %__x) #0 {
+entry:
+  %__x.addr = alloca double, align 8
+  store double %__x, ptr %__x.addr, align 8
+  %0 = load double, ptr %__x.addr, align 8
+  %conv = fpext double %0 to x86_fp80
+  %1 = load double, ptr %__x.addr, align 8
+  %2 = load double, ptr %__x.addr, align 8
+  %neg = fneg double %1
+  %3 = call double @llvm.fmuladd.f64(double %neg, double %2, double 1.000000e+00)
+  %conv1 = fpext double %3 to x86_fp80
+  %call = call x86_fp80 @__sqrtl(x86_fp80 noundef %conv1)
+  %call2 = call x86_fp80 @__atan2l(x86_fp80 noundef %conv, x86_fp80 noundef %call)
+  %conv3 = fptrunc x86_fp80 %call2 to double
+  ret double %conv3
+}
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #3
+declare void @abort() #1
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #4
+; Function Attrs: noinline nounwind uwtable
+define internal x86_fp80 @__atan2l(x86_fp80 noundef %__y, x86_fp80 noundef %__x) #0 {
+entry:
+  %__y.addr = alloca x86_fp80, align 16
+  %__x.addr = alloca x86_fp80, align 16
+  %__value = alloca x86_fp80, align 16
+  store x86_fp80 %__y, ptr %__y.addr, align 16
+  store x86_fp80 %__x, ptr %__x.addr, align 16
+  %0 = load x86_fp80, ptr %__x.addr, align 16
+  %1 = load x86_fp80, ptr %__y.addr, align 16
+  %2 = call x86_fp80 asm sideeffect "fpatan\0A\09", "={st},0,{st(1)},~{st(1)},~{dirflag},~{fpsr},~{flags}"(x86_fp80 %0, x86_fp80 %1) #4, !srcloc !6
+  store x86_fp80 %2, ptr %__value, align 16
+  %3 = load x86_fp80, ptr %__value, align 16
+  ret x86_fp80 %3
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal x86_fp80 @__sqrtl(x86_fp80 noundef %__x) #0 {
+entry:
+  %__x.addr = alloca x86_fp80, align 16
+  %__result = alloca x86_fp80, align 16
+  store x86_fp80 %__x, ptr %__x.addr, align 16
+  %0 = load x86_fp80, ptr %__x.addr, align 16
+  %1 = call x86_fp80 asm sideeffect "fsqrt", "={st},0,~{dirflag},~{fpsr},~{flags}"(x86_fp80 %0) #4, !srcloc !7
+  store x86_fp80 %1, ptr %__result, align 16
+  %2 = load x86_fp80, ptr %__result, align 16
+  ret x86_fp80 %2
+}
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare double @llvm.fmuladd.f64(double, double, double) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { noreturn nounwind }
-attributes #6 = { noreturn }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -102,3 +109,5 @@ attributes #6 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = !{i64 363, i64 372}
+!7 = !{i64 567}

@@ -1,32 +1,49 @@
-; 145483379369126982703364471858572085003
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145483379369126982703364471858572085003.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145483379369126982703364471858572085003.c"
+; 191886985336863599718267019049863893615
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191886985336863599718267019049863893615.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191886985336863599718267019049863893615.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [12 x i8] c"%d, %d, %d\0A\00", align 1
+@a = dso_local global i16 -1, align 2
+@c = dso_local global i8 0, align 1
+@b = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (...) @doNothing()
-  %call1 = call i32 (i32, ...) @BLOGGS(i32 noundef 1)
-  %call2 = call i32 (i32, ...) @BLOGGS(i32 noundef 2)
-  %call3 = call i32 (i32, ...) @BLOGGS(i32 noundef 3)
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %call1, i32 noundef %call2, i32 noundef %call3)
+  %0 = load i16, ptr @a, align 2
+  %conv = trunc i16 %0 to i8
+  store i8 %conv, ptr @c, align 1
+  %call = call i32 (...) @uselessFunction()
+  %1 = load i16, ptr @a, align 2
+  %conv1 = sext i16 %1 to i32
+  %2 = load i8, ptr @c, align 1
+  %conv2 = sext i8 %2 to i32
+  %or = or i32 %conv1, %conv2
+  store i32 %or, ptr @b, align 4
+  %3 = load i32, ptr @b, align 4
+  %cmp = icmp ne i32 %3, -1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
-declare i32 @doNothing(...) #1
+declare i32 @uselessFunction(...) #1
 
-declare i32 @printf(ptr noundef, ...) #1
-
-declare i32 @BLOGGS(...) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

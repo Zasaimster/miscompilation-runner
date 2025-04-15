@@ -1,49 +1,24 @@
-; 137139938710489009997925473929453476476
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137139938710489009997925473929453476476_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137139938710489009997925473929453476476.c"
+; 149001604215663710420160039892839792942
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/149001604215663710420160039892839792942_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/149001604215663710420160039892839792942.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %k, i32 noundef %i1, i32 noundef %j1) #0 {
-entry:
-  %k.addr = alloca i32, align 4
-  %i1.addr = alloca i32, align 4
-  %j1.addr = alloca i32, align 4
-  %f1 = alloca ptr, align 8
-  store i32 %k, ptr %k.addr, align 4
-  store i32 %i1, ptr %i1.addr, align 4
-  store i32 %j1, ptr %j1.addr, align 4
-  store ptr %j1.addr, ptr %f1, align 8
-  store i32 0, ptr %i1.addr, align 4
-  %0 = load ptr, ptr %f1, align 8
-  %1 = load i32, ptr %0, align 4
-  ret i32 %1
-}
+@a = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local i32 @square(i32 noundef %x) #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 1, i32 noundef 1, i32 noundef 2)
-  %cmp = icmp ne i32 %call, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #2
-  unreachable
-
-if.end:                                           ; preds = %entry
-  ret i32 0
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %1 = load i32, ptr %x.addr, align 4
+  %mul = mul nsw i32 %0, %1
+  ret i32 %mul
 }
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

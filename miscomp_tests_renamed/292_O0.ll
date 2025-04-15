@@ -1,75 +1,73 @@
-; 150133210210356653127770424181216050856
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150133210210356653127770424181216050856.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150133210210356653127770424181216050856.c"
+; 149035720606420000591764987696160538088
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/149035720606420000591764987696160538088.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/149035720606420000591764987696160538088.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.block = type { i64, i64, ptr, ptr, i8, i32, [1 x %struct.symbol] }
-%struct.symbol = type { i32, ptr }
-%struct.blockvector = type { i32, [2 x ptr] }
-%struct.symtab = type { ptr }
+@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @blockvector_for_pc_sect(i64 noundef %pc, ptr noundef %symtab) #0 {
+define dso_local ptr @f(ptr noundef %p) #0 {
 entry:
-  %pc.addr = alloca i64, align 8
-  %symtab.addr = alloca ptr, align 8
-  %b = alloca ptr, align 8
-  %bot = alloca i32, align 4
-  %top = alloca i32, align 4
-  %half = alloca i32, align 4
-  %bl = alloca ptr, align 8
-  store i64 %pc, ptr %pc.addr, align 8
-  store ptr %symtab, ptr %symtab.addr, align 8
-  ret ptr null
+  %p.addr = alloca ptr, align 8
+  %x = alloca i16, align 2
+  store ptr %p, ptr %p.addr, align 8
+  %0 = load ptr, ptr %p.addr, align 8
+  %incdec.ptr = getelementptr inbounds nuw i8, ptr %0, i32 1
+  store ptr %incdec.ptr, ptr %p.addr, align 8
+  %1 = load i8, ptr %0, align 1
+  %conv = sext i8 %1 to i32
+  %shl = shl i32 %conv, 16
+  %conv1 = trunc i32 %shl to i16
+  store i16 %conv1, ptr %x, align 2
+  %call = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
+  %conv2 = sext i32 %call to i64
+  %2 = inttoptr i64 %conv2 to ptr
+  ret ptr %2
 }
+
+declare i32 @calculateSquare(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca %struct.block, align 8
-  %b = alloca %struct.block, align 8
-  %bv = alloca %struct.blockvector, align 8
-  %s = alloca %struct.symtab, align 8
-  %ret = alloca ptr, align 8
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  call void @llvm.memset.p0.i64(ptr align 8 %a, i8 0, i64 56, i1 false)
-  %0 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 1
-  store i64 65536, ptr %0, align 8
-  %1 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 4
-  store i8 1, ptr %1, align 8
-  %2 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 6
-  store i32 20, ptr %2, align 4
-  call void @llvm.memset.p0.i64(ptr align 8 %b, i8 0, i64 56, i1 false)
-  %3 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 0
-  store i64 65536, ptr %3, align 8
-  %4 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 1
-  store i64 131072, ptr %4, align 8
-  %5 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 4
-  store i8 1, ptr %5, align 8
-  %6 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 6
-  store i32 20, ptr %6, align 4
-  %nblocks = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 0
-  store i32 2, ptr %nblocks, align 8
-  %7 = getelementptr i8, ptr %bv, i64 4
-  call void @llvm.memset.p0.i64(ptr align 4 %7, i8 0, i64 4, i1 false)
-  %block = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 1
-  store ptr %a, ptr %block, align 8
-  %arrayinit.element = getelementptr inbounds ptr, ptr %block, i64 1
-  store ptr %b, ptr %arrayinit.element, align 8
-  %blockvector = getelementptr inbounds nuw %struct.symtab, ptr %s, i32 0, i32 0
-  store ptr %bv, ptr %blockvector, align 8
-  %call = call ptr @blockvector_for_pc_sect(i64 noundef 1280, ptr noundef %s)
-  store ptr %call, ptr %ret, align 8
-  ret i32 0
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = sext i32 %call to i64
+  %0 = inttoptr i64 %conv to ptr
+  store ptr %0, ptr %p, align 8
+  %1 = load ptr, ptr %p, align 8
+  %call1 = call ptr @f(ptr noundef %1)
+  %2 = load ptr, ptr %p, align 8
+  %add.ptr = getelementptr inbounds i8, ptr %2, i64 1
+  %cmp = icmp ne ptr %call1, %add.ptr
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #5
+  unreachable
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

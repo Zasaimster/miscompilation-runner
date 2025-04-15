@@ -1,28 +1,51 @@
-; 173069434714166763916025113969181238556
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173069434714166763916025113969181238556.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173069434714166763916025113969181238556.c"
+; 121191351756301737246391975059191639778
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121191351756301737246391975059191639778.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121191351756301737246391975059191639778.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@x = dso_local global { i8, i8, [2 x i8] } { i8 2, i8 67, [2 x i8] zeroinitializer }, align 4
+@g_3 = dso_local global i16 0, align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %l_2 = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %bf.load = load i16, ptr @x, align 4
-  %bf.shl = shl i16 %bf.load, 12
-  %bf.ashr = ashr i16 %bf.shl, 12
-  %bf.cast = sext i16 %bf.ashr to i32
-  %cmp = icmp ne i32 %bf.cast, 2
+  store i32 1, ptr %l_2, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  br i1 false, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %0 = load i32, ptr %l_2, align 4
+  %1 = load i16, ptr @g_3, align 2
+  %conv = sext i16 %1 to i32
+  %or = or i32 %conv, %0
+  %conv1 = trunc i32 %or to i16
+  store i16 %conv1, ptr @g_3, align 2
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %2 = load i32, ptr %l_2, align 4
+  %sub = sub nsw i32 %2, 1
+  %conv2 = trunc i32 %sub to i8
+  %conv3 = zext i8 %conv2 to i32
+  store i32 %conv3, ptr %l_2, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %3 = load i16, ptr @g_3, align 2
+  %conv4 = sext i16 %3 to i32
+  %cmp = icmp ne i32 %conv4, -1
   br i1 %cmp, label %if.then, label %if.end
 
-if.then:                                          ; preds = %entry
+if.then:                                          ; preds = %for.end
   call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %for.end
   ret i32 0
 }
 

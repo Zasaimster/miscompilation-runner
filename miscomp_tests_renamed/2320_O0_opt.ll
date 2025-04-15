@@ -1,26 +1,32 @@
-; 162391770827983526920656731981633963961
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/162391770827983526920656731981633963961_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/162391770827983526920656731981633963961.c"
+; 146276626696526377904418367410039654928
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/146276626696526377904418367410039654928_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/146276626696526377904418367410039654928.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.aun = type { [8 x i8] }
+@.str = private unnamed_addr constant [6 x i8] c"hello\00", align 1
+@.str.1 = private unnamed_addr constant [7 x i8] c"Hello\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca %union.aun, align 1
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  call void @llvm.memset.p0.i64(ptr align 1 %a, i8 0, i64 8, i1 false)
-  ret i32 0
+  store ptr @.str, ptr %p, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %0 = load ptr, ptr %p, align 8
+  %call1 = call i32 @strlen(ptr noundef %0)
+  %sub = sub nsw i32 %call1, 5
+  ret i32 %sub
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+declare i32 @printf(ptr noundef, ...) #1
+
+declare i32 @strlen(ptr noundef) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

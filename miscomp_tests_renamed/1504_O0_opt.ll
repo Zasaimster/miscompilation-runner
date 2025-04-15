@@ -1,52 +1,71 @@
-; 170576130110709801602383018877026612674
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170576130110709801602383018877026612674_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170576130110709801602383018877026612674.c"
+; 148755203179339612473607781933092044249
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/148755203179339612473607781933092044249_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/148755203179339612473607781933092044249.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @func_44(i32 noundef %p_45) #0 {
-entry:
-  %p_45.addr = alloca i32, align 4
-  store i32 %p_45, ptr %p_45.addr, align 4
-  %0 = load i32, ptr %p_45.addr, align 4
-  %mul = mul i32 %0, -9
-  %call = call i32 @mod_rhs(i32 noundef -9)
-  %rem = urem i32 %mul, %call
-  %tobool = icmp ne i32 %rem, 0
-  br i1 %tobool, label %if.end, label %if.then
+%struct.tree_common = type { ptr, ptr, i16 }
+%union.tree_node = type { %struct.tree_common }
 
-if.then:                                          ; preds = %entry
-  call void @abort() #2
-  unreachable
-
-if.end:                                           ; preds = %entry
-  ret void
-}
+@.str = private unnamed_addr constant [33 x i8] c"unsigned enum bit-fields broken\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define internal i32 @mod_rhs(i32 noundef %rhs) #0 {
+define dso_local i32 @blah() #0 {
 entry:
-  %rhs.addr = alloca i32, align 4
-  store i32 %rhs, ptr %rhs.addr, align 4
   ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @convert_like_real(ptr noundef %convs) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %convs.addr = alloca ptr, align 8
+  store ptr %convs, ptr %convs.addr, align 8
+  %0 = load ptr, ptr %convs.addr, align 8
+  %code = getelementptr inbounds nuw %struct.tree_common, ptr %0, i32 0, i32 2
+  %bf.load = load i16, ptr %code, align 8
+  %bf.clear = and i16 %bf.load, 255
+  %bf.cast = zext i16 %bf.clear to i32
+  switch i32 %bf.cast, label %sw.default [
+    i32 152, label %sw.bb
+  ]
+
+sw.bb:                                            ; preds = %entry
+  %call = call i32 @blah()
+  store i32 %call, ptr %retval, align 4
+  br label %return
+
+sw.default:                                       ; preds = %entry
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %sw.default
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  br label %return
+
+return:                                           ; preds = %sw.epilog, %sw.bb
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %convs = alloca %union.tree_node, align 8
   store i32 0, ptr %retval, align 4
-  call void @func_44(i32 noundef 2)
+  %code = getelementptr inbounds nuw %struct.tree_common, ptr %convs, i32 0, i32 2
+  %bf.load = load i16, ptr %code, align 8
+  %bf.clear = and i16 %bf.load, -256
+  %bf.set = or i16 %bf.clear, 152
+  store i16 %bf.set, ptr %code, align 8
+  %call = call i32 @convert_like_real(ptr noundef %convs)
   ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

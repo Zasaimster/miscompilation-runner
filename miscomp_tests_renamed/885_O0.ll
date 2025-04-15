@@ -1,44 +1,42 @@
-; 157692446487848896793510097473237647091
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157692446487848896793510097473237647091.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157692446487848896793510097473237647091.c"
+; 191629476541287432356135879012786340707
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191629476541287432356135879012786340707.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191629476541287432356135879012786340707.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(double noundef %x) #0 {
-entry:
-  %x.addr = alloca double, align 8
-  %p = alloca double, align 8
-  %q = alloca double, align 8
-  store double %x, ptr %x.addr, align 8
-  store double 5.000000e+00, ptr %p, align 8
-  store double 0.000000e+00, ptr %q, align 8
-  %0 = load double, ptr %p, align 8
-  %1 = load double, ptr %q, align 8
-  %cmp = fcmp olt double %0, %1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @link_error()
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  ret void
-}
+%struct.neon_s8 = type { i8, i8, i8, i8 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @link_error() #0 {
+define dso_local i32 @helper_neon_rshl_s8(i32 noundef %arg1, i32 noundef %arg2) #0 {
 entry:
-  call void @abort() #2
-  unreachable
+  %arg1.addr = alloca i32, align 4
+  %arg2.addr = alloca i32, align 4
+  %res = alloca i32, align 4
+  %vsrc1 = alloca %struct.neon_s8, align 1
+  %vsrc2 = alloca %struct.neon_s8, align 1
+  %vdest = alloca %struct.neon_s8, align 1
+  store i32 %arg1, ptr %arg1.addr, align 4
+  store i32 %arg2, ptr %arg2.addr, align 4
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %r = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @foo(double noundef 1.000000e+00)
+  %call = call i32 @helper_neon_rshl_s8(i32 noundef 84215045, i32 noundef 16843009)
+  store i32 %call, ptr %r, align 4
+  %0 = load i32, ptr %r, align 4
+  %cmp = icmp ne i32 %0, 168430090
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #2
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

@@ -1,41 +1,36 @@
-; 121496520699383528391408577700095393741
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121496520699383528391408577700095393741_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121496520699383528391408577700095393741.c"
+; 112189913309855978007024692740820634280
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112189913309855978007024692740820634280_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112189913309855978007024692740820634280.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [6 x i8] c"Done\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local void @brother(i32 noundef %a, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
 entry:
-  %call8 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp9 = icmp slt i32 %call8, 4
-  br i1 %cmp9, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.body, %entry
-  %Count.010 = phi i32 [ %inc, %for.body ], [ 0, %entry ]
-  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %Count.010)
-  %switch.selectcmp = icmp eq i32 %Count.010, 2
-  %switch.select = select i1 %switch.selectcmp, i32 2, i32 0
-  %switch.selectcmp11 = icmp eq i32 %Count.010, 1
-  %switch.select12 = select i1 %switch.selectcmp11, i32 1, i32 %switch.select
-  %call2 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %switch.select12)
-  %inc = add nuw nsw i32 %Count.010, 1
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp = icmp slt i32 %call, 4
-  br i1 %cmp, label %for.body, label %for.end, !llvm.loop !5
-
-for.end:                                          ; preds = %for.body, %entry
-  ret i32 0
+  tail call void @abort() #2
+  unreachable
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local void @sister(i64 %f.coerce0, i32 %f.coerce1, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
+entry:
+  tail call void @abort() #2
+  unreachable
+}
+
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  tail call void @abort() #2
+  unreachable
+}
+
+attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -45,6 +40,3 @@ attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buf
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = distinct !{!5, !6, !7}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = !{!"llvm.loop.unroll.disable"}

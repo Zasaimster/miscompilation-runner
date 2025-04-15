@@ -1,123 +1,99 @@
-; 172716432305997247636814355810195568301
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172716432305997247636814355810195568301_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172716432305997247636814355810195568301.c"
+; 183278478003674217791671554879577573937
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/183278478003674217791671554879577573937_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/183278478003674217791671554879577573937.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@b = dso_local global i32 1, align 4
-@c = dso_local global i32 0, align 4
-@d = dso_local global ptr @c, align 8
-@f = dso_local global i32 0, align 4
-@e = internal global i32 0, align 4
-@j = dso_local global i32 0, align 4
-@a = dso_local global i32 0, align 4
-@h = dso_local global i32 0, align 4
-@g = dso_local global ptr null, align 8
+@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
-  %k = alloca i64, align 8
-  %l = alloca i32, align 4
-  %m = alloca ptr, align 8
-  %i13 = alloca i32, align 4
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %i, align 4
+  store i32 0, ptr %x, align 4
+  br label %while.cond
+
+while.cond:                                       ; preds = %entry
+  %call = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  br label %while.end
+
+while.end:                                        ; preds = %while.body, %while.cond
+  br label %while.cond1
+
+while.cond1:                                      ; preds = %if.end, %while.end
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %tobool3 = icmp ne i32 %call2, 0
+  br i1 %tobool3, label %while.body4, label %while.end5
+
+while.body4:                                      ; preds = %while.cond1
+  %0 = load i32, ptr %x, align 4
+  %cmp = icmp eq i32 %0, 5
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %while.body4
+  br label %while.end5
+
+if.end:                                           ; preds = %while.body4
+  %1 = load i32, ptr %x, align 4
+  %add = add nsw i32 %1, 1
+  store i32 %add, ptr %x, align 4
+  br label %while.cond1, !llvm.loop !6
+
+while.end5:                                       ; preds = %if.then, %while.cond1
   br label %for.cond
 
-for.cond:                                         ; preds = %for.inc10, %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 2
-  br i1 %cmp, label %for.body, label %for.end12
+for.cond:                                         ; preds = %if.end8, %while.end5
+  %2 = load i32, ptr %x, align 4
+  %cmp6 = icmp eq i32 %2, 10
+  br i1 %cmp6, label %if.then7, label %if.end8
 
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr @b, align 4
-  %conv = sext i32 %1 to i64
-  store i64 %conv, ptr %k, align 8
-  store i32 0, ptr @f, align 4
-  br label %for.cond1
+if.then7:                                         ; preds = %for.cond
+  br label %for.end
 
-for.cond1:                                        ; preds = %for.inc, %for.body
-  %2 = load i32, ptr @f, align 4
-  %cmp2 = icmp slt i32 %2, 8
-  br i1 %cmp2, label %for.body4, label %for.end
+if.end8:                                          ; preds = %for.cond
+  %3 = load i32, ptr %x, align 4
+  %add9 = add nsw i32 %3, 1
+  store i32 %add9, ptr %x, align 4
+  br label %for.cond
 
-for.body4:                                        ; preds = %for.cond1
-  store ptr @e, ptr %m, align 8
-  %3 = load ptr, ptr @d, align 8
-  %4 = load i32, ptr %3, align 4
-  store i32 %4, ptr @j, align 4
-  %5 = load i32, ptr @a, align 4
-  %6 = load i32, ptr @j, align 4
-  %mul = mul nsw i32 %5, %6
-  %sub = sub nsw i32 %mul, 1
-  store i32 %sub, ptr @h, align 4
-  %7 = load i32, ptr @h, align 4
-  %cmp5 = icmp eq i32 %7, 0
-  %conv6 = zext i1 %cmp5 to i32
-  %conv7 = sext i32 %conv6 to i64
-  %8 = load i64, ptr %k, align 8
-  %cmp8 = icmp slt i64 %conv7, %8
-  %conv9 = zext i1 %cmp8 to i32
-  %9 = load ptr, ptr %m, align 8
-  store i32 %conv9, ptr %9, align 4
-  store ptr %l, ptr @g, align 8
-  br label %for.inc
+for.end:                                          ; preds = %if.then7
+  br label %do.body
 
-for.inc:                                          ; preds = %for.body4
-  %10 = load i32, ptr @f, align 4
-  %inc = add nsw i32 %10, 1
-  store i32 %inc, ptr @f, align 4
-  br label %for.cond1, !llvm.loop !6
+do.body:                                          ; preds = %do.cond, %for.end
+  %4 = load i32, ptr %x, align 4
+  %cmp10 = icmp eq i32 %4, 15
+  br i1 %cmp10, label %if.then11, label %if.end12
 
-for.end:                                          ; preds = %for.cond1
-  br label %for.inc10
+if.then11:                                        ; preds = %do.body
+  br label %do.end
 
-for.inc10:                                        ; preds = %for.end
-  %11 = load i32, ptr %i, align 4
-  %inc11 = add nsw i32 %11, 1
-  store i32 %inc11, ptr %i, align 4
-  br label %for.cond, !llvm.loop !8
+if.end12:                                         ; preds = %do.body
+  %5 = load i32, ptr %x, align 4
+  %add13 = add nsw i32 %5, 1
+  store i32 %add13, ptr %x, align 4
+  br label %do.cond
 
-for.end12:                                        ; preds = %for.cond
-  store i32 0, ptr %i13, align 4
-  br label %for.cond14
+do.cond:                                          ; preds = %if.end12
+  br i1 true, label %do.body, label %do.end
 
-for.cond14:                                       ; preds = %for.inc18, %for.end12
-  %12 = load i32, ptr %i13, align 4
-  %cmp15 = icmp slt i32 %12, 10
-  br i1 %cmp15, label %for.body17, label %for.end20
-
-for.body17:                                       ; preds = %for.cond14
-  br label %for.inc18
-
-for.inc18:                                        ; preds = %for.body17
-  %13 = load i32, ptr %i13, align 4
-  %inc19 = add nsw i32 %13, 1
-  store i32 %inc19, ptr %i13, align 4
-  br label %for.cond14, !llvm.loop !9
-
-for.end20:                                        ; preds = %for.cond14
-  %14 = load i32, ptr @e, align 4
-  %cmp21 = icmp ne i32 %14, 1
-  br i1 %cmp21, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.end20
-  call void @abort() #2
-  unreachable
-
-if.end:                                           ; preds = %for.end20
-  ret i32 0
+do.end:                                           ; preds = %do.cond, %if.then11
+  %6 = load i32, ptr %x, align 4
+  %sub = sub nsw i32 %6, 15
+  ret i32 %sub
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare i32 @calculateSquare(...) #1
+
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -130,5 +106,3 @@ attributes #2 = { noreturn nounwind }
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}
-!9 = distinct !{!9, !7}

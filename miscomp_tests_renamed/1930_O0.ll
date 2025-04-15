@@ -1,59 +1,65 @@
-; 138789592576259585671354233822021221594
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138789592576259585671354233822021221594.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138789592576259585671354233822021221594.c"
+; 153554980413335590721210912885171945379
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153554980413335590721210912885171945379.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153554980413335590721210912885171945379.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.A = type { i32 }
+%struct.fred = type { i32, i32 }
 
-@f = dso_local global i32 1, align 4
-@__const.foo.h = private unnamed_addr constant [70 x %struct.A] [%struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }, %struct.A { i32 1 }], align 16
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo() #0 {
-entry:
-  %retval = alloca %struct.A, align 4
-  %h = alloca [70 x %struct.A], align 16
-  call void @llvm.memcpy.p0.p0.i64(ptr align 16 %h, ptr align 16 @__const.foo.h, i64 280, i1 false)
-  %arrayidx = getelementptr inbounds [70 x %struct.A], ptr %h, i64 0, i64 24
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %retval, ptr align 16 %arrayidx, i64 4, i1 false)
-  %coerce.dive = getelementptr inbounds nuw %struct.A, ptr %retval, i32 0, i32 0
-  %0 = load i32, ptr %coerce.dive, align 4
-  ret i32 %0
-}
-
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca %struct.A, align 4
-  %j = alloca %struct.A, align 4
+  %bloggs = alloca %struct.fred, align 4
+  %jones = alloca [2 x %struct.fred], align 16
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo()
-  %coerce.dive = getelementptr inbounds nuw %struct.A, ptr %i, i32 0, i32 0
-  store i32 %call, ptr %coerce.dive, align 4
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %j, ptr align 4 %i, i64 4, i1 false)
-  %b = getelementptr inbounds nuw %struct.A, ptr %j, i32 0, i32 0
-  %0 = load i32, ptr %b, align 4
-  %tobool = icmp ne i32 %0, 0
-  br i1 %tobool, label %land.rhs, label %land.end
-
-land.rhs:                                         ; preds = %entry
-  store i32 0, ptr @f, align 4
-  br label %land.end
-
-land.end:                                         ; preds = %land.rhs, %entry
-  %1 = phi i1 [ false, %entry ], [ false, %land.rhs ]
-  %land.ext = zext i1 %1 to i32
-  %2 = load i32, ptr @f, align 4
-  ret i32 %2
+  %boris = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 0
+  store i32 12, ptr %boris, align 4
+  %natasha = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 1
+  store i32 34, ptr %natasha, align 4
+  %boris1 = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 0
+  %0 = load i32, ptr %boris1, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  %natasha2 = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 1
+  %1 = load i32, ptr %natasha2, align 4
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %1)
+  %arrayidx = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %boris4 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx, i32 0, i32 0
+  store i32 12, ptr %boris4, align 16
+  %arrayidx5 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %natasha6 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx5, i32 0, i32 1
+  store i32 34, ptr %natasha6, align 4
+  %arrayidx7 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %boris8 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx7, i32 0, i32 0
+  store i32 56, ptr %boris8, align 8
+  %arrayidx9 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %natasha10 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx9, i32 0, i32 1
+  store i32 78, ptr %natasha10, align 4
+  %arrayidx11 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %boris12 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx11, i32 0, i32 0
+  %2 = load i32, ptr %boris12, align 16
+  %call13 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %2)
+  %arrayidx14 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %natasha15 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx14, i32 0, i32 1
+  %3 = load i32, ptr %natasha15, align 4
+  %call16 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %3)
+  %arrayidx17 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %boris18 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx17, i32 0, i32 0
+  %4 = load i32, ptr %boris18, align 8
+  %call19 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %4)
+  %arrayidx20 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %natasha21 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx20, i32 0, i32 1
+  %5 = load i32, ptr %natasha21, align 4
+  %call22 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %5)
+  ret i32 0
 }
 
+declare i32 @printf(ptr noundef, ...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

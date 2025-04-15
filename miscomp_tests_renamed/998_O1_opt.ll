@@ -1,29 +1,28 @@
-; 135344049560537088633113851683802317164
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135344049560537088633113851683802317164_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135344049560537088633113851683802317164.c"
+; 153875270712329636899782864626840575296
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153875270712329636899782864626840575296_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153875270712329636899782864626840575296.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @dd(i32 noundef %x, i32 noundef %d) local_unnamed_addr #0 {
+; Function Attrs: cold noreturn nounwind memory(inaccessiblemem: write) uwtable
+define dso_local void @gcc_crash(ptr noundef readnone captures(none) %p) local_unnamed_addr #0 {
 entry:
-  ret i32 0
-}
-
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
-  tail call void @abort() #3
+  tail call void @llvm.trap()
   unreachable
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+; Function Attrs: cold noreturn nounwind memory(inaccessiblemem: write)
+declare void @llvm.trap() #1
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+; Function Attrs: cold noreturn nounwind memory(inaccessiblemem: write) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  tail call void @llvm.trap()
+  unreachable
+}
+
+attributes #0 = { cold noreturn nounwind memory(inaccessiblemem: write) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold noreturn nounwind memory(inaccessiblemem: write) }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

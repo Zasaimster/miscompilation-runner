@@ -1,51 +1,99 @@
-; 162795829639330324713795037863903885367
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/162795829639330324713795037863903885367.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/162795829639330324713795037863903885367.c"
+; 150371821754084320509332281073507698306
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150371821754084320509332281073507698306.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150371821754084320509332281073507698306.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.type = type { ptr, i32 }
-
-@t = dso_local global %struct.type zeroinitializer, align 8
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo() #0 {
-entry:
-  %bf.load = load i32, ptr getelementptr inbounds nuw (%struct.type, ptr @t, i32 0, i32 1), align 8
-  %bf.lshr = lshr i32 %bf.load, 16
-  %bf.clear = and i32 %bf.lshr, 511
-  ret i32 %bf.clear
-}
+@x = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %bf.load = load i32, ptr getelementptr inbounds nuw (%struct.type, ptr @t, i32 0, i32 1), align 8
-  %bf.clear = and i32 %bf.load, -33488897
-  %bf.set = or i32 %bf.clear, 524288
-  store i32 %bf.set, ptr getelementptr inbounds nuw (%struct.type, ptr @t, i32 0, i32 1), align 8
-  %0 = load ptr, ptr @t, align 8
-  %1 = load i64, ptr getelementptr inbounds nuw ({ ptr, i64 }, ptr @t, i32 0, i32 1), align 8
-  %call = call i32 (ptr, i64, ...) @foo(ptr %0, i64 %1)
-  %cmp = icmp ne i32 %call, 8
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 (...) @example7()
+  switch i32 %call, label %sw.epilog [
+    i32 0, label %sw.bb
+  ]
 
-if.then:                                          ; preds = %entry
-  call void @abort() #2
-  unreachable
+sw.bb:                                            ; preds = %entry
+  br label %sw.epilog
 
-if.end:                                           ; preds = %entry
-  ret i32 0
+sw.epilog:                                        ; preds = %sw.bb, %entry
+  %0 = load i32, ptr @x, align 4
+  switch i32 %0, label %sw.epilog3 [
+    i32 0, label %sw.bb1
+  ]
+
+sw.bb1:                                           ; preds = %sw.epilog
+  %1 = load i32, ptr @x, align 4
+  switch i32 %1, label %sw.default [
+    i32 0, label %sw.bb2
+  ]
+
+sw.bb2:                                           ; preds = %sw.bb1
+  br label %next
+
+sw.default:                                       ; preds = %sw.bb1
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.epilog3:                                       ; preds = %sw.epilog
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+next:                                             ; preds = %sw.bb2
+  %2 = load i32, ptr @x, align 4
+  switch i32 %2, label %sw.epilog5 [
+    i32 1, label %sw.bb4
+  ]
+
+sw.bb4:                                           ; preds = %next
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.epilog5:                                       ; preds = %next
+  %3 = load i32, ptr @x, align 4
+  switch i32 %3, label %sw.epilog7 [
+    i32 1, label %sw.bb6
+  ]
+
+foo:                                              ; No predecessors!
+  br label %sw.bb6
+
+sw.bb6:                                           ; preds = %sw.epilog5, %foo
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.epilog7:                                       ; preds = %sw.epilog5
+  %4 = load i32, ptr @x, align 4
+  switch i32 %4, label %sw.default10 [
+    i32 0, label %sw.bb8
+    i32 1, label %sw.bb9
+  ]
+
+sw.bb8:                                           ; preds = %sw.epilog7
+  %5 = load i32, ptr @x, align 4
+  store i32 %5, ptr %retval, align 4
+  br label %return
+
+sw.bb9:                                           ; preds = %sw.epilog7
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+sw.default10:                                     ; preds = %sw.epilog7
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %sw.default10, %sw.bb9, %sw.bb8, %sw.bb6, %sw.bb4, %sw.epilog3, %sw.default
+  %6 = load i32, ptr %retval, align 4
+  ret i32 %6
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare i32 @example7(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

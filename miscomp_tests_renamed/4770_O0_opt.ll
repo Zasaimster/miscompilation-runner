@@ -1,34 +1,47 @@
-; 199384290288514913123238474055468563756
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/199384290288514913123238474055468563756_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/199384290288514913123238474055468563756.c"
+; 190000563742255999717193138016730343946
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190000563742255999717193138016730343946_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190000563742255999717193138016730343946.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.foo = type { i32, i32, i32, ptr, float }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f1(ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %p, i32 noundef %n, ...) #0 {
+define dso_local void @g(i64 noundef %x, i32 noundef %y, i32 noundef %z, ptr noundef %p) #0 {
 entry:
+  %x.addr = alloca i64, align 8
+  %y.addr = alloca i32, align 4
+  %z.addr = alloca i32, align 4
   %p.addr = alloca ptr, align 8
-  %n.addr = alloca i32, align 4
+  %w = alloca i32, align 4
+  store i64 %x, ptr %x.addr, align 8
+  store i32 %y, ptr %y.addr, align 4
+  store i32 %z, ptr %z.addr, align 4
   store ptr %p, ptr %p.addr, align 8
-  store i32 %n, ptr %n.addr, align 4
-  ret i32 0
+  %0 = load i64, ptr %x.addr, align 8
+  %1 = load i32, ptr %y.addr, align 4
+  %sh_prom = zext i32 %1 to i64
+  %shr = lshr i64 %0, %sh_prom
+  %and = and i64 %shr, 4294967295
+  %2 = load i32, ptr %z.addr, align 4
+  %and1 = and i32 %2, 31
+  %sh_prom2 = zext i32 %and1 to i64
+  %shl = shl i64 %and, %sh_prom2
+  %conv = trunc i64 %shl to i32
+  store i32 %conv, ptr %w, align 4
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %f = alloca %struct.foo, align 8
+  %a = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %j = getelementptr inbounds nuw %struct.foo, ptr %f, i32 0, i32 1
-  store i32 1, ptr %j, align 4
-  %i = getelementptr inbounds nuw %struct.foo, ptr %f, i32 0, i32 0
-  store i32 1, ptr %i, align 8
-  %call = call i32 (ptr, ptr, i32, ...) @f1(ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %f, i32 noundef 2)
-  %call1 = call i32 (ptr, ptr, i32, ...) @f1(ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %f, i32 noundef 2, i32 noundef 1, ptr noundef byval(%struct.foo) align 8 %f, ptr noundef %f)
-  ret i32 0
+  store i64 0, ptr %a, align 8
+  call void @g(i64 noundef -2401053092593056409, i32 noundef 0, i32 noundef 0, ptr noundef %a)
+  %0 = load i64, ptr %a, align 8
+  %cmp = icmp eq i64 %0, 19088743
+  %cond = select i1 %cmp, i32 0, i32 1
+  ret i32 %cond
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

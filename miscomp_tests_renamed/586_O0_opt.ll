@@ -1,41 +1,54 @@
-; 1925349894565047682388986226844932562
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/1925349894565047682388986226844932562_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/1925349894565047682388986226844932562.c"
+; 189187905256845320408223080216605440947
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189187905256845320408223080216605440947_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189187905256845320408223080216605440947.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@c = dso_local global i32 1, align 4
-@b = internal global i8 -127, align 1
-@a = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [19 x i8] c"This won't print.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %u = alloca i32, align 4
+  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i8, ptr @b, align 1
-  %conv = sext i8 %0 to i32
-  %1 = load i32, ptr @c, align 4
-  %mul = mul nsw i32 -6, %1
-  %conv1 = trunc i32 %mul to i8
-  %conv2 = zext i8 %conv1 to i32
-  %cmp = icmp sle i32 %conv, %conv2
-  %conv3 = zext i1 %cmp to i32
-  store i32 %conv3, ptr @a, align 4
-  %call = call i32 (...) @func6()
-  %2 = load i32, ptr @a, align 4
-  %tobool = icmp ne i32 %2, 0
-  br i1 %tobool, label %if.end, label %if.then
+  store i32 -1, ptr %i, align 4
+  %0 = load i32, ptr %i, align 4
+  %call = call i32 (i32, i32, ...) @MAX(i32 noundef %0, i32 noundef 0)
+  %call1 = call i32 (i32, i32, ...) @MAX(i32 noundef %call, i32 noundef 1)
+  store i32 %call1, ptr %u, align 4
+  %1 = load i32, ptr %u, align 4
+  %cmp = icmp ugt i32 %1, 10
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %2 = load i32, ptr %i, align 4
+  %call3 = call i32 (i32, i32, ...) @MAX(i32 noundef %2, i32 noundef 0)
+  %3 = load i32, ptr %i, align 4
+  %call4 = call i32 (i32, i32, ...) @MIN(i32 noundef %call3, i32 noundef %3)
+  store i32 %call4, ptr %u, align 4
+  %4 = load i32, ptr %u, align 4
+  %cmp5 = icmp ne i32 %4, 0
+  br i1 %cmp5, label %if.then6, label %if.end7
+
+if.then6:                                         ; preds = %if.end
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end7:                                          ; preds = %if.end
   ret i32 0
 }
 
-declare i32 @func6(...) #1
+declare i32 @MAX(...) #1
+
+declare i32 @printf(ptr noundef, ...) #1
+
+declare i32 @MIN(...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

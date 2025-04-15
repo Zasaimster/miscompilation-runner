@@ -1,50 +1,61 @@
-; 137990151116125181508562898227225901008
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137990151116125181508562898227225901008_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137990151116125181508562898227225901008.c"
+; 121000758582426291270538600212295947840
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121000758582426291270538600212295947840_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121000758582426291270538600212295947840.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@b = dso_local local_unnamed_addr global i16 0, align 2
-@a = dso_local local_unnamed_addr global i32 0, align 4
-@d = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local local_unnamed_addr global i32 0, align 4
+@.str = private unnamed_addr constant [4 x i8] c"int\00", align 1
+@.str.2 = private unnamed_addr constant [6 x i8] c"short\00", align 1
+@.str.33 = private unnamed_addr constant [10 x i8] c"integer*8\00", align 1
+@switch.table.stab_xcoff_builtin_type.rel = private unnamed_addr constant [33 x i32] [i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.33 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.2 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32), i32 trunc (i64 sub (i64 ptrtoint (ptr @.str.2 to i64), i64 ptrtoint (ptr @switch.table.stab_xcoff_builtin_type.rel to i64)) to i32)], align 4
 
-; Function Attrs: nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 -128, 128) i32 @stab_xcoff_builtin_type(i32 noundef %typenum) local_unnamed_addr #0 {
 entry:
-  %b.promoted = load i16, ptr @b, align 2, !tbaa !5
-  %cmp14 = icmp slt i16 %b.promoted, 2
-  br i1 %cmp14, label %for.body.lr.ph, label %for.end12
+  %0 = add i32 %typenum, -34
+  %or.cond = icmp ult i32 %0, -68
+  br i1 %or.cond, label %cleanup, label %if.end
 
-for.body.lr.ph:                                   ; preds = %entry
-  store i32 0, ptr @a, align 4, !tbaa !9
-  %0 = load i32, ptr @d, align 4, !tbaa !9
-  %tobool = icmp ne i32 %0, 0
-  %1 = load i32, ptr @c, align 4
-  %tobool9.not = icmp eq i32 %1, 0
-  br label %for.body
+if.end:                                           ; preds = %entry
+  %switch.tableidx = add i32 %typenum, 34
+  %1 = icmp ult i32 %switch.tableidx, 33
+  br i1 %1, label %switch.lookup, label %sw.epilog
 
-for.body:                                         ; preds = %for.inc, %for.body.lr.ph
-  %inc1315 = phi i16 [ %b.promoted, %for.body.lr.ph ], [ %inc, %for.inc ]
-  %tobool6 = icmp ne i16 %inc1315, 0
-  %or.cond = or i1 %tobool6, %tobool
-  %brmerge = select i1 %or.cond, i1 true, i1 %tobool9.not
-  br i1 %brmerge, label %for.inc, label %for.cond8
+switch.lookup:                                    ; preds = %if.end
+  %2 = zext nneg i32 %switch.tableidx to i64
+  %reltable.shift = shl i64 %2, 2
+  %reltable.intrinsic = call ptr @llvm.load.relative.i64(ptr @switch.table.stab_xcoff_builtin_type.rel, i64 %reltable.shift)
+  br label %sw.epilog
 
-for.cond8:                                        ; preds = %for.cond8, %for.body
-  br label %for.cond8
+sw.epilog:                                        ; preds = %switch.lookup, %if.end
+  %name.0 = phi ptr [ @.str, %if.end ], [ %reltable.intrinsic, %switch.lookup ]
+  %3 = load i8, ptr %name.0, align 1, !tbaa !5
+  %conv = sext i8 %3 to i32
+  br label %cleanup
 
-for.inc:                                          ; preds = %for.body
-  %inc = add nsw i16 %inc1315, 1
-  store i16 %inc, ptr @b, align 2, !tbaa !5
-  %exitcond.not = icmp eq i16 %inc, 2
-  br i1 %exitcond.not, label %for.end12, label %for.body, !llvm.loop !11
-
-for.end12:                                        ; preds = %for.inc, %entry
-  ret i32 0
+cleanup:                                          ; preds = %sw.epilog, %entry
+  %retval.0 = phi i32 [ %conv, %sw.epilog ], [ 0, %entry ]
+  ret i32 %retval.0
 }
 
-attributes #0 = { nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  tail call void @abort() #4
+  unreachable
+}
+
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #2
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: read)
+declare ptr @llvm.load.relative.i64(ptr, i64) #3
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nocallback nofree nosync nounwind willreturn memory(argmem: read) }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -55,11 +66,5 @@ attributes #0 = { nofree norecurse nosync nounwind memory(readwrite, argmem: non
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"short", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!10, !10, i64 0}
-!10 = !{!"int", !7, i64 0}
-!11 = distinct !{!11, !12, !13}
-!12 = !{!"llvm.loop.mustprogress"}
-!13 = !{!"llvm.loop.unroll.disable"}
+!6 = !{!"omnipotent char", !7, i64 0}
+!7 = !{!"Simple C/C++ TBAA"}

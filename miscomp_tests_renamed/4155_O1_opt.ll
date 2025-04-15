@@ -1,8 +1,18 @@
-; 133362793446530738042383317855672850315
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133362793446530738042383317855672850315_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133362793446530738042383317855672850315.c"
+; 172456861716716425723893949889551085112
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172456861716716425723893949889551085112_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172456861716716425723893949889551085112.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef range(i32 1, 5) i32 @foo(i32 noundef %status) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp eq i32 %status, 3
+  %spec.store.select = select i1 %cmp, i32 3, i32 1
+  %cmp1 = icmp eq i32 %status, 4
+  %spec.store.select4 = select i1 %cmp1, i32 4, i32 %spec.store.select
+  ret i32 %spec.store.select4
+}
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {

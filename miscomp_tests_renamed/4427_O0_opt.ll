@@ -1,27 +1,48 @@
-; 141888139293586274300783271600024173998
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141888139293586274300783271600024173998_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141888139293586274300783271600024173998.c"
+; 17999330992761005846339062494794903917
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17999330992761005846339062494794903917_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17999330992761005846339062494794903917.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @sub(i32 noundef %i, ptr noundef %array) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i.addr = alloca i32, align 4
+  %array.addr = alloca ptr, align 8
+  store i32 %i, ptr %i.addr, align 4
+  store ptr %array, ptr %array.addr, align 8
+  %0 = load i32, ptr %i.addr, align 4
+  %inc = add nsw i32 %0, 1
+  store i32 %inc, ptr %i.addr, align 4
+  %call = call i32 (...) @deadFunction()
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
+}
+
+declare i32 @deadFunction(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %f = alloca float, align 4
+  %array = alloca [10 x i32], align 16
   store i32 0, ptr %retval, align 4
-  store i32 10, ptr %a, align 4
-  store float 0.000000e+00, ptr %f, align 4
-  %0 = load float, ptr %f, align 4
-  %1 = load i32, ptr %a, align 4
-  %conv = sitofp i32 %1 to float
-  %cmp = fcmp oeq float %0, %conv
-  %conv1 = zext i1 %cmp to i32
-  ret i32 %conv1
+  %arraydecay = getelementptr inbounds [10 x i32], ptr %array, i64 0, i64 0
+  %call = call i32 @sub(i32 noundef 10, ptr noundef %arraydecay)
+  %cmp = icmp ne i32 %call, 11
+  %conv = zext i1 %cmp to i32
+  call void @exit(i32 noundef %conv) #3
+  unreachable
 }
 
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

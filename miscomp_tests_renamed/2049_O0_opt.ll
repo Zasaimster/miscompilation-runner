@@ -1,22 +1,35 @@
-; 154773628865208051327629737742912422195
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/154773628865208051327629737742912422195_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/154773628865208051327629737742912422195.c"
+; 101578428092226920317471867530458673271
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101578428092226920317471867530458673271_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101578428092226920317471867530458673271.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S2 = type { %struct.S1 }
-%struct.S1 = type { i32 }
+@a = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s2 = alloca %struct.S2, align 4
+  %e = alloca [0 x i8], align 1
+  %f = alloca i8, align 1
   store i32 0, ptr %retval, align 4
-  %s1 = getelementptr inbounds nuw %struct.S2, ptr %s2, i32 0, i32 0
-  %x = getelementptr inbounds nuw %struct.S1, ptr %s1, i32 0, i32 0
-  store i32 0, ptr %x, align 4
-  ret i32 0
+  store i8 0, ptr %f, align 1
+  %0 = load i32, ptr @a, align 4
+  %cmp = icmp eq i32 %0, 131072
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load i32, ptr @a, align 4
+  %idxprom = sext i32 %1 to i64
+  %arrayidx = getelementptr inbounds [0 x i8], ptr %e, i64 0, i64 %idxprom
+  %2 = load i8, ptr %arrayidx, align 1
+  store i8 %2, ptr %f, align 1
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %3 = load i8, ptr %f, align 1
+  %conv = sext i8 %3 to i32
+  ret i32 %conv
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

@@ -1,25 +1,57 @@
-; 167650474503183160322553869163634254682
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167650474503183160322553869163634254682.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167650474503183160322553869163634254682.c"
+; 101738863087485913716291110726114518234
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101738863087485913716291110726114518234.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101738863087485913716291110726114518234.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@x = dso_local global i64 -1, align 8
-@.str = private unnamed_addr constant [10 x i8] c"a is: %d\0A\00", align 1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(i32 noundef %a) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  %mul = mul nsw i32 %call, 65536
+  %div = sdiv i32 %mul, 8
+  ret i32 %div
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @g(i32 noundef %a) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  %call = call i32 (...) @example7()
+  %mul = mul nsw i32 %call, 65536
+  ret i32 %mul
+}
+
+declare i32 @example7(...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @h(i32 noundef %a) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %div = udiv i32 %0, 8
+  ret i32 %div
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %b = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load i64, ptr @x, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i64 noundef %0)
-  %conv = sext i32 %call to i64
-  store i64 %conv, ptr %b, align 8
-  %1 = load i64, ptr %b, align 8
-  %tobool = icmp ne i64 %1, 0
-  br i1 %tobool, label %if.then, label %if.end
+  %call = call i32 @f(i32 noundef 65536)
+  %call1 = call i32 @g(i32 noundef 65536)
+  %call2 = call i32 @h(i32 noundef %call1)
+  %cmp = icmp ne i32 %call, %call2
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #4
@@ -29,8 +61,6 @@ if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

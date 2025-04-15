@@ -1,27 +1,25 @@
-; 141196777049716913008086893089254462055
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141196777049716913008086893089254462055.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141196777049716913008086893089254462055.c"
+; 12047843641154820085432687156785663545
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12047843641154820085432687156785663545.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12047843641154820085432687156785663545.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i64 noundef %x) #0 {
+define dso_local double @f(double noundef %x) #0 {
 entry:
-  %x.addr = alloca i64, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %x.addr, align 8
-  %cmp = icmp sgt i64 %0, 4294967295
-  br i1 %cmp, label %lor.end, label %lor.rhs
+  %x.addr = alloca double, align 8
+  store double %x, ptr %x.addr, align 8
+  ret double 7.000000e+00
+}
 
-lor.rhs:                                          ; preds = %entry
-  %1 = load i64, ptr %x.addr, align 8
-  %cmp1 = icmp slt i64 %1, -2147483648
-  br label %lor.end
-
-lor.end:                                          ; preds = %lor.rhs, %entry
-  %2 = phi i1 [ true, %entry ], [ %cmp1, %lor.rhs ]
-  %lor.ext = zext i1 %2 to i32
-  ret i32 %lor.ext
+; Function Attrs: noinline nounwind uwtable
+define dso_local double @Int(ptr noundef %f, double noundef %a) #0 {
+entry:
+  %f.addr = alloca ptr, align 8
+  %a.addr = alloca double, align 8
+  store ptr %f, ptr %f.addr, align 8
+  store double %a, ptr %a.addr, align 8
+  ret double 0.000000e+00
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -29,8 +27,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i64 noundef 0)
-  %cmp = icmp ne i32 %call, 0
+  %call = call double @Int(ptr noundef @f, double noundef 2.000000e+00)
+  %cmp = fcmp une double %call, 4.000000e+00
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

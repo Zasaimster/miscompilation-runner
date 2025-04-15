@@ -1,90 +1,66 @@
-; 141924281168068434501661190307597442121
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141924281168068434501661190307597442121.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141924281168068434501661190307597442121.c"
+; 196633462066855698754153549368561573924
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196633462066855698754153549368561573924.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196633462066855698754153549368561573924.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.R = type { %struct.A, %struct.A }
-%struct.A = type { i64 }
-
-@R = dso_local global %struct.R { %struct.A { i64 100 }, %struct.A { i64 200 } }, align 8
-@.str = private unnamed_addr constant [15 x i8] c"Program runs!\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f(i64 %r.coerce0, i64 %r.coerce1) #0 {
+define dso_local i32 @foo(i32 noundef %x, i32 noundef %y, i32 noundef %i, i32 noundef %j) #0 {
 entry:
-  %r = alloca %struct.R, align 8
-  %0 = getelementptr inbounds nuw { i64, i64 }, ptr %r, i32 0, i32 0
-  store i64 %r.coerce0, ptr %0, align 8
-  %1 = getelementptr inbounds nuw { i64, i64 }, ptr %r, i32 0, i32 1
-  store i64 %r.coerce1, ptr %1, align 8
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  %i.addr = alloca i32, align 4
+  %j.addr = alloca i32, align 4
+  %tmp1 = alloca double, align 8
+  %tmp2 = alloca double, align 8
+  store i32 %x, ptr %x.addr, align 4
+  store i32 %y, ptr %y.addr, align 4
+  store i32 %i, ptr %i.addr, align 4
+  store i32 %j, ptr %j.addr, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
+  %conv = sitofp i32 %call to double
+  store double %conv, ptr %tmp1, align 8
+  %0 = load i32, ptr %i.addr, align 4
+  %conv1 = sitofp i32 %0 to double
+  %1 = load i32, ptr %j.addr, align 4
+  %conv2 = sitofp i32 %1 to double
+  %div = fdiv double %conv1, %conv2
+  store double %div, ptr %tmp2, align 8
+  %2 = load double, ptr %tmp1, align 8
+  %3 = load double, ptr %tmp2, align 8
+  %cmp = fcmp olt double %2, %3
+  %conv3 = zext i1 %cmp to i32
+  ret i32 %conv3
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local { i64, i64 } @g() #0 {
-entry:
-  %retval = alloca %struct.R, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %retval, ptr align 8 @R, i64 16, i1 false)
-  %0 = load { i64, i64 }, ptr %retval, align 8
-  ret { i64, i64 } %0
-}
-
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
-
-; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %r = alloca %struct.R, align 8
-  %tmp = alloca %struct.R, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load i64, ptr @R, align 8
-  %1 = load i64, ptr getelementptr inbounds nuw ({ i64, i64 }, ptr @R, i32 0, i32 1), align 8
-  call void @f(i64 %0, i64 %1)
-  %call = call { i64, i64 } @g()
-  %2 = getelementptr inbounds nuw { i64, i64 }, ptr %tmp, i32 0, i32 0
-  %3 = extractvalue { i64, i64 } %call, 0
-  store i64 %3, ptr %2, align 8
-  %4 = getelementptr inbounds nuw { i64, i64 }, ptr %tmp, i32 0, i32 1
-  %5 = extractvalue { i64, i64 } %call, 1
-  store i64 %5, ptr %4, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %r, ptr align 8 %tmp, i64 16, i1 false)
-  %a = getelementptr inbounds nuw %struct.R, ptr %r, i32 0, i32 0
-  %x = getelementptr inbounds nuw %struct.A, ptr %a, i32 0, i32 0
-  %6 = load i64, ptr %x, align 8
-  %7 = load i64, ptr @R, align 8
-  %cmp = icmp ne i64 %6, %7
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  %call = call i32 @foo(i32 noundef 2, i32 noundef 24, i32 noundef 3, i32 noundef 4)
+  %cmp = icmp eq i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.end
 
-lor.lhs.false:                                    ; preds = %entry
-  %b = getelementptr inbounds nuw %struct.R, ptr %r, i32 0, i32 1
-  %x1 = getelementptr inbounds nuw %struct.A, ptr %b, i32 0, i32 0
-  %8 = load i64, ptr %x1, align 8
-  %9 = load i64, ptr getelementptr inbounds nuw (%struct.R, ptr @R, i32 0, i32 1), align 8
-  %cmp2 = icmp ne i64 %8, %9
-  br i1 %cmp2, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  call void @abort() #4
+if.then:                                          ; preds = %entry
+  call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #3
+declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
-attributes #3 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

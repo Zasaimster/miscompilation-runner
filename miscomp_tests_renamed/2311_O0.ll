@@ -1,6 +1,6 @@
-; 158589605127930715930063039031490108569
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/158589605127930715930063039031490108569.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/158589605127930715930063039031490108569.c"
+; 189851860839790073334215379832306530316
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189851860839790073334215379832306530316.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189851860839790073334215379832306530316.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,12 +8,8 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %c = alloca i8, align 1
-  %d = alloca i8, align 1
-  %nbits = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i8 -1, ptr %c, align 1
-  ret i32 0
+  ret i32 42
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

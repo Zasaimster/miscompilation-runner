@@ -1,72 +1,78 @@
-; 163920517954292827005393610397035503816
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/163920517954292827005393610397035503816.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/163920517954292827005393610397035503816.c"
+; 19567147135451521584107327562934585273
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/19567147135451521584107327562934585273.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/19567147135451521584107327562934585273.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.anon = type { i8, [3 x i8] }
+@.str = private unnamed_addr constant [24 x i8] c"This will never print.\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @buggy(ptr noundef %param) #0 {
+entry:
+  %param.addr = alloca ptr, align 8
+  %accu = alloca i32, align 4
+  %zero = alloca i32, align 4
+  %borrow = alloca i32, align 4
+  store ptr %param, ptr %param.addr, align 8
+  store i32 0, ptr %zero, align 4
+  %0 = load ptr, ptr %param.addr, align 8
+  %1 = load i32, ptr %0, align 4
+  %sub = sub i32 0, %1
+  store i32 %sub, ptr %accu, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %2 = load i32, ptr %zero, align 4
+  %cmp = icmp ugt i32 %call, %2
+  %conv = zext i1 %cmp to i32
+  %sub1 = sub nsw i32 0, %conv
+  store i32 %sub1, ptr %borrow, align 4
+  %3 = load i32, ptr %accu, align 4
+  %4 = load ptr, ptr %param.addr, align 8
+  %5 = load i32, ptr %4, align 4
+  %add = add i32 %5, %3
+  store i32 %add, ptr %4, align 4
+  %6 = load i32, ptr %borrow, align 4
+  ret i32 %6
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %b = alloca i32, align 4
-  %sdata = alloca %struct.anon, align 4
+  %param = alloca i32, align 4
+  %borrow = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 10, ptr %b, align 4
-  call void @llvm.memset.p0.i64(ptr align 4 %sdata, i8 0, i64 4, i1 false)
-  br label %while.cond
+  store i32 1, ptr %param, align 4
+  %call = call i32 @buggy(ptr noundef %param)
+  store i32 %call, ptr %borrow, align 4
+  %0 = load i32, ptr %param, align 4
+  %cmp = icmp ne i32 %0, 0
+  br i1 %cmp, label %if.then, label %if.end
 
-while.cond:                                       ; preds = %if.end, %entry
-  %bf.load = load i8, ptr %sdata, align 4
-  %bf.clear = and i8 %bf.load, 1
-  %bf.cast = zext i8 %bf.clear to i32
-  %dec = add i32 %bf.cast, -1
-  %0 = trunc i32 %dec to i8
-  %bf.load1 = load i8, ptr %sdata, align 4
-  %bf.value = and i8 %0, 1
-  %bf.clear2 = and i8 %bf.load1, -2
-  %bf.set = or i8 %bf.clear2, %bf.value
-  store i8 %bf.set, ptr %sdata, align 4
-  %bf.result.cast = zext i8 %bf.value to i32
-  %cmp = icmp ugt i32 %bf.cast, 0
-  br i1 %cmp, label %while.body, label %while.end
-
-while.body:                                       ; preds = %while.cond
-  %1 = load i32, ptr %b, align 4
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr %b, align 4
-  %2 = load i32, ptr %b, align 4
-  %cmp3 = icmp sgt i32 %2, 100
-  br i1 %cmp3, label %if.then, label %if.end
-
-if.then:                                          ; preds = %while.body
-  br label %while.end
-
-if.end:                                           ; preds = %while.body
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %if.then, %while.cond
-  %3 = load i32, ptr %b, align 4
-  %cmp4 = icmp ne i32 %3, 1
-  br i1 %cmp4, label %if.then5, label %if.end6
-
-if.then5:                                         ; preds = %while.end
+if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
-if.end6:                                          ; preds = %while.end
+if.end:                                           ; preds = %entry
+  %1 = load i32, ptr %borrow, align 4
+  %add = add i32 %1, 1
+  %cmp1 = icmp ne i32 %add, 0
+  br i1 %cmp1, label %if.then2, label %if.end3
+
+if.then2:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end3:                                          ; preds = %if.end
   ret i32 0
 }
-
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn nounwind }
 
@@ -79,5 +85,3 @@ attributes #3 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

@@ -1,28 +1,39 @@
-; 197510228801972420494459417801622781270
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197510228801972420494459417801622781270.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197510228801972420494459417801622781270.c"
+; 169645846314666199637306307096118243737
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169645846314666199637306307096118243737.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169645846314666199637306307096118243737.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.A = type { i32, i32, i32 }
-
-@e = dso_local local_unnamed_addr global %struct.A zeroinitializer, align 4
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local { i64, i32 } @foo() local_unnamed_addr #0 {
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @f(ptr noundef readnone captures(none) %b, i32 noundef %c) local_unnamed_addr #0 {
 entry:
-  ret { i64, i32 } undef
+  switch i32 %c, label %sw.default [
+    i32 100, label %sw.epilog
+    i32 107, label %sw.epilog
+  ]
+
+sw.default:                                       ; preds = %entry
+  tail call void @abort() #3
+  unreachable
+
+sw.epilog:                                        ; preds = %entry, %entry
+  ret i32 0
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: none, inaccessiblemem: none) uwtable
-define dso_local i32 @main() local_unnamed_addr #1 {
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
-  %0 = load i32, ptr @e, align 4, !tbaa !5
-  ret i32 %0
+  tail call void @abort() #3
+  unreachable
 }
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -32,8 +43,3 @@ attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memor
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !7, i64 0}
-!6 = !{!"A", !7, i64 0, !7, i64 4, !7, i64 8}
-!7 = !{!"int", !8, i64 0}
-!8 = !{!"omnipotent char", !9, i64 0}
-!9 = !{!"Simple C/C++ TBAA"}

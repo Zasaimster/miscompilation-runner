@@ -1,36 +1,37 @@
-; 156731614911996773497138227692574298494
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/156731614911996773497138227692574298494_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/156731614911996773497138227692574298494.c"
+; 104666141095689956435865759427645982320
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104666141095689956435865759427645982320_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104666141095689956435865759427645982320.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  %r = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %0 = load i32, ptr %i.addr, align 4
-  %mul = mul nsw i32 4, %0
-  %sub = sub nsw i32 80, %mul
-  %div = sdiv i32 %sub, 20
-  store i32 %div, ptr %r, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %1 = load i32, ptr %r, align 4
-  ret i32 %1
-}
-
-declare i32 @printf(ptr noundef, ...) #1
+@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
+@.str.1 = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i8, align 1
+  %b = alloca i64, align 8
+  %c = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 1)
-  %cmp = icmp ne i32 %call, 3
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = trunc i32 %call to i8
+  store volatile i8 %conv, ptr %a, align 1
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %conv2 = sext i32 %call1 to i64
+  store i64 %conv2, ptr %b, align 8
+  %0 = load i64, ptr %b, align 8
+  %sub = sub nsw i64 0, %0
+  %conv3 = trunc i64 %sub to i32
+  %1 = load volatile i8, ptr %a, align 1
+  %conv4 = zext i8 %1 to i32
+  %mul = mul nsw i32 -2147483647, %conv4
+  %sub5 = sub nsw i32 %conv3, %mul
+  %sub6 = sub nsw i32 0, %sub5
+  store i32 %sub6, ptr %c, align 4
+  %2 = load i32, ptr %c, align 4
+  %cmp = icmp ne i32 %2, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -40,6 +41,8 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %entry
   ret i32 0
 }
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

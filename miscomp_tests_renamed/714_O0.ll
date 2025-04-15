@@ -1,33 +1,18 @@
-; 129837480417543698166926681276256224046
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129837480417543698166926681276256224046.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129837480417543698166926681276256224046.c"
+; 132168104832104376764268761939202831687
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132168104832104376764268761939202831687.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132168104832104376764268761939202831687.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [7 x i32] [i32 97, i32 98, i32 99, i32 100, i32 101, i32 102, i32 0], align 4
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo() #0 {
-entry:
-  %call = call i32 @f(ptr noundef @.str)
-  ret i32 %call
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @f(ptr noundef %x) #0 {
-entry:
-  %x.addr = alloca ptr, align 8
-  store ptr %x, ptr %x.addr, align 8
-  ret i32 0
-}
+%union.anon = type { double }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo()
-  %cmp = icmp ne i32 %call, 0
+  %call = call i32 @test(i32 noundef 5)
+  %cmp = icmp ne i32 %call, 2
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -35,17 +20,18 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i32 @foo()
-  %cmp2 = icmp ne i32 %call1, 1
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @test(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  %a = alloca %union.anon, align 8
+  store i32 %x, ptr %x.addr, align 4
+  store double 0.000000e+00, ptr %a, align 8
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind

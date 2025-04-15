@@ -1,145 +1,197 @@
-; 168320608028899237931774045886099650540
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168320608028899237931774045886099650540_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168320608028899237931774045886099650540.c"
+; 141051674140539369517270211924580599029
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141051674140539369517270211924580599029_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141051674140539369517270211924580599029.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.B = type { ptr, i32 }
-%struct.A = type { i32, i32 }
+%struct.S = type { i32, i16, i16, [8 x i8], ptr }
 
-@b = dso_local global i32 1, align 4
-@c = dso_local global i32 0, align 4
-@d = dso_local global [1 x %struct.B] zeroinitializer, align 16
-@.str = private unnamed_addr constant [5 x i8] c"test\00", align 1
-@a = dso_local global ptr null, align 8
-@.str.1 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
+@glob_int = dso_local global i32 4, align 4
+@glob_int_arr = dso_local global [7 x i32] zeroinitializer, align 16
+@glob_vol_ptr_int = dso_local global ptr @glob_int_arr, align 8
+@glob_vol_int_arr = dso_local global [100 x i32] zeroinitializer, align 16
+@glob_ptr_vol_int = dso_local global ptr @glob_vol_int_arr, align 8
+@glob_vol_ptr_vol_int = dso_local global ptr @glob_vol_int_arr, align 8
+@str = dso_local global %struct.S zeroinitializer, align 8
+@vol_ptr_str = dso_local global ptr @str, align 8
+@vol_str = dso_local global %struct.S zeroinitializer, align 8
+@ptr_vol_str = dso_local global ptr @vol_str, align 8
+@vol_ptr_vol_str = dso_local global ptr @vol_str, align 8
+@glob_vol_int = dso_local global i32 0, align 4
+@stat_vol_int_arr = internal global [100 x i32] zeroinitializer, align 16
+@stat_vol_ptr_int = internal global ptr @stat_int_arr, align 8
+@stat_ptr_vol_int = internal global ptr @stat_vol_int_arr, align 8
+@stat_vol_ptr_vol_int = internal global ptr @stat_vol_int_arr, align 8
+@stat_vol_int = internal global i32 0, align 4
+@stat_int_arr = internal global [100 x i32] zeroinitializer, align 16
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(ptr noundef %x, ptr noundef %y, i32 noundef %z) #0 {
+define dso_local void @simple_vol_global() #0 {
 entry:
-  %x.addr = alloca ptr, align 8
-  %y.addr = alloca ptr, align 8
-  %z.addr = alloca i32, align 4
-  store ptr %x, ptr %x.addr, align 8
-  store ptr %y, ptr %y.addr, align 8
-  store i32 %z, ptr %z.addr, align 4
-  %0 = load ptr, ptr %y.addr, align 8
-  %arrayidx = getelementptr inbounds i8, ptr %0, i64 4
-  %1 = load i8, ptr %arrayidx, align 1
-  %conv = sext i8 %1 to i32
-  %2 = load i32, ptr %z.addr, align 4
-  %mul = mul nsw i32 %2, 25
-  %add = add nsw i32 %conv, %mul
-  store i32 %add, ptr @c, align 4
+  call void @llvm.prefetch.p0(ptr @glob_vol_int_arr, i32 0, i32 0, i32 1)
+  %0 = load volatile ptr, ptr @glob_vol_ptr_int, align 8
+  call void @llvm.prefetch.p0(ptr %0, i32 0, i32 0, i32 1)
+  %1 = load ptr, ptr @glob_ptr_vol_int, align 8
+  call void @llvm.prefetch.p0(ptr %1, i32 0, i32 0, i32 1)
+  %2 = load volatile ptr, ptr @glob_vol_ptr_vol_int, align 8
+  call void @llvm.prefetch.p0(ptr %2, i32 0, i32 0, i32 1)
+  call void @llvm.prefetch.p0(ptr @glob_vol_int, i32 0, i32 0, i32 1)
+  ret void
+}
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite, inaccessiblemem: readwrite)
+declare void @llvm.prefetch.p0(ptr readonly captures(none), i32 immarg, i32 immarg, i32 immarg) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @simple_vol_file() #0 {
+entry:
+  call void @llvm.prefetch.p0(ptr @stat_vol_int_arr, i32 0, i32 0, i32 1)
+  %0 = load volatile ptr, ptr @stat_vol_ptr_int, align 8
+  call void @llvm.prefetch.p0(ptr %0, i32 0, i32 0, i32 1)
+  %1 = load ptr, ptr @stat_ptr_vol_int, align 8
+  call void @llvm.prefetch.p0(ptr %1, i32 0, i32 0, i32 1)
+  %2 = load volatile ptr, ptr @stat_vol_ptr_vol_int, align 8
+  call void @llvm.prefetch.p0(ptr %2, i32 0, i32 0, i32 1)
+  call void @llvm.prefetch.p0(ptr @stat_vol_int, i32 0, i32 0, i32 1)
   ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @bar(ptr noundef %v, i32 noundef %w, i32 noundef %x, ptr noundef %y, i32 noundef %z) #0 {
+define dso_local void @expr_vol_global() #0 {
 entry:
-  %v.addr = alloca ptr, align 8
-  %w.addr = alloca i32, align 4
-  %x.addr = alloca i32, align 4
-  %y.addr = alloca ptr, align 8
-  %z.addr = alloca i32, align 4
-  store ptr %v, ptr %v.addr, align 8
-  store i32 %w, ptr %w.addr, align 4
-  store i32 %x, ptr %x.addr, align 4
-  store ptr %y, ptr %y.addr, align 8
-  store i32 %z, ptr %z.addr, align 4
-  %0 = load i32, ptr %w.addr, align 4
-  %tobool = icmp ne i32 %0, 0
-  br i1 %tobool, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #4
-  unreachable
-
-if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #5
-  unreachable
-}
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @test(ptr noundef %x, ptr noundef %y) #0 {
-entry:
-  %x.addr = alloca ptr, align 8
-  %y.addr = alloca ptr, align 8
-  store ptr %x, ptr %x.addr, align 8
-  store ptr %y, ptr %y.addr, align 8
-  %0 = load ptr, ptr @d, align 16
-  %1 = load i32, ptr getelementptr inbounds nuw (%struct.B, ptr @d, i32 0, i32 1), align 8
-  %idxprom = sext i32 %1 to i64
-  %arrayidx = getelementptr inbounds ptr, ptr %0, i64 %idxprom
-  %2 = load ptr, ptr %arrayidx, align 8
-  call void @foo(ptr noundef %2, ptr noundef @.str, i32 noundef 200)
-  %3 = load ptr, ptr %x.addr, align 8
-  %4 = load i32, ptr @b, align 4
-  %tobool = icmp ne i32 %4, 0
-  %cond = select i1 %tobool, i32 0, i32 65536
-  %5 = load ptr, ptr %x.addr, align 8
-  %call = call i64 @strlen(ptr noundef %5) #6
-  %conv = trunc i64 %call to i32
-  %call1 = call ptr @bar(ptr noundef %3, i32 noundef %cond, i32 noundef %conv, ptr noundef @.str, i32 noundef 201)
-  %6 = load ptr, ptr @d, align 16
-  %7 = load i32, ptr getelementptr inbounds nuw (%struct.B, ptr @d, i32 0, i32 1), align 8
-  %idxprom2 = sext i32 %7 to i64
-  %arrayidx3 = getelementptr inbounds ptr, ptr %6, i64 %idxprom2
-  store ptr %call1, ptr %arrayidx3, align 8
-  %8 = load ptr, ptr @d, align 16
-  %9 = load i32, ptr getelementptr inbounds nuw (%struct.B, ptr @d, i32 0, i32 1), align 8
-  %idxprom4 = sext i32 %9 to i64
-  %arrayidx5 = getelementptr inbounds ptr, ptr %8, i64 %idxprom4
-  %10 = load ptr, ptr %arrayidx5, align 8
-  %a = getelementptr inbounds nuw %struct.A, ptr %10, i32 0, i32 0
-  %11 = load i32, ptr %a, align 4
-  %inc = add nsw i32 %11, 1
-  store i32 %inc, ptr %a, align 4
-  %12 = load ptr, ptr %y.addr, align 8
-  %tobool6 = icmp ne ptr %12, null
-  br i1 %tobool6, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  %13 = load ptr, ptr %y.addr, align 8
-  %14 = load i32, ptr %13, align 4
-  %15 = load ptr, ptr @d, align 16
-  %16 = load i32, ptr getelementptr inbounds nuw (%struct.B, ptr @d, i32 0, i32 1), align 8
-  %idxprom7 = sext i32 %16 to i64
-  %arrayidx8 = getelementptr inbounds ptr, ptr %15, i64 %idxprom7
-  %17 = load ptr, ptr %arrayidx8, align 8
-  %b = getelementptr inbounds nuw %struct.A, ptr %17, i32 0, i32 1
-  store i32 %14, ptr %b, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
+  call void @llvm.prefetch.p0(ptr @vol_str, i32 0, i32 0, i32 1)
+  %0 = load ptr, ptr @ptr_vol_str, align 8
+  call void @llvm.prefetch.p0(ptr %0, i32 0, i32 0, i32 1)
+  %1 = load volatile ptr, ptr @vol_ptr_str, align 8
+  call void @llvm.prefetch.p0(ptr %1, i32 0, i32 0, i32 1)
+  %2 = load volatile ptr, ptr @vol_ptr_vol_str, align 8
+  call void @llvm.prefetch.p0(ptr %2, i32 0, i32 0, i32 1)
+  call void @llvm.prefetch.p0(ptr getelementptr inbounds nuw (%struct.S, ptr @vol_str, i32 0, i32 1), i32 0, i32 0, i32 1)
+  %3 = load ptr, ptr @ptr_vol_str, align 8
+  %b = getelementptr inbounds nuw %struct.S, ptr %3, i32 0, i32 1
+  call void @llvm.prefetch.p0(ptr %b, i32 0, i32 0, i32 1)
+  %4 = load volatile ptr, ptr @vol_ptr_str, align 8
+  %b1 = getelementptr inbounds nuw %struct.S, ptr %4, i32 0, i32 1
+  call void @llvm.prefetch.p0(ptr %b1, i32 0, i32 0, i32 1)
+  %5 = load volatile ptr, ptr @vol_ptr_vol_str, align 8
+  %b2 = getelementptr inbounds nuw %struct.S, ptr %5, i32 0, i32 1
+  call void @llvm.prefetch.p0(ptr %b2, i32 0, i32 0, i32 1)
+  call void @llvm.prefetch.p0(ptr getelementptr inbounds nuw (%struct.S, ptr @vol_str, i32 0, i32 3), i32 0, i32 0, i32 1)
+  %6 = load volatile ptr, ptr @vol_ptr_str, align 8
+  %d = getelementptr inbounds nuw %struct.S, ptr %6, i32 0, i32 3
+  call void @llvm.prefetch.p0(ptr %d, i32 0, i32 0, i32 1)
+  %7 = load ptr, ptr @ptr_vol_str, align 8
+  %d3 = getelementptr inbounds nuw %struct.S, ptr %7, i32 0, i32 3
+  call void @llvm.prefetch.p0(ptr %d3, i32 0, i32 0, i32 1)
+  %8 = load volatile ptr, ptr @vol_ptr_vol_str, align 8
+  %d4 = getelementptr inbounds nuw %struct.S, ptr %8, i32 0, i32 3
+  call void @llvm.prefetch.p0(ptr %d4, i32 0, i32 0, i32 1)
+  %9 = load volatile ptr, ptr getelementptr inbounds nuw (%struct.S, ptr @vol_str, i32 0, i32 4), align 8
+  call void @llvm.prefetch.p0(ptr %9, i32 0, i32 0, i32 1)
+  %10 = load volatile ptr, ptr @vol_ptr_str, align 8
+  %next = getelementptr inbounds nuw %struct.S, ptr %10, i32 0, i32 4
+  %11 = load ptr, ptr %next, align 8
+  call void @llvm.prefetch.p0(ptr %11, i32 0, i32 0, i32 1)
+  %12 = load ptr, ptr @ptr_vol_str, align 8
+  %next5 = getelementptr inbounds nuw %struct.S, ptr %12, i32 0, i32 4
+  %13 = load volatile ptr, ptr %next5, align 8
+  call void @llvm.prefetch.p0(ptr %13, i32 0, i32 0, i32 1)
+  %14 = load volatile ptr, ptr @vol_ptr_vol_str, align 8
+  %next6 = getelementptr inbounds nuw %struct.S, ptr %14, i32 0, i32 4
+  %15 = load volatile ptr, ptr %next6, align 8
+  call void @llvm.prefetch.p0(ptr %15, i32 0, i32 0, i32 1)
+  %16 = load volatile ptr, ptr getelementptr inbounds nuw (%struct.S, ptr @vol_str, i32 0, i32 4), align 8
+  %d7 = getelementptr inbounds nuw %struct.S, ptr %16, i32 0, i32 3
+  %arraydecay = getelementptr inbounds [8 x i8], ptr %d7, i64 0, i64 0
+  call void @llvm.prefetch.p0(ptr %arraydecay, i32 0, i32 0, i32 1)
+  %17 = load volatile ptr, ptr @vol_ptr_str, align 8
+  %next8 = getelementptr inbounds nuw %struct.S, ptr %17, i32 0, i32 4
+  %18 = load ptr, ptr %next8, align 8
+  %d9 = getelementptr inbounds nuw %struct.S, ptr %18, i32 0, i32 3
+  %arraydecay10 = getelementptr inbounds [8 x i8], ptr %d9, i64 0, i64 0
+  call void @llvm.prefetch.p0(ptr %arraydecay10, i32 0, i32 0, i32 1)
+  %19 = load ptr, ptr @ptr_vol_str, align 8
+  %next11 = getelementptr inbounds nuw %struct.S, ptr %19, i32 0, i32 4
+  %20 = load volatile ptr, ptr %next11, align 8
+  %d12 = getelementptr inbounds nuw %struct.S, ptr %20, i32 0, i32 3
+  %arraydecay13 = getelementptr inbounds [8 x i8], ptr %d12, i64 0, i64 0
+  call void @llvm.prefetch.p0(ptr %arraydecay13, i32 0, i32 0, i32 1)
+  %21 = load volatile ptr, ptr @vol_ptr_vol_str, align 8
+  %next14 = getelementptr inbounds nuw %struct.S, ptr %21, i32 0, i32 4
+  %22 = load volatile ptr, ptr %next14, align 8
+  %d15 = getelementptr inbounds nuw %struct.S, ptr %22, i32 0, i32 3
+  %arraydecay16 = getelementptr inbounds [8 x i8], ptr %d15, i64 0, i64 0
+  call void @llvm.prefetch.p0(ptr %arraydecay16, i32 0, i32 0, i32 1)
+  call void @llvm.prefetch.p0(ptr @glob_vol_int_arr, i32 0, i32 0, i32 1)
+  %23 = load volatile ptr, ptr @glob_vol_ptr_int, align 8
+  call void @llvm.prefetch.p0(ptr %23, i32 0, i32 0, i32 1)
+  %24 = load ptr, ptr @glob_ptr_vol_int, align 8
+  call void @llvm.prefetch.p0(ptr %24, i32 0, i32 0, i32 1)
+  %25 = load volatile ptr, ptr @glob_vol_ptr_vol_int, align 8
+  call void @llvm.prefetch.p0(ptr %25, i32 0, i32 0, i32 1)
+  call void @llvm.prefetch.p0(ptr getelementptr inbounds ([100 x i32], ptr @glob_vol_int_arr, i64 0, i64 2), i32 0, i32 0, i32 1)
+  %26 = load volatile ptr, ptr @glob_vol_ptr_int, align 8
+  %arrayidx = getelementptr inbounds i32, ptr %26, i64 3
+  call void @llvm.prefetch.p0(ptr %arrayidx, i32 0, i32 0, i32 1)
+  %27 = load ptr, ptr @glob_ptr_vol_int, align 8
+  %arrayidx17 = getelementptr inbounds i32, ptr %27, i64 3
+  call void @llvm.prefetch.p0(ptr %arrayidx17, i32 0, i32 0, i32 1)
+  %28 = load volatile ptr, ptr @glob_vol_ptr_vol_int, align 8
+  %arrayidx18 = getelementptr inbounds i32, ptr %28, i64 3
+  call void @llvm.prefetch.p0(ptr %arrayidx18, i32 0, i32 0, i32 1)
+  call void @llvm.prefetch.p0(ptr getelementptr inbounds (i32, ptr @glob_vol_int_arr, i64 3), i32 0, i32 0, i32 1)
+  %29 = load volatile i32, ptr @glob_vol_int, align 4
+  %idx.ext = sext i32 %29 to i64
+  %add.ptr = getelementptr inbounds i32, ptr @glob_vol_int_arr, i64 %idx.ext
+  call void @llvm.prefetch.p0(ptr %add.ptr, i32 0, i32 0, i32 1)
+  %30 = load volatile ptr, ptr @glob_vol_ptr_int, align 8
+  %add.ptr19 = getelementptr inbounds i32, ptr %30, i64 5
+  call void @llvm.prefetch.p0(ptr %add.ptr19, i32 0, i32 0, i32 1)
+  %31 = load ptr, ptr @glob_ptr_vol_int, align 8
+  %add.ptr20 = getelementptr inbounds i32, ptr %31, i64 5
+  call void @llvm.prefetch.p0(ptr %add.ptr20, i32 0, i32 0, i32 1)
+  %32 = load volatile ptr, ptr @glob_vol_ptr_vol_int, align 8
+  %add.ptr21 = getelementptr inbounds i32, ptr %32, i64 5
+  call void @llvm.prefetch.p0(ptr %add.ptr21, i32 0, i32 0, i32 1)
+  %33 = load volatile ptr, ptr @glob_vol_ptr_int, align 8
+  %34 = load volatile i32, ptr @glob_vol_int, align 4
+  %idx.ext22 = sext i32 %34 to i64
+  %add.ptr23 = getelementptr inbounds i32, ptr %33, i64 %idx.ext22
+  call void @llvm.prefetch.p0(ptr %add.ptr23, i32 0, i32 0, i32 1)
+  %35 = load ptr, ptr @glob_ptr_vol_int, align 8
+  %36 = load volatile i32, ptr @glob_vol_int, align 4
+  %idx.ext24 = sext i32 %36 to i64
+  %add.ptr25 = getelementptr inbounds i32, ptr %35, i64 %idx.ext24
+  call void @llvm.prefetch.p0(ptr %add.ptr25, i32 0, i32 0, i32 1)
+  %37 = load volatile ptr, ptr @glob_vol_ptr_vol_int, align 8
+  %38 = load volatile i32, ptr @glob_vol_int, align 4
+  %idx.ext26 = sext i32 %38 to i64
+  %add.ptr27 = getelementptr inbounds i32, ptr %37, i64 %idx.ext26
+  call void @llvm.prefetch.p0(ptr %add.ptr27, i32 0, i32 0, i32 1)
   ret void
 }
-
-; Function Attrs: nounwind
-declare i64 @strlen(ptr noundef) #3
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
-  store i32 0, ptr getelementptr inbounds nuw (%struct.B, ptr @d, i32 0, i32 1), align 8
-  store ptr @a, ptr @d, align 16
-  call void @test(ptr noundef @.str.1, ptr noundef null)
-  ret i32 0
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  call void @simple_vol_global()
+  call void @simple_vol_file()
+  store ptr @str, ptr getelementptr inbounds nuw (%struct.S, ptr @str, i32 0, i32 4), align 8
+  store volatile ptr @str, ptr getelementptr inbounds nuw (%struct.S, ptr @vol_str, i32 0, i32 4), align 8
+  call void @expr_vol_global()
+  call void @exit(i32 noundef 0) #3
+  unreachable
 }
 
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite, inaccessiblemem: readwrite) }
 attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
-attributes #5 = { noreturn }
-attributes #6 = { nounwind }
+attributes #3 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

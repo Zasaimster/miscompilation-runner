@@ -1,58 +1,115 @@
-; 119587044666473570150973800875189929052
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119587044666473570150973800875189929052_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119587044666473570150973800875189929052.c"
+; 165818195507906556408813380351649320608
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/165818195507906556408813380351649320608_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/165818195507906556408813380351649320608.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@masktab = dso_local global [0 x i16] zeroinitializer, align 2
+@psd = dso_local global [6 x i16] [i16 50, i16 40, i16 30, i16 20, i16 10, i16 0], align 2
+@bndpsd = dso_local global [6 x i16] [i16 1, i16 2, i16 3, i16 4, i16 5, i16 0], align 2
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @false() #0 {
+define dso_local void @ba_compute_psd(i16 noundef signext %start) #0 {
 entry:
-  ret i32 -123
+  %start.addr = alloca i16, align 2
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %k = alloca i32, align 4
+  %lastbin = alloca i16, align 2
+  store i16 %start, ptr %start.addr, align 2
+  store i16 4, ptr %lastbin, align 2
+  %0 = load i16, ptr %start.addr, align 2
+  %conv = sext i16 %0 to i32
+  store i32 %conv, ptr %j, align 4
+  %1 = load i16, ptr %start.addr, align 2
+  %idxprom = sext i16 %1 to i64
+  %arrayidx = getelementptr inbounds [0 x i16], ptr @masktab, i64 0, i64 %idxprom
+  %2 = load i16, ptr %arrayidx, align 2
+  %conv1 = sext i16 %2 to i32
+  store i32 %conv1, ptr %k, align 4
+  %3 = load i32, ptr %j, align 4
+  %idxprom2 = sext i32 %3 to i64
+  %arrayidx3 = getelementptr inbounds [6 x i16], ptr @psd, i64 0, i64 %idxprom2
+  %4 = load i16, ptr %arrayidx3, align 2
+  %5 = load i32, ptr %k, align 4
+  %idxprom4 = sext i32 %5 to i64
+  %arrayidx5 = getelementptr inbounds [6 x i16], ptr @bndpsd, i64 0, i64 %idxprom4
+  store i16 %4, ptr %arrayidx5, align 2
+  %6 = load i32, ptr %j, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, ptr %j, align 4
+  %7 = load i32, ptr %j, align 4
+  store i32 %7, ptr %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %8 = load i32, ptr %i, align 4
+  %9 = load i16, ptr %lastbin, align 2
+  %conv6 = sext i16 %9 to i32
+  %cmp = icmp slt i32 %8, %conv6
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %10 = load i32, ptr %k, align 4
+  %idxprom8 = sext i32 %10 to i64
+  %arrayidx9 = getelementptr inbounds [6 x i16], ptr @bndpsd, i64 0, i64 %idxprom8
+  %11 = load i32, ptr %j, align 4
+  %idxprom10 = sext i32 %11 to i64
+  %arrayidx11 = getelementptr inbounds [6 x i16], ptr @psd, i64 0, i64 %idxprom10
+  %call = call signext i16 @logadd(ptr noundef %arrayidx9, ptr noundef %arrayidx11)
+  %12 = load i32, ptr %k, align 4
+  %idxprom12 = sext i32 %12 to i64
+  %arrayidx13 = getelementptr inbounds [6 x i16], ptr @bndpsd, i64 0, i64 %idxprom12
+  store i16 %call, ptr %arrayidx13, align 2
+  %13 = load i32, ptr %j, align 4
+  %inc14 = add nsw i32 %13, 1
+  store i32 %inc14, ptr %j, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %14 = load i32, ptr %i, align 4
+  %inc15 = add nsw i32 %14, 1
+  store i32 %inc15, ptr %i, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local signext i16 @logadd(ptr noundef %a, ptr noundef %b) #0 {
+entry:
+  %a.addr = alloca ptr, align 8
+  %b.addr = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  store ptr %b, ptr %b.addr, align 8
+  %0 = load ptr, ptr %a.addr, align 8
+  %1 = load i16, ptr %0, align 2
+  %conv = sext i16 %1 to i32
+  %2 = load ptr, ptr %b.addr, align 8
+  %3 = load i16, ptr %2, align 2
+  %conv1 = sext i16 %3 to i32
+  %add = add nsw i32 %conv, %conv1
+  %conv2 = trunc i32 %add to i16
+  ret i16 %conv2
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
-  %count = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  store i32 0, ptr %count, align 4
-  br label %while.cond
+  call void @ba_compute_psd(i16 noundef signext 0)
+  %0 = load i16, ptr getelementptr inbounds ([6 x i16], ptr @bndpsd, i64 0, i64 1), align 2
+  %conv = sext i16 %0 to i32
+  %cmp = icmp ne i32 %conv, 140
+  br i1 %cmp, label %if.then, label %if.end
 
-while.cond:                                       ; preds = %while.body, %entry
-  %call = call i32 @false()
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %lor.end, label %lor.rhs
-
-lor.rhs:                                          ; preds = %while.cond
-  %0 = load i32, ptr %count, align 4
-  %cmp = icmp slt i32 %0, -123
-  br label %lor.end
-
-lor.end:                                          ; preds = %lor.rhs, %while.cond
-  %1 = phi i1 [ true, %while.cond ], [ %cmp, %lor.rhs ]
-  br i1 %1, label %while.body, label %while.end
-
-while.body:                                       ; preds = %lor.end
-  %2 = load i32, ptr %count, align 4
-  %inc = add nsw i32 %2, 1
-  store i32 %inc, ptr %count, align 4
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %lor.end
-  %3 = load i32, ptr %count, align 4
-  %tobool1 = icmp ne i32 %3, 0
-  br i1 %tobool1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %while.end
+if.then:                                          ; preds = %entry
   call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %while.end
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

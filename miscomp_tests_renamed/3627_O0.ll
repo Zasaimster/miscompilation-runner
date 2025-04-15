@@ -1,77 +1,68 @@
-; 138998937569297741826814163547325786255
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138998937569297741826814163547325786255.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138998937569297741826814163547325786255.c"
+; 191483072580550482387625494127120087876
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191483072580550482387625494127120087876.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191483072580550482387625494127120087876.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.descriptor_dimension = type { i32, i32, i32 }
-%struct.gfc_array_i4 = type { ptr, i32, [7 x %struct.descriptor_dimension] }
-
-@constinit = private constant [7 x %struct.descriptor_dimension] [%struct.descriptor_dimension { i32 1, i32 1, i32 3 }, %struct.descriptor_dimension { i32 3, i32 1, i32 3 }, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer], align 4
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @msum_i4(ptr noundef %retarray, ptr noundef %array, ptr noundef %pdim) #0 {
-entry:
-  %retarray.addr = alloca ptr, align 8
-  %array.addr = alloca ptr, align 8
-  %pdim.addr = alloca ptr, align 8
-  %count = alloca [7 x i32], align 16
-  %extent = alloca [7 x i32], align 16
-  %dest = alloca ptr, align 8
-  %base = alloca ptr, align 8
-  %dim = alloca i32, align 4
-  %n = alloca i32, align 4
-  %len = alloca i32, align 4
-  store ptr %retarray, ptr %retarray.addr, align 8
-  store ptr %array, ptr %array.addr, align 8
-  store ptr %pdim, ptr %pdim.addr, align 8
-  ret void
-}
+@a = dso_local global i32 1, align 4
+@b = dso_local global i32 -1, align 4
+@c = dso_local global i32 1, align 4
+@d = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %rdata = alloca [3 x i32], align 4
-  %adata = alloca [9 x i32], align 16
-  %retarray = alloca %struct.gfc_array_i4, align 8
-  %array = alloca %struct.gfc_array_i4, align 8
-  %dim5 = alloca i32, align 4
+  %e = alloca double, align 8
+  %f = alloca double, align 8
+  %g = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  call void @llvm.memset.p0.i64(ptr align 8 %retarray, i8 0, i64 96, i1 false)
-  %data = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %retarray, i32 0, i32 0
-  %arraydecay = getelementptr inbounds [3 x i32], ptr %rdata, i64 0, i64 0
-  store ptr %arraydecay, ptr %data, align 8
-  %dtype = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %retarray, i32 0, i32 1
-  store i32 265, ptr %dtype, align 8
-  %dim = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %retarray, i32 0, i32 2
-  %stride = getelementptr inbounds nuw %struct.descriptor_dimension, ptr %dim, i32 0, i32 0
-  store i32 1, ptr %stride, align 4
-  %lbound = getelementptr inbounds nuw %struct.descriptor_dimension, ptr %dim, i32 0, i32 1
-  store i32 1, ptr %lbound, align 4
-  %ubound = getelementptr inbounds nuw %struct.descriptor_dimension, ptr %dim, i32 0, i32 2
-  store i32 3, ptr %ubound, align 4
-  %data1 = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %array, i32 0, i32 0
-  %arraydecay2 = getelementptr inbounds [9 x i32], ptr %adata, i64 0, i64 0
-  store ptr %arraydecay2, ptr %data1, align 8
-  %dtype3 = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %array, i32 0, i32 1
-  store i32 266, ptr %dtype3, align 8
-  %dim4 = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %array, i32 0, i32 2
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %dim4, ptr align 4 @constinit, i64 84, i1 false)
-  store i32 2, ptr %dim5, align 4
-  call void @msum_i4(ptr noundef %retarray, ptr noundef %array, ptr noundef %dim5)
-  ret i32 0
+  %0 = load i32, ptr @c, align 4
+  %conv = sitofp i32 %0 to double
+  store double %conv, ptr %f, align 8
+  %1 = load i32, ptr @d, align 4
+  %conv1 = sitofp i32 %1 to double
+  store double %conv1, ptr %g, align 8
+  %2 = load i32, ptr @a, align 4
+  %3 = load i32, ptr @b, align 4
+  %cmp = icmp slt i32 %2, %3
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %4 = load double, ptr %f, align 8
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %5 = load double, ptr %g, align 8
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi double [ %4, %cond.true ], [ %5, %cond.false ]
+  store double %cond, ptr %e, align 8
+  %6 = load double, ptr %e, align 8
+  %tobool = fcmp une double %6, 0.000000e+00
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %cond.end
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %cond.end
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
-attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

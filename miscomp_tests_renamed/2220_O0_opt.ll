@@ -1,116 +1,70 @@
-; 181743834294244682855835059754674900657
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/181743834294244682855835059754674900657_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/181743834294244682855835059754674900657.c"
+; 138998937569297741826814163547325786255
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138998937569297741826814163547325786255_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138998937569297741826814163547325786255.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [7 x i8] c"abcdef\00", align 1
-@.str.1 = private unnamed_addr constant [16 x i8] c"I am not used!\0A\00", align 1
+%struct.descriptor_dimension = type { i32, i32, i32 }
+%struct.gfc_array_i4 = type { ptr, i32, [7 x %struct.descriptor_dimension] }
+
+@constinit = private constant [7 x %struct.descriptor_dimension] [%struct.descriptor_dimension { i32 1, i32 1, i32 3 }, %struct.descriptor_dimension { i32 3, i32 1, i32 3 }, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer, %struct.descriptor_dimension zeroinitializer], align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @msum_i4(ptr noundef %retarray, ptr noundef %array, ptr noundef %pdim) #0 {
+entry:
+  %retarray.addr = alloca ptr, align 8
+  %array.addr = alloca ptr, align 8
+  %pdim.addr = alloca ptr, align 8
+  store ptr %retarray, ptr %retarray.addr, align 8
+  store ptr %array, ptr %array.addr, align 8
+  store ptr %pdim, ptr %pdim.addr, align 8
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s = alloca ptr, align 8
+  %rdata = alloca [3 x i32], align 4
+  %adata = alloca [9 x i32], align 16
+  %retarray = alloca %struct.gfc_array_i4, align 8
+  %array = alloca %struct.gfc_array_i4, align 8
+  %dim5 = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store ptr @.str, ptr %s, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %0 = load ptr, ptr %s, align 8
-  %arrayidx = getelementptr inbounds i8, ptr %0, i64 0
-  %1 = load i8, ptr %arrayidx, align 1
-  %conv = sext i8 %1 to i32
-  %cmp = icmp ne i32 %conv, 97
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %2 = load ptr, ptr %s, align 8
-  %arrayidx2 = getelementptr inbounds i8, ptr %2, i64 1
-  %3 = load i8, ptr %arrayidx2, align 1
-  %conv3 = sext i8 %3 to i32
-  %cmp4 = icmp ne i32 %conv3, 98
-  br i1 %cmp4, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end
-  store i32 2, ptr %retval, align 4
-  br label %return
-
-if.end7:                                          ; preds = %if.end
-  %4 = load ptr, ptr %s, align 8
-  %arrayidx8 = getelementptr inbounds i8, ptr %4, i64 2
-  %5 = load i8, ptr %arrayidx8, align 1
-  %conv9 = sext i8 %5 to i32
-  %cmp10 = icmp ne i32 %conv9, 99
-  br i1 %cmp10, label %if.then12, label %if.end13
-
-if.then12:                                        ; preds = %if.end7
-  store i32 3, ptr %retval, align 4
-  br label %return
-
-if.end13:                                         ; preds = %if.end7
-  %6 = load ptr, ptr %s, align 8
-  %arrayidx14 = getelementptr inbounds i8, ptr %6, i64 3
-  %7 = load i8, ptr %arrayidx14, align 1
-  %conv15 = sext i8 %7 to i32
-  %cmp16 = icmp ne i32 %conv15, 100
-  br i1 %cmp16, label %if.then18, label %if.end19
-
-if.then18:                                        ; preds = %if.end13
-  store i32 4, ptr %retval, align 4
-  br label %return
-
-if.end19:                                         ; preds = %if.end13
-  %8 = load ptr, ptr %s, align 8
-  %arrayidx20 = getelementptr inbounds i8, ptr %8, i64 4
-  %9 = load i8, ptr %arrayidx20, align 1
-  %conv21 = sext i8 %9 to i32
-  %cmp22 = icmp ne i32 %conv21, 101
-  br i1 %cmp22, label %if.then24, label %if.end25
-
-if.then24:                                        ; preds = %if.end19
-  store i32 5, ptr %retval, align 4
-  br label %return
-
-if.end25:                                         ; preds = %if.end19
-  %10 = load ptr, ptr %s, align 8
-  %arrayidx26 = getelementptr inbounds i8, ptr %10, i64 5
-  %11 = load i8, ptr %arrayidx26, align 1
-  %conv27 = sext i8 %11 to i32
-  %cmp28 = icmp ne i32 %conv27, 102
-  br i1 %cmp28, label %if.then30, label %if.end31
-
-if.then30:                                        ; preds = %if.end25
-  store i32 6, ptr %retval, align 4
-  br label %return
-
-if.end31:                                         ; preds = %if.end25
-  %12 = load ptr, ptr %s, align 8
-  %arrayidx32 = getelementptr inbounds i8, ptr %12, i64 6
-  %13 = load i8, ptr %arrayidx32, align 1
-  %conv33 = sext i8 %13 to i32
-  %cmp34 = icmp ne i32 %conv33, 0
-  br i1 %cmp34, label %if.then36, label %if.end37
-
-if.then36:                                        ; preds = %if.end31
-  store i32 7, ptr %retval, align 4
-  br label %return
-
-if.end37:                                         ; preds = %if.end31
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end37, %if.then36, %if.then30, %if.then24, %if.then18, %if.then12, %if.then6, %if.then
-  %14 = load i32, ptr %retval, align 4
-  ret i32 %14
+  call void @llvm.memset.p0.i64(ptr align 8 %retarray, i8 0, i64 96, i1 false)
+  %data = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %retarray, i32 0, i32 0
+  %arraydecay = getelementptr inbounds [3 x i32], ptr %rdata, i64 0, i64 0
+  store ptr %arraydecay, ptr %data, align 8
+  %dtype = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %retarray, i32 0, i32 1
+  store i32 265, ptr %dtype, align 8
+  %dim = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %retarray, i32 0, i32 2
+  %stride = getelementptr inbounds nuw %struct.descriptor_dimension, ptr %dim, i32 0, i32 0
+  store i32 1, ptr %stride, align 4
+  %lbound = getelementptr inbounds nuw %struct.descriptor_dimension, ptr %dim, i32 0, i32 1
+  store i32 1, ptr %lbound, align 4
+  %ubound = getelementptr inbounds nuw %struct.descriptor_dimension, ptr %dim, i32 0, i32 2
+  store i32 3, ptr %ubound, align 4
+  %data1 = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %array, i32 0, i32 0
+  %arraydecay2 = getelementptr inbounds [9 x i32], ptr %adata, i64 0, i64 0
+  store ptr %arraydecay2, ptr %data1, align 8
+  %dtype3 = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %array, i32 0, i32 1
+  store i32 266, ptr %dtype3, align 8
+  %dim4 = getelementptr inbounds nuw %struct.gfc_array_i4, ptr %array, i32 0, i32 2
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %dim4, ptr align 4 @constinit, i64 84, i1 false)
+  store i32 2, ptr %dim5, align 4
+  call void @msum_i4(ptr noundef %retarray, ptr noundef %array, ptr noundef %dim5)
+  ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,47 +1,38 @@
-; 143403791403644458184063368648349816819
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/143403791403644458184063368648349816819_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/143403791403644458184063368648349816819.c"
+; 118044113597010054594111269373721413505
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/118044113597010054594111269373721413505_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/118044113597010054594111269373721413505.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.s = type { i32, i32, ptr }
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f1(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  ret i32 100
+}
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %sp) #0 {
+define dso_local i64 @f2(i32 noundef %x) #0 {
 entry:
-  %sp.addr = alloca ptr, align 8
-  store ptr %sp, ptr %sp.addr, align 8
-  %0 = load ptr, ptr %sp.addr, align 8
-  %a = getelementptr inbounds nuw %struct.s, ptr %0, i32 0, i32 0
-  %1 = load i32, ptr %a, align 8
-  %cmp = icmp eq i32 %1, -1
-  br i1 %cmp, label %land.rhs, label %land.end
-
-land.rhs:                                         ; preds = %entry
-  %2 = load ptr, ptr %sp.addr, align 8
-  %b = getelementptr inbounds nuw %struct.s, ptr %2, i32 0, i32 1
-  %3 = load i32, ptr %b, align 4
-  %cmp1 = icmp eq i32 %3, -1
-  br label %land.end
-
-land.end:                                         ; preds = %land.rhs, %entry
-  %4 = phi i1 [ false, %entry ], [ %cmp1, %land.rhs ]
-  %land.ext = zext i1 %4 to i32
-  ret i32 %land.ext
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %cmp = icmp ne i32 %0, 0
+  %conv = zext i1 %cmp to i32
+  %conv1 = sext i32 %conv to i64
+  %sub = sub i64 %conv1, 3
+  %div = udiv i64 %sub, 2
+  ret i64 %div
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca %struct.s, align 8
   store i32 0, ptr %retval, align 4
-  %b = getelementptr inbounds nuw %struct.s, ptr %x, i32 0, i32 1
-  store i32 -1, ptr %b, align 4
-  %a = getelementptr inbounds nuw %struct.s, ptr %x, i32 0, i32 0
-  store i32 -1, ptr %a, align 8
-  %call = call i32 @f(ptr noundef %x)
-  %cmp = icmp eq i32 %call, 0
+  %call = call i32 @f1(i32 noundef 1)
+  %cmp = icmp ne i32 %call, 2147483647
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -49,6 +40,33 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @f1(i32 noundef 0)
+  %cmp2 = icmp ne i32 %call1, 2147483646
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i64 @f2(i32 noundef 1)
+  %cmp6 = icmp ne i64 %call5, 9223372036854775807
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #3
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
+  %call9 = call i64 @f2(i32 noundef 0)
+  %cmp10 = icmp ne i64 %call9, 9223372036854775806
+  br i1 %cmp10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  call void @abort() #3
+  unreachable
+
+if.end12:                                         ; preds = %if.end8
   call void @exit(i32 noundef 0) #4
   unreachable
 }

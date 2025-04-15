@@ -1,40 +1,47 @@
-; 113214685894925048230835099276882109211
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/113214685894925048230835099276882109211_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/113214685894925048230835099276882109211.c"
+; 136818868181247513812000702751533067754
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136818868181247513812000702751533067754_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136818868181247513812000702751533067754.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { ptr }
-
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo() #0 {
+define dso_local void @big(i64 noundef %u) #0 {
 entry:
-  ret i32 0
+  %u.addr = alloca i64, align 8
+  store i64 %u, ptr %u.addr, align 8
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @doit(i32 noundef %a, i32 noundef %b, ptr noundef %id) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  %id.addr = alloca ptr, align 8
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  store ptr %id, ptr %id.addr, align 8
+  %0 = load i32, ptr %a.addr, align 4
+  %conv = zext i32 %0 to i64
+  call void @big(i64 noundef %conv)
+  %1 = load i32, ptr %b.addr, align 4
+  %conv1 = zext i32 %1 to i64
+  call void @big(i64 noundef %conv1)
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %v = alloca %struct.S, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, ptr noundef @foo)
-  %conv = sext i32 %call to i64
-  %0 = inttoptr i64 %conv to ptr
-  %fptr = getelementptr inbounds nuw %struct.S, ptr %v, i32 0, i32 0
-  store ptr %0, ptr %fptr, align 8
-  %fptr1 = getelementptr inbounds nuw %struct.S, ptr %v, i32 0, i32 0
-  %1 = load ptr, ptr %fptr1, align 8
-  %call2 = call i32 (...) %1()
-  ret i32 %call2
+  call void @doit(i32 noundef 1, i32 noundef 1, ptr noundef @.str)
+  ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

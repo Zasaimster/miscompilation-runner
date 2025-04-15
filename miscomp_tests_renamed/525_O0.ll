@@ -1,27 +1,35 @@
-; 126490285931324502839003550531827408477
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126490285931324502839003550531827408477.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126490285931324502839003550531827408477.c"
+; 192446608498256443057508660353157212279
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192446608498256443057508660353157212279.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192446608498256443057508660353157212279.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.s = type { i32, i32 }
-
-@v = dso_local global %struct.s zeroinitializer, align 4
-@.str = private unnamed_addr constant [5 x i8] c"End\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str.1 = private unnamed_addr constant [6 x i8] c"b=%d\0A\00", align 1
+@.str.2 = private unnamed_addr constant [6 x i8] c"c=%d\0A\00", align 1
+@.str.3 = private unnamed_addr constant [6 x i8] c"e=%d\0A\00", align 1
+@.str.4 = private unnamed_addr constant [6 x i8] c"f=%d\0A\00", align 1
+@.str.5 = private unnamed_addr constant [6 x i8] c"g=%d\0A\00", align 1
+@.str.6 = private unnamed_addr constant [6 x i8] c"i=%d\0A\00", align 1
+@.str.7 = private unnamed_addr constant [6 x i8] c"j=%d\0A\00", align 1
+@.str.8 = private unnamed_addr constant [6 x i8] c"k=%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %d = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 1, ptr @v, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 2, ptr getelementptr inbounds nuw (%struct.s, ptr @v, i32 0, i32 1), align 4
-  %0 = load i32, ptr @v, align 4
-  %sub = sub nsw i32 3, %0
-  %1 = load i32, ptr getelementptr inbounds nuw (%struct.s, ptr @v, i32 0, i32 1), align 4
-  %sub1 = sub nsw i32 %sub, %1
-  ret i32 %sub1
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef 1)
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef 2)
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3, i32 noundef 0)
+  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i32 noundef 1)
+  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.5, i32 noundef 2)
+  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.6, i32 noundef 0)
+  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.7, i32 noundef 1)
+  %call8 = call i32 (ptr, ...) @printf(ptr noundef @.str.8, i32 noundef 2)
+  ret i32 0
 }
 
 declare i32 @printf(ptr noundef, ...) #1

@@ -1,148 +1,92 @@
-; 199036444606452132058500008816016809725
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/199036444606452132058500008816016809725_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/199036444606452132058500008816016809725.c"
+; 196914209213550583465012358177239167641
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196914209213550583465012358177239167641_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196914209213550583465012358177239167641.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@C = dso_local global x86_fp80 0xK3FFF8000000000000000, align 16
-@U = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@Y2 = dso_local global x86_fp80 0xK4002B000000000000000, align 16
-@Y1 = dso_local global x86_fp80 0xK40038800000000000000, align 16
-@X = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@Y = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@Z = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@T = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@R = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@S = dso_local global x86_fp80 0xK00000000000000000000, align 16
+%struct.rtx_def = type { i8, [3 x i8] }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @f2() #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %0 = load x86_fp80, ptr @C, align 16
-  %1 = load x86_fp80, ptr @U, align 16
-  %add = fadd x86_fp80 %0, %1
-  %2 = load x86_fp80, ptr @Y2, align 16
-  %mul = fmul x86_fp80 %add, %2
-  store x86_fp80 %mul, ptr @X, align 16
-  %3 = load x86_fp80, ptr @C, align 16
-  %4 = load x86_fp80, ptr @U, align 16
-  %sub = fsub x86_fp80 %3, %4
-  %5 = load x86_fp80, ptr @U, align 16
-  %sub1 = fsub x86_fp80 %sub, %5
-  store x86_fp80 %sub1, ptr @Y, align 16
-  %6 = load x86_fp80, ptr @C, align 16
-  %7 = load x86_fp80, ptr @U, align 16
-  %add2 = fadd x86_fp80 %6, %7
-  %8 = load x86_fp80, ptr @U, align 16
-  %add3 = fadd x86_fp80 %add2, %8
-  store x86_fp80 %add3, ptr @Z, align 16
-  %9 = load x86_fp80, ptr @C, align 16
-  %10 = load x86_fp80, ptr @U, align 16
-  %sub4 = fsub x86_fp80 %9, %10
-  %11 = load x86_fp80, ptr @Y1, align 16
-  %mul5 = fmul x86_fp80 %sub4, %11
-  store x86_fp80 %mul5, ptr @T, align 16
-  %12 = load x86_fp80, ptr @X, align 16
-  %13 = load x86_fp80, ptr @Z, align 16
-  %14 = load x86_fp80, ptr @U, align 16
-  %add6 = fadd x86_fp80 %13, %14
-  %sub7 = fsub x86_fp80 %12, %add6
-  store x86_fp80 %sub7, ptr @X, align 16
-  %15 = load x86_fp80, ptr @Y, align 16
-  %16 = load x86_fp80, ptr @Y1, align 16
-  %mul8 = fmul x86_fp80 %15, %16
-  store x86_fp80 %mul8, ptr @R, align 16
-  %17 = load x86_fp80, ptr @Z, align 16
-  %18 = load x86_fp80, ptr @Y2, align 16
-  %mul9 = fmul x86_fp80 %17, %18
-  store x86_fp80 %mul9, ptr @S, align 16
-  %19 = load x86_fp80, ptr @T, align 16
-  %20 = load x86_fp80, ptr @Y, align 16
-  %sub10 = fsub x86_fp80 %19, %20
-  store x86_fp80 %sub10, ptr @T, align 16
-  %21 = load x86_fp80, ptr @U, align 16
-  %22 = load x86_fp80, ptr @Y, align 16
-  %sub11 = fsub x86_fp80 %21, %22
-  %23 = load x86_fp80, ptr @R, align 16
-  %add12 = fadd x86_fp80 %sub11, %23
-  store x86_fp80 %add12, ptr @Y, align 16
-  %24 = load x86_fp80, ptr @S, align 16
-  %25 = load x86_fp80, ptr @Z, align 16
-  %26 = load x86_fp80, ptr @U, align 16
-  %add13 = fadd x86_fp80 %25, %26
-  %27 = load x86_fp80, ptr @U, align 16
-  %add14 = fadd x86_fp80 %add13, %27
-  %sub15 = fsub x86_fp80 %24, %add14
-  store x86_fp80 %sub15, ptr @Z, align 16
-  %28 = load x86_fp80, ptr @Y2, align 16
-  %29 = load x86_fp80, ptr @U, align 16
-  %add16 = fadd x86_fp80 %28, %29
-  %30 = load x86_fp80, ptr @Y1, align 16
-  %mul17 = fmul x86_fp80 %add16, %30
-  store x86_fp80 %mul17, ptr @R, align 16
-  %31 = load x86_fp80, ptr @Y2, align 16
-  %32 = load x86_fp80, ptr @Y1, align 16
-  %mul18 = fmul x86_fp80 %31, %32
-  store x86_fp80 %mul18, ptr @Y1, align 16
-  %33 = load x86_fp80, ptr @R, align 16
-  %34 = load x86_fp80, ptr @Y2, align 16
-  %sub19 = fsub x86_fp80 %33, %34
-  store x86_fp80 %sub19, ptr @R, align 16
-  %35 = load x86_fp80, ptr @Y1, align 16
-  %sub20 = fsub x86_fp80 %35, 0xK3FFE8000000000000000
-  store x86_fp80 %sub20, ptr @Y1, align 16
-  %36 = load x86_fp80, ptr @Z, align 16
-  %cmp = fcmp une x86_fp80 %36, 0xK40058800000000000000
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %37 = load x86_fp80, ptr @Y, align 16
-  %cmp21 = fcmp une x86_fp80 %37, 0xK4004C400000000000000
-  br i1 %cmp21, label %if.then, label %lor.lhs.false22
-
-lor.lhs.false22:                                  ; preds = %lor.lhs.false
-  %38 = load x86_fp80, ptr @X, align 16
-  %cmp23 = fcmp une x86_fp80 %38, 0xK4004E800000000000000
-  br i1 %cmp23, label %if.then, label %lor.lhs.false24
-
-lor.lhs.false24:                                  ; preds = %lor.lhs.false22
-  %39 = load x86_fp80, ptr @Y1, align 16
-  %cmp25 = fcmp une x86_fp80 %39, 0xK4006BA80000000000000
-  br i1 %cmp25, label %if.then, label %lor.lhs.false26
-
-lor.lhs.false26:                                  ; preds = %lor.lhs.false24
-  %40 = load x86_fp80, ptr @R, align 16
-  %cmp27 = fcmp une x86_fp80 %40, 0xK4006C100000000000000
-  br i1 %cmp27, label %if.then, label %lor.lhs.false28
-
-lor.lhs.false28:                                  ; preds = %lor.lhs.false26
-  %41 = load x86_fp80, ptr @S, align 16
-  %cmp29 = fcmp une x86_fp80 %41, 0xK40059A00000000000000
-  br i1 %cmp29, label %if.then, label %lor.lhs.false30
-
-lor.lhs.false30:                                  ; preds = %lor.lhs.false28
-  %42 = load x86_fp80, ptr @T, align 16
-  %cmp31 = fcmp une x86_fp80 %42, 0xK40058200000000000000
-  br i1 %cmp31, label %if.then, label %lor.lhs.false32
-
-lor.lhs.false32:                                  ; preds = %lor.lhs.false30
-  %43 = load x86_fp80, ptr @Y2, align 16
-  %cmp33 = fcmp une x86_fp80 %43, 0xK4002B000000000000000
-  br i1 %cmp33, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false32, %lor.lhs.false30, %lor.lhs.false28, %lor.lhs.false26, %lor.lhs.false24, %lor.lhs.false22, %lor.lhs.false, %entry
   call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false32
-  call void @exit(i32 noundef 0) #4
   unreachable
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %foo = alloca %struct.rtx_def, align 4
+  %bar = alloca ptr, align 8
+  store i32 0, ptr %retval, align 4
+  %bf.load = load i8, ptr %foo, align 4
+  %bf.clear = and i8 %bf.load, -2
+  %bf.set = or i8 %bf.clear, 1
+  store i8 %bf.set, ptr %foo, align 4
+  %bf.load1 = load i8, ptr %foo, align 4
+  %bf.clear2 = and i8 %bf.load1, -3
+  %bf.set3 = or i8 %bf.clear2, 0
+  store i8 %bf.set3, ptr %foo, align 4
+  %call = call ptr @f(ptr noundef %foo)
+  store ptr %call, ptr %bar, align 8
+  %0 = load ptr, ptr %bar, align 8
+  %cmp = icmp ne ptr %0, %foo
+  br i1 %cmp, label %if.then, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load ptr, ptr %bar, align 8
+  %bf.load4 = load i8, ptr %1, align 4
+  %bf.shl = shl i8 %bf.load4, 6
+  %bf.ashr = ashr i8 %bf.shl, 7
+  %bf.cast = sext i8 %bf.ashr to i32
+  %cmp5 = icmp ne i32 %bf.cast, 0
+  br i1 %cmp5, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %lor.lhs.false
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal ptr @f(ptr noundef %orig) #0 {
+entry:
+  %retval = alloca ptr, align 8
+  %orig.addr = alloca ptr, align 8
+  store ptr %orig, ptr %orig.addr, align 8
+  %0 = load ptr, ptr %orig.addr, align 8
+  %bf.load = load i8, ptr %0, align 4
+  %bf.shl = shl i8 %bf.load, 6
+  %bf.ashr = ashr i8 %bf.shl, 7
+  %bf.cast = sext i8 %bf.ashr to i32
+  %tobool = icmp ne i32 %bf.cast, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store ptr null, ptr %retval, align 8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %1 = load ptr, ptr %orig.addr, align 8
+  %bf.load1 = load i8, ptr %1, align 4
+  %bf.clear = and i8 %bf.load1, -3
+  %bf.set = or i8 %bf.clear, 2
+  store i8 %bf.set, ptr %1, align 4
+  %2 = load ptr, ptr %orig.addr, align 8
+  store ptr %2, ptr %retval, align 8
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %3 = load ptr, ptr %retval, align 8
+  ret ptr %3
+}
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

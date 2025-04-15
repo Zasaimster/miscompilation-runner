@@ -1,29 +1,44 @@
-; 12187691993597482387366341968266936128
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12187691993597482387366341968266936128_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12187691993597482387366341968266936128.c"
+; 137732010725437863775341958624111763375
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137732010725437863775341958624111763375_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137732010725437863775341958624111763375.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-@p = dso_local global ptr null, align 8
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @bar() #0 {
+define dso_local ptr @f(ptr noundef %p) #0 {
 entry:
-  ret i32 0
+  %p.addr = alloca ptr, align 8
+  %a = alloca i64, align 8
+  store ptr %p, ptr %p.addr, align 8
+  %0 = load ptr, ptr %p.addr, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, ptr noundef %0)
+  %shr = ashr i32 %call, 24
+  %conv = sext i32 %shr to i64
+  store i64 %conv, ptr %a, align 8
+  %call1 = call i32 (...) @example3()
+  %conv2 = sext i32 %call1 to i64
+  %1 = load i64, ptr %a, align 8
+  %add = add i64 %conv2, %1
+  %2 = inttoptr i64 %add to ptr
+  ret ptr %2
 }
+
+declare i32 @printf(ptr noundef, ...) #1
+
+declare i32 @example3(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
+  %x = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %i, align 4
-  store ptr %i, ptr @p, align 8
-  %call1 = call i32 @bar()
-  %cmp = icmp ne i32 %call1, 6
+  store i64 2147483648, ptr %x, align 8
+  %call = call ptr @f(ptr noundef %x)
+  %add.ptr = getelementptr inbounds i64, ptr %x, i64 129
+  %cmp = icmp ne ptr %call, %add.ptr
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -34,8 +49,6 @@ if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

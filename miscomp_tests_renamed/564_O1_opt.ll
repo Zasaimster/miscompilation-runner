@@ -1,36 +1,40 @@
-; 15084767298301064468780286172779009874
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/15084767298301064468780286172779009874_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/15084767298301064468780286172779009874.c"
+; 112034026132189821509372662143245527460
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112034026132189821509372662143245527460_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112034026132189821509372662143245527460.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
 
 ; Function Attrs: nounwind uwtable
-define dso_local range(i32 -1073741824, 1073741825) i32 @test(i32 noundef %one, i32 noundef %bit) local_unnamed_addr #0 {
+define dso_local i32 @calc_mp(i32 noundef %mod) local_unnamed_addr #0 {
 entry:
   %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %and = and i32 %call, 1
-  %call1 = tail call i32 (...) @doNothing() #6
-  %shr = ashr i32 %call1, 1
-  %add = add nsw i32 %shr, %and
-  ret i32 %add
+  %0 = urem i32 %call, %mod
+  %call1 = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #6
+  %cmp = icmp ugt i32 %call1, %mod
+  %sub2 = select i1 %cmp, i32 %mod, i32 0
+  %1 = add i32 %call, %sub2
+  %spec.select = sub i32 %0, %1
+  ret i32 %spec.select
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-declare i32 @doNothing(...) local_unnamed_addr #2
+declare i32 @calculateSquare(...) local_unnamed_addr #2
 
 ; Function Attrs: noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #3 {
+define dso_local noundef i32 @main(i32 noundef %argc, ptr noundef readnone captures(none) %argv) local_unnamed_addr #3 {
 entry:
   %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %and.i = and i32 %call.i, 1
-  %call1.i = tail call i32 (...) @doNothing() #6
-  %shr.i = ashr i32 %call1.i, 1
-  %add.i = sub nsw i32 0, %and.i
-  %cmp.not = icmp eq i32 %shr.i, %add.i
+  %0 = urem i32 %call.i, 1234
+  %call1.i = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #6
+  %cmp.i = icmp ugt i32 %call1.i, 1234
+  %sub2.i.neg1 = select i1 %cmp.i, i32 -1234, i32 0
+  %.neg = sub i32 %0, %call.i
+  %spec.select.i = add i32 %.neg, %sub2.i.neg1
+  %cmp.not = icmp eq i32 %spec.select.i, 680
   br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
@@ -38,32 +42,6 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call.i9 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %and.i10 = and i32 %call.i9, 1
-  %call1.i11 = tail call i32 (...) @doNothing() #6
-  %shr.i12 = ashr i32 %call1.i11, 1
-  %add.i13 = add nsw i32 %shr.i12, %and.i10
-  %cmp2.not = icmp eq i32 %add.i13, 1
-  br i1 %cmp2.not, label %if.end4, label %if.then3
-
-if.then3:                                         ; preds = %if.end
-  tail call void @abort() #7
-  unreachable
-
-if.end4:                                          ; preds = %if.end
-  %call.i14 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %and.i15 = and i32 %call.i14, 1
-  %call1.i16 = tail call i32 (...) @doNothing() #6
-  %shr.i17 = ashr i32 %call1.i16, 1
-  %add.i18 = add nsw i32 %shr.i17, %and.i15
-  %cmp6.not = icmp eq i32 %add.i18, 1
-  br i1 %cmp6.not, label %if.end8, label %if.then7
-
-if.then7:                                         ; preds = %if.end4
-  tail call void @abort() #7
-  unreachable
-
-if.end8:                                          ; preds = %if.end4
   tail call void @exit(i32 noundef 0) #7
   unreachable
 }

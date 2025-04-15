@@ -1,109 +1,61 @@
-; 139462803554708877611527816520466050331
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139462803554708877611527816520466050331.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139462803554708877611527816520466050331.c"
+; 17604389349212272214088306509680119795
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17604389349212272214088306509680119795.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17604389349212272214088306509680119795.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @sub1(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @sub2(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %0 = load i32, ptr %i.addr, align 4
-  %1 = load i32, ptr %i.addr, align 4
-  %add = add nsw i32 5, %1
-  %add1 = add nsw i32 %0, %add
-  ret i32 %add1
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @sub3(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %0 = load i32, ptr %i.addr, align 4
-  %1 = load i32, ptr %i.addr, align 4
-  %add = add nsw i32 5, %1
-  %sub = sub nsw i32 %0, %add
-  ret i32 %sub
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @sub4(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %0 = load i32, ptr %i.addr, align 4
-  %1 = load i32, ptr %i.addr, align 4
-  %sub = sub nsw i32 5, %1
-  %add = add nsw i32 %0, %sub
-  ret i32 %add
-}
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i32, align 4
+  %b = alloca i32, align 4
+  %d = alloca ptr, align 8
+  %e = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @sub1(i32 noundef 20)
-  %cmp = icmp ne i32 %call, 35
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %entry
-  %call1 = call i32 @sub2(i32 noundef 20)
-  %cmp2 = icmp ne i32 %call1, 45
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end4:                                          ; preds = %if.end
-  %call5 = call i32 @sub3(i32 noundef 20)
-  %cmp6 = icmp ne i32 %call5, -5
-  br i1 %cmp6, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %if.end4
-  call void @abort() #3
-  unreachable
-
-if.end8:                                          ; preds = %if.end4
-  %call9 = call i32 @sub4(i32 noundef 20)
-  %cmp10 = icmp ne i32 %call9, 5
-  br i1 %cmp10, label %if.then11, label %if.end12
-
-if.then11:                                        ; preds = %if.end8
-  call void @abort() #3
-  unreachable
-
-if.end12:                                         ; preds = %if.end8
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  store ptr null, ptr %d, align 8
+  store ptr %b, ptr %e, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  store i32 %call, ptr %a, align 4
+  store i32 34, ptr %b, align 4
+  %0 = load ptr, ptr %d, align 8
+  %1 = load i32, ptr %0, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %1)
+  %2 = load ptr, ptr %e, align 8
+  %3 = load i32, ptr %2, align 4
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %3)
+  %4 = load ptr, ptr %d, align 8
+  %5 = load ptr, ptr %e, align 8
+  %cmp = icmp eq ptr %4, %5
+  %conv = zext i1 %cmp to i32
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv)
+  %6 = load ptr, ptr %d, align 8
+  %7 = load ptr, ptr %e, align 8
+  %cmp4 = icmp ne ptr %6, %7
+  %conv5 = zext i1 %cmp4 to i32
+  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv5)
+  %8 = load ptr, ptr %e, align 8
+  store ptr %8, ptr %d, align 8
+  %9 = load ptr, ptr %d, align 8
+  %10 = load ptr, ptr %e, align 8
+  %cmp7 = icmp eq ptr %9, %10
+  %conv8 = zext i1 %cmp7 to i32
+  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv8)
+  %11 = load ptr, ptr %d, align 8
+  %12 = load ptr, ptr %e, align 8
+  %cmp10 = icmp ne ptr %11, %12
+  %conv11 = zext i1 %cmp10 to i32
+  %call12 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv11)
+  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

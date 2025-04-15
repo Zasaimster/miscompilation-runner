@@ -1,89 +1,122 @@
-; 13313275314758168243570341963598839981
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13313275314758168243570341963598839981_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13313275314758168243570341963598839981.c"
+; 195738817147096824648459812153344139045
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195738817147096824648459812153344139045_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195738817147096824648459812153344139045.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
+@x = dso_local global i32 256, align 4
+@p = dso_local global ptr @x, align 8
+@p1 = dso_local global ptr null, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %ty) #0 {
+define dso_local void @broken_longjmp(ptr noundef %p) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %ty.addr = alloca ptr, align 8
-  store ptr %ty, ptr %ty.addr, align 8
-  %0 = load ptr, ptr %ty.addr, align 8
-  store double -1.000000e+00, ptr %0, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
+  %p.addr = alloca ptr, align 8
+  store ptr %p, ptr %p.addr, align 8
+  ret void
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @test() #0 {
+entry:
+  %buf = alloca [5 x ptr], align 16
+  %q = alloca ptr, align 8
+  %0 = load volatile ptr, ptr @p, align 8
+  store volatile ptr %0, ptr %q, align 8
+  %arraydecay = getelementptr inbounds [5 x ptr], ptr %buf, i64 0, i64 0
+  %1 = call ptr @llvm.frameaddress.p0(i32 0)
+  store ptr %1, ptr %arraydecay, align 16
+  %2 = call ptr @llvm.stacksave.p0()
+  %3 = getelementptr inbounds ptr, ptr %arraydecay, i64 2
+  store ptr %2, ptr %3, align 16
+  %4 = call i32 @llvm.eh.sjlj.setjmp(ptr %arraydecay)
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  %arraydecay1 = getelementptr inbounds [5 x ptr], ptr %buf, i64 0, i64 0
+  call void @broken_longjmp(ptr noundef %arraydecay1)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %5 = load volatile ptr, ptr @p, align 8
+  %6 = load volatile ptr, ptr %q, align 8
+  %cmp = icmp ne ptr %5, %6
+  br i1 %cmp, label %if.then2, label %if.end3
+
+if.then2:                                         ; preds = %if.end
+  call void @abort() #5
+  unreachable
+
+if.end3:                                          ; preds = %if.end
+  ret void
+}
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(none)
+declare ptr @llvm.frameaddress.p0(i32 immarg) #1
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn
+declare ptr @llvm.stacksave.p0() #2
+
+; Function Attrs: nounwind
+declare i32 @llvm.eh.sjlj.setjmp(ptr) #3
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @test2() #0 {
+entry:
+  %q = alloca ptr, align 8
+  %0 = load volatile ptr, ptr @p, align 8
+  store volatile ptr %0, ptr %q, align 8
+  %1 = load volatile i32, ptr @x, align 4
+  %conv = sext i32 %1 to i64
+  %2 = alloca i8, i64 %conv, align 16
+  store volatile ptr %2, ptr @p1, align 8
+  call void @test()
+  %3 = load volatile ptr, ptr @p, align 8
+  %4 = load volatile ptr, ptr %q, align 8
+  %cmp = icmp ne ptr %3, %4
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #5
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %tx = alloca double, align 8
-  %ty = alloca double, align 8
-  %d = alloca double, align 8
+  %q = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store double 0.000000e+00, ptr %tx, align 8
-  %call = call i32 @f(ptr noundef %ty)
-  %0 = load double, ptr %ty, align 8
-  %cmp = fcmp olt double %0, 0.000000e+00
+  %0 = load volatile ptr, ptr @p, align 8
+  store volatile ptr %0, ptr %q, align 8
+  call void @test()
+  call void @test2()
+  %1 = load volatile ptr, ptr @p, align 8
+  %2 = load volatile ptr, ptr %q, align 8
+  %cmp = icmp ne ptr %1, %2
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %1 = load double, ptr %ty, align 8
-  %fneg = fneg double %1
-  store double %fneg, ptr %ty, align 8
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load double, ptr %tx, align 8
-  %3 = load double, ptr %ty, align 8
-  %cmp1 = fcmp ogt double %2, %3
-  br i1 %cmp1, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %if.end
-  %4 = load double, ptr %tx, align 8
-  br label %cond.end
-
-cond.false:                                       ; preds = %if.end
-  %5 = load double, ptr %ty, align 8
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi double [ %4, %cond.true ], [ %5, %cond.false ]
-  store double %cond, ptr %d, align 8
-  %6 = load double, ptr %ty, align 8
-  %7 = load double, ptr %d, align 8
-  %cmp2 = fcmp une double %6, %7
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %cond.end
-  call void @abort() #4
+  call void @abort() #5
   unreachable
 
-if.end4:                                          ; preds = %cond.end
-  call void @exit(i32 noundef 0) #5
-  unreachable
+if.end:                                           ; preds = %entry
+  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #3
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
-attributes #5 = { noreturn }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(none) }
+attributes #2 = { nocallback nofree nosync nounwind willreturn }
+attributes #3 = { nounwind }
+attributes #4 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,35 +1,34 @@
-; 162198853806097978021573234337629240117
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/162198853806097978021573234337629240117.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/162198853806097978021573234337629240117.c"
+; 148669660601060105888697215100124524662
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/148669660601060105888697215100124524662.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/148669660601060105888697215100124524662.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@x = dso_local global i32 3, align 4
-@.str = private unnamed_addr constant [20 x i8] c"This is dead code.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %i = alloca i64, align 8
+  %u = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @x, align 4
-  %cmp = icmp eq i32 %0, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  store i32 0, ptr @x, align 4
-  %1 = load i32, ptr @x, align 4
-  ret i32 %1
+  store i64 5, ptr %i, align 8
+  store i64 10, ptr %i, align 8
+  store i64 -1, ptr %i, align 8
+  store i64 4294967295, ptr %i, align 8
+  store i64 -1, ptr %i, align 8
+  store i64 3, ptr %i, align 8
+  store i64 1, ptr %i, align 8
+  store i64 1, ptr %u, align 8
+  store i64 -1, ptr %u, align 8
+  store i64 -1, ptr %u, align 8
+  store i64 4294967295, ptr %u, align 8
+  store i64 -1, ptr %u, align 8
+  store i64 3, ptr %u, align 8
+  store i64 0, ptr %u, align 8
+  ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

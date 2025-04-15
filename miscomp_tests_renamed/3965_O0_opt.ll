@@ -1,25 +1,23 @@
-; 140767900146033484758892094286638845155
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/140767900146033484758892094286638845155_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/140767900146033484758892094286638845155.c"
+; 150557904555292393155281169465708836768
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150557904555292393155281169465708836768_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150557904555292393155281169465708836768.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @foo(i64 noundef %a) #0 {
-entry:
-  %a.addr = alloca i64, align 8
-  store i64 %a, ptr %a.addr, align 8
-  ret i64 0
-}
+%struct.anon = type { i32, [0 x i32] }
+
+@y = dso_local global ptr null, align 8
+@x = dso_local global %struct.anon zeroinitializer, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @bar(i64 noundef %a) #0 {
+define dso_local i32 @foo() #0 {
 entry:
-  %a.addr = alloca i64, align 8
-  store i64 %a, ptr %a.addr, align 8
-  %0 = load i64, ptr %a.addr, align 8
-  %xor = xor i64 %0, 4294901760
-  ret i64 %xor
+  %0 = load ptr, ptr @y, align 8
+  %sub.ptr.lhs.cast = ptrtoint ptr %0 to i64
+  %sub.ptr.sub = sub i64 %sub.ptr.lhs.cast, ptrtoint (ptr getelementptr inbounds nuw (%struct.anon, ptr @x, i32 0, i32 1) to i64)
+  %sub.ptr.div = sdiv exact i64 %sub.ptr.sub, 4
+  %conv = trunc i64 %sub.ptr.div to i32
+  ret i32 %conv
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -27,24 +25,16 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i64 @foo(i64 noundef 0)
-  %cmp = icmp ne i64 %call, 65535
-  br i1 %cmp, label %if.then, label %if.end
+  store ptr getelementptr inbounds nuw (%struct.anon, ptr @x, i32 0, i32 1), ptr @y, align 8
+  %call = call i32 @foo()
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i64 @bar(i64 noundef 0)
-  %cmp2 = icmp ne i64 %call1, 4294901760
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }

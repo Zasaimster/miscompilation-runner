@@ -1,70 +1,77 @@
-; 108509259147682203012343338383443828234
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108509259147682203012343338383443828234_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108509259147682203012343338383443828234.c"
+; 136957929089569929576277552078645011855
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136957929089569929576277552078645011855_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136957929089569929576277552078645011855.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@e = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local local_unnamed_addr global i32 0, align 4
-@b = dso_local local_unnamed_addr global i32 0, align 4
-@d = dso_local local_unnamed_addr global i32 0, align 4
-@f = dso_local local_unnamed_addr global i32 0, align 4
-@g = dso_local local_unnamed_addr global i32 0, align 4
-@h = dso_local local_unnamed_addr global i32 0, align 4
-@j = dso_local local_unnamed_addr global i32 0, align 4
+@.str.2 = private unnamed_addr constant [13 x i8] c"timeout=%ld\0A\00", align 1
+@str = private unnamed_addr constant [6 x i8] c"begin\00", align 1
+@str.4 = private unnamed_addr constant [4 x i8] c"end\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @h, align 4, !tbaa !5
-  %tobool.not.i = icmp eq i32 %0, 0
-  br i1 %tobool.not.i, label %if.end.i, label %fn1.exit
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef undef)
+  %conv.i = sext i32 %call.i to i64
+  br label %do.body.i
 
-if.end.i:                                         ; preds = %entry
-  %1 = load i32, ptr @c, align 4, !tbaa !5
-  %tobool1.i = icmp ne i32 %1, 0
-  %2 = load i32, ptr @b, align 4
-  %tobool2.i = icmp ne i32 %2, 0
-  %3 = select i1 %tobool1.i, i1 true, i1 %tobool2.i
-  %lor.ext.i = zext i1 %3 to i32
-  %4 = load i32, ptr @e, align 4, !tbaa !5
-  %rem.i = srem i32 %lor.ext.i, %4
-  store i32 %rem.i, ptr @g, align 4, !tbaa !5
-  %tobool3.i = icmp ne i32 %rem.i, 0
-  %5 = load i32, ptr @f, align 4
-  %tobool4.i = icmp ne i32 %5, 0
-  %or.cond.i = select i1 %tobool3.i, i1 true, i1 %tobool4.i
-  %or.cond12.i = select i1 %or.cond.i, i1 %tobool2.i, i1 false
-  br i1 %or.cond12.i, label %fn1.exit, label %if.end7.i
+do.body.i:                                        ; preds = %do.body.i, %entry
+  %timeout.0.i = phi i64 [ %conv.i, %entry ], [ %dec.i, %do.body.i ]
+  %call1.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i)
+  %dec.i = add i64 %timeout.0.i, -1
+  %tobool.not.i = icmp eq i64 %dec.i, 0
+  br i1 %tobool.not.i, label %do.body.i3, label %do.body.i, !llvm.loop !5
 
-if.end7.i:                                        ; preds = %if.end.i
-  %6 = load i32, ptr @d, align 4, !tbaa !5
-  store i32 %6, ptr @e, align 4, !tbaa !5
-  %tobool8.not.i = icmp eq i32 %6, 0
-  %storemerge14.i = select i1 %tobool8.not.i, i32 -4, i32 -5
-  store i32 %storemerge14.i, ptr @c, align 4, !tbaa !5
-  store i32 %storemerge14.i, ptr @j, align 4, !tbaa !5
-  br label %fn1.exit
+do.body.i3:                                       ; preds = %do.body.i3, %do.body.i
+  %timeout.0.i4 = phi i64 [ %dec.i6, %do.body.i3 ], [ 2, %do.body.i ]
+  %call.i5 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i4)
+  %dec.i6 = add nsw i64 %timeout.0.i4, -1
+  %tobool.not.i7 = icmp eq i64 %dec.i6, 0
+  br i1 %tobool.not.i7, label %do.body.i8, label %do.body.i3, !llvm.loop !8
 
-fn1.exit:                                         ; preds = %if.end7.i, %if.end.i, %entry
-  %7 = load i32, ptr @c, align 4, !tbaa !5
-  %cmp.not = icmp eq i32 %7, -4
-  br i1 %cmp.not, label %if.end, label %if.then
+do.body.i8:                                       ; preds = %do.body.i8, %do.body.i3
+  %timeout.0.i9 = phi i64 [ %dec.i11, %do.body.i8 ], [ 2, %do.body.i3 ]
+  %call.i10 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i9)
+  %dec.i11 = add nsw i64 %timeout.0.i9, -1
+  %tobool.not.i12 = icmp eq i64 %dec.i11, 0
+  br i1 %tobool.not.i12, label %do.body.i13, label %do.body.i8, !llvm.loop !9
 
-if.then:                                          ; preds = %fn1.exit
-  tail call void @abort() #2
-  unreachable
+do.body.i13:                                      ; preds = %do.body.i13, %do.body.i8
+  %timeout.0.i14 = phi i64 [ %dec.i16, %do.body.i13 ], [ 2, %do.body.i8 ]
+  %call.i15 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i14)
+  %dec.i16 = add nsw i64 %timeout.0.i14, -1
+  %tobool.not.i17 = icmp eq i64 %dec.i16, 0
+  br i1 %tobool.not.i17, label %do.body.i18, label %do.body.i13, !llvm.loop !10
 
-if.end:                                           ; preds = %fn1.exit
+do.body.i18:                                      ; preds = %do.body.i18, %do.body.i13
+  %timeout.0.i19 = phi i64 [ %dec.i21, %do.body.i18 ], [ 2, %do.body.i13 ]
+  %call.i20 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i19)
+  %dec.i21 = add nsw i64 %timeout.0.i19, -1
+  %tobool.not.i22 = icmp eq i64 %dec.i21, 0
+  br i1 %tobool.not.i22, label %do.body.i23, label %do.body.i18, !llvm.loop !11
+
+do.body.i23:                                      ; preds = %do.body.i23, %do.body.i18
+  %timeout.0.i24 = phi i64 [ %dec.i26, %do.body.i23 ], [ 2, %do.body.i18 ]
+  %call.i25 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i24)
+  %dec.i26 = add nsw i64 %timeout.0.i24, -1
+  %tobool.not.i27 = icmp eq i64 %dec.i26, 0
+  br i1 %tobool.not.i27, label %kb_wait_4.exit, label %do.body.i23, !llvm.loop !12
+
+kb_wait_4.exit:                                   ; preds = %do.body.i23
+  %puts2 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
   ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -74,7 +81,11 @@ attributes #2 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
+!5 = distinct !{!5, !6, !7}
+!6 = !{!"llvm.loop.mustprogress"}
+!7 = !{!"llvm.loop.unroll.disable"}
+!8 = distinct !{!8, !6, !7}
+!9 = distinct !{!9, !6, !7}
+!10 = distinct !{!10, !6, !7}
+!11 = distinct !{!11, !6, !7}
+!12 = distinct !{!12, !6, !7}

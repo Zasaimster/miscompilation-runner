@@ -1,82 +1,78 @@
-; 133697917925281346112456891055960253608
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133697917925281346112456891055960253608.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133697917925281346112456891055960253608.c"
+; 123122995709094232859259239863300358817
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123122995709094232859259239863300358817.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123122995709094232859259239863300358817.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@x = dso_local global i32 5, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %arr = alloca [0 x [4 x i8]], align 1
+  %p = alloca ptr, align 8
+  %q = alloca ptr, align 8
+  %v = alloca [4 x i32], align 16
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @x, align 4
-  switch i32 %0, label %sw.epilog [
-    i32 0, label %sw.bb
-  ]
+  %arraydecay = getelementptr inbounds [0 x [4 x i8]], ptr %arr, i64 0, i64 0
+  store ptr %arraydecay, ptr %p, align 8
+  %arrayidx = getelementptr inbounds [0 x [4 x i8]], ptr %arr, i64 0, i64 1
+  %arrayidx1 = getelementptr inbounds [4 x i8], ptr %arrayidx, i64 0, i64 3
+  store ptr %arrayidx1, ptr %q, align 8
+  %arrayidx2 = getelementptr inbounds [0 x [4 x i8]], ptr %arr, i64 0, i64 1
+  %arrayidx3 = getelementptr inbounds [4 x i8], ptr %arrayidx2, i64 0, i64 3
+  store i8 2, ptr %arrayidx3, align 1
+  %arrayidx4 = getelementptr inbounds [4 x i32], ptr %v, i64 0, i64 0
+  store i32 2, ptr %arrayidx4, align 16
+  %arrayidx5 = getelementptr inbounds [0 x [4 x i8]], ptr %arr, i64 0, i64 1
+  %arrayidx6 = getelementptr inbounds [4 x i8], ptr %arrayidx5, i64 0, i64 3
+  %0 = load i8, ptr %arrayidx6, align 1
+  %conv = sext i8 %0 to i32
+  %cmp = icmp ne i32 %conv, 2
+  br i1 %cmp, label %if.then, label %if.end
 
-sw.bb:                                            ; preds = %entry
-  %1 = load i32, ptr @x, align 4
-  switch i32 %1, label %sw.default [
-    i32 0, label %sw.bb1
-  ]
-
-sw.bb1:                                           ; preds = %sw.bb
-  br label %next
-
-sw.default:                                       ; preds = %sw.bb
+if.then:                                          ; preds = %entry
   store i32 1, ptr %retval, align 4
   br label %return
 
-sw.epilog:                                        ; preds = %entry
+if.end:                                           ; preds = %entry
+  %1 = load ptr, ptr %p, align 8
+  %arrayidx8 = getelementptr inbounds [4 x i8], ptr %1, i64 1
+  %arrayidx9 = getelementptr inbounds [4 x i8], ptr %arrayidx8, i64 0, i64 3
+  %2 = load i8, ptr %arrayidx9, align 1
+  %conv10 = sext i8 %2 to i32
+  %cmp11 = icmp ne i32 %conv10, 2
+  br i1 %cmp11, label %if.then13, label %if.end14
+
+if.then13:                                        ; preds = %if.end
   store i32 1, ptr %retval, align 4
   br label %return
 
-next:                                             ; preds = %sw.bb1
-  %2 = load i32, ptr @x, align 4
-  switch i32 %2, label %sw.epilog3 [
-    i32 1, label %sw.bb2
-  ]
+if.end14:                                         ; preds = %if.end
+  %3 = load ptr, ptr %q, align 8
+  %4 = load i8, ptr %3, align 1
+  %conv15 = sext i8 %4 to i32
+  %cmp16 = icmp ne i32 %conv15, 2
+  br i1 %cmp16, label %if.then18, label %if.end19
 
-sw.bb2:                                           ; preds = %next
+if.then18:                                        ; preds = %if.end14
   store i32 1, ptr %retval, align 4
   br label %return
 
-sw.epilog3:                                       ; preds = %next
-  %3 = load i32, ptr @x, align 4
-  switch i32 %3, label %sw.epilog5 [
-    i32 1, label %sw.bb4
-  ]
+if.end19:                                         ; preds = %if.end14
+  %arraydecay20 = getelementptr inbounds [4 x i32], ptr %v, i64 0, i64 0
+  %5 = load i32, ptr %arraydecay20, align 16
+  %cmp21 = icmp ne i32 %5, 2
+  br i1 %cmp21, label %if.then23, label %if.end24
 
-foo:                                              ; No predecessors!
-  br label %sw.bb4
-
-sw.bb4:                                           ; preds = %sw.epilog3, %foo
+if.then23:                                        ; preds = %if.end19
   store i32 1, ptr %retval, align 4
   br label %return
 
-sw.epilog5:                                       ; preds = %sw.epilog3
-  %4 = load i32, ptr @x, align 4
-  switch i32 %4, label %sw.default8 [
-    i32 0, label %sw.bb6
-    i32 1, label %sw.bb7
-  ]
-
-sw.bb6:                                           ; preds = %sw.epilog5
-  %5 = load i32, ptr @x, align 4
-  store i32 %5, ptr %retval, align 4
+if.end24:                                         ; preds = %if.end19
+  store i32 0, ptr %retval, align 4
   br label %return
 
-sw.bb7:                                           ; preds = %sw.epilog5
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-sw.default8:                                      ; preds = %sw.epilog5
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %sw.default8, %sw.bb7, %sw.bb6, %sw.bb4, %sw.bb2, %sw.epilog, %sw.default
+return:                                           ; preds = %if.end24, %if.then23, %if.then18, %if.then13, %if.then
   %6 = load i32, ptr %retval, align 4
   ret i32 %6
 }

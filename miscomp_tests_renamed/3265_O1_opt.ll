@@ -1,65 +1,22 @@
-; 160264059597880256694047858459458440268
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/160264059597880256694047858459458440268_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/160264059597880256694047858459458440268.c"
+; 123105987336976213811287930757830958293
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123105987336976213811287930757830958293_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123105987336976213811287930757830958293.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"This function has dead code.\0A\00", align 1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local range(i32 0, 2) i32 @foo(i32 noundef %x) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef range(i32 -2147483647, -2147483648) i32 @f() local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp = icmp slt i32 %call, %x
-  %conv = zext i1 %cmp to i32
-  ret i32 %conv
+  unreachable
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 -2147483647, -2147483648) i32 @bar(i32 noundef %x) local_unnamed_addr #2 {
-entry:
-  %add1 = add i32 %x, 2
-  ret i32 %add1
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @baz(i32 noundef %x) local_unnamed_addr #2 {
-entry:
-  %add = add i32 %x, 1
-  ret i32 %add
-}
-
-; Function Attrs: nofree nounwind uwtable
+; Function Attrs: mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp.i.not = icmp eq i32 %call.i, 2147483647
-  br i1 %cmp.i.not, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %call.i10 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp.i11.not = icmp eq i32 %call.i10, 2147483647
-  br i1 %cmp.i11.not, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  tail call void @abort() #4
   unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
-  ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #3
-
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

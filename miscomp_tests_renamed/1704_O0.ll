@@ -1,62 +1,53 @@
-; 115791570058851748132536465273434858713
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/115791570058851748132536465273434858713.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/115791570058851748132536465273434858713.c"
+; 183382906228939892641850109067896816705
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/183382906228939892641850109067896816705.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/183382906228939892641850109067896816705.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.tiny = type { i32 }
+%union.doubleword = type { [2 x i64] }
+%union.doubleword.0 = type { [2 x i64] }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %n, i32 %x.coerce, i32 %y.coerce, i32 %z.coerce, i64 noundef %l) #0 {
+define dso_local i32 @test_endianness() #0 {
 entry:
-  %x = alloca %struct.tiny, align 4
-  %y = alloca %struct.tiny, align 4
-  %z = alloca %struct.tiny, align 4
-  %n.addr = alloca i32, align 4
-  %l.addr = alloca i64, align 8
-  %coerce.dive = getelementptr inbounds nuw %struct.tiny, ptr %x, i32 0, i32 0
-  store i32 %x.coerce, ptr %coerce.dive, align 4
-  %coerce.dive1 = getelementptr inbounds nuw %struct.tiny, ptr %y, i32 0, i32 0
-  store i32 %y.coerce, ptr %coerce.dive1, align 4
-  %coerce.dive2 = getelementptr inbounds nuw %struct.tiny, ptr %z, i32 0, i32 0
-  store i32 %z.coerce, ptr %coerce.dive2, align 4
-  store i32 %n, ptr %n.addr, align 4
-  store i64 %l, ptr %l.addr, align 8
-  call void @abort() #3
-  unreachable
+  %dw = alloca %union.doubleword, align 8
+  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test_endianness_vol() #0 {
+entry:
+  %dw = alloca %union.doubleword.0, align 8
+  store volatile double 1.000000e+01, ptr %dw, align 8
+  %arrayidx = getelementptr inbounds [2 x i64], ptr %dw, i64 0, i64 0
+  %0 = load volatile i64, ptr %arrayidx, align 8
+  %cmp = icmp ne i64 %0, 0
+  %1 = zext i1 %cmp to i64
+  %cond = select i1 %cmp, i32 1, i32 0
+  ret i32 %cond
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca [3 x %struct.tiny], align 4
   store i32 0, ptr %retval, align 4
-  %arrayidx = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
-  %c = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx, i32 0, i32 0
-  store i32 10, ptr %c, align 4
-  %arrayidx1 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
-  %c2 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx1, i32 0, i32 0
-  store i32 11, ptr %c2, align 4
-  %arrayidx3 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
-  %c4 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx3, i32 0, i32 0
-  store i32 12, ptr %c4, align 4
-  %arrayidx5 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
-  %arrayidx6 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
-  %arrayidx7 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
-  %coerce.dive = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx5, i32 0, i32 0
-  %0 = load i32, ptr %coerce.dive, align 4
-  %coerce.dive8 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx6, i32 0, i32 0
-  %1 = load i32, ptr %coerce.dive8, align 4
-  %coerce.dive9 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx7, i32 0, i32 0
-  %2 = load i32, ptr %coerce.dive9, align 4
-  %call = call i32 @f(i32 noundef 3, i32 %0, i32 %1, i32 %2, i64 noundef 123)
+  %call = call i32 @test_endianness()
+  %call1 = call i32 @test_endianness_vol()
+  %cmp = icmp ne i32 %call, %call1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

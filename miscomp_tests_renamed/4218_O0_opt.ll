@@ -1,51 +1,45 @@
-; 14976749151254034742738916434739963585
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/14976749151254034742738916434739963585_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/14976749151254034742738916434739963585.c"
+; 161568323408456314981041184469673107293
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161568323408456314981041184469673107293_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161568323408456314981041184469673107293.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.fd = type { i8, i8 }
+%struct.foo = type { i16, [2 x i8] }
 
-@f = dso_local global %struct.fd { i8 5, i8 0 }, align 1
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@foo = dso_local global %struct.foo zeroinitializer, align 4
+@oldfoo = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @g() #0 {
+define dso_local i32 @bar(i32 noundef %k) #0 {
 entry:
-  %retval = alloca ptr, align 8
+  %k.addr = alloca i32, align 4
+  store i32 %k, ptr %k.addr, align 4
+  %bf.load = load i16, ptr @foo, align 4
+  %bf.lshr = lshr i16 %bf.load, 12
+  %bf.cast = zext i16 %bf.lshr to i32
+  store i32 %bf.cast, ptr @oldfoo, align 4
+  %0 = load i32, ptr %k.addr, align 4
+  %1 = trunc i32 %0 to i16
+  %bf.load1 = load i16, ptr @foo, align 4
+  %bf.value = and i16 %1, 15
+  %bf.shl = shl i16 %bf.value, 12
+  %bf.clear = and i16 %bf.load1, 4095
+  %bf.set = or i16 %bf.clear, %bf.shl
+  store i16 %bf.set, ptr @foo, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %0 = load ptr, ptr %retval, align 8
-  ret ptr %0
+  ret i32 2
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @h() #0 {
-entry:
-  ret i32 -1
-}
-
-; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %f = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call ptr @g()
-  store ptr %call, ptr %f, align 8
-  %call1 = call i32 @h()
-  %conv = trunc i32 %call1 to i8
-  %0 = load ptr, ptr %f, align 8
-  %b = getelementptr inbounds nuw %struct.fd, ptr %0, i32 0, i32 1
-  store i8 %conv, ptr %b, align 1
-  %1 = load ptr, ptr %f, align 8
-  %a = getelementptr inbounds nuw %struct.fd, ptr %1, i32 0, i32 0
-  %2 = load i8, ptr %a, align 1
-  %conv2 = zext i8 %2 to i32
-  %and = and i32 %conv2, 127
-  %and3 = and i32 %and, -17
-  %cmp = icmp sle i32 %and3, 2
+  %call = call i32 @bar(i32 noundef 1)
+  %cmp = icmp ne i32 %call, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

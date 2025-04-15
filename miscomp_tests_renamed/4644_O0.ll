@@ -1,35 +1,37 @@
-; 196909738651358610432519805982903330358
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196909738651358610432519805982903330358.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196909738651358610432519805982903330358.c"
+; 173650226460152034075632947952048684018
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173650226460152034075632947952048684018.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173650226460152034075632947952048684018.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local signext i16 @foo(i64 noundef %x) #0 {
+define dso_local i32 @foo(i8 noundef zeroext %x, i64 noundef %y) #0 {
 entry:
-  %x.addr = alloca i64, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = trunc i32 %call to i16
-  ret i16 %conv
+  %x.addr = alloca i8, align 1
+  %y.addr = alloca i64, align 8
+  store i8 %x, ptr %x.addr, align 1
+  store i64 %y, ptr %y.addr, align 8
+  %call = call i32 (...) @pointlessFunction()
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %0 to i64
+  %1 = load i64, ptr %y.addr, align 8
+  %add = add i64 %conv, %1
+  %conv1 = trunc i64 %add to i32
+  ret i32 %conv1
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+declare i32 @pointlessFunction(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i64, align 8
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i64 272170, ptr %a, align 8
-  %0 = load i64, ptr %a, align 8
-  %call = call signext i16 @foo(i64 noundef %0)
-  %conv = sext i16 %call to i64
-  %1 = load i64, ptr %a, align 8
-  %cmp = icmp eq i64 %conv, %1
+  %call = call i32 @foo(i8 noundef zeroext 1, i64 noundef 0)
+  store i32 %call, ptr %x, align 4
+  %0 = load i32, ptr %x, align 4
+  %cmp = icmp ne i32 %0, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

@@ -1,50 +1,80 @@
-; 184685675851463730277041355318715643470
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184685675851463730277041355318715643470.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184685675851463730277041355318715643470.c"
+; 104445626478669437361251991349877174085
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104445626478669437361251991349877174085.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104445626478669437361251991349877174085.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@b = dso_local local_unnamed_addr global i16 0, align 2
-@a = dso_local local_unnamed_addr global i32 0, align 4
-@d = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local local_unnamed_addr global i32 0, align 4
+@.str = private unnamed_addr constant [3 x i8] c"  \00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d \00", align 1
 
-; Function Attrs: nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %b.promoted = load i16, ptr @b, align 2, !tbaa !5
-  %cmp14 = icmp slt i16 %b.promoted, 2
-  br i1 %cmp14, label %for.body.lr.ph, label %for.end12
+  br label %for.cond1.preheader
 
-for.body.lr.ph:                                   ; preds = %entry
-  store i32 0, ptr @a, align 4, !tbaa !9
-  %0 = load i32, ptr @d, align 4, !tbaa !9
-  %tobool = icmp ne i32 %0, 0
-  %1 = load i32, ptr @c, align 4
-  %tobool9.not = icmp eq i32 %1, 0
-  br label %for.body
+for.cond1.preheader:                              ; preds = %entry, %while.end
+  %indvars.iv = phi i32 [ 1, %entry ], [ %indvars.iv.next, %while.end ]
+  %i.040 = phi i32 [ 1, %entry ], [ %inc19, %while.end ]
+  %cmp2.not35 = icmp eq i32 %i.040, 2
+  br i1 %cmp2.not35, label %while.body.preheader, label %for.body3
 
-for.body:                                         ; preds = %for.body.lr.ph, %for.inc
-  %inc1315 = phi i16 [ %b.promoted, %for.body.lr.ph ], [ %inc, %for.inc ]
-  %tobool6 = icmp ne i16 %inc1315, 0
-  %or.cond = or i1 %tobool6, %tobool
-  %brmerge = select i1 %or.cond, i1 true, i1 %tobool9.not
-  br i1 %brmerge, label %for.inc, label %for.cond8
+for.body3:                                        ; preds = %for.cond1.preheader
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  br label %while.body.preheader
 
-for.cond8:                                        ; preds = %for.body, %for.cond8
-  br label %for.cond8
+while.body.preheader:                             ; preds = %for.body3, %for.cond1.preheader
+  %count.238.ph = phi i32 [ 0, %for.cond1.preheader ], [ 1, %for.body3 ]
+  br label %while.body
 
-for.inc:                                          ; preds = %for.body
-  %inc = add nsw i16 %inc1315, 1
-  store i16 %inc, ptr @b, align 2, !tbaa !5
-  %exitcond.not = icmp eq i16 %inc, 2
-  br i1 %exitcond.not, label %for.end12, label %for.body, !llvm.loop !11
+while.body:                                       ; preds = %while.body.preheader, %if.end
+  %count1.139 = phi i32 [ %count1.2, %if.end ], [ 0, %while.body.preheader ]
+  %count.238 = phi i32 [ %count.3, %if.end ], [ %count.238.ph, %while.body.preheader ]
+  %k.137 = phi i32 [ %inc16, %if.end ], [ 0, %while.body.preheader ]
+  %cmp8 = icmp slt i32 %count.238, 2
+  br i1 %cmp8, label %if.then, label %if.else
 
-for.end12:                                        ; preds = %for.inc, %entry
+if.then:                                          ; preds = %while.body
+  %add = add nuw nsw i32 %k.137, %i.040
+  %call9 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %add)
+  %inc10 = add nsw i32 %count.238, 1
+  br label %if.end
+
+if.else:                                          ; preds = %while.body
+  %inc11.neg = xor i32 %count1.139, -1
+  %inc11 = add nsw i32 %count1.139, 1
+  %add12 = add nuw nsw i32 %k.137, %i.040
+  %mul13.neg41 = shl i32 %inc11.neg, 1
+  %sub14 = add i32 %add12, %mul13.neg41
+  %call15 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %sub14)
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %count.3 = phi i32 [ %inc10, %if.then ], [ %count.238, %if.else ]
+  %count1.2 = phi i32 [ %count1.139, %if.then ], [ %inc11, %if.else ]
+  %inc16 = add nuw nsw i32 %k.137, 1
+  %exitcond = icmp eq i32 %inc16, %indvars.iv
+  br i1 %exitcond, label %while.end, label %while.body, !llvm.loop !5
+
+while.end:                                        ; preds = %if.end
+  %putchar = tail call i32 @putchar(i32 10)
+  %inc19 = add nuw nsw i32 %i.040, 1
+  %indvars.iv.next = add nuw nsw i32 %indvars.iv, 2
+  %exitcond42.not = icmp eq i32 %inc19, 3
+  br i1 %exitcond42.not, label %for.end20, label %for.cond1.preheader, !llvm.loop !8
+
+for.end20:                                        ; preds = %while.end
   ret i32 0
 }
 
-attributes #0 = { nofree norecurse nosync nounwind memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @putchar(i32 noundef) local_unnamed_addr #2
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -54,12 +84,7 @@ attributes #0 = { nofree norecurse nosync nounwind memory(readwrite, argmem: non
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"short", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!10, !10, i64 0}
-!10 = !{!"int", !7, i64 0}
-!11 = distinct !{!11, !12, !13}
-!12 = !{!"llvm.loop.mustprogress"}
-!13 = !{!"llvm.loop.unroll.disable"}
+!5 = distinct !{!5, !6, !7}
+!6 = !{!"llvm.loop.mustprogress"}
+!7 = !{!"llvm.loop.unroll.disable"}
+!8 = distinct !{!8, !6, !7}

@@ -4,7 +4,7 @@ import os
 # Renames files in a directory numerically and adds the original identifier (string before the first '_') as a comment.
 def rename_and_add_comment(directory_path, new_directory):
     file_counter = 1
-    processed_identifiers = set()
+    identifiers = {}
 
     for filename in os.listdir(directory_path):
         if filename.endswith(("_O0_opt.ll", "_O0.ll", "_O1_opt.ll", "_O1.ll")):
@@ -40,15 +40,14 @@ def rename_and_add_comment(directory_path, new_directory):
                 )
                 continue  # Skip if the rest of the filename doesn't match expected patterns
 
-            if id not in processed_identifiers:
-                new_prefix = str(file_counter)
-                processed_identifiers.add(id)
+            if id not in identifiers:
+                identifiers[id] = file_counter
+                new_id = file_counter
                 file_counter += 1
             else:
-                # If identifier already processed, get its assigned number
-                new_prefix = str(list(processed_identifiers).index(id) + 1)
+                new_id = identifiers[id]
 
-            new_filename = f"{new_prefix}_{opt_level}"
+            new_filename = f"{new_id}_{opt_level}"
             if opt:
                 new_filename += "_opt"
             new_filename += ".ll"
@@ -76,4 +75,5 @@ def rename_and_add_comment(directory_path, new_directory):
 if __name__ == "__main__":
     directory_to_process = "./miscomp_tests/"
     new_directory = "./miscomp_tests_renamed/"
+    os.makedirs(f"{new_directory}runtime/", exist_ok=True)
     rename_and_add_comment(directory_to_process, new_directory)

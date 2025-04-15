@@ -1,88 +1,56 @@
-; 150189162928015657266625386042316516301
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150189162928015657266625386042316516301_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150189162928015657266625386042316516301.c"
+; 132098228666218886550616979791391677088
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132098228666218886550616979791391677088_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132098228666218886550616979791391677088.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.foo = type { ptr }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @test(ptr noundef %node) #0 {
+define dso_local void @check(i32 noundef %a) #0 {
 entry:
-  %node.addr = alloca ptr, align 8
-  store ptr %node, ptr %node.addr, align 8
-  br label %while.cond
-
-while.cond:                                       ; preds = %if.end, %entry
-  %0 = load ptr, ptr %node.addr, align 8
-  %tobool = icmp ne ptr %0, null
-  br i1 %tobool, label %while.body, label %while.end
-
-while.body:                                       ; preds = %while.cond
-  %call = call i32 @bar()
-  %tobool1 = icmp ne i32 %call, 0
-  br i1 %tobool1, label %land.lhs.true, label %if.end
-
-land.lhs.true:                                    ; preds = %while.body
-  %call2 = call i32 @baz()
-  %tobool3 = icmp ne i32 %call2, 0
-  br i1 %tobool3, label %if.end, label %if.then
-
-if.then:                                          ; preds = %land.lhs.true
-  br label %while.end
-
-if.end:                                           ; preds = %land.lhs.true, %while.body
-  %1 = load ptr, ptr %node.addr, align 8
-  %next = getelementptr inbounds nuw %struct.foo, ptr %1, i32 0, i32 0
-  %2 = load ptr, ptr %next, align 8
-  store ptr %2, ptr %node.addr, align 8
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %if.then, %while.cond
-  ret ptr null
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @bar() #0 {
-entry:
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @baz() #0 {
-entry:
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  %a = alloca %struct.foo, align 8
-  %b = alloca %struct.foo, align 8
-  %c = alloca ptr, align 8
-  store i32 0, ptr %retval, align 4
-  %next = getelementptr inbounds nuw %struct.foo, ptr %a, i32 0, i32 0
-  store ptr %b, ptr %next, align 8
-  %next1 = getelementptr inbounds nuw %struct.foo, ptr %b, i32 0, i32 0
-  store ptr null, ptr %next1, align 8
-  %call = call ptr @test(ptr noundef %a)
-  store ptr %call, ptr %c, align 8
-  %0 = load ptr, ptr %c, align 8
-  %tobool = icmp ne ptr %0, null
-  br i1 %tobool, label %if.then, label %if.end
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %cmp = icmp ne i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  ret void
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @test(i32 noundef %a, i32 noundef %b) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %tobool = icmp ne i32 %0, 0
+  %cond = select i1 %tobool, i32 1, i32 0
+  %1 = load i32, ptr %b.addr, align 4
+  %tobool1 = icmp ne i32 %1, 0
+  %cond2 = select i1 %tobool1, i32 2, i32 0
+  %or = or i32 %cond, %cond2
+  call void @check(i32 noundef %or)
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  call void @test(i32 noundef 1, i32 noundef 0)
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2
@@ -102,5 +70,3 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

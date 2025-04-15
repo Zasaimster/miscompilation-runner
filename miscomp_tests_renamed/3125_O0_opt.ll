@@ -1,31 +1,29 @@
-; 175601522194966978980622351240764087653
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175601522194966978980622351240764087653_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175601522194966978980622351240764087653.c"
+; 148869169975338744684571353880085933451
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/148869169975338744684571353880085933451_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/148869169975338744684571353880085933451.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.anon = type { i32, %union.pthread_mutex_t }
+%union.pthread_mutex_t = type { i32 }
+
+@__const.main.r = private unnamed_addr constant %struct.anon { i32 0, %union.pthread_mutex_t { i32 7 } }, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %p = alloca ptr, align 8
+  %r = alloca %struct.anon, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load ptr, ptr %p, align 8
-  %call = call i32 @strlen(ptr noundef %0)
-  %sub = sub nsw i32 %call, 5
-  %conv = sext i32 %sub to i64
-  %1 = inttoptr i64 %conv to ptr
-  store ptr %1, ptr %p, align 8
-  %2 = load ptr, ptr %p, align 8
-  %call1 = call i32 @strlen(ptr noundef %2)
-  %sub2 = sub nsw i32 %call1, 5
-  ret i32 %sub2
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %r, ptr align 4 @__const.main.r, i64 8, i1 false)
+  ret i32 0
 }
 
-declare i32 @strlen(ptr noundef) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

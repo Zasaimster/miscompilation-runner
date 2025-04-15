@@ -1,24 +1,34 @@
-; 144996797419093134713002410799471629617
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/144996797419093134713002410799471629617_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/144996797419093134713002410799471629617.c"
+; 157826663988676619274831206457762506483
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157826663988676619274831206457762506483_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157826663988676619274831206457762506483.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.1 = private unnamed_addr constant [15 x i8] c"Program runs!\0A\00", align 1
-@str = private unnamed_addr constant [15 x i8] c"I am not used!\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local range(i32 0, 2) i32 @main() local_unnamed_addr #0 {
+define dso_local noundef range(i32 1, 6) i32 @foo(i32 noundef %status) local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1)
-  %cmp.not = icmp ne i32 %call1, 1
-  %. = zext i1 %cmp.not to i32
-  ret i32 %.
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp = icmp eq i32 %call, 1
+  %spec.select = select i1 %cmp, i32 1, i32 5
+  %cmp1 = icmp eq i32 %status, 3
+  %s.1 = select i1 %cmp1, i32 3, i32 %spec.select
+  %cmp4 = icmp eq i32 %status, 4
+  %s.2 = select i1 %cmp4, i32 4, i32 %s.1
+  ret i32 %s.2
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret i32 0
+}
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2

@@ -1,24 +1,16 @@
-; 154724874076725130818562802649575243010
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/154724874076725130818562802649575243010_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/154724874076725130818562802649575243010.c"
+; 168282880975082495649066141436342932456
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168282880975082495649066141436342932456_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168282880975082495649066141436342932456.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@.str = private unnamed_addr constant [15 x i8] c"Program runs!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @test1(i32 noundef %x) #0 {
 entry:
   %x.addr = alloca i32, align 4
   store i32 %x, ptr %x.addr, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %div = sdiv i32 %call, 10
-  %cmp = icmp eq i32 %div, 2
-  %conv = zext i1 %cmp to i32
-  ret i32 %conv
+  ret i32 0
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @test2(i32 noundef %x) #0 {
@@ -90,7 +82,7 @@ entry:
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end:                                           ; preds = %entry
@@ -99,7 +91,7 @@ if.end:                                           ; preds = %entry
   br i1 %cmp2, label %if.then3, label %if.end4
 
 if.then3:                                         ; preds = %if.end
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end4:                                          ; preds = %if.end
@@ -108,7 +100,7 @@ if.end4:                                          ; preds = %if.end
   br i1 %cmp6, label %if.then7, label %if.end8
 
 if.then7:                                         ; preds = %if.end4
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end8:                                          ; preds = %if.end4
@@ -117,7 +109,7 @@ if.end8:                                          ; preds = %if.end4
   br i1 %cmp10, label %if.then11, label %if.end12
 
 if.then11:                                        ; preds = %if.end8
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end12:                                         ; preds = %if.end8
@@ -126,7 +118,7 @@ if.end12:                                         ; preds = %if.end8
   br i1 %cmp14, label %if.then15, label %if.end16
 
 if.then15:                                        ; preds = %if.end12
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end16:                                         ; preds = %if.end12
@@ -135,7 +127,7 @@ if.end16:                                         ; preds = %if.end12
   br i1 %cmp18, label %if.then19, label %if.end20
 
 if.then19:                                        ; preds = %if.end16
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end20:                                         ; preds = %if.end16
@@ -144,7 +136,7 @@ if.end20:                                         ; preds = %if.end16
   br i1 %cmp22, label %if.then23, label %if.end24
 
 if.then23:                                        ; preds = %if.end20
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end24:                                         ; preds = %if.end20
@@ -153,7 +145,7 @@ if.end24:                                         ; preds = %if.end20
   br i1 %cmp26, label %if.then27, label %if.end28
 
 if.then27:                                        ; preds = %if.end24
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end28:                                         ; preds = %if.end24
@@ -162,7 +154,7 @@ if.end28:                                         ; preds = %if.end24
   br i1 %cmp30, label %if.then31, label %if.end32
 
 if.then31:                                        ; preds = %if.end28
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end32:                                         ; preds = %if.end28
@@ -171,7 +163,7 @@ if.end32:                                         ; preds = %if.end28
   br i1 %cmp34, label %if.then35, label %if.end36
 
 if.then35:                                        ; preds = %if.end32
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end36:                                         ; preds = %if.end32
@@ -180,7 +172,7 @@ if.end36:                                         ; preds = %if.end32
   br i1 %cmp38, label %if.then39, label %if.end40
 
 if.then39:                                        ; preds = %if.end36
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end40:                                         ; preds = %if.end36
@@ -189,7 +181,7 @@ if.end40:                                         ; preds = %if.end36
   br i1 %cmp42, label %if.then43, label %if.end44
 
 if.then43:                                        ; preds = %if.end40
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end44:                                         ; preds = %if.end40
@@ -198,7 +190,7 @@ if.end44:                                         ; preds = %if.end40
   br i1 %cmp46, label %if.then47, label %if.end48
 
 if.then47:                                        ; preds = %if.end44
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end48:                                         ; preds = %if.end44
@@ -207,7 +199,7 @@ if.end48:                                         ; preds = %if.end44
   br i1 %cmp50, label %if.then51, label %if.end52
 
 if.then51:                                        ; preds = %if.end48
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end52:                                         ; preds = %if.end48
@@ -216,7 +208,7 @@ if.end52:                                         ; preds = %if.end48
   br i1 %cmp54, label %if.then55, label %if.end56
 
 if.then55:                                        ; preds = %if.end52
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end56:                                         ; preds = %if.end52
@@ -225,7 +217,7 @@ if.end56:                                         ; preds = %if.end52
   br i1 %cmp58, label %if.then59, label %if.end60
 
 if.then59:                                        ; preds = %if.end56
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end60:                                         ; preds = %if.end56
@@ -234,7 +226,7 @@ if.end60:                                         ; preds = %if.end56
   br i1 %cmp62, label %if.then63, label %if.end64
 
 if.then63:                                        ; preds = %if.end60
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end64:                                         ; preds = %if.end60
@@ -243,7 +235,7 @@ if.end64:                                         ; preds = %if.end60
   br i1 %cmp66, label %if.then67, label %if.end68
 
 if.then67:                                        ; preds = %if.end64
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end68:                                         ; preds = %if.end64
@@ -252,7 +244,7 @@ if.end68:                                         ; preds = %if.end64
   br i1 %cmp70, label %if.then71, label %if.end72
 
 if.then71:                                        ; preds = %if.end68
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end72:                                         ; preds = %if.end68
@@ -261,7 +253,7 @@ if.end72:                                         ; preds = %if.end68
   br i1 %cmp74, label %if.then75, label %if.end76
 
 if.then75:                                        ; preds = %if.end72
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end76:                                         ; preds = %if.end72
@@ -270,7 +262,7 @@ if.end76:                                         ; preds = %if.end72
   br i1 %cmp78, label %if.then79, label %if.end80
 
 if.then79:                                        ; preds = %if.end76
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end80:                                         ; preds = %if.end76
@@ -279,7 +271,7 @@ if.end80:                                         ; preds = %if.end76
   br i1 %cmp82, label %if.then83, label %if.end84
 
 if.then83:                                        ; preds = %if.end80
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end84:                                         ; preds = %if.end80
@@ -288,7 +280,7 @@ if.end84:                                         ; preds = %if.end80
   br i1 %cmp86, label %if.then87, label %if.end88
 
 if.then87:                                        ; preds = %if.end84
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end88:                                         ; preds = %if.end84
@@ -297,7 +289,7 @@ if.end88:                                         ; preds = %if.end84
   br i1 %cmp90, label %if.then91, label %if.end92
 
 if.then91:                                        ; preds = %if.end88
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end92:                                         ; preds = %if.end88
@@ -305,12 +297,11 @@ if.end92:                                         ; preds = %if.end88
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

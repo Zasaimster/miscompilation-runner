@@ -1,37 +1,36 @@
-; 170284227892147081698281321648309011764
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170284227892147081698281321648309011764.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170284227892147081698281321648309011764.c"
+; 111711339496974660791214062483307124930
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111711339496974660791214062483307124930.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111711339496974660791214062483307124930.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [2 x i8] c"\0A\00", align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @big(i64 noundef %u) #0 {
+define dso_local void @dummy(ptr noundef %x, i32 noundef %y) #0 {
 entry:
-  %u.addr = alloca i64, align 8
-  store i64 %u, ptr %u.addr, align 8
+  %x.addr = alloca ptr, align 8
+  %y.addr = alloca i32, align 4
+  store ptr %x, ptr %x.addr, align 8
+  store i32 %y, ptr %y.addr, align 4
   ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @doit(i32 noundef %a, i32 noundef %b, ptr noundef %id) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %id.addr = alloca ptr, align 8
-  store i32 %a, ptr %a.addr, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store ptr %id, ptr %id.addr, align 8
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
 entry:
   %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca ptr, align 8
+  %number_columns = alloca i32, align 4
+  %cnt0 = alloca i32, align 4
+  %cnt1 = alloca i32, align 4
+  %i = alloca i32, align 4
+  %A1 = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @doit(i32 noundef 1, i32 noundef 1, ptr noundef @.str)
+  store i32 %argc, ptr %argc.addr, align 4
+  store ptr %argv, ptr %argv.addr, align 8
+  store i32 9, ptr %number_columns, align 4
+  store i32 0, ptr %cnt0, align 4
+  store i32 0, ptr %cnt1, align 4
   ret i32 0
 }
 

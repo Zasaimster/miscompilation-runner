@@ -1,66 +1,70 @@
-; 187586790631354358005834696186989251982
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187586790631354358005834696186989251982_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187586790631354358005834696186989251982.c"
+; 150133210210356653127770424181216050856
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150133210210356653127770424181216050856_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150133210210356653127770424181216050856.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local double @foo() #0 {
-entry:
-  ret double 0.000000e+00
-}
+%struct.block = type { i64, i64, ptr, ptr, i8, i32, [1 x %struct.symbol] }
+%struct.symbol = type { i32, ptr }
+%struct.blockvector = type { i32, [2 x ptr] }
+%struct.symtab = type { ptr }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @do_sibcall() #0 {
+define dso_local ptr @blockvector_for_pc_sect(i64 noundef %pc, ptr noundef %symtab) #0 {
 entry:
-  %call = call double @foo()
-  ret void
+  %pc.addr = alloca i64, align 8
+  %symtab.addr = alloca ptr, align 8
+  store i64 %pc, ptr %pc.addr, align 8
+  store ptr %symtab, ptr %symtab.addr, align 8
+  ret ptr null
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca double, align 8
+  %a = alloca %struct.block, align 8
+  %b = alloca %struct.block, align 8
+  %bv = alloca %struct.blockvector, align 8
+  %s = alloca %struct.symtab, align 8
+  %ret = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store double 0.000000e+00, ptr %x, align 8
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load double, ptr %x, align 8
-  %cmp = fcmp olt double %0, 2.000000e+01
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  call void @do_sibcall()
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %1 = load double, ptr %x, align 8
-  %inc = fadd double %1, 1.000000e+00
-  store double %inc, ptr %x, align 8
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %2 = load double, ptr %x, align 8
-  %cmp1 = fcmp olt double %2, 0.000000e+00
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.end
-  store double 5.000000e+00, ptr %x, align 8
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %for.end
-  call void @exit(i32 noundef 0) #2
-  unreachable
+  call void @llvm.memset.p0.i64(ptr align 8 %a, i8 0, i64 56, i1 false)
+  %0 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 1
+  store i64 65536, ptr %0, align 8
+  %1 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 4
+  store i8 1, ptr %1, align 8
+  %2 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 6
+  store i32 20, ptr %2, align 4
+  call void @llvm.memset.p0.i64(ptr align 8 %b, i8 0, i64 56, i1 false)
+  %3 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 0
+  store i64 65536, ptr %3, align 8
+  %4 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 1
+  store i64 131072, ptr %4, align 8
+  %5 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 4
+  store i8 1, ptr %5, align 8
+  %6 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 6
+  store i32 20, ptr %6, align 4
+  %nblocks = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 0
+  store i32 2, ptr %nblocks, align 8
+  %7 = getelementptr i8, ptr %bv, i64 4
+  call void @llvm.memset.p0.i64(ptr align 4 %7, i8 0, i64 4, i1 false)
+  %block = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 1
+  store ptr %a, ptr %block, align 8
+  %arrayinit.element = getelementptr inbounds ptr, ptr %block, i64 1
+  store ptr %b, ptr %arrayinit.element, align 8
+  %blockvector = getelementptr inbounds nuw %struct.symtab, ptr %s, i32 0, i32 0
+  store ptr %bv, ptr %blockvector, align 8
+  %call = call ptr @blockvector_for_pc_sect(i64 noundef 1280, ptr noundef %s)
+  store ptr %call, ptr %ret, align 8
+  ret i32 0
 }
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -71,5 +75,3 @@ attributes #2 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

@@ -1,10 +1,8 @@
-; 111071278559384003673764024248940906483
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111071278559384003673764024248940906483_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111071278559384003673764024248940906483.c"
+; 190490762021167869921567861881249734011
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190490762021167869921567861881249734011_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190490762021167869921567861881249734011.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@result = dso_local global { i8, i8, [2 x i8] } { i8 -1, i8 15, [2 x i8] zeroinitializer }, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {

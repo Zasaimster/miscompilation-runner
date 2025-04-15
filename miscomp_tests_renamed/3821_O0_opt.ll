@@ -1,33 +1,31 @@
-; 107550157771792259499602411019676100949
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/107550157771792259499602411019676100949_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/107550157771792259499602411019676100949.c"
+; 157771454515693401689943768183693121916
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157771454515693401689943768183693121916_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157771454515693401689943768183693121916.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local zeroext i1 @foo() #0 {
-entry:
-  %retval = alloca i1, align 1
-  %p = alloca ptr, align 8
-  %0 = alloca i8, i64 32, align 16
-  store ptr %0, ptr %p, align 8
-  %1 = load ptr, ptr %p, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, ptr noundef %1)
-  %2 = load i1, ptr %retval, align 1
-  ret i1 %2
-}
-
-declare i32 @printf(ptr noundef, ...) #1
+@a = dso_local global i16 0, align 2
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@c = dso_local global i8 0, align 1
+@b = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call zeroext i1 @foo()
-  br i1 %call, label %if.end, label %if.then
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = trunc i32 %call to i8
+  store i8 %conv, ptr @c, align 1
+  %0 = load i16, ptr @a, align 2
+  %conv1 = sext i16 %0 to i32
+  %1 = load i8, ptr @c, align 1
+  %conv2 = sext i8 %1 to i32
+  %or = or i32 %conv1, %conv2
+  store i32 %or, ptr @b, align 4
+  %2 = load i32, ptr @b, align 4
+  %cmp = icmp ne i32 %2, -1
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
@@ -36,6 +34,8 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %entry
   ret i32 0
 }
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

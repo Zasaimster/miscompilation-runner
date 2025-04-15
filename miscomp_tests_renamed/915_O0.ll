@@ -1,23 +1,20 @@
-; 19006671490029954110620305315255768303
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/19006671490029954110620305315255768303.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/19006671490029954110620305315255768303.c"
+; 105676057883190841474477494096389900116
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105676057883190841474477494096389900116.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105676057883190841474477494096389900116.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [23 x i8] c"ASCII value of %c = %d\00", align 1
+@.str = private unnamed_addr constant [12 x i8] c"Dead code.\0A\00", align 1
+@.str.1 = private unnamed_addr constant [15 x i8] c"it's all good\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %c = alloca i8, align 1
+  %a = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i8 42, ptr %c, align 1
-  %0 = load i8, ptr %c, align 1
-  %conv = sext i8 %0 to i32
-  %1 = load i8, ptr %c, align 1
-  %conv1 = sext i8 %1 to i32
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %conv, i32 noundef %conv1)
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
   ret i32 0
 }
 

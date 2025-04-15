@@ -1,28 +1,36 @@
-; 135819453156338850231687951658653829750
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135819453156338850231687951658653829750.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135819453156338850231687951658653829750.c"
+; 157692446487848896793510097473237647091
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157692446487848896793510097473237647091.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157692446487848896793510097473237647091.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i32 1, align 4
-@d = dso_local global i32 4014, align 4
-@e = dso_local global i32 58230, align 4
-@b = dso_local global i8 0, align 1
-@f = dso_local global i8 1, align 1
-@g = dso_local global i8 1, align 1
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo(double noundef %x) #0 {
+entry:
+  %x.addr = alloca double, align 8
+  %p = alloca double, align 8
+  %q = alloca double, align 8
+  store double %x, ptr %x.addr, align 8
+  store double 5.000000e+00, ptr %p, align 8
+  store double 0.000000e+00, ptr %q, align 8
+  %0 = load double, ptr %p, align 8
+  %1 = load double, ptr %q, align 8
+  %cmp = fcmp olt double %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @link_error()
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo() #0 {
+define dso_local void @link_error() #0 {
 entry:
-  %c = alloca i8, align 1
-  %0 = load i32, ptr @a, align 4
-  %1 = load i8, ptr @b, align 1
-  %loadedv = trunc i8 %1 to i1
-  %conv = zext i1 %loadedv to i32
-  %cmp = icmp ne i32 %0, %conv
-  %storedv = zext i1 %cmp to i8
-  store i8 %storedv, ptr %c, align 1
-  ret void
+  call void @abort() #2
+  unreachable
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -30,22 +38,7 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @foo()
-  %0 = load i8, ptr @f, align 1
-  %loadedv = trunc i8 %0 to i1
-  br i1 %loadedv, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load i8, ptr @g, align 1
-  %conv = zext i8 %1 to i32
-  %cmp = icmp ne i32 %conv, 1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  call void @abort() #2
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
+  call void @foo(double noundef 1.000000e+00)
   ret i32 0
 }
 

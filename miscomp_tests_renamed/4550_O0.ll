@@ -1,106 +1,44 @@
-; 19212915999004951222329468797548349442
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/19212915999004951222329468797548349442.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/19212915999004951222329468797548349442.c"
+; 118343246438784188512352030692285025017
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/118343246438784188512352030692285025017.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/118343246438784188512352030692285025017.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.b = type { i32 }
-
-@a = dso_local constant i32 0, align 4
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
-@.str.2 = private unnamed_addr constant [5 x i8] c"long\00", align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @a_f() #0 {
-entry:
-  %call = call i32 (...) @pointlessFunction()
-  ret i32 %call
-}
-
-declare i32 @pointlessFunction(...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @b_f() #0 {
-entry:
-  ret i32 10
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %i) #0 {
+define dso_local i32 @sub(i32 noundef %i, ptr noundef %array) #0 {
 entry:
   %i.addr = alloca i32, align 4
+  %array.addr = alloca ptr, align 8
   store i32 %i, ptr %i.addr, align 4
+  store ptr %array, ptr %array.addr, align 8
   %0 = load i32, ptr %i.addr, align 4
-  ret i32 %0
+  %inc = add nsw i32 %0, 1
+  store i32 %inc, ptr %i.addr, align 4
+  %1 = zext i32 %0 to i64
+  %2 = load i32, ptr %i.addr, align 4
+  ret i32 %2
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
-  %l = alloca i64, align 8
-  %titi = alloca %struct.b, align 4
-  %ptr = alloca ptr, align 8
-  %ti = alloca ptr, align 8
-  %i2 = alloca i32, align 4
+  %array = alloca [10 x i32], align 16
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %i, align 4
-  store i64 2, ptr %l, align 8
-  %call = call i32 @a_f()
-  store i32 %call, ptr %i, align 4
-  %0 = load i32, ptr %i, align 4
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
-  %call2 = call i32 @a_f()
-  %div = sdiv i32 %call2, 2
-  store i32 %div, ptr %i, align 4
-  %1 = load i32, ptr %i, align 4
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %1)
-  store i32 20, ptr %i, align 4
-  %2 = load i32, ptr %i, align 4
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %2)
-  %call5 = call i32 (i32, ...) @gen_sw(i32 noundef 0)
-  store i32 %call5, ptr %i, align 4
-  %3 = load i32, ptr %i, align 4
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %3)
-  store i32 2, ptr %i, align 4
-  %4 = load i32, ptr %i, align 4
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %4)
-  store i32 0, ptr %i, align 4
-  %5 = load i32, ptr %i, align 4
-  %call8 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %5)
-  store i32 5, ptr %i, align 4
-  %6 = load i32, ptr %i, align 4
-  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %6)
-  store i32 1, ptr %i, align 4
-  %7 = load i32, ptr %i, align 4
-  %call10 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %7)
-  store i32 2, ptr %i, align 4
-  %8 = load i32, ptr %i, align 4
-  %call11 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %8)
-  store i32 3, ptr %i, align 4
-  %9 = load i32, ptr %i, align 4
-  %call12 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %9)
-  store i32 4, ptr %i, align 4
-  %10 = load i32, ptr %i, align 4
-  %call13 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %10)
-  %call14 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, ptr noundef @.str.2)
-  store i32 1, ptr %i, align 4
-  %11 = load i32, ptr %i, align 4
-  %call15 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %11)
-  store i32 3, ptr %i, align 4
-  %12 = load i32, ptr %i, align 4
-  %call16 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %12)
-  ret i32 0
+  %arraydecay = getelementptr inbounds [10 x i32], ptr %array, i64 0, i64 0
+  %call = call i32 @sub(i32 noundef 10, ptr noundef %arraydecay)
+  %cmp = icmp ne i32 %call, 11
+  %conv = zext i1 %cmp to i32
+  call void @exit(i32 noundef %conv) #2
+  unreachable
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
-declare i32 @gen_sw(...) #1
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

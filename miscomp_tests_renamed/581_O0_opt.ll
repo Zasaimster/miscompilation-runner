@@ -1,25 +1,30 @@
-; 167022666042215029499371987519887353272
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167022666042215029499371987519887353272_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167022666042215029499371987519887353272.c"
+; 125672463374327435623725274120900665895
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/125672463374327435623725274120900665895_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/125672463374327435623725274120900665895.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.s = type { i32, i32 }
-
-@v = dso_local global %struct.s zeroinitializer, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(i32 noundef %a, i32 noundef %b) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %add = add nsw i32 2, %0
+  %1 = load i32, ptr %b.addr, align 4
+  %sub = sub nsw i32 %add, %1
+  ret i32 %sub
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr @v, align 4
-  store i32 2, ptr getelementptr inbounds nuw (%struct.s, ptr @v, i32 0, i32 1), align 4
-  %0 = load i32, ptr @v, align 4
-  %sub = sub nsw i32 3, %0
-  %1 = load i32, ptr getelementptr inbounds nuw (%struct.s, ptr @v, i32 0, i32 1), align 4
-  %sub1 = sub nsw i32 %sub, %1
-  ret i32 %sub1
+  %call = call i32 @foo(i32 noundef 1, i32 noundef 3)
+  ret i32 %call
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

@@ -1,88 +1,58 @@
-; 106671771146994764709915286481087301647
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106671771146994764709915286481087301647_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106671771146994764709915286481087301647.c"
+; 129553032666075956018088022594454027739
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129553032666075956018088022594454027739_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129553032666075956018088022594454027739.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i = dso_local local_unnamed_addr global i16 0, align 2
-@b = dso_local local_unnamed_addr global i32 0, align 4
-@k = dso_local local_unnamed_addr global i32 0, align 4
-@g = dso_local local_unnamed_addr global i32 0, align 4
-@j = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local global i32 0, align 4
-@a = dso_local local_unnamed_addr global i8 0, align 1
-@d = dso_local local_unnamed_addr global i32 0, align 4
-@h = dso_local local_unnamed_addr global i8 0, align 1
-@e = dso_local local_unnamed_addr global i32 0, align 4
+%struct.IOGBounds = type { i16, i16, i16, i16 }
 
-; Function Attrs: nofree nounwind uwtable
+@expectedwidth = dso_local local_unnamed_addr global i32 0, align 4
+@global_vramPtr = dso_local local_unnamed_addr global ptr inttoptr (i64 40960 to ptr), align 8
+@global_bounds = dso_local local_unnamed_addr global %struct.IOGBounds { i16 100, i16 150, i16 100, i16 150 }, align 2
+@global_saveRect = dso_local local_unnamed_addr global %struct.IOGBounds { i16 75, i16 175, i16 75, i16 175 }, align 2
+
+; Function Attrs: nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i16, ptr @i, align 2, !tbaa !5
-  %1 = xor i16 %0, 5
-  store i16 %1, ptr @i, align 2, !tbaa !5
-  %conv4 = zext i16 %1 to i32
-  %2 = load i32, ptr @k, align 4, !tbaa !9
-  %3 = load i8, ptr @a, align 1, !tbaa !11
-  %conv6 = sext i8 %3 to i32
-  %sext = shl i32 %conv4, 24
-  %conv7 = ashr exact i32 %sext, 24
-  %cmp8.not = icmp eq i32 %conv7, %conv6
-  %e.promoted37 = load i32, ptr @e, align 4
-  %d.promoted41 = load i32, ptr @d, align 4
-  %j.promoted = load i32, ptr @j, align 4, !tbaa !9
-  %tobool.not = icmp eq i32 %j.promoted, 0
-  br i1 %tobool.not, label %lor.rhs, label %lor.end
+  %saveRect.sroa.0.0.copyload = load i16, ptr @global_saveRect, align 2, !tbaa !5
+  %saveRect.sroa.5.0.copyload = load i16, ptr getelementptr inbounds nuw (i8, ptr @global_saveRect, i64 2), align 2, !tbaa !5
+  %bounds.sroa.0.0.copyload = load i16, ptr @global_bounds, align 2, !tbaa !5
+  %bounds.sroa.4.0.copyload = load i16, ptr getelementptr inbounds nuw (i8, ptr @global_bounds, i64 2), align 2, !tbaa !5
+  %spec.select = tail call i16 @llvm.smax.i16(i16 %saveRect.sroa.0.0.copyload, i16 %bounds.sroa.0.0.copyload)
+  %saveRect.sroa.5.0 = tail call i16 @llvm.smin.i16(i16 %saveRect.sroa.5.0.copyload, i16 %bounds.sroa.4.0.copyload)
+  %conv19 = sext i16 %saveRect.sroa.5.0 to i32
+  %conv21 = sext i16 %spec.select to i32
+  %sub22 = sub nsw i32 %conv19, %conv21
+  %0 = load i32, ptr @expectedwidth, align 4, !tbaa !9
+  %cmp23.not = icmp eq i32 %sub22, %0
+  br i1 %cmp23.not, label %if.end26, label %if.then25
 
-lor.rhs:                                          ; preds = %entry
-  %4 = load volatile i32, ptr @c, align 4, !tbaa !9
-  %tobool5 = icmp ne i32 %4, 0
-  %5 = zext i1 %tobool5 to i32
-  br label %lor.end
-
-lor.end:                                          ; preds = %lor.rhs, %entry
-  %lor.ext = phi i32 [ 1, %entry ], [ %5, %lor.rhs ]
-  br i1 %cmp8.not, label %if.else, label %for.cond10.preheader
-
-for.cond10.preheader:                             ; preds = %lor.end
-  %cmp1131 = icmp slt i32 %d.promoted41, 1
-  br i1 %cmp1131, label %for.cond10.if.end.loopexit29_crit_edge, label %for.end22
-
-if.else:                                          ; preds = %lor.end
-  store i8 1, ptr @h, align 1, !tbaa !11
-  %tobool15.not34 = icmp eq i32 %e.promoted37, 0
-  br i1 %tobool15.not34, label %for.end22, label %for.cond14.if.end.loopexit_crit_edge
-
-for.cond14.if.end.loopexit_crit_edge:             ; preds = %if.else
-  store i32 0, ptr @e, align 4, !tbaa !9
-  br label %for.end22
-
-for.cond10.if.end.loopexit29_crit_edge:           ; preds = %for.cond10.preheader
-  store i32 1, ptr @d, align 4, !tbaa !9
-  br label %for.end22
-
-for.end22:                                        ; preds = %for.cond10.if.end.loopexit29_crit_edge, %for.cond14.if.end.loopexit_crit_edge, %if.else, %for.cond10.preheader
-  store i32 1, ptr @b, align 4, !tbaa !9
-  store i32 %2, ptr @g, align 4, !tbaa !9
-  store i32 %lor.ext, ptr @j, align 4, !tbaa !9
-  %6 = load i8, ptr @h, align 1, !tbaa !11
-  %cmp24.not = icmp eq i8 %6, 0
-  br i1 %cmp24.not, label %if.end27, label %if.then26
-
-if.then26:                                        ; preds = %for.end22
-  tail call void @abort() #2
+if.then25:                                        ; preds = %entry
+  tail call void @abort() #4
   unreachable
 
-if.end27:                                         ; preds = %for.end22
-  ret i32 0
+if.end26:                                         ; preds = %entry
+  tail call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #1
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #2
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i16 @llvm.smax.i16(i16, i16) #3
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i16 @llvm.smin.i16(i16, i16) #3
+
+attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -98,4 +68,3 @@ attributes #2 = { noreturn nounwind }
 !8 = !{!"Simple C/C++ TBAA"}
 !9 = !{!10, !10, i64 0}
 !10 = !{!"int", !7, i64 0}
-!11 = !{!7, !7, i64 0}

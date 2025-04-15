@@ -1,69 +1,56 @@
-; 197051125120169245703071582949015799307
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197051125120169245703071582949015799307.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197051125120169245703071582949015799307.c"
+; 106514162047012926914988006102178967974
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106514162047012926914988006102178967974.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106514162047012926914988006102178967974.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@g_2 = internal global i8 1, align 1
-@l_8 = internal global ptr @g_9, align 8
-@g_9 = internal global i32 0, align 4
+@a = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %l_11 = alloca i8, align 1
+  %c = alloca i32, align 4
+  %d = alloca i8, align 1
   store i32 0, ptr %retval, align 4
-  store i8 -2, ptr %l_11, align 1
-  %0 = load i8, ptr @g_2, align 1
-  %conv = zext i8 %0 to i32
-  %1 = load ptr, ptr @l_8, align 8
-  %2 = load i32, ptr %1, align 4
-  %or = or i32 %2, %conv
-  store i32 %or, ptr %1, align 4
-  %3 = load ptr, ptr @l_8, align 8
-  %4 = load i32, ptr %3, align 4
-  %5 = load i8, ptr %l_11, align 1
-  %conv1 = zext i8 %5 to i32
-  %or2 = or i32 %conv1, %4
-  %conv3 = trunc i32 %or2 to i8
-  store i8 %conv3, ptr %l_11, align 1
-  %6 = load i8, ptr %l_11, align 1
-  %conv4 = zext i8 %6 to i32
-  call void @func_12(i32 noundef %conv4)
-  %7 = load i32, ptr @g_9, align 4
-  %cmp = icmp ne i32 %7, 1
-  br i1 %cmp, label %if.then, label %if.end
+  store i32 10, ptr @a, align 4
+  br label %for.cond
 
-if.then:                                          ; preds = %entry
+for.cond:                                         ; preds = %for.inc, %entry
+  br i1 false, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %0 = load i32, ptr @a, align 4
+  %conv = trunc i32 %0 to i8
+  store i8 %conv, ptr %d, align 1
+  %1 = load i8, ptr %d, align 1
+  %conv1 = sext i8 %1 to i32
+  store i32 %conv1, ptr %c, align 4
+  %2 = load i32, ptr @a, align 4
+  %3 = load i32, ptr %c, align 4
+  %cmp = icmp eq i32 %2, %3
+  %conv2 = zext i1 %cmp to i32
+  store i32 %conv2, ptr @b, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %4 = load i32, ptr @a, align 4
+  %inc = add i32 %4, 1
+  store i32 %inc, ptr @a, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
+  %5 = load i32, ptr @a, align 4
+  %cmp3 = icmp ne i32 %5, 7
+  br i1 %cmp3, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.end
   call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %for.end
   ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal void @func_12(i32 noundef %p_13) #0 {
-entry:
-  %p_13.addr = alloca i32, align 4
-  %l_17 = alloca ptr, align 8
-  store i32 %p_13, ptr %p_13.addr, align 4
-  store ptr @g_9, ptr %l_17, align 8
-  %0 = load i32, ptr %p_13.addr, align 4
-  %cmp = icmp slt i32 0, %0
-  %conv = zext i1 %cmp to i32
-  %1 = load ptr, ptr %l_17, align 8
-  %2 = load i32, ptr %1, align 4
-  %and = and i32 %2, %conv
-  store i32 %and, ptr %1, align 4
-  br label %while.body
-
-while.body:                                       ; preds = %entry
-  br label %while.end
-
-while.end:                                        ; preds = %while.body
-  ret void
 }
 
 ; Function Attrs: noreturn nounwind

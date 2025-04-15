@@ -1,20 +1,21 @@
-; 137949978699447850680705879365437488175
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137949978699447850680705879365437488175_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137949978699447850680705879365437488175.c"
+; 168877707844968954395985341844469695760
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168877707844968954395985341844469695760_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168877707844968954395985341844469695760.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.T = type { i32 }
+@a = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
+@d = dso_local global i32 0, align 4
+@f = dso_local global i32 0, align 4
+@c = dso_local global i8 0, align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @process(i32 noundef %data) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %s = alloca %struct.T, align 4
-  store i32 0, ptr %retval, align 4
-  %x = getelementptr inbounds nuw %struct.T, ptr %s, i32 0, i32 0
-  store i32 5, ptr %x, align 4
-  ret i32 5
+  %data.addr = alloca i32, align 4
+  store i32 %data, ptr %data.addr, align 4
+  ret void
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

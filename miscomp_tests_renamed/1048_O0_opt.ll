@@ -1,30 +1,57 @@
-; 122148206715439262547056257625950849666
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122148206715439262547056257625950849666_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122148206715439262547056257625950849666.c"
+; 128469931143450237791107770484620805503
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128469931143450237791107770484620805503_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128469931143450237791107770484620805503.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i32 0, align 4
-@b = dso_local global i32 0, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @g(i64 noundef %x, i32 noundef %y, i32 noundef %z, ptr noundef %p) #0 {
+entry:
+  %x.addr = alloca i64, align 8
+  %y.addr = alloca i32, align 4
+  %z.addr = alloca i32, align 4
+  %p.addr = alloca ptr, align 8
+  %w = alloca i32, align 4
+  store i64 %x, ptr %x.addr, align 8
+  store i32 %y, ptr %y.addr, align 4
+  store i32 %z, ptr %z.addr, align 4
+  store ptr %p, ptr %p.addr, align 8
+  %0 = load i64, ptr %x.addr, align 8
+  %1 = load i32, ptr %y.addr, align 4
+  %sh_prom = zext i32 %1 to i64
+  %shr = lshr i64 %0, %sh_prom
+  %and = and i64 %shr, 4294967295
+  %2 = load i32, ptr %z.addr, align 4
+  %and1 = and i32 %2, 31
+  %sh_prom2 = zext i32 %and1 to i64
+  %shl = shl i64 %and, %sh_prom2
+  %conv = trunc i64 %shl to i32
+  store i32 %conv, ptr %w, align 4
+  %3 = load i32, ptr %w, align 4
+  %conv3 = zext i32 %3 to i64
+  %and4 = and i64 %conv3, 4294967295
+  %4 = load i32, ptr %z.addr, align 4
+  %sh_prom5 = zext i32 %4 to i64
+  %shl6 = shl i64 %and4, %sh_prom5
+  %5 = load ptr, ptr %p.addr, align 8
+  %6 = load i64, ptr %5, align 8
+  %or = or i64 %6, %shl6
+  store i64 %or, ptr %5, align 8
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %c = alloca i32, align 4
-  %d = alloca i32, align 4
-  %e = alloca i32, align 4
-  %f = alloca i32, align 4
+  %a = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  store i32 -2, ptr %c, align 4
-  store i32 254, ptr %d, align 4
-  %0 = load i32, ptr @a, align 4
-  %and = and i32 %0, 1
-  store i32 %and, ptr %e, align 4
-  %1 = load i32, ptr @b, align 4
-  %and1 = and i32 %1, 2
-  store i32 %and1, ptr %f, align 4
-  ret i32 0
+  store i64 0, ptr %a, align 8
+  call void @g(i64 noundef -2401053092593056409, i32 noundef 0, i32 noundef 0, ptr noundef %a)
+  %0 = load i64, ptr %a, align 8
+  %cmp = icmp eq i64 %0, 19088743
+  %cond = select i1 %cmp, i32 0, i32 1
+  ret i32 %cond
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

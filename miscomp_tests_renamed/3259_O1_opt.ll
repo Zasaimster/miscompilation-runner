@@ -1,75 +1,54 @@
-; 186666117870887822883048845625453513651
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/186666117870887822883048845625453513651_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/186666117870887822883048845625453513651.c"
+; 134589972178932734717793625750820593961
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134589972178932734717793625750820593961_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134589972178932734717793625750820593961.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.2 = private unnamed_addr constant [13 x i8] c"timeout=%ld\0A\00", align 1
-@str = private unnamed_addr constant [6 x i8] c"begin\00", align 1
-@str.4 = private unnamed_addr constant [4 x i8] c"end\00", align 1
+@.str = private unnamed_addr constant [16 x i8] c"Loop finished.\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %do.body.i
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %conv = sitofp i32 %call to double
+  br label %for.body
 
-do.body.i:                                        ; preds = %do.body.i, %entry
-  %timeout.0.i = phi i64 [ 2, %entry ], [ %dec.i, %do.body.i ]
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i)
-  %dec.i = add nsw i64 %timeout.0.i, -1
-  %tobool.not.i = icmp eq i64 %dec.i, 0
-  br i1 %tobool.not.i, label %do.body.i3, label %do.body.i, !llvm.loop !5
+for.body:                                         ; preds = %if.end7, %entry
+  %i.017 = phi i32 [ 1, %entry ], [ %inc, %if.end7 ]
+  %work.016 = phi double [ 1.000000e+00, %entry ], [ %div8, %if.end7 ]
+  %beta.015 = phi double [ %conv, %entry ], [ %beta.1, %if.end7 ]
+  %oldrho.014 = phi double [ undef, %entry ], [ %mul, %if.end7 ]
+  %mul = fmul double %work.016, %work.016
+  %cmp2.not = icmp eq i32 %i.017, 1
+  %div = fdiv double %mul, %oldrho.014
+  %beta.1 = select i1 %cmp2.not, double %beta.015, double %div
+  %cmp4 = fcmp oeq double %beta.1, 1.000000e+00
+  br i1 %cmp4, label %if.then6, label %if.end7
 
-do.body.i3:                                       ; preds = %do.body.i3, %do.body.i
-  %timeout.0.i4 = phi i64 [ %dec.i6, %do.body.i3 ], [ 2, %do.body.i ]
-  %call.i5 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i4)
-  %dec.i6 = add nsw i64 %timeout.0.i4, -1
-  %tobool.not.i7 = icmp eq i64 %dec.i6, 0
-  br i1 %tobool.not.i7, label %do.body.i8, label %do.body.i3, !llvm.loop !8
+if.then6:                                         ; preds = %for.body
+  tail call void @abort() #3
+  unreachable
 
-do.body.i8:                                       ; preds = %do.body.i8, %do.body.i3
-  %timeout.0.i9 = phi i64 [ %dec.i11, %do.body.i8 ], [ 2, %do.body.i3 ]
-  %call.i10 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i9)
-  %dec.i11 = add nsw i64 %timeout.0.i9, -1
-  %tobool.not.i12 = icmp eq i64 %dec.i11, 0
-  br i1 %tobool.not.i12, label %do.body.i13, label %do.body.i8, !llvm.loop !9
+if.end7:                                          ; preds = %for.body
+  %div8 = fmul double %work.016, 5.000000e-01
+  %inc = add nuw nsw i32 %i.017, 1
+  %exitcond.not = icmp eq i32 %inc, 3
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !5
 
-do.body.i13:                                      ; preds = %do.body.i13, %do.body.i8
-  %timeout.0.i14 = phi i64 [ %dec.i16, %do.body.i13 ], [ 2, %do.body.i8 ]
-  %call.i15 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i14)
-  %dec.i16 = add nsw i64 %timeout.0.i14, -1
-  %tobool.not.i17 = icmp eq i64 %dec.i16, 0
-  br i1 %tobool.not.i17, label %do.body.i18, label %do.body.i13, !llvm.loop !10
-
-do.body.i18:                                      ; preds = %do.body.i18, %do.body.i13
-  %timeout.0.i19 = phi i64 [ %dec.i21, %do.body.i18 ], [ 2, %do.body.i13 ]
-  %call.i20 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i19)
-  %dec.i21 = add nsw i64 %timeout.0.i19, -1
-  %tobool.not.i22 = icmp eq i64 %dec.i21, 0
-  br i1 %tobool.not.i22, label %do.body.i23, label %do.body.i18, !llvm.loop !11
-
-do.body.i23:                                      ; preds = %do.body.i23, %do.body.i18
-  %timeout.0.i24 = phi i64 [ %dec.i26, %do.body.i23 ], [ 2, %do.body.i18 ]
-  %call.i25 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i24)
-  %dec.i26 = add nsw i64 %timeout.0.i24, -1
-  %tobool.not.i27 = icmp eq i64 %dec.i26, 0
-  br i1 %tobool.not.i27, label %kb_wait_4.exit, label %do.body.i23, !llvm.loop !12
-
-kb_wait_4.exit:                                   ; preds = %do.body.i23
-  %puts2 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
+for.end:                                          ; preds = %if.end7
   ret i32 0
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #2
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -82,8 +61,3 @@ attributes #2 = { nofree nounwind }
 !5 = distinct !{!5, !6, !7}
 !6 = !{!"llvm.loop.mustprogress"}
 !7 = !{!"llvm.loop.unroll.disable"}
-!8 = distinct !{!8, !6, !7}
-!9 = distinct !{!9, !6, !7}
-!10 = distinct !{!10, !6, !7}
-!11 = distinct !{!11, !6, !7}
-!12 = distinct !{!12, !6, !7}

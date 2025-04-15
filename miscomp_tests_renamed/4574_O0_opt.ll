@@ -1,64 +1,20 @@
-; 137384880355554676157105823931170084376
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137384880355554676157105823931170084376_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137384880355554676157105823931170084376.c"
+; 133362793446530738042383317855672850315
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133362793446530738042383317855672850315_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133362793446530738042383317855672850315.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@.str = private unnamed_addr constant [13 x i8] c"abcdefghijkl\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @f(ptr noundef %s, i32 noundef %i) #0 {
-entry:
-  %s.addr = alloca ptr, align 8
-  %i.addr = alloca i32, align 4
-  store ptr %s, ptr %s.addr, align 8
-  store i32 %i, ptr %i.addr, align 4
-  %0 = load ptr, ptr %s.addr, align 8
-  %1 = load i32, ptr %i.addr, align 4
-  %add = add i32 %1, 3
-  %sub = sub i32 %add, 1
-  %idxprom = zext i32 %sub to i64
-  %arrayidx = getelementptr inbounds nuw i8, ptr %0, i64 %idxprom
-  ret ptr %arrayidx
-}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %str = alloca ptr, align 8
-  %x2 = alloca ptr, align 8
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store ptr @.str, ptr %str, align 8
-  %0 = load ptr, ptr %str, align 8
-  %call = call ptr @f(ptr noundef %0, i32 noundef 12)
-  store ptr %call, ptr %x2, align 8
-  %1 = load ptr, ptr %str, align 8
-  %add.ptr = getelementptr inbounds i8, ptr %1, i64 14
-  %2 = load ptr, ptr %x2, align 8
-  %cmp = icmp ne ptr %add.ptr, %2
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  store i32 1, ptr %x, align 4
+  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

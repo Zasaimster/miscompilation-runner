@@ -1,48 +1,27 @@
-; 126824110488253839772566761251627824957
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126824110488253839772566761251627824957.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126824110488253839772566761251627824957.c"
+; 134832746991892837610679836957006970476
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134832746991892837610679836957006970476.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134832746991892837610679836957006970476.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @add(i32 noundef %a, i32 noundef %b, i32 noundef %c, i32 noundef %d, i32 noundef %e, i32 noundef %f, i32 noundef %g, i32 noundef %h, i32 noundef %i, i32 noundef %j, i32 noundef %k, i32 noundef %l, i32 noundef %m) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %c.addr = alloca i32, align 4
-  %d.addr = alloca i32, align 4
-  %e.addr = alloca i32, align 4
-  %f.addr = alloca i32, align 4
-  %g.addr = alloca i32, align 4
-  %h.addr = alloca i32, align 4
-  %i.addr = alloca i32, align 4
-  %j.addr = alloca i32, align 4
-  %k.addr = alloca i32, align 4
-  %l.addr = alloca i32, align 4
-  %m.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 %c, ptr %c.addr, align 4
-  store i32 %d, ptr %d.addr, align 4
-  store i32 %e, ptr %e.addr, align 4
-  store i32 %f, ptr %f.addr, align 4
-  store i32 %g, ptr %g.addr, align 4
-  store i32 %h, ptr %h.addr, align 4
-  store i32 %i, ptr %i.addr, align 4
-  store i32 %j, ptr %j.addr, align 4
-  store i32 %k, ptr %k.addr, align 4
-  store i32 %l, ptr %l.addr, align 4
-  store i32 %m, ptr %m.addr, align 4
-  ret i32 0
-}
+%struct.B = type { %struct.C, ptr }
+%struct.C = type { %struct.D, i64, i64, i64, i64, i64 }
+%struct.D = type { i32, ptr }
+
+@y = dso_local global %struct.B zeroinitializer, align 8
+@x = dso_local global %struct.B zeroinitializer, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @foo(ptr noundef %x, ptr noundef %y) #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %call = call i32 @add(i32 noundef 1, i32 noundef 2, i32 noundef 3, i32 noundef 4, i32 noundef 5, i32 noundef 6, i32 noundef 7, i32 noundef 8, i32 noundef 9, i32 noundef 10, i32 noundef 11, i32 noundef 12, i32 noundef 13)
-  %cmp = icmp ne i32 %call, 0
+  %x.addr = alloca ptr, align 8
+  %y.addr = alloca ptr, align 8
+  store ptr %x, ptr %x.addr, align 8
+  store ptr %y, ptr %y.addr, align 8
+  %0 = load ptr, ptr %y.addr, align 8
+  %b2 = getelementptr inbounds nuw %struct.B, ptr %0, i32 0, i32 1
+  %1 = load ptr, ptr %b2, align 8
+  %cmp = icmp ne ptr %1, null
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -50,12 +29,72 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
+  %2 = load ptr, ptr %x.addr, align 8
+  %b1 = getelementptr inbounds nuw %struct.B, ptr %2, i32 0, i32 0
+  %c3 = getelementptr inbounds nuw %struct.C, ptr %b1, i32 0, i32 2
+  %3 = load i64, ptr %c3, align 8
+  %cmp1 = icmp eq i64 %3, -1
+  br i1 %cmp1, label %if.then2, label %if.end14
+
+if.then2:                                         ; preds = %if.end
+  %4 = load ptr, ptr %y.addr, align 8
+  %b13 = getelementptr inbounds nuw %struct.B, ptr %4, i32 0, i32 0
+  %c34 = getelementptr inbounds nuw %struct.C, ptr %b13, i32 0, i32 2
+  %5 = load i64, ptr %c34, align 8
+  %6 = load ptr, ptr %x.addr, align 8
+  %b15 = getelementptr inbounds nuw %struct.B, ptr %6, i32 0, i32 0
+  %c36 = getelementptr inbounds nuw %struct.C, ptr %b15, i32 0, i32 2
+  store i64 %5, ptr %c36, align 8
+  %7 = load ptr, ptr %y.addr, align 8
+  %b17 = getelementptr inbounds nuw %struct.B, ptr %7, i32 0, i32 0
+  %c4 = getelementptr inbounds nuw %struct.C, ptr %b17, i32 0, i32 3
+  %8 = load i64, ptr %c4, align 8
+  %9 = load ptr, ptr %x.addr, align 8
+  %b18 = getelementptr inbounds nuw %struct.B, ptr %9, i32 0, i32 0
+  %c49 = getelementptr inbounds nuw %struct.C, ptr %b18, i32 0, i32 3
+  store i64 %8, ptr %c49, align 8
+  %10 = load ptr, ptr %y.addr, align 8
+  %b110 = getelementptr inbounds nuw %struct.B, ptr %10, i32 0, i32 0
+  %c311 = getelementptr inbounds nuw %struct.C, ptr %b110, i32 0, i32 2
+  store i64 -1, ptr %c311, align 8
+  %11 = load ptr, ptr %y.addr, align 8
+  %b112 = getelementptr inbounds nuw %struct.B, ptr %11, i32 0, i32 0
+  %c413 = getelementptr inbounds nuw %struct.C, ptr %b112, i32 0, i32 3
+  store i64 0, ptr %c413, align 8
+  br label %if.end14
+
+if.end14:                                         ; preds = %if.then2, %if.end
+  %12 = load ptr, ptr %y.addr, align 8
+  %b115 = getelementptr inbounds nuw %struct.B, ptr %12, i32 0, i32 0
+  %c316 = getelementptr inbounds nuw %struct.C, ptr %b115, i32 0, i32 2
+  %13 = load i64, ptr %c316, align 8
+  %cmp17 = icmp ne i64 %13, -1
+  br i1 %cmp17, label %if.then18, label %if.end19
+
+if.then18:                                        ; preds = %if.end14
+  call void @abort() #3
   unreachable
+
+if.end19:                                         ; preds = %if.end14
+  ret void
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  store i32 6, ptr @y, align 8
+  store i64 145, ptr getelementptr inbounds nuw (%struct.C, ptr @y, i32 0, i32 2), align 8
+  store i64 2448, ptr getelementptr inbounds nuw (%struct.C, ptr @y, i32 0, i32 3), align 8
+  store i64 -1, ptr getelementptr inbounds nuw (%struct.C, ptr @x, i32 0, i32 2), align 8
+  call void @foo(ptr noundef @x, ptr noundef @y)
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

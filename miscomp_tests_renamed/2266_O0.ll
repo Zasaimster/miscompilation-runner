@@ -1,37 +1,47 @@
-; 191178060611047505726764646671251562644
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191178060611047505726764646671251562644.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191178060611047505726764646671251562644.c"
+; 10625411889391779975956726157675436320
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10625411889391779975956726157675436320.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10625411889391779975956726157675436320.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global [2 x i32] zeroinitializer, align 4
+%struct.three_byte_t = type <{ i8, i16 }>
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %b) #0 {
+define dso_local zeroext i8 @f() #0 {
 entry:
-  %b.addr = alloca i32, align 4
-  %i = alloca i32, align 4
-  %p = alloca ptr, align 8
-  store i32 %b, ptr %b.addr, align 4
-  ret i32 0
+  ret i8 0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local zeroext i16 @g() #0 {
+entry:
+  ret i16 4660
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %three_byte = alloca %struct.three_byte_t, align 1
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr getelementptr inbounds ([2 x i32], ptr @a, i64 0, i64 1), align 4
-  store i32 0, ptr @a, align 4
-  %call = call i32 @f(i32 noundef 2)
-  %0 = load i32, ptr @a, align 4
-  %cmp = icmp ne i32 %0, ptrtoint (ptr @a to i32)
+  %call = call zeroext i8 @f()
+  %a = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 0
+  store i8 %call, ptr %a, align 1
+  %call1 = call zeroext i16 @g()
+  %b = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 1
+  store i16 %call1, ptr %b, align 1
+  %a2 = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 0
+  %0 = load i8, ptr %a2, align 1
+  %conv = zext i8 %0 to i32
+  %cmp = icmp ne i32 %conv, 171
   br i1 %cmp, label %if.then, label %lor.lhs.false
 
 lor.lhs.false:                                    ; preds = %entry
-  %1 = load i32, ptr getelementptr inbounds ([2 x i32], ptr @a, i64 0, i64 1), align 4
-  %cmp1 = icmp ne i32 %1, add nsw (i32 ptrtoint (ptr @a to i32), i32 3)
-  br i1 %cmp1, label %if.then, label %if.end
+  %b4 = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 1
+  %1 = load i16, ptr %b4, align 1
+  %conv5 = zext i16 %1 to i32
+  %cmp6 = icmp ne i32 %conv5, 4660
+  br i1 %cmp6, label %if.then, label %if.end
 
 if.then:                                          ; preds = %lor.lhs.false, %entry
   call void @abort() #3

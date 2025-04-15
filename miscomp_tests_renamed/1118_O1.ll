@@ -1,29 +1,52 @@
-; 179380824259027868323178085480553221330
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/179380824259027868323178085480553221330.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/179380824259027868323178085480553221330.c"
+; 177974834334468704829927062879794176551
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177974834334468704829927062879794176551.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177974834334468704829927062879794176551.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @f() local_unnamed_addr #0 {
-entry:
-  ret i32 1
-}
+@str = private unnamed_addr constant [18 x i8] c"This won't print.\00", align 1
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  tail call void @abort() #3
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %entry
+  %info.sroa.5.0 = phi i32 [ 0, %entry ], [ %info.sroa.5.1, %for.body.i ]
+  %y.032.i = phi i32 [ 0, %entry ], [ %inc.i, %for.body.i ]
+  %info.sroa.5.1 = add nuw nsw i32 %info.sroa.5.0, 1
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %inc.i = add nuw nsw i32 %y.032.i, 1
+  %exitcond.not.i = icmp eq i32 %inc.i, 256
+  br i1 %exitcond.not.i, label %render_image_rgb_a.exit, label %for.body.i, !llvm.loop !5
+
+render_image_rgb_a.exit:                          ; preds = %for.body.i
+  %cmp.not = icmp eq i32 %info.sroa.5.1, 256
+  br i1 %cmp.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %render_image_rgb_a.exit
+  tail call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %render_image_rgb_a.exit
+  tail call void @exit(i32 noundef 0) #4
   unreachable
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+declare void @abort() local_unnamed_addr #1
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #2
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #3
+
+attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree nounwind }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -33,3 +56,6 @@ attributes #3 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!5 = distinct !{!5, !6, !7}
+!6 = !{!"llvm.loop.mustprogress"}
+!7 = !{!"llvm.loop.unroll.disable"}

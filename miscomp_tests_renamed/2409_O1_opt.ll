@@ -1,27 +1,24 @@
-; 135465647488820076924240667042486682841
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135465647488820076924240667042486682841_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135465647488820076924240667042486682841.c"
+; 102139678123981843331418486063385044205
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102139678123981843331418486063385044205_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102139678123981843331418486063385044205.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local local_unnamed_addr global i32 0, align 4
-@b = dso_local local_unnamed_addr global i32 0, align 4
+@a = dso_local local_unnamed_addr global [7 x i32] [i32 1, i32 2, i32 3, i32 4, i32 5, i32 6, i32 7], align 16
+@c = dso_local local_unnamed_addr global i32 0, align 4
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @a, align 4, !tbaa !5
-  %inc = add nsw i32 %0, 1
-  store i32 %inc, ptr @a, align 4, !tbaa !5
-  %1 = load i32, ptr @b, align 4, !tbaa !5
-  %cmp.not = icmp eq i32 %1, 1
-  br i1 %cmp.not, label %if.end, label %if.then
+  %0 = load i32, ptr @c, align 4, !tbaa !5
+  %cmp4.not = icmp eq i32 %0, 1
+  br i1 %cmp4.not, label %if.end6, label %if.then5
 
-if.then:                                          ; preds = %entry
+if.then5:                                         ; preds = %entry
   tail call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end6:                                          ; preds = %entry
   ret i32 0
 }
 

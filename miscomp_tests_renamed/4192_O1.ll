@@ -1,22 +1,29 @@
-; 176764930719743565132221982447850138424
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176764930719743565132221982447850138424.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176764930719743565132221982447850138424.c"
+; 145444333296402476596882162738137174995
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145444333296402476596882162738137174995.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145444333296402476596882162738137174995.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: nounwind uwtable
-define dso_local range(i32 -2147483648, 2147483645) i32 @main() local_unnamed_addr #0 {
+define dso_local ptr @f(ptr noundef readnone captures(none) %p) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (...) @anotherDummyFunc() #2
-  %sub = add nsw i32 %call, -3
-  ret i32 %sub
+  %call = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #3
+  ret ptr undef
 }
 
-declare i32 @anotherDummyFunc(...) local_unnamed_addr #1
+declare i32 @calculateSquare(...) local_unnamed_addr #1
+
+; Function Attrs: noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  %call.i = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #3
+  unreachable
+}
 
 attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nounwind }
+attributes #2 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

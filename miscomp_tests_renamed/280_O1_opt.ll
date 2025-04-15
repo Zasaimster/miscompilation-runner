@@ -1,47 +1,38 @@
-; 173741884191377946520717735852901496138
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173741884191377946520717735852901496138_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173741884191377946520717735852901496138.c"
+; 138044080596902695943570956031261165509
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138044080596902695943570956031261165509_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138044080596902695943570956031261165509.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i16, [2 x i8] }
+%struct.baz = type { i32, i32, i32, i32, i32 }
 
-@s = dso_local local_unnamed_addr global %struct.S zeroinitializer, align 4
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local void @bar(ptr noundef readnone captures(none) %x, i32 noundef %f, i32 noundef %g, i32 noundef %h, i32 noundef %i, i32 noundef %j) local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %bf.load = load i16, ptr @s, align 4
-  %bf.lshr = lshr i16 %bf.load, 4
-  %bf.value = and i16 %bf.lshr, 15
-  %bf.clear2 = and i16 %bf.load, -1024
-  %bf.shl = shl nuw nsw i16 %bf.value, 4
-  %0 = or disjoint i16 %bf.shl, %bf.clear2
-  %bf.set9 = or disjoint i16 %0, %bf.value
-  store i16 %bf.set9, ptr @s, align 4
-  %cmp.not = icmp eq i16 %bf.value, 15
-  br i1 %cmp.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  tail call void @abort() #3
+  tail call void @abort() #2
   unreachable
-
-if.end:                                           ; preds = %entry
-  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local void @foo(ptr noundef readnone byval(%struct.baz) align 8 captures(none) %x, ptr noundef readnone captures(none) %y) local_unnamed_addr #0 {
+entry:
+  tail call void @abort() #2
+  unreachable
+}
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  tail call void @abort() #2
+  unreachable
+}
+
+attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
-attributes #3 = { noreturn nounwind }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

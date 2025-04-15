@@ -1,16 +1,17 @@
-; 18120723103395385854416203947238769256
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/18120723103395385854416203947238769256_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/18120723103395385854416203947238769256.c"
+; 105240667441356227845466561498835944927
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105240667441356227845466561498835944927_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105240667441356227845466561498835944927.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+@d = dso_local local_unnamed_addr global double 0x3800000000000000, align 8
+@str = private unnamed_addr constant [10 x i8] c"Loop done\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local void @example8() local_unnamed_addr #0 {
 entry:
   %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  ret i32 0
+  ret void
 }
 
 ; Function Attrs: nofree nounwind

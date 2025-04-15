@@ -1,38 +1,34 @@
-; 182248676141511751878772619863953234692
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182248676141511751878772619863953234692.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182248676141511751878772619863953234692.c"
+; 128469931143450237791107770484620805503
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128469931143450237791107770484620805503.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128469931143450237791107770484620805503.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.baz = type { i32, i32, i32, i32, i32 }
-
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local void @bar(ptr noundef readnone captures(none) %x, i32 noundef %f, i32 noundef %g, i32 noundef %h, i32 noundef %i, i32 noundef %j) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite) uwtable
+define dso_local void @g(i64 noundef %x, i32 noundef %y, i32 noundef %z, ptr noundef captures(none) %p) local_unnamed_addr #0 {
 entry:
-  tail call void @abort() #2
-  unreachable
+  %sh_prom = zext nneg i32 %y to i64
+  %shr = lshr i64 %x, %sh_prom
+  %and1 = and i32 %z, 31
+  %sh_prom2 = zext nneg i32 %and1 to i64
+  %shl = shl i64 %shr, %sh_prom2
+  %conv3 = and i64 %shl, 4294967295
+  %sh_prom5 = zext nneg i32 %z to i64
+  %shl6 = shl i64 %conv3, %sh_prom5
+  %0 = load i64, ptr %p, align 8, !tbaa !5
+  %or = or i64 %0, %shl6
+  store i64 %or, ptr %p, align 8, !tbaa !5
+  ret void
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local void @foo(ptr noundef readnone captures(none) %z, ptr noundef readnone byval(%struct.baz) align 8 captures(none) %x, ptr noundef readnone captures(none) %y) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef range(i32 0, 2) i32 @main() local_unnamed_addr #1 {
 entry:
-  tail call void @abort() #2
-  unreachable
+  ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  tail call void @abort() #2
-  unreachable
-}
-
-attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: readwrite) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -42,3 +38,7 @@ attributes #2 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"long long", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C/C++ TBAA"}

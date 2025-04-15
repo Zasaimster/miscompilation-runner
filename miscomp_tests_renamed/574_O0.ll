@@ -1,63 +1,52 @@
-; 127888658967788613227605748493021064804
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/127888658967788613227605748493021064804.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/127888658967788613227605748493021064804.c"
+; 11318279587007227597198454747603567500
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11318279587007227597198454747603567500.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11318279587007227597198454747603567500.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.four_quarters = type { i16, i16, i16, i16 }
-
-@a = dso_local global i32 0, align 4
-@x = dso_local global %struct.four_quarters zeroinitializer, align 2
-@b = dso_local global i32 0, align 4
+@cfb_tab8_be = internal constant [16 x i32] [i32 0, i32 255, i32 65280, i32 65535, i32 16711680, i32 16711935, i32 16776960, i32 16777215, i32 -16777216, i32 -16776961, i32 -16711936, i32 -16711681, i32 -65536, i32 -65281, i32 -256, i32 -1], align 16
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f(i64 %j.coerce) #0 {
+define dso_local ptr @xxx(i32 noundef %bpp) #0 {
 entry:
-  %j = alloca %struct.four_quarters, align 2
-  store i64 %j.coerce, ptr %j, align 2
-  ret void
+  %bpp.addr = alloca i32, align 4
+  %tab = alloca ptr, align 8
+  store i32 %bpp, ptr %bpp.addr, align 4
+  ret ptr null
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca %struct.four_quarters, align 2
+  %a = alloca ptr, align 8
+  %b = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %b2 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 2
-  store i16 0, ptr %b2, align 2
-  %b1 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 1
-  store i16 0, ptr %b1, align 2
-  %b0 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 0
-  store i16 0, ptr %b0, align 2
-  %b3 = getelementptr inbounds nuw %struct.four_quarters, ptr %x, i32 0, i32 3
-  store i16 38, ptr %b3, align 2
-  %0 = load i64, ptr %x, align 2
-  call void @f(i64 %0)
-  %1 = load i32, ptr @a, align 4
-  %cmp = icmp ne i32 %1, 38
+  %call = call ptr @xxx(i32 noundef 8)
+  store ptr %call, ptr %a, align 8
+  %0 = load ptr, ptr %a, align 8
+  %arrayidx = getelementptr inbounds i32, ptr %0, i64 0
+  %1 = load i32, ptr %arrayidx, align 4
+  store i32 %1, ptr %b, align 4
+  %2 = load i32, ptr %b, align 4
+  %3 = load i32, ptr @cfb_tab8_be, align 16
+  %cmp = icmp ne i32 %2, %3
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

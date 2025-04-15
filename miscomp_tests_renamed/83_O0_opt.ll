@@ -1,70 +1,179 @@
-; 142518017456742084896747888896890340724
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/142518017456742084896747888896890340724_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/142518017456742084896747888896890340724.c"
+; 171619072323734058042735921708853088599
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171619072323734058042735921708853088599_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171619072323734058042735921708853088599.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
+%struct.Point = type { i64, i64 }
+
+@.str = private unnamed_addr constant [7 x i8] c"Start\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %a, ptr noundef %y) #0 {
+define dso_local void @bar() #0 {
 entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i32, align 4
-  %y.addr = alloca ptr, align 8
-  %x = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store ptr %y, ptr %y.addr, align 8
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f(i64 %p0.coerce0, i64 %p0.coerce1, i64 %p1.coerce0, i64 %p1.coerce1, i64 %p2.coerce0, i64 %p2.coerce1, ptr noundef byval(%struct.Point) align 8 %p3, ptr noundef byval(%struct.Point) align 8 %p4, ptr noundef byval(%struct.Point) align 8 %p5) #0 {
+entry:
+  %p0 = alloca %struct.Point, align 8
+  %p1 = alloca %struct.Point, align 8
+  %p2 = alloca %struct.Point, align 8
+  %0 = getelementptr inbounds nuw { i64, i64 }, ptr %p0, i32 0, i32 0
+  store i64 %p0.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { i64, i64 }, ptr %p0, i32 0, i32 1
+  store i64 %p0.coerce1, ptr %1, align 8
+  %2 = getelementptr inbounds nuw { i64, i64 }, ptr %p1, i32 0, i32 0
+  store i64 %p1.coerce0, ptr %2, align 8
+  %3 = getelementptr inbounds nuw { i64, i64 }, ptr %p1, i32 0, i32 1
+  store i64 %p1.coerce1, ptr %3, align 8
+  %4 = getelementptr inbounds nuw { i64, i64 }, ptr %p2, i32 0, i32 0
+  store i64 %p2.coerce0, ptr %4, align 8
+  %5 = getelementptr inbounds nuw { i64, i64 }, ptr %p2, i32 0, i32 1
+  store i64 %p2.coerce1, ptr %5, align 8
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %x, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %cmp = icmp eq i32 %0, 0
-  br i1 %cmp, label %if.then, label %if.end
+  %cmp = icmp ne i32 %call, 0
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
-  %1 = load ptr, ptr %y.addr, align 8
-  %2 = load i32, ptr %1, align 4
-  store i32 %2, ptr %retval, align 4
-  br label %return
+lor.lhs.false:                                    ; preds = %entry
+  %p_y = getelementptr inbounds nuw %struct.Point, ptr %p0, i32 0, i32 1
+  %6 = load i64, ptr %p_y, align 8
+  %cmp1 = icmp ne i64 %6, 1
+  br i1 %cmp1, label %if.then, label %lor.lhs.false2
 
-if.end:                                           ; preds = %entry
-  %3 = load i32, ptr %a.addr, align 4
-  %sub = sub nsw i32 %3, 1
-  %call1 = call i32 @f(i32 noundef %sub, ptr noundef %x)
-  store i32 %call1, ptr %retval, align 4
-  br label %return
+lor.lhs.false2:                                   ; preds = %lor.lhs.false
+  %p_x = getelementptr inbounds nuw %struct.Point, ptr %p1, i32 0, i32 0
+  %7 = load i64, ptr %p_x, align 8
+  %cmp3 = icmp ne i64 %7, -1
+  br i1 %cmp3, label %if.then, label %lor.lhs.false4
 
-return:                                           ; preds = %if.end, %if.then
-  %4 = load i32, ptr %retval, align 4
-  ret i32 %4
+lor.lhs.false4:                                   ; preds = %lor.lhs.false2
+  %p_y5 = getelementptr inbounds nuw %struct.Point, ptr %p1, i32 0, i32 1
+  %8 = load i64, ptr %p_y5, align 8
+  %cmp6 = icmp ne i64 %8, 0
+  br i1 %cmp6, label %if.then, label %lor.lhs.false7
+
+lor.lhs.false7:                                   ; preds = %lor.lhs.false4
+  %p_x8 = getelementptr inbounds nuw %struct.Point, ptr %p2, i32 0, i32 0
+  %9 = load i64, ptr %p_x8, align 8
+  %cmp9 = icmp ne i64 %9, 1
+  br i1 %cmp9, label %if.then, label %lor.lhs.false10
+
+lor.lhs.false10:                                  ; preds = %lor.lhs.false7
+  %p_y11 = getelementptr inbounds nuw %struct.Point, ptr %p2, i32 0, i32 1
+  %10 = load i64, ptr %p_y11, align 8
+  %cmp12 = icmp ne i64 %10, -1
+  br i1 %cmp12, label %if.then, label %lor.lhs.false13
+
+lor.lhs.false13:                                  ; preds = %lor.lhs.false10
+  %p_x14 = getelementptr inbounds nuw %struct.Point, ptr %p3, i32 0, i32 0
+  %11 = load i64, ptr %p_x14, align 8
+  %cmp15 = icmp ne i64 %11, -1
+  br i1 %cmp15, label %if.then, label %lor.lhs.false16
+
+lor.lhs.false16:                                  ; preds = %lor.lhs.false13
+  %p_y17 = getelementptr inbounds nuw %struct.Point, ptr %p3, i32 0, i32 1
+  %12 = load i64, ptr %p_y17, align 8
+  %cmp18 = icmp ne i64 %12, 1
+  br i1 %cmp18, label %if.then, label %lor.lhs.false19
+
+lor.lhs.false19:                                  ; preds = %lor.lhs.false16
+  %p_x20 = getelementptr inbounds nuw %struct.Point, ptr %p4, i32 0, i32 0
+  %13 = load i64, ptr %p_x20, align 8
+  %cmp21 = icmp ne i64 %13, 0
+  br i1 %cmp21, label %if.then, label %lor.lhs.false22
+
+lor.lhs.false22:                                  ; preds = %lor.lhs.false19
+  %p_y23 = getelementptr inbounds nuw %struct.Point, ptr %p4, i32 0, i32 1
+  %14 = load i64, ptr %p_y23, align 8
+  %cmp24 = icmp ne i64 %14, -1
+  br i1 %cmp24, label %if.then, label %lor.lhs.false25
+
+lor.lhs.false25:                                  ; preds = %lor.lhs.false22
+  %p_x26 = getelementptr inbounds nuw %struct.Point, ptr %p5, i32 0, i32 0
+  %15 = load i64, ptr %p_x26, align 8
+  %cmp27 = icmp ne i64 %15, 1
+  br i1 %cmp27, label %if.then, label %lor.lhs.false28
+
+lor.lhs.false28:                                  ; preds = %lor.lhs.false25
+  %p_y29 = getelementptr inbounds nuw %struct.Point, ptr %p5, i32 0, i32 1
+  %16 = load i64, ptr %p_y29, align 8
+  %cmp30 = icmp ne i64 %16, 0
+  br i1 %cmp30, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false28, %lor.lhs.false25, %lor.lhs.false22, %lor.lhs.false19, %lor.lhs.false16, %lor.lhs.false13, %lor.lhs.false10, %lor.lhs.false7, %lor.lhs.false4, %lor.lhs.false2, %lor.lhs.false, %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %lor.lhs.false28
+  ret void
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local void @foo() #0 {
+entry:
+  %p0 = alloca %struct.Point, align 8
+  %p1 = alloca %struct.Point, align 8
+  %p2 = alloca %struct.Point, align 8
+  %p3 = alloca %struct.Point, align 8
+  %p4 = alloca %struct.Point, align 8
+  %p5 = alloca %struct.Point, align 8
+  call void @bar()
+  %p_x = getelementptr inbounds nuw %struct.Point, ptr %p0, i32 0, i32 0
+  store i64 0, ptr %p_x, align 8
+  %p_y = getelementptr inbounds nuw %struct.Point, ptr %p0, i32 0, i32 1
+  store i64 1, ptr %p_y, align 8
+  %p_x1 = getelementptr inbounds nuw %struct.Point, ptr %p1, i32 0, i32 0
+  store i64 -1, ptr %p_x1, align 8
+  %p_y2 = getelementptr inbounds nuw %struct.Point, ptr %p1, i32 0, i32 1
+  store i64 0, ptr %p_y2, align 8
+  %p_x3 = getelementptr inbounds nuw %struct.Point, ptr %p2, i32 0, i32 0
+  store i64 1, ptr %p_x3, align 8
+  %p_y4 = getelementptr inbounds nuw %struct.Point, ptr %p2, i32 0, i32 1
+  store i64 -1, ptr %p_y4, align 8
+  %p_x5 = getelementptr inbounds nuw %struct.Point, ptr %p3, i32 0, i32 0
+  store i64 -1, ptr %p_x5, align 8
+  %p_y6 = getelementptr inbounds nuw %struct.Point, ptr %p3, i32 0, i32 1
+  store i64 1, ptr %p_y6, align 8
+  %p_x7 = getelementptr inbounds nuw %struct.Point, ptr %p4, i32 0, i32 0
+  store i64 0, ptr %p_x7, align 8
+  %p_y8 = getelementptr inbounds nuw %struct.Point, ptr %p4, i32 0, i32 1
+  store i64 -1, ptr %p_y8, align 8
+  %p_x9 = getelementptr inbounds nuw %struct.Point, ptr %p5, i32 0, i32 0
+  store i64 1, ptr %p_x9, align 8
+  %p_y10 = getelementptr inbounds nuw %struct.Point, ptr %p5, i32 0, i32 1
+  store i64 0, ptr %p_y10, align 8
+  %0 = getelementptr inbounds nuw { i64, i64 }, ptr %p0, i32 0, i32 0
+  %1 = load i64, ptr %0, align 8
+  %2 = getelementptr inbounds nuw { i64, i64 }, ptr %p0, i32 0, i32 1
+  %3 = load i64, ptr %2, align 8
+  %4 = getelementptr inbounds nuw { i64, i64 }, ptr %p1, i32 0, i32 0
+  %5 = load i64, ptr %4, align 8
+  %6 = getelementptr inbounds nuw { i64, i64 }, ptr %p1, i32 0, i32 1
+  %7 = load i64, ptr %6, align 8
+  %8 = getelementptr inbounds nuw { i64, i64 }, ptr %p2, i32 0, i32 0
+  %9 = load i64, ptr %8, align 8
+  %10 = getelementptr inbounds nuw { i64, i64 }, ptr %p2, i32 0, i32 1
+  %11 = load i64, ptr %10, align 8
+  call void @f(i64 %1, i64 %3, i64 %5, i64 %7, i64 %9, i64 %11, ptr noundef byval(%struct.Point) align 8 %p3, ptr noundef byval(%struct.Point) align 8 %p4, ptr noundef byval(%struct.Point) align 8 %p5)
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  %call = call i32 @f(i32 noundef 100, ptr noundef null)
-  %cmp = icmp ne i32 %call, 1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #4
-  unreachable
-
-if.end:                                           ; preds = %entry
+  call void @foo()
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #3

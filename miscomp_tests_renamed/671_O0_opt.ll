@@ -1,210 +1,101 @@
-; 130432778478475145392873713886439544791
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/130432778478475145392873713886439544791_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/130432778478475145392873713886439544791.c"
+; 190576573546341567356293826617067401334
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190576573546341567356293826617067401334_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190576573546341567356293826617067401334.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@w = dso_local global [2 x [2 x i32]] zeroinitializer, align 16
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f1(i32 noundef %diff) #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %diff.addr = alloca i32, align 4
-  store i32 %diff, ptr %diff.addr, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  store i32 0, ptr %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc7, %entry
+  %0 = load i32, ptr %i, align 4
+  %cmp = icmp slt i32 %0, 2
+  br i1 %cmp, label %for.body, label %for.end9
+
+for.body:                                         ; preds = %for.cond
+  store i32 0, ptr %j, align 4
+  br label %for.cond1
+
+for.cond1:                                        ; preds = %for.inc, %for.body
+  %1 = load i32, ptr %j, align 4
+  %cmp2 = icmp slt i32 %1, 2
+  br i1 %cmp2, label %for.body3, label %for.end
+
+for.body3:                                        ; preds = %for.cond1
+  %2 = load i32, ptr %i, align 4
+  %3 = load i32, ptr %j, align 4
+  %cmp4 = icmp eq i32 %2, %3
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body3
+  %4 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %4 to i64
+  %arrayidx = getelementptr inbounds [2 x [2 x i32]], ptr @w, i64 0, i64 %idxprom
+  %5 = load i32, ptr %j, align 4
+  %idxprom5 = sext i32 %5 to i64
+  %arrayidx6 = getelementptr inbounds [2 x i32], ptr %arrayidx, i64 0, i64 %idxprom5
+  store i32 1, ptr %arrayidx6, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body3
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %6 = load i32, ptr %j, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, ptr %j, align 4
+  br label %for.cond1, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond1
+  br label %for.inc7
+
+for.inc7:                                         ; preds = %for.end
+  %7 = load i32, ptr %i, align 4
+  %inc8 = add nsw i32 %7, 1
+  store i32 %inc8, ptr %i, align 4
+  br label %for.cond, !llvm.loop !8
+
+for.end9:                                         ; preds = %for.cond
   ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f2(i32 noundef %diff) #0 {
-entry:
-  %diff.addr = alloca i32, align 4
-  store i32 %diff, ptr %diff.addr, align 4
-  %0 = load i32, ptr %diff.addr, align 4
-  %cmp = icmp slt i32 %0, 0
-  br i1 %cmp, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %entry
-  %1 = load i32, ptr %diff.addr, align 4
-  %sub = sub i32 0, %1
-  br label %cond.end
-
-cond.false:                                       ; preds = %entry
-  %2 = load i32, ptr %diff.addr, align 4
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i32 [ %sub, %cond.true ], [ %2, %cond.false ]
-  ret i32 %cond
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @f3(i64 noundef %diff) #0 {
-entry:
-  %diff.addr = alloca i64, align 8
-  store i64 %diff, ptr %diff.addr, align 8
-  %0 = load i64, ptr %diff.addr, align 8
-  %cmp = icmp slt i64 %0, 0
-  br i1 %cmp, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %entry
-  %1 = load i64, ptr %diff.addr, align 8
-  %sub = sub nsw i64 0, %1
-  br label %cond.end
-
-cond.false:                                       ; preds = %entry
-  %2 = load i64, ptr %diff.addr, align 8
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i64 [ %sub, %cond.true ], [ %2, %cond.false ]
-  ret i64 %cond
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @f4(i64 noundef %diff) #0 {
-entry:
-  %diff.addr = alloca i64, align 8
-  store i64 %diff, ptr %diff.addr, align 8
-  %0 = load i64, ptr %diff.addr, align 8
-  %cmp = icmp slt i64 %0, 0
-  br i1 %cmp, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %entry
-  %1 = load i64, ptr %diff.addr, align 8
-  %sub = sub i64 0, %1
-  br label %cond.end
-
-cond.false:                                       ; preds = %entry
-  %2 = load i64, ptr %diff.addr, align 8
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i64 [ %sub, %cond.true ], [ %2, %cond.false ]
-  ret i64 %cond
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %i, align 4
-  br label %for.cond
+  %call = call i32 @f()
+  %0 = load i32, ptr @w, align 16
+  %cmp = icmp ne i32 %0, 1
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp sle i32 %0, 10
-  br i1 %cmp, label %for.body, label %for.end
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load i32, ptr getelementptr inbounds ([2 x i32], ptr getelementptr inbounds ([2 x [2 x i32]], ptr @w, i64 0, i64 1), i64 0, i64 1), align 4
+  %cmp1 = icmp ne i32 %1, 1
+  br i1 %cmp1, label %if.then, label %lor.lhs.false2
 
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4
-  %call = call i32 @f1(i32 noundef %1)
-  %2 = load i32, ptr %i, align 4
-  %cmp1 = icmp ne i32 %call, %2
-  br i1 %cmp1, label %if.then, label %if.end
+lor.lhs.false2:                                   ; preds = %lor.lhs.false
+  %2 = load i32, ptr getelementptr inbounds ([2 x [2 x i32]], ptr @w, i64 0, i64 1), align 8
+  %cmp3 = icmp ne i32 %2, 0
+  br i1 %cmp3, label %if.then, label %lor.lhs.false4
 
-if.then:                                          ; preds = %for.body
+lor.lhs.false4:                                   ; preds = %lor.lhs.false2
+  %3 = load i32, ptr getelementptr inbounds ([2 x i32], ptr @w, i64 0, i64 1), align 4
+  %cmp5 = icmp ne i32 %3, 0
+  br i1 %cmp5, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false4, %lor.lhs.false2, %lor.lhs.false, %entry
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %for.body
-  %3 = load i32, ptr %i, align 4
-  %sub = sub nsw i32 0, %3
-  %call2 = call i32 @f1(i32 noundef %sub)
-  %4 = load i32, ptr %i, align 4
-  %cmp3 = icmp ne i32 %call2, %4
-  br i1 %cmp3, label %if.then4, label %if.end5
-
-if.then4:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end5:                                          ; preds = %if.end
-  %5 = load i32, ptr %i, align 4
-  %call6 = call i32 @f2(i32 noundef %5)
-  %6 = load i32, ptr %i, align 4
-  %cmp7 = icmp ne i32 %call6, %6
-  br i1 %cmp7, label %if.then8, label %if.end9
-
-if.then8:                                         ; preds = %if.end5
-  call void @abort() #3
-  unreachable
-
-if.end9:                                          ; preds = %if.end5
-  %7 = load i32, ptr %i, align 4
-  %sub10 = sub nsw i32 0, %7
-  %call11 = call i32 @f2(i32 noundef %sub10)
-  %8 = load i32, ptr %i, align 4
-  %cmp12 = icmp ne i32 %call11, %8
-  br i1 %cmp12, label %if.then13, label %if.end14
-
-if.then13:                                        ; preds = %if.end9
-  call void @abort() #3
-  unreachable
-
-if.end14:                                         ; preds = %if.end9
-  %9 = load i32, ptr %i, align 4
-  %conv = sext i32 %9 to i64
-  %call15 = call i64 @f3(i64 noundef %conv)
-  %10 = load i32, ptr %i, align 4
-  %conv16 = sext i32 %10 to i64
-  %cmp17 = icmp ne i64 %call15, %conv16
-  br i1 %cmp17, label %if.then19, label %if.end20
-
-if.then19:                                        ; preds = %if.end14
-  call void @abort() #3
-  unreachable
-
-if.end20:                                         ; preds = %if.end14
-  %11 = load i32, ptr %i, align 4
-  %sub21 = sub nsw i32 0, %11
-  %conv22 = sext i32 %sub21 to i64
-  %call23 = call i64 @f3(i64 noundef %conv22)
-  %12 = load i32, ptr %i, align 4
-  %conv24 = sext i32 %12 to i64
-  %cmp25 = icmp ne i64 %call23, %conv24
-  br i1 %cmp25, label %if.then27, label %if.end28
-
-if.then27:                                        ; preds = %if.end20
-  call void @abort() #3
-  unreachable
-
-if.end28:                                         ; preds = %if.end20
-  %13 = load i32, ptr %i, align 4
-  %conv29 = sext i32 %13 to i64
-  %call30 = call i64 @f4(i64 noundef %conv29)
-  %14 = load i32, ptr %i, align 4
-  %conv31 = sext i32 %14 to i64
-  %cmp32 = icmp ne i64 %call30, %conv31
-  br i1 %cmp32, label %if.then34, label %if.end35
-
-if.then34:                                        ; preds = %if.end28
-  call void @abort() #3
-  unreachable
-
-if.end35:                                         ; preds = %if.end28
-  %15 = load i32, ptr %i, align 4
-  %sub36 = sub nsw i32 0, %15
-  %conv37 = sext i32 %sub36 to i64
-  %call38 = call i64 @f4(i64 noundef %conv37)
-  %16 = load i32, ptr %i, align 4
-  %conv39 = sext i32 %16 to i64
-  %cmp40 = icmp ne i64 %call38, %conv39
-  br i1 %cmp40, label %if.then42, label %if.end43
-
-if.then42:                                        ; preds = %if.end35
-  call void @abort() #3
-  unreachable
-
-if.end43:                                         ; preds = %if.end35
-  br label %for.inc
-
-for.inc:                                          ; preds = %if.end43
-  %17 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %17, 1
-  store i32 %inc, ptr %i, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
+if.end:                                           ; preds = %lor.lhs.false4
   call void @exit(i32 noundef 0) #4
   unreachable
 }
@@ -232,3 +123,4 @@ attributes #4 = { noreturn }
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}

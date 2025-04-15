@@ -1,22 +1,25 @@
-; 126214765739496793434777410007911377247
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126214765739496793434777410007911377247.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126214765739496793434777410007911377247.c"
+; 151107905575676355192584923008914096472
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151107905575676355192584923008914096472.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151107905575676355192584923008914096472.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
-entry:
-  ret i32 100
-}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp sgt i32 %call, 0
+  store i32 0, ptr %x, align 4
+  %call = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
+  %0 = load i32, ptr %x, align 4
+  %add = add nsw i32 %0, %call
+  store i32 %add, ptr %x, align 4
+  %1 = load i32, ptr %x, align 4
+  %add1 = add nsw i32 %1, 2
+  store i32 %add1, ptr %x, align 4
+  %2 = load i32, ptr %x, align 4
+  %cmp = icmp ne i32 %2, 4
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -24,60 +27,42 @@ if.then:                                          ; preds = %entry
   br label %return
 
 if.end:                                           ; preds = %entry
-  %call1 = call i32 @f()
-  %cmp2 = icmp sge i32 %call1, 1000
+  %3 = load i32, ptr %x, align 4
+  %sub = sub nsw i32 %3, 1
+  store i32 %sub, ptr %x, align 4
+  %4 = load i32, ptr %x, align 4
+  %cmp2 = icmp ne i32 %4, 3
   br i1 %cmp2, label %if.then3, label %if.end4
 
 if.then3:                                         ; preds = %if.end
-  store i32 1, ptr %retval, align 4
+  store i32 2, ptr %retval, align 4
   br label %return
 
 if.end4:                                          ; preds = %if.end
-  %call5 = call i32 @f()
-  %cmp6 = icmp slt i32 1000, %call5
-  br i1 %cmp6, label %if.then7, label %if.end8
+  %5 = load i32, ptr %x, align 4
+  %mul = mul nsw i32 %5, 2
+  store i32 %mul, ptr %x, align 4
+  %6 = load i32, ptr %x, align 4
+  %cmp5 = icmp ne i32 %6, 6
+  br i1 %cmp5, label %if.then6, label %if.end7
 
-if.then7:                                         ; preds = %if.end4
-  store i32 1, ptr %retval, align 4
+if.then6:                                         ; preds = %if.end4
+  store i32 3, ptr %retval, align 4
   br label %return
 
-if.end8:                                          ; preds = %if.end4
-  %call9 = call i32 @f()
-  %cmp10 = icmp sle i32 1000, %call9
-  br i1 %cmp10, label %if.then11, label %if.end12
-
-if.then11:                                        ; preds = %if.end8
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end12:                                         ; preds = %if.end8
-  %call13 = call i32 @f()
-  %cmp14 = icmp eq i32 1000, %call13
-  br i1 %cmp14, label %if.then15, label %if.end16
-
-if.then15:                                        ; preds = %if.end12
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end16:                                         ; preds = %if.end12
-  %call17 = call i32 @f()
-  %cmp18 = icmp ne i32 100, %call17
-  br i1 %cmp18, label %if.then19, label %if.end20
-
-if.then19:                                        ; preds = %if.end16
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end20:                                         ; preds = %if.end16
+if.end7:                                          ; preds = %if.end4
   store i32 0, ptr %retval, align 4
   br label %return
 
-return:                                           ; preds = %if.end20, %if.then19, %if.then15, %if.then11, %if.then7, %if.then3, %if.then
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
+return:                                           ; preds = %if.end7, %if.then6, %if.then3, %if.then
+  %7 = load i32, ptr %retval, align 4
+  ret i32 %7
 }
 
+declare i32 @calculateSquare(...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

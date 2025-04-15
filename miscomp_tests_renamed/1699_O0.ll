@@ -1,83 +1,64 @@
-; 179419437041082562060388283306775604585
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/179419437041082562060388283306775604585.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/179419437041082562060388283306775604585.c"
+; 121626740587843502764541299053325368603
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121626740587843502764541299053325368603.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121626740587843502764541299053325368603.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %a) #0 {
+define dso_local i32 @test(i32 noundef %one, i32 noundef %bit) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %cmp = icmp slt i32 %0, 12
-  br i1 %cmp, label %if.then, label %if.end7
-
-if.then:                                          ; preds = %entry
-  %1 = load i32, ptr %a.addr, align 4
-  %cmp1 = icmp sgt i32 %1, -15
-  br i1 %cmp1, label %if.then2, label %if.end6
-
-if.then2:                                         ; preds = %if.then
-  %2 = load i32, ptr %a.addr, align 4
-  %cmp3 = icmp sgt i32 %2, 0
-  br i1 %cmp3, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %if.then2
-  %3 = load i32, ptr %a.addr, align 4
-  br label %cond.end
-
-cond.false:                                       ; preds = %if.then2
-  %4 = load i32, ptr %a.addr, align 4
-  %sub = sub nsw i32 0, %4
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi i32 [ %3, %cond.true ], [ %sub, %cond.false ]
-  store i32 %cond, ptr %a.addr, align 4
-  %5 = load i32, ptr %a.addr, align 4
-  %cmp4 = icmp eq i32 %5, 2
-  br i1 %cmp4, label %if.then5, label %if.end
-
-if.then5:                                         ; preds = %cond.end
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %cond.end
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end6:                                          ; preds = %if.then
-  br label %if.end7
-
-if.end7:                                          ; preds = %if.end6, %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end7, %if.end, %if.then5
-  %6 = load i32, ptr %retval, align 4
-  ret i32 %6
+  %one.addr = alloca i32, align 4
+  %bit.addr = alloca i32, align 4
+  %val = alloca i32, align 4
+  %zero = alloca i32, align 4
+  store i32 %one, ptr %one.addr, align 4
+  store i32 %bit, ptr %bit.addr, align 4
+  %0 = load i32, ptr %bit.addr, align 4
+  %and = and i32 %0, 1
+  store i32 %and, ptr %val, align 4
+  %1 = load i32, ptr %one.addr, align 4
+  %shr = lshr i32 %1, 1
+  store i32 %shr, ptr %zero, align 4
+  store i32 30, ptr %val, align 4
+  %2 = load i32, ptr %zero, align 4
+  %3 = load i32, ptr %val, align 4
+  %shr1 = lshr i32 %3, 1
+  %add = add i32 %2, %shr1
+  ret i32 %add
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  %call = call i32 @f(i32 noundef -2)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %if.end
+  %call = call i32 @test(i32 noundef 1, i32 noundef 0)
+  %cmp = icmp ne i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @test(i32 noundef 1, i32 noundef 1)
+  %cmp2 = icmp ne i32 %call1, 1
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @test(i32 noundef 1, i32 noundef 65535)
+  %cmp6 = icmp ne i32 %call5, 1
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #3
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
   call void @exit(i32 noundef 0) #4
   unreachable
 }

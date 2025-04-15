@@ -1,36 +1,22 @@
-; 188696808475168126970435706527128992252
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188696808475168126970435706527128992252.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188696808475168126970435706527128992252.c"
+; 132161129027924721846361292488537372860
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132161129027924721846361292488537372860.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132161129027924721846361292488537372860.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.anon = type { i32 }
-
-@f = dso_local local_unnamed_addr global %struct.anon zeroinitializer, align 4
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
-define dso_local void @foo(i16 noundef signext %j) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @foo() local_unnamed_addr #0 {
 entry:
-  %conv = sext i16 %j to i32
-  %bf.load = load i32, ptr @f, align 4
-  %bf.value = and i32 %conv, 536870911
-  %bf.clear = and i32 %bf.load, -536870912
-  %bf.set = or disjoint i32 %bf.clear, %bf.value
-  store i32 %bf.set, ptr @f, align 4
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  %bf.load.i = load i32, ptr @f, align 4
-  %bf.clear.i = and i32 %bf.load.i, -536870912
-  %bf.set.i = or disjoint i32 %bf.clear.i, 536870857
-  store i32 %bf.set.i, ptr @f, align 4
   ret i32 0
 }
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  ret i32 0
+}
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

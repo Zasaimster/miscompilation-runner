@@ -1,21 +1,30 @@
-; 10907083723979478821794985577538173588
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10907083723979478821794985577538173588_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10907083723979478821794985577538173588.c"
+; 122957935922699334969911822002831487721
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122957935922699334969911822002831487721_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122957935922699334969911822002831487721.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i8, [3 x i8] }
-
-@v = dso_local local_unnamed_addr global i32 -1, align 4
-@s = dso_local local_unnamed_addr global %struct.S zeroinitializer, align 4
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local noundef i32 @foo() local_unnamed_addr #0 {
 entry:
   ret i32 0
 }
 
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  ret i32 %call
+}
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #2
+
 attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

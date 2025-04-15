@@ -1,34 +1,14 @@
-; 136394161687622942231249690539305639215
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136394161687622942231249690539305639215_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136394161687622942231249690539305639215.c"
+; 183044033068181565488176281275110513436
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/183044033068181565488176281275110513436_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/183044033068181565488176281275110513436.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @dummy(ptr noundef %x, i32 noundef %y) #0 {
-entry:
-  %x.addr = alloca ptr, align 8
-  %y.addr = alloca i32, align 4
-  store ptr %x, ptr %x.addr, align 8
-  store i32 %y, ptr %y.addr, align 4
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
-  %number_columns = alloca i32, align 4
-  %cnt0 = alloca i32, align 4
-  %cnt1 = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  store i32 9, ptr %number_columns, align 4
-  store i32 0, ptr %cnt0, align 4
-  store i32 0, ptr %cnt1, align 4
   ret i32 0
 }
 

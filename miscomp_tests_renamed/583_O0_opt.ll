@@ -1,34 +1,55 @@
-; 107878442480141874617336097168322206862
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/107878442480141874617336097168322206862_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/107878442480141874617336097168322206862.c"
+; 100758730029248361079357375815616167963
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/100758730029248361079357375815616167963_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/100758730029248361079357375815616167963.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.iso_directory_record = type { [4 x i8] }
+%struct.gs_imager_state_s = type { %struct.anon }
+%struct.anon = type { i32, i32, float }
 
-@entry = dso_local global %union.iso_directory_record zeroinitializer, align 1
+@gstate_initial = internal constant %struct.gs_imager_state_s { %struct.anon { i32 1, i32 0, float 0.000000e+00 } }, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @main() #0 {
+define dso_local void @gstate_path_memory(ptr noundef %pgs) #0 {
 entry:
+  %pgs.addr = alloca ptr, align 8
+  store ptr %pgs, ptr %pgs.addr, align 8
+  %call = call i32 (...) @compute()
   ret void
 }
 
+declare i32 @compute(...) #1
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @set(ptr noundef %p) #0 {
+define dso_local i32 @gs_state_update_overprint() #0 {
 entry:
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %arrayidx = getelementptr inbounds [4 x i8], ptr %0, i64 0, i64 0
-  store i8 1, ptr %arrayidx, align 1
-  %1 = load ptr, ptr %p.addr, align 8
-  %arrayidx1 = getelementptr inbounds [4 x i8], ptr %1, i64 0, i64 1
-  store i8 0, ptr %arrayidx1, align 1
-  ret void
+  ret i32 1
 }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  %call = call i32 @gs_state_update_overprint()
+  %cmp = icmp ne i32 %call, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret i32 0
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

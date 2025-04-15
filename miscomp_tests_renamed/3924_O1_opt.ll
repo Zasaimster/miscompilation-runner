@@ -1,25 +1,13 @@
-; 169200940991566061976469252777588076637
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169200940991566061976469252777588076637_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169200940991566061976469252777588076637.c"
+; 103358982109677968409411868314475931330
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103358982109677968409411868314475931330_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103358982109677968409411868314475931330.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @zero() local_unnamed_addr #0 {
-entry:
-  ret i32 3
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @one() local_unnamed_addr #0 {
-entry:
-  ret i32 5
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  ret i32 1
+  ret i32 0
 }
 
 attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

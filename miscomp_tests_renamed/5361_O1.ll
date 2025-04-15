@@ -1,54 +1,93 @@
-; 132313697535659885792839630654418235569
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132313697535659885792839630654418235569.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132313697535659885792839630654418235569.c"
+; 101774122810936538918483770656155787999
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101774122810936538918483770656155787999.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101774122810936538918483770656155787999.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.foo = type { i32, i32, i32, ptr, float }
+%struct.A = type { i32, i32 }
+%struct.B = type { ptr, ptr }
+%struct.C = type { ptr, ptr }
 
-; Function Attrs: nofree nosync nounwind memory(argmem: read) uwtable
-define dso_local i32 @f1(ptr noundef readonly byval(%struct.foo) align 8 %f, ptr noundef readonly captures(none) %p, i32 noundef %n, ...) local_unnamed_addr #0 {
+@.compoundliteral = internal global %struct.A { i32 1, i32 2 }, align 4
+@.compoundliteral.1 = internal global %struct.A { i32 3, i32 4 }, align 4
+@.compoundliteral.2 = internal global %struct.B { ptr @.compoundliteral, ptr @.compoundliteral.1 }, align 8
+@.compoundliteral.3 = internal global %struct.A { i32 5, i32 6 }, align 4
+@e = dso_local local_unnamed_addr global %struct.C { ptr @.compoundliteral.2, ptr @.compoundliteral.3 }, align 8
+@str = private unnamed_addr constant [22 x i8] c"This won't be called.\00", align 1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call = call i32 (ptr, ptr, i32, ...) @f1(ptr noundef nonnull byval(%struct.foo) align 8 %f, ptr noundef nonnull %f, i32 noundef 2, i32 noundef 1, ptr noundef nonnull byval(%struct.foo) align 8 %f, ptr noundef nonnull %f)
-  %0 = load i32, ptr %p, align 8, !tbaa !5
-  %cmp.not = icmp eq i32 %call, %0
-  br i1 %cmp.not, label %if.end, label %return
+  %0 = load ptr, ptr @e, align 8, !tbaa !5
+  %1 = load ptr, ptr %0, align 8, !tbaa !12
+  %2 = load i32, ptr %1, align 4, !tbaa !14
+  %cmp.not = icmp eq i32 %2, 1
+  br i1 %cmp.not, label %lor.lhs.false, label %if.then
 
-if.end:                                           ; preds = %entry
-  %j = getelementptr inbounds nuw i8, ptr %p, i64 4
-  %1 = load i32, ptr %j, align 4, !tbaa !13
-  %add = add nsw i32 %1, %n
-  br label %return
+lor.lhs.false:                                    ; preds = %entry
+  %j = getelementptr inbounds nuw i8, ptr %1, i64 4
+  %3 = load i32, ptr %j, align 4, !tbaa !17
+  %cmp2.not = icmp eq i32 %3, 2
+  br i1 %cmp2.not, label %if.end, label %if.then
 
-return:                                           ; preds = %entry, %if.end
-  %retval.0 = phi i32 [ %add, %if.end ], [ 0, %entry ]
-  ret i32 %retval.0
-}
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  tail call void @abort() #3
+  unreachable
 
-; Function Attrs: nofree nosync nounwind memory(none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
-  %f = alloca %struct.foo, align 8
-  call void @llvm.lifetime.start.p0(i64 32, ptr nonnull %f) #3
-  %j = getelementptr inbounds nuw i8, ptr %f, i64 4
-  store i32 1, ptr %j, align 4, !tbaa !13
-  store i32 1, ptr %f, align 8, !tbaa !5
-  %call = call i32 (ptr, ptr, i32, ...) @f1(ptr noundef nonnull byval(%struct.foo) align 8 %f, ptr noundef nonnull %f, i32 noundef 2)
-  %call1 = call i32 (ptr, ptr, i32, ...) @f1(ptr noundef nonnull byval(%struct.foo) align 8 %f, ptr noundef nonnull %f, i32 noundef 2, i32 noundef 1, ptr noundef nonnull byval(%struct.foo) align 8 %f, ptr noundef nonnull %f)
-  call void @llvm.lifetime.end.p0(i64 32, ptr nonnull %f) #3
+if.end:                                           ; preds = %lor.lhs.false
+  %b = getelementptr inbounds nuw i8, ptr %0, i64 8
+  %4 = load ptr, ptr %b, align 8, !tbaa !18
+  %5 = load i32, ptr %4, align 4, !tbaa !14
+  %cmp4.not = icmp eq i32 %5, 3
+  br i1 %cmp4.not, label %lor.lhs.false5, label %if.then9
+
+lor.lhs.false5:                                   ; preds = %if.end
+  %j7 = getelementptr inbounds nuw i8, ptr %4, i64 4
+  %6 = load i32, ptr %j7, align 4, !tbaa !17
+  %cmp8.not = icmp eq i32 %6, 4
+  br i1 %cmp8.not, label %if.end10, label %if.then9
+
+if.then9:                                         ; preds = %lor.lhs.false5, %if.end
+  tail call void @abort() #3
+  unreachable
+
+if.end10:                                         ; preds = %lor.lhs.false5
+  %7 = load ptr, ptr getelementptr inbounds nuw (i8, ptr @e, i64 8), align 8, !tbaa !19
+  %8 = load i32, ptr %7, align 4, !tbaa !14
+  %cmp12.not = icmp eq i32 %8, 5
+  br i1 %cmp12.not, label %lor.lhs.false13, label %if.then16
+
+lor.lhs.false13:                                  ; preds = %if.end10
+  %j14 = getelementptr inbounds nuw i8, ptr %7, i64 4
+  %9 = load i32, ptr %j14, align 4, !tbaa !17
+  %cmp15.not = icmp eq i32 %9, 6
+  br i1 %cmp15.not, label %if.end17, label %if.then16
+
+if.then16:                                        ; preds = %lor.lhs.false13, %if.end10
+  tail call void @abort() #3
+  unreachable
+
+if.end17:                                         ; preds = %lor.lhs.false13
   ret i32 0
 }
 
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #2
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
 
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #2
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @deadFunction() local_unnamed_addr #0 {
+entry:
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
+}
 
-attributes #0 = { nofree nosync nounwind memory(argmem: read) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nosync nounwind memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #3 = { nounwind }
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -59,11 +98,17 @@ attributes #3 = { nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !7, i64 0}
-!6 = !{!"foo", !7, i64 0, !7, i64 4, !7, i64 8, !10, i64 16, !12, i64 24}
-!7 = !{!"int", !8, i64 0}
-!8 = !{!"omnipotent char", !9, i64 0}
-!9 = !{!"Simple C/C++ TBAA"}
-!10 = !{!"p1 omnipotent char", !11, i64 0}
-!11 = !{!"any pointer", !8, i64 0}
-!12 = !{!"float", !8, i64 0}
-!13 = !{!6, !7, i64 4}
+!6 = !{!"C", !7, i64 0, !11, i64 8}
+!7 = !{!"p1 _ZTS1B", !8, i64 0}
+!8 = !{!"any pointer", !9, i64 0}
+!9 = !{!"omnipotent char", !10, i64 0}
+!10 = !{!"Simple C/C++ TBAA"}
+!11 = !{!"p1 _ZTS1A", !8, i64 0}
+!12 = !{!13, !11, i64 0}
+!13 = !{!"B", !11, i64 0, !11, i64 8}
+!14 = !{!15, !16, i64 0}
+!15 = !{!"A", !16, i64 0, !16, i64 4}
+!16 = !{!"int", !9, i64 0}
+!17 = !{!15, !16, i64 4}
+!18 = !{!13, !11, i64 8}
+!19 = !{!6, !11, i64 8}

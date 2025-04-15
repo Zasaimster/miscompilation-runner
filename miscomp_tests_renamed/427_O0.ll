@@ -1,15 +1,24 @@
-; 181937680786350460503552446043390028503
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/181937680786350460503552446043390028503.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/181937680786350460503552446043390028503.c"
+; 133079439182781744940403569826429646393
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133079439182781744940403569826429646393.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133079439182781744940403569826429646393.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@count = dso_local global i32 0, align 4
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(ptr noundef %a) #0 {
+define dso_local i32 @foo1() #0 {
 entry:
-  %a.addr = alloca ptr, align 8
-  store ptr %a, ptr %a.addr, align 8
-  ret i32 42
+  ret i32 0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo2() #0 {
+entry:
+  %0 = load i32, ptr @count, align 4
+  %inc = add nsw i32 %0, 1
+  store i32 %inc, ptr @count, align 4
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -17,15 +26,30 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(ptr noundef null)
-  %cmp = icmp ne i32 %call, 0
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 @foo1()
+  %cmp = icmp eq i32 %call, 1
+  %conv = zext i1 %cmp to i32
+  %call1 = call i32 @foo2()
+  %cmp2 = icmp eq i32 %call1, 1
+  %conv3 = zext i1 %cmp2 to i32
+  %and = and i32 %conv, %conv3
+  %tobool = icmp ne i32 %and, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #2
   unreachable
 
 if.end:                                           ; preds = %entry
+  %0 = load i32, ptr @count, align 4
+  %cmp4 = icmp ne i32 %0, 2
+  br i1 %cmp4, label %if.then6, label %if.end7
+
+if.then6:                                         ; preds = %if.end
+  call void @abort() #2
+  unreachable
+
+if.end7:                                          ; preds = %if.end
   ret i32 0
 }
 

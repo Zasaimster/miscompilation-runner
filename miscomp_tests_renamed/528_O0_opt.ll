@@ -1,39 +1,28 @@
-; 103985672402130343645161687278067232031
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103985672402130343645161687278067232031_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103985672402130343645161687278067232031.c"
+; 196988253915356115296215551214346363435
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196988253915356115296215551214346363435_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196988253915356115296215551214346363435.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@.str = private unnamed_addr constant [14 x i8] c"I'm not used\0A\00", align 1
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %a, i32 noundef %b) #0 {
+define dso_local void @notUsed() #0 {
 entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store i32 %b, ptr %b.addr, align 4
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  ret void
 }
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %addr1 = alloca i64, align 8
-  %addr2 = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  store i64 0, ptr %addr1, align 8
-  %call = call i32 (...) @doNothing()
-  %conv = sext i32 %call to i64
-  %0 = load i64, ptr %addr1, align 8
-  %add = add i64 %0, %conv
-  store i64 %add, ptr %addr1, align 8
-  store i64 add (i64 ptrtoint (ptr @f to i64), i64 5), ptr %addr2, align 8
-  %1 = load i64, ptr %addr1, align 8
-  %2 = load i64, ptr %addr2, align 8
-  %cmp = icmp ne i64 %1, %2
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 (...) @f()
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #4
@@ -44,7 +33,7 @@ if.end:                                           ; preds = %entry
   unreachable
 }
 
-declare i32 @doNothing(...) #1
+declare i32 @f(...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

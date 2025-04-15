@@ -1,45 +1,69 @@
-; 134900500284262028771051194886209108068
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134900500284262028771051194886209108068.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134900500284262028771051194886209108068.c"
+; 173470220912836385472247048563956360606
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173470220912836385472247048563956360606.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173470220912836385472247048563956360606.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global [2 x i32] zeroinitializer, align 4
+@r = dso_local global ptr null, align 8
+@pars = dso_local global i64 0, align 8
+@b = dso_local global [4 x i64] zeroinitializer, align 16
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %b) #0 {
+define dso_local void @alpha_ep_extbl_i_eq_0() #0 {
 entry:
-  %retval = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %i = alloca i32, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 0, ptr %i, align 4
-  br label %for.cond
+  %rb = alloca i32, align 4
+  %ra = alloca i32, align 4
+  %rc = alloca i32, align 4
+  %temp = alloca i64, align 8
+  %0 = load i64, ptr @pars, align 8
+  %shr = lshr i64 %0, 27
+  %and = and i64 %shr, 31
+  %conv = trunc i64 %and to i32
+  store i32 %conv, ptr %rb, align 4
+  %1 = load i64, ptr @pars, align 8
+  %conv1 = trunc i64 %1 to i32
+  %shr2 = lshr i32 %conv1, 5
+  %conv3 = zext i32 %shr2 to i64
+  %and4 = and i64 %conv3, 31
+  %conv5 = trunc i64 %and4 to i32
+  store i32 %conv5, ptr %ra, align 4
+  %2 = load i64, ptr @pars, align 8
+  %conv6 = trunc i64 %2 to i32
+  %shr7 = lshr i32 %conv6, 0
+  %conv8 = zext i32 %shr7 to i64
+  %and9 = and i64 %conv8, 31
+  %conv10 = trunc i64 %and9 to i32
+  store i32 %conv10, ptr %rc, align 4
+  %3 = load ptr, ptr @r, align 8
+  %4 = load i32, ptr %ra, align 4
+  %idxprom = zext i32 %4 to i64
+  %arrayidx = getelementptr inbounds nuw i64, ptr %3, i64 %idxprom
+  %5 = load i64, ptr %arrayidx, align 8
+  %6 = load ptr, ptr @r, align 8
+  %7 = load i32, ptr %rb, align 4
+  %idxprom11 = zext i32 %7 to i64
+  %arrayidx12 = getelementptr inbounds nuw i64, ptr %6, i64 %idxprom11
+  %8 = load i64, ptr %arrayidx12, align 8
+  %and13 = and i64 %8, 7
+  %shl = shl i64 %and13, 3
+  %shr14 = lshr i64 %5, %shl
+  %and15 = and i64 %shr14, 255
+  store i64 %and15, ptr %temp, align 8
+  %9 = load i32, ptr %rc, align 4
+  %cmp = icmp ne i32 %9, 31
+  br i1 %cmp, label %if.then, label %if.end
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4
-  %1 = load i32, ptr %b.addr, align 4
-  %cmp = icmp ult i32 %0, %1
-  br i1 %cmp, label %for.body, label %for.end
+if.then:                                          ; preds = %entry
+  %10 = load i64, ptr %temp, align 8
+  %11 = load ptr, ptr @r, align 8
+  %12 = load i32, ptr %rc, align 4
+  %idxprom17 = zext i32 %12 to i64
+  %arrayidx18 = getelementptr inbounds nuw i64, ptr %11, i64 %idxprom17
+  store i64 %10, ptr %arrayidx18, align 8
+  br label %if.end
 
-for.body:                                         ; preds = %for.cond
-  %2 = load i32, ptr %i, align 4
-  %sub = sub i32 %2, 2
-  %3 = load i32, ptr %i, align 4
-  %idxprom = zext i32 %3 to i64
-  %arrayidx = getelementptr inbounds nuw [2 x i32], ptr @a, i64 0, i64 %idxprom
-  store i32 %sub, ptr %arrayidx, align 4
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %4 = load i32, ptr %i, align 4
-  %inc = add i32 %4, 1
-  store i32 %inc, ptr %i, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %5 = load i32, ptr %retval, align 4
-  ret i32 %5
+if.end:                                           ; preds = %if.then, %entry
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -47,23 +71,19 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr getelementptr inbounds ([2 x i32], ptr @a, i64 0, i64 1), align 4
-  store i32 0, ptr @a, align 4
-  %call = call i32 @f(i32 noundef 2)
-  %0 = load i32, ptr @a, align 4
-  %cmp = icmp ne i32 %0, -2
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  store i64 3160194, ptr getelementptr inbounds ([4 x i64], ptr @b, i64 0, i64 17), align 8
+  store i64 6003104017374052362, ptr getelementptr inbounds ([4 x i64], ptr @b, i64 0, i64 2), align 16
+  store i64 2281701442, ptr @pars, align 8
+  call void @alpha_ep_extbl_i_eq_0()
+  %0 = load i64, ptr getelementptr inbounds ([4 x i64], ptr @b, i64 0, i64 2), align 16
+  %cmp = icmp ne i64 %0, 77
+  br i1 %cmp, label %if.then, label %if.end
 
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load i32, ptr getelementptr inbounds ([2 x i32], ptr @a, i64 0, i64 1), align 4
-  %cmp1 = icmp ne i32 %1, -1
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
+if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }
@@ -89,5 +109,3 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

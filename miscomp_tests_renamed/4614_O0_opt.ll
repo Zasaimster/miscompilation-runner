@@ -1,6 +1,6 @@
-; 141585673366683282637555969002256601265
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141585673366683282637555969002256601265_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141585673366683282637555969002256601265.c"
+; 107684985100439994761116294718383437489
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/107684985100439994761116294718383437489_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/107684985100439994761116294718383437489.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,18 +8,28 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %A = alloca [30 x i8], align 16
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %arraydecay = getelementptr inbounds [30 x i8], ptr %A, i64 0, i64 0
-  call void @llvm.memset.p0.i64(ptr align 16 %arraydecay, i8 1, i64 30, i1 false)
-  ret i32 0
+  store i32 5, ptr %x, align 4
+  %0 = load i32, ptr %x, align 4
+  %shl = shl i32 %0, 1
+  %cmp = icmp ne i32 %shl, 2
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,37 +1,34 @@
-; 122714838500976016464573442444792438438
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122714838500976016464573442444792438438.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122714838500976016464573442444792438438.c"
+; 128895513831323184431541863527875259214
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128895513831323184431541863527875259214.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128895513831323184431541863527875259214.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [26 x i8] c"Size of int = %zu bytes \0A\00", align 1
-@.str.2 = private unnamed_addr constant [30 x i8] c"Size of long int = %zu bytes\0A\00", align 1
-@.str.3 = private unnamed_addr constant [35 x i8] c"Size of long long int = %zu bytes\0A\00", align 1
-@.str.4 = private unnamed_addr constant [28 x i8] c"Size of double = %zu bytes\0A\00", align 1
-@.str.5 = private unnamed_addr constant [33 x i8] c"Size of long double = %zu bytes\0A\00", align 1
-@str = private unnamed_addr constant [10 x i8] c"Finished!\00", align 1
+@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
 
-; Function Attrs: nofree nounwind uwtable
+; Function Attrs: nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i64 noundef 4)
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call2 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef 8)
-  %call3 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.3, i64 noundef 8)
-  %call4 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.4, i64 noundef 8)
-  %call5 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.5, i64 noundef 16)
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %conv = sitofp i32 %call to float
+  %add = fadd float %conv, 1.000000e+00
+  %sub = fadd float %conv, -1.000000e+00
+  %sub1 = fsub float %add, %sub
+  %cmp = fcmp oeq float %sub1, 0.000000e+00
+  %conv2 = zext i1 %cmp to i32
+  %call3 = tail call i32 (i32, ...) @assert(i32 noundef %conv2) #3
   ret i32 0
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+declare i32 @assert(...) local_unnamed_addr #2
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

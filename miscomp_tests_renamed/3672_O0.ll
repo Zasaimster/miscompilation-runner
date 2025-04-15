@@ -1,49 +1,25 @@
-; 197982854894424774001833422980634589542
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197982854894424774001833422980634589542.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197982854894424774001833422980634589542.c"
+; 109237416279186937823074013450593774688
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/109237416279186937823074013450593774688.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/109237416279186937823074013450593774688.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@.str = private unnamed_addr constant [21 x i8] c"Before Early Return\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %saved_stack = alloca ptr, align 8
-  %__vla_expr0 = alloca i64, align 8
+  %arr = alloca [2 x i32], align 4
   %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %0 = zext i32 %call to i64
-  %1 = call ptr @llvm.stacksave.p0()
-  store ptr %1, ptr %saved_stack, align 8
-  %vla = alloca i32, i64 %0, align 16
-  store i64 %0, ptr %__vla_expr0, align 8
-  %arrayidx = getelementptr inbounds i32, ptr %vla, i64 1
-  store ptr %arrayidx, ptr %p, align 8
-  %2 = load ptr, ptr %p, align 8
-  store i32 0, ptr %2, align 4
-  %arrayidx1 = getelementptr inbounds i32, ptr %vla, i64 1
-  %3 = load i32, ptr %arrayidx1, align 4
-  store i32 %3, ptr %retval, align 4
-  %4 = load ptr, ptr %saved_stack, align 8
-  call void @llvm.stackrestore.p0(ptr %4)
-  %5 = load i32, ptr %retval, align 4
-  ret i32 %5
+  store ptr inttoptr (i64 10 to ptr), ptr %p, align 8
+  %0 = load ptr, ptr %p, align 8
+  store i32 0, ptr %0, align 4
+  %arrayidx = getelementptr inbounds [2 x i32], ptr %arr, i64 0, i64 1
+  %1 = load i32, ptr %arrayidx, align 4
+  ret i32 %1
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare ptr @llvm.stacksave.p0() #2
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare void @llvm.stackrestore.p0(ptr) #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nosync nounwind willreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

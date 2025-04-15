@@ -1,98 +1,94 @@
-; 132171339934863746863847808385143245515
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132171339934863746863847808385143245515_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132171339934863746863847808385143245515.c"
+; 161352115749418602472728578646191141187
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161352115749418602472728578646191141187_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161352115749418602472728578646191141187.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i = dso_local global i32 0, align 4
+%struct.WorkEntrySType = type { ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr }
+%struct.ShrPcPteSType = type { %struct.ShrPcStatsSType }
+%struct.ShrPcStatsSType = type { i32, i32, %struct.ShrPcCommonStatSType, %union.ShrPcStatUnion }
+%struct.ShrPcCommonStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64 }
+%union.ShrPcStatUnion = type { %struct.ShrPcGemStatSType }
+%struct.ShrPcGemStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, [40 x i64] }
+
+@Local1 = dso_local global ptr null, align 8
+@Local2 = dso_local global ptr null, align 8
+@Local3 = dso_local global ptr null, align 8
+@RDbf1 = dso_local global ptr null, align 8
+@RDbf2 = dso_local global ptr null, align 8
+@RDbf3 = dso_local global ptr null, align 8
+@IntVc1 = dso_local global ptr null, align 8
+@IntVc2 = dso_local global ptr null, align 8
+@IntCode3 = dso_local global ptr null, align 8
+@IntCode4 = dso_local global ptr null, align 8
+@IntCode5 = dso_local global ptr null, align 8
+@IntCode6 = dso_local global ptr null, align 8
+@Lom1 = dso_local global ptr null, align 8
+@Lom2 = dso_local global ptr null, align 8
+@Lom3 = dso_local global ptr null, align 8
+@Lom4 = dso_local global ptr null, align 8
+@Lom5 = dso_local global ptr null, align 8
+@Lom6 = dso_local global ptr null, align 8
+@Lom7 = dso_local global ptr null, align 8
+@Lom8 = dso_local global ptr null, align 8
+@Lom9 = dso_local global ptr null, align 8
+@Lom10 = dso_local global ptr null, align 8
+@RDbf11 = dso_local global ptr null, align 8
+@RDbf12 = dso_local global ptr null, align 8
+@Workspace = dso_local global %struct.WorkEntrySType zeroinitializer, align 8
+@MyPte = dso_local global %struct.ShrPcPteSType zeroinitializer, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @g() #0 {
+define dso_local void @InitCache(i32 noundef %sessionId) #0 {
 entry:
-  store i32 10, ptr @i, align 4
+  %sessionId.addr = alloca i32, align 4
+  store i32 %sessionId, ptr %sessionId.addr, align 4
+  %0 = load i32, ptr %sessionId.addr, align 4
+  %conv = sext i32 %0 to i64
+  call void @initPte(ptr noundef null, i64 noundef %conv)
   ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f(i32 noundef %a, i32 noundef %b) #0 {
+define internal void @initPte(ptr noundef %shrpcPtr, i64 noundef %sessionId) #0 {
 entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %c = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 0, ptr %c, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %cmp = icmp eq i32 %0, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %c, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %1 = load i32, ptr %c, align 4
-  %tobool = icmp ne i32 %1, 0
-  br i1 %tobool, label %if.then1, label %if.end2
-
-if.then1:                                         ; preds = %if.end
-  br label %if.end11
-
-if.end2:                                          ; preds = %if.end
-  %2 = load i32, ptr %c, align 4
-  %cmp3 = icmp eq i32 %2, 1
-  br i1 %cmp3, label %if.then4, label %if.end5
-
-if.then4:                                         ; preds = %if.end2
-  store i32 0, ptr %c, align 4
-  br label %if.end5
-
-if.end5:                                          ; preds = %if.then4, %if.end2
-  %3 = load i32, ptr %b.addr, align 4
-  %cmp6 = icmp eq i32 %3, 0
-  br i1 %cmp6, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %if.end5
-  store i32 1, ptr %c, align 4
-  br label %if.end8
-
-if.end8:                                          ; preds = %if.then7, %if.end5
-  %4 = load i32, ptr %c, align 4
-  %tobool9 = icmp ne i32 %4, 0
-  br i1 %tobool9, label %if.then10, label %if.end11
-
-if.then10:                                        ; preds = %if.end8
-  call void @g()
-  br label %if.end11
-
-if.end11:                                         ; preds = %if.then10, %if.end8, %if.then1
+  %shrpcPtr.addr = alloca ptr, align 8
+  %sessionId.addr = alloca i64, align 8
+  %ptePtr = alloca ptr, align 8
+  store ptr %shrpcPtr, ptr %shrpcPtr.addr, align 8
+  store i64 %sessionId, ptr %sessionId.addr, align 8
+  store ptr @MyPte, ptr %ptePtr, align 8
+  %0 = load ptr, ptr %ptePtr, align 8
+  %stats = getelementptr inbounds nuw %struct.ShrPcPteSType, ptr %0, i32 0, i32 0
+  %1 = load i64, ptr %sessionId.addr, align 8
+  call void @setStatPointers(ptr noundef %stats, i64 noundef %1)
   ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
 entry:
   %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  call void @f(i32 noundef 1, i32 noundef 0)
-  %0 = load i32, ptr @i, align 4
-  %cmp = icmp ne i32 %0, 1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #2
-  unreachable
-
-if.end:                                           ; preds = %entry
+  store i32 %argc, ptr %argc.addr, align 4
+  store ptr %argv, ptr %argv.addr, align 8
+  call void @InitCache(i32 noundef 5)
   ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+; Function Attrs: noinline nounwind uwtable
+define internal void @setStatPointers(ptr noundef %statsPtr, i64 noundef %sessionId) #0 {
+entry:
+  %statsPtr.addr = alloca ptr, align 8
+  %sessionId.addr = alloca i64, align 8
+  store ptr %statsPtr, ptr %statsPtr.addr, align 8
+  store i64 %sessionId, ptr %sessionId.addr, align 8
+  ret void
+}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
