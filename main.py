@@ -92,7 +92,7 @@ def get_commands_for_normal_exec(file, it):
     out_path = f"{path}/runtime/{filename}"
 
     # Commands
-    llc = f"llc --march=arm64 --mtriple=arm64-apple-darwin {file} -o {out_path}_{it}.s"
+    llc = f"llc {file} -o {out_path}_{it}.s"
     # llc = f"llc {file} -o {out_path}_{it}.s"
     obj_file = f"clang -c {out_path}_{it}.s -o {out_path}_{it}.o"
     exec = f"clang {out_path}_{it}.o -o {out_path}_{it}"
