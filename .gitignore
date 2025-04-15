@@ -6,3 +6,4 @@ miscomp_tests
 .vscode
 *_modified_crc.ll
 miscomp_tests_runner/test_outs/*
+miscomp_tests_runner/*.txt

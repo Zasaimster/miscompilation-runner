@@ -127,19 +127,12 @@ def run_cmds(cmds):
     for cmd in cmds:
         try:
             print(f"Running: {' '.join(cmd)}")
-            if cmd[0][0:2] == "./":
-                out = subprocess.run(cmd, capture_output=True)
-                # update to returncode or stdout check based on input programs
-                print(f"Return code: {out.returncode}")
-                # print(out.stderr)
-                res.append(out)
-            else:
-                out = subprocess.run(cmd, capture_output=True)
-                print(f"Return code: {out.returncode}")
-                # print(out.stdout)
-                res.append(out)
-        # except subprocess.CalledProcessError as e:
-        # use general exception to catch all errors (ex: file not found) and report in the main func
+            out = subprocess.run(cmd, capture_output=True)
+            print(f"Return code: {out.returncode}")
+            res.append(out)
+            if out.returncode != 0:
+                print(f"stderr: {out.stderr.decode('utf-8')}")
+                break
         except Exception as e:
             print(f"Error running command: {' '.join(cmd)}")
             print("Error: ", e)

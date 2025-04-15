@@ -1,9 +1,0 @@
-total_programs: 5
-timed_out: 0
-regular_executed: 3
-regular_crashed: 2
-crc_executed: 1
-crc_crashed: 0
-crc_inject_failed: 4
-crc_logic_failed: 0
-crc_succeeded: 1

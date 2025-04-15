@@ -66,7 +66,7 @@ def run_main(id, f1, f2, opt):
             timed_out.write(f"{id}_{opt}\n")
 
     output_filename = f"./miscomp_tests_runner/test_outs/{id}_{opt}.out"
-    with open(output_filename, "a") as outfile:
+    with open(output_filename, "w") as outfile:
         outfile.write(f"Stdout:\n{res.stdout}\n")
         outfile.write(f"Stderr:\n{res.stderr}\n")
 
