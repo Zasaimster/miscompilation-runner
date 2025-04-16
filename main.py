@@ -588,18 +588,23 @@ def main():
 
     # Check if P had a compilation issue
     for cmd_out in og_cmds_outs["p"]:
-        if isinstance(cmd_out, tuple):  # or cmd_out.returncode != 0:
+        print(cmd_out.returncode)
+        if isinstance(cmd_out, tuple) or cmd_out.returncode == 1:
             og_cmds_error = True
-            print(f"Error running command: {cmd_out[0]}")
-            print(f"Error: {cmd_out[1]}")
+            if isinstance(cmd_out, tuple):
+                print(f"Error running command: {cmd_out[0]}")
+                print(f"Error: {cmd_out[1]}")
+
             print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P")
 
     # Check if P_prime had a compilation issue
     for cmd_out in og_cmds_outs["p_prime"]:
-        if isinstance(cmd_out, tuple):  # or cmd_out.returncode != 0:
+        print(cmd_out.returncode)
+        if isinstance(cmd_out, tuple) or cmd_out.returncode == 1:
             og_cmds_error = True
-            print(f"Error running command: {cmd_out[0]}")
-            print(f"Error: {cmd_out[1]}")
+            if isinstance(cmd_out, tuple):
+                print(f"Error running command: {cmd_out[0]}")
+                print(f"Error: {cmd_out[1]}")
             print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P'")
 
     p_last_out = og_cmds_outs["p"][-1]
@@ -636,6 +641,7 @@ def main():
     else:
         crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
 
+    # TODO: update this to use same logic as regular program execution
     if crc_cmd_outs is not None:
         # Check CRC P's output
         for cmd_out in crc_cmd_outs["p"]:
@@ -663,15 +669,16 @@ def main():
                 print(f"Error running command: {cmd_out.args}")
                 print(f"stdout: {cmd_out.stdout}")
                 print(f"stderr: {cmd_out.stderr}")
+
     if not crc_cmds_error:
         print("MISCOMPILATION STATUS: CRC EXECUTED")
 
     # TODO If there was an error in running the CRC commands, skip this section
     if not crc_cmds_error:
-        # Find hash outputs
         p_stdout = crc_cmd_outs["p"][-1].stdout.strip().split("\n")
         p_prime_stdout = crc_cmd_outs["p_prime"][-1].stdout.strip().split("\n")
 
+        # Find first instance of checksum
         p_hash_i, p_prime_hash_i = -1, -1
         for i, l in enumerate(p_stdout):
             if "...checksum after hashing" in l:
@@ -681,7 +688,15 @@ def main():
             if "...checksum after hashing" in l:
                 p_prime_hash_i = i
                 break
-        if not p_hash_i == -1 and not p_prime_hash_i == -1:
+
+        # Handle no hash found separately
+        if p_hash_i == -1 and p_prime_hash_i == -1:
+            print("MISCOMPILATION STATUS: CRC NO HASH FOUND.")
+        # Different # of hashes implies varying output. Therefore, this is a miscompilation
+        elif p_hash_i == -1 or p_prime_hash_i == -1:
+            print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
+        # Else, both P, P' produced > 0 hashes
+        else:
             # Separate normal output and the CRC output
             p_out = p_stdout[:p_hash_i]
             p_hash = p_stdout[p_hash_i:]
@@ -699,9 +714,6 @@ def main():
                 print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different hashes")
             else:
                 print("MISCOMPILATION STATUS: CRC SUCCEEDED. Same hashes")
-
-        else:
-            print("MISCOMPILATION STATUS: CRC LOGIC FAILED. No hash output found")
 
     return
     # Evaluate results

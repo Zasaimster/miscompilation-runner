@@ -18,6 +18,7 @@ stats = {
     "crc_executed": 0,
     "crc_crashed": 0,
     "crc_no_globals_found": 0,
+    "crc_no_hash_found": 0,
     "crc_logic_failed": 0,
     "crc_succeeded": 0,
 }
@@ -32,6 +33,7 @@ regular_different_output_log = f"{log_path}/regular_different_output.txt"
 crc_executed_log = f"{log_path}/crc_executed.txt"
 crc_crashed_log = f"{log_path}/crc_crashed.txt"
 crc_no_globals_found = f"{log_path}/crc_no_globals_found.txt"
+crc_no_hash_found = f"{log_path}/crc_no_hash_found.txt"
 crc_logic_failed_log = f"{log_path}/crc_logic_failed.txt"
 crc_succeeded_log = f"{log_path}/crc_succeeded.txt"
 
@@ -86,7 +88,7 @@ def run_main(id, f1, f2, opt):
             stats["regular_same_output"] += 1
             add_id_to_log(regular_same_output_log, f"{id}_{opt}")
         elif "REGULAR OUTPUT DIFFERENT" in res.stdout:
-            stats["regular_same_error"] += 1
+            stats["regular_different_output"] += 1
             add_id_to_log(regular_different_output_log, f"{id}_{opt}")
 
     if "CRC CRASHED" in res.stdout:
@@ -100,7 +102,10 @@ def run_main(id, f1, f2, opt):
         stats["crc_no_globals_found"] += 1
         add_id_to_log(crc_no_globals_found, f"{id}_{opt}")
 
-    if "CRC LOGIC FAILED" in res.stdout:
+    if "CRC NO HASH FOUND" in res.stdout:
+        stats["crc_no_hash_found"] += 1
+        add_id_to_log(crc_no_hash_found, f"{id}_{opt}")
+    elif "CRC LOGIC FAILED" in res.stdout:
         stats["crc_logic_failed"] += 1
         add_id_to_log(crc_logic_failed_log, f"{id}_{opt}")
     elif "CRC SUCCEEDED" in res.stdout:
