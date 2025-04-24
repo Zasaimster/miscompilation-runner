@@ -1,74 +1,229 @@
-; 128044218862744289594185649276262411873
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128044218862744289594185649276262411873.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128044218862744289594185649276262411873.c"
+; 189725745637314109968146741384898591609
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189725745637314109968146741384898591609.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189725745637314109968146741384898591609.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [19 x i8] c"Hello, optimizer!\0A\00", align 1
-@a = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local local_unnamed_addr global i8 0, align 1
-@d = dso_local local_unnamed_addr global i8 0, align 1
-@e = dso_local local_unnamed_addr global i8 0, align 1
-@f = dso_local local_unnamed_addr global i64 0, align 8
-@g = dso_local local_unnamed_addr global i64 0, align 8
-@h = dso_local local_unnamed_addr global i64 0, align 8
-@i = dso_local local_unnamed_addr global i64 0, align 8
-@j = dso_local local_unnamed_addr global i16 0, align 2
-@k = dso_local local_unnamed_addr global i16 0, align 2
-@b = dso_local local_unnamed_addr global i32 0, align 4
-
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local i32 @ieq(i32 noundef %x, i32 noundef %y, i32 noundef %ok) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  store i32 %call, ptr @a, align 4, !tbaa !5
-  %0 = load i8, ptr @c, align 1, !tbaa !9
-  %conv = sext i8 %0 to i32
-  store i32 %conv, ptr @a, align 4, !tbaa !5
-  %1 = load i8, ptr @d, align 1, !tbaa !9
-  %conv1 = sext i8 %1 to i32
-  store i32 %conv1, ptr @a, align 4, !tbaa !5
-  %2 = load i8, ptr @e, align 1, !tbaa !9
-  %conv2 = zext i8 %2 to i32
-  store i32 %conv2, ptr @a, align 4, !tbaa !5
-  %3 = load i64, ptr @f, align 8, !tbaa !10
-  %conv3 = trunc i64 %3 to i32
-  store i32 %conv3, ptr @a, align 4, !tbaa !5
-  %4 = load i64, ptr @g, align 8, !tbaa !10
-  %conv4 = trunc i64 %4 to i32
-  store i32 %conv4, ptr @a, align 4, !tbaa !5
-  %5 = load i64, ptr @h, align 8, !tbaa !12
-  %conv5 = trunc i64 %5 to i32
-  store i32 %conv5, ptr @a, align 4, !tbaa !5
-  %6 = load i64, ptr @i, align 8, !tbaa !12
-  %conv6 = trunc i64 %6 to i32
-  store i32 %conv6, ptr @a, align 4, !tbaa !5
-  %7 = load i16, ptr @j, align 2, !tbaa !14
-  %conv7 = sext i16 %7 to i32
-  store i32 %conv7, ptr @a, align 4, !tbaa !5
-  %8 = load i16, ptr @k, align 2, !tbaa !14
-  %conv8 = zext i16 %8 to i32
-  store i32 %conv8, ptr @a, align 4, !tbaa !5
-  store i32 %conv8, ptr @b, align 4, !tbaa !5
-  %conv19 = trunc i16 %8 to i8
-  store i8 %conv19, ptr @c, align 1, !tbaa !9
-  store i8 %conv19, ptr @d, align 1, !tbaa !9
-  store i8 %conv19, ptr @e, align 1, !tbaa !9
-  %conv48 = zext i16 %8 to i64
-  store i64 %conv48, ptr @f, align 8, !tbaa !10
-  store i64 %conv48, ptr @g, align 8, !tbaa !10
-  store i64 %conv48, ptr @h, align 8, !tbaa !12
-  store i64 %conv48, ptr @i, align 8, !tbaa !12
-  store i16 %8, ptr @j, align 2, !tbaa !14
-  store i16 %8, ptr @k, align 2, !tbaa !14
-  ret i32 0
+  %cmp.not = icmp slt i32 %x, %y
+  %tobool2.not = icmp eq i32 %ok, 0
+  br i1 %cmp.not, label %if.else, label %if.then
+
+if.then:                                          ; preds = %entry
+  br i1 %tobool2.not, label %if.then1, label %if.end5
+
+if.then1:                                         ; preds = %if.then
+  tail call void @abort() #3
+  unreachable
+
+if.else:                                          ; preds = %entry
+  br i1 %tobool2.not, label %if.end5, label %if.then3
+
+if.then3:                                         ; preds = %if.else
+  tail call void @abort() #3
+  unreachable
+
+if.end5:                                          ; preds = %if.else, %if.then
+  %cmp7 = icmp eq i32 %x, %y
+  %tobool9.not = icmp eq i32 %ok, 0
+  br i1 %cmp7, label %if.then8, label %if.else12
+
+if.then8:                                         ; preds = %if.end5
+  br i1 %tobool9.not, label %if.then10, label %if.end16
+
+if.then10:                                        ; preds = %if.then8
+  tail call void @abort() #3
+  unreachable
+
+if.else12:                                        ; preds = %if.end5
+  br i1 %tobool9.not, label %if.end16, label %if.then14
+
+if.then14:                                        ; preds = %if.else12
+  tail call void @abort() #3
+  unreachable
+
+if.end16:                                         ; preds = %if.else12, %if.then8
+  %brmerge.not = icmp eq i32 %x, %y
+  %tobool21.not = icmp eq i32 %ok, 0
+  br i1 %brmerge.not, label %if.then20, label %if.else24
+
+if.then20:                                        ; preds = %if.end16
+  br i1 %tobool21.not, label %if.then22, label %if.end28
+
+if.then22:                                        ; preds = %if.then20
+  tail call void @abort() #3
+  unreachable
+
+if.else24:                                        ; preds = %if.end16
+  br i1 %tobool21.not, label %if.end28, label %if.then26
+
+if.then26:                                        ; preds = %if.else24
+  tail call void @abort() #3
+  unreachable
+
+if.end28:                                         ; preds = %if.else24, %if.then20
+  %tobool33.not = icmp eq i32 %ok, 0
+  br i1 %cmp7, label %if.then32, label %if.else36
+
+if.then32:                                        ; preds = %if.end28
+  br i1 %tobool33.not, label %if.then34, label %if.end40
+
+if.then34:                                        ; preds = %if.then32
+  tail call void @abort() #3
+  unreachable
+
+if.else36:                                        ; preds = %if.end28
+  br i1 %tobool33.not, label %if.end40, label %if.then38
+
+if.then38:                                        ; preds = %if.else36
+  tail call void @abort() #3
+  unreachable
+
+if.end40:                                         ; preds = %if.else36, %if.then32
+  ret i32 undef
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local i32 @ine(i32 noundef %x, i32 noundef %y, i32 noundef %ok) local_unnamed_addr #0 {
+entry:
+  %or.cond.not = icmp eq i32 %x, %y
+  %tobool3.not = icmp eq i32 %ok, 0
+  br i1 %or.cond.not, label %if.else, label %if.then
+
+if.then:                                          ; preds = %entry
+  br i1 %tobool3.not, label %if.then2, label %if.end6
+
+if.then2:                                         ; preds = %if.then
+  tail call void @abort() #3
+  unreachable
+
+if.else:                                          ; preds = %entry
+  br i1 %tobool3.not, label %if.end6, label %if.then4
+
+if.then4:                                         ; preds = %if.else
+  tail call void @abort() #3
+  unreachable
+
+if.end6:                                          ; preds = %if.else, %if.then
+  ret i32 undef
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local i32 @ilt(i32 noundef %x, i32 noundef %y, i32 noundef %ok) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp slt i32 %x, %y
+  %tobool.not = icmp eq i32 %ok, 0
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  br i1 %tobool.not, label %if.then2, label %if.end6
+
+if.then2:                                         ; preds = %if.then
+  tail call void @abort() #3
+  unreachable
+
+if.else:                                          ; preds = %entry
+  br i1 %tobool.not, label %if.end6, label %if.then4
+
+if.then4:                                         ; preds = %if.else
+  tail call void @abort() #3
+  unreachable
+
+if.end6:                                          ; preds = %if.else, %if.then
+  ret i32 undef
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local i32 @ile(i32 noundef %x, i32 noundef %y, i32 noundef %ok) local_unnamed_addr #0 {
+entry:
+  %or.cond.not = icmp sgt i32 %x, %y
+  %tobool3.not = icmp eq i32 %ok, 0
+  br i1 %or.cond.not, label %if.else, label %if.then
+
+if.then:                                          ; preds = %entry
+  br i1 %tobool3.not, label %if.then2, label %if.end6
+
+if.then2:                                         ; preds = %if.then
+  tail call void @abort() #3
+  unreachable
+
+if.else:                                          ; preds = %entry
+  br i1 %tobool3.not, label %if.end6, label %if.then4
+
+if.then4:                                         ; preds = %if.else
+  tail call void @abort() #3
+  unreachable
+
+if.end6:                                          ; preds = %if.else, %if.then
+  ret i32 undef
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local i32 @igt(i32 noundef %x, i32 noundef %y, i32 noundef %ok) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp sgt i32 %x, %y
+  %tobool.not = icmp eq i32 %ok, 0
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  br i1 %tobool.not, label %if.then2, label %if.end6
+
+if.then2:                                         ; preds = %if.then
+  tail call void @abort() #3
+  unreachable
+
+if.else:                                          ; preds = %entry
+  br i1 %tobool.not, label %if.end6, label %if.then4
+
+if.then4:                                         ; preds = %if.else
+  tail call void @abort() #3
+  unreachable
+
+if.end6:                                          ; preds = %if.else, %if.then
+  ret i32 undef
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local i32 @ige(i32 noundef %x, i32 noundef %y, i32 noundef %ok) local_unnamed_addr #0 {
+entry:
+  %or.cond.not = icmp slt i32 %x, %y
+  %tobool3.not = icmp eq i32 %ok, 0
+  br i1 %or.cond.not, label %if.else, label %if.then
+
+if.then:                                          ; preds = %entry
+  br i1 %tobool3.not, label %if.then2, label %if.end6
+
+if.then2:                                         ; preds = %if.then
+  tail call void @abort() #3
+  unreachable
+
+if.else:                                          ; preds = %entry
+  br i1 %tobool3.not, label %if.end6, label %if.then4
+
+if.then4:                                         ; preds = %if.else
+  tail call void @abort() #3
+  unreachable
+
+if.end6:                                          ; preds = %if.else, %if.then
+  ret i32 undef
+}
+
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  tail call void @abort() #3
+  unreachable
+}
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -78,14 +233,3 @@ attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buf
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!7, !7, i64 0}
-!10 = !{!11, !11, i64 0}
-!11 = !{!"long", !7, i64 0}
-!12 = !{!13, !13, i64 0}
-!13 = !{!"long long", !7, i64 0}
-!14 = !{!15, !15, i64 0}
-!15 = !{!"short", !7, i64 0}

@@ -1,32 +1,20 @@
-; 11473325348450516624840102372810572777
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11473325348450516624840102372810572777.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11473325348450516624840102372810572777.c"
+; 173563448139697520565142020934589096586
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173563448139697520565142020934589096586.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173563448139697520565142020934589096586.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i8, [3 x i8] }
-
-@v = dso_local global i32 -1, align 4
-@s = dso_local global %struct.S zeroinitializer, align 4
+@x = dso_local global double 1.000000e+01, align 8
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @v, align 4
-  %cmp = icmp slt i32 %0, 0
+  %0 = load double, ptr @x, align 8
+  %cmp = fcmp olt double %0, 1.000000e+00
   %conv = zext i1 %cmp to i32
-  %1 = trunc i32 %conv to i8
-  %bf.load = load i8, ptr @s, align 4
-  %bf.value = and i8 %1, 1
-  %bf.clear = and i8 %bf.load, -2
-  %bf.set = or i8 %bf.clear, %bf.value
-  store i8 %bf.set, ptr @s, align 4
-  %bf.result.shl = shl i8 %bf.value, 7
-  %bf.result.ashr = ashr i8 %bf.result.shl, 7
-  %bf.result.cast = sext i8 %bf.result.ashr to i32
-  ret i32 0
+  ret i32 %conv
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

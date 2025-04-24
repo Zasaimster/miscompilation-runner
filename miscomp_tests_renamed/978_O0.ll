@@ -1,107 +1,67 @@
-; 173409488529899660757478348197934647030
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173409488529899660757478348197934647030.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173409488529899660757478348197934647030.c"
+; 117584403006835581498859184214831957110
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117584403006835581498859184214831957110.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117584403006835581498859184214831957110.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i8, i64 }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local { i8, i64 } @foo(i8 %x.coerce0, i64 %x.coerce1, i8 %y.coerce0, i64 %y.coerce1) #0 {
+define dso_local double @test(double noundef %le, double noundef %ri) #0 {
 entry:
-  %retval = alloca %struct.S, align 8
-  %x = alloca %struct.S, align 8
-  %y = alloca %struct.S, align 8
-  %0 = getelementptr inbounds nuw { i8, i64 }, ptr %x, i32 0, i32 0
-  store i8 %x.coerce0, ptr %0, align 8
-  %1 = getelementptr inbounds nuw { i8, i64 }, ptr %x, i32 0, i32 1
-  store i64 %x.coerce1, ptr %1, align 8
-  %2 = getelementptr inbounds nuw { i8, i64 }, ptr %y, i32 0, i32 0
-  store i8 %y.coerce0, ptr %2, align 8
-  %3 = getelementptr inbounds nuw { i8, i64 }, ptr %y, i32 0, i32 1
-  store i64 %y.coerce1, ptr %3, align 8
-  %b = getelementptr inbounds nuw %struct.S, ptr %retval, i32 0, i32 1
-  store i64 1, ptr %b, align 8
-  %4 = load { i8, i64 }, ptr %retval, align 8
-  ret { i8, i64 } %4
+  %le.addr = alloca double, align 8
+  %ri.addr = alloca double, align 8
+  %val = alloca double, align 8
+  store double %le, ptr %le.addr, align 8
+  store double %ri, ptr %ri.addr, align 8
+  %0 = load double, ptr %ri.addr, align 8
+  %1 = load double, ptr %le.addr, align 8
+  %sub = fsub double %0, %1
+  %2 = load double, ptr %ri.addr, align 8
+  %3 = load double, ptr %le.addr, align 8
+  %add = fadd double %3, 1.000000e+00
+  %mul = fmul double %2, %add
+  %div = fdiv double %sub, %mul
+  store double %div, ptr %val, align 8
+  %4 = load double, ptr %val, align 8
+  ret double %4
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca %struct.S, align 8
-  %b = alloca %struct.S, align 8
-  %coerce = alloca %struct.S, align 8
-  %coerce7 = alloca %struct.S, align 8
+  %retval1 = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  %b1 = getelementptr inbounds nuw %struct.S, ptr %a, i32 0, i32 1
-  store i64 32, ptr %b1, align 8
-  %b2 = getelementptr inbounds nuw %struct.S, ptr %b, i32 0, i32 1
-  store i64 4, ptr %b2, align 8
-  %0 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 0
-  %1 = load i8, ptr %0, align 8
-  %2 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 1
-  %3 = load i64, ptr %2, align 8
-  %4 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 0
-  %5 = load i8, ptr %4, align 8
-  %6 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 1
-  %7 = load i64, ptr %6, align 8
-  %call = call { i8, i64 } @foo(i8 %1, i64 %3, i8 %5, i64 %7)
-  %8 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce, i32 0, i32 0
-  %9 = extractvalue { i8, i64 } %call, 0
-  store i8 %9, ptr %8, align 8
-  %10 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce, i32 0, i32 1
-  %11 = extractvalue { i8, i64 } %call, 1
-  store i64 %11, ptr %10, align 8
-  %b3 = getelementptr inbounds nuw %struct.S, ptr %coerce, i32 0, i32 1
-  %12 = load i64, ptr %b3, align 8
-  %cmp = icmp ne i64 %12, 8
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call double @test(double noundef 1.000000e+00, double noundef 2.000000e+00)
+  store double %call, ptr %retval1, align 8
+  %0 = load double, ptr %retval1, align 8
+  %cmp = fcmp olt double %0, 2.400000e-01
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
-  call void @abort() #2
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load double, ptr %retval1, align 8
+  %cmp2 = fcmp ogt double %1, 2.600000e-01
+  br i1 %cmp2, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %entry
-  %b4 = getelementptr inbounds nuw %struct.S, ptr %a, i32 0, i32 1
-  store i64 -8, ptr %b4, align 8
-  %b5 = getelementptr inbounds nuw %struct.S, ptr %b, i32 0, i32 1
-  store i64 -2, ptr %b5, align 8
-  %13 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 0
-  %14 = load i8, ptr %13, align 8
-  %15 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 1
-  %16 = load i64, ptr %15, align 8
-  %17 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 0
-  %18 = load i8, ptr %17, align 8
-  %19 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 1
-  %20 = load i64, ptr %19, align 8
-  %call6 = call { i8, i64 } @foo(i8 %14, i64 %16, i8 %18, i64 %20)
-  %21 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce7, i32 0, i32 0
-  %22 = extractvalue { i8, i64 } %call6, 0
-  store i8 %22, ptr %21, align 8
-  %23 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce7, i32 0, i32 1
-  %24 = extractvalue { i8, i64 } %call6, 1
-  store i64 %24, ptr %23, align 8
-  %b8 = getelementptr inbounds nuw %struct.S, ptr %coerce7, i32 0, i32 1
-  %25 = load i64, ptr %b8, align 8
-  %cmp9 = icmp ne i64 %25, 4
-  br i1 %cmp9, label %if.then10, label %if.end11
-
-if.then10:                                        ; preds = %if.end
-  call void @abort() #2
+if.end:                                           ; preds = %lor.lhs.false
+  call void @exit(i32 noundef 0) #4
   unreachable
-
-if.end11:                                         ; preds = %if.end
-  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

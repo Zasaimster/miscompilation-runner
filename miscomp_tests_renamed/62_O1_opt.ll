@@ -1,34 +1,29 @@
-; 160089197409542071151504123190015587912
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/160089197409542071151504123190015587912_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/160089197409542071151504123190015587912.c"
+; 101051484798078794399921868459068552326
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101051484798078794399921868459068552326_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101051484798078794399921868459068552326.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.type = type { ptr, i32 }
-
-@t = dso_local local_unnamed_addr global %struct.type zeroinitializer, align 8
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: none, inaccessiblemem: none) uwtable
-define dso_local range(i32 0, 512) i32 @foo() local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @bar(ptr noundef readnone captures(none) %x, i32 noundef %y, ptr noundef readnone captures(none) %z) local_unnamed_addr #0 {
 entry:
-  %bf.load = load i32, ptr getelementptr inbounds nuw (i8, ptr @t, i64 8), align 8
-  %bf.lshr = lshr i32 %bf.load, 16
-  %bf.clear = and i32 %bf.lshr, 511
-  ret i32 %bf.clear
+  ret void
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local i64 @foo(i32 noundef %x, ptr noundef readnone captures(none) %y) local_unnamed_addr #0 {
+entry:
+  ret i64 undef
+}
+
+; Function Attrs: mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  %bf.load = load i32, ptr getelementptr inbounds nuw (i8, ptr @t, i64 8), align 8
-  %bf.clear = and i32 %bf.load, -33488897
-  %bf.set = or disjoint i32 %bf.clear, 524288
-  store i32 %bf.set, ptr getelementptr inbounds nuw (i8, ptr @t, i64 8), align 8
-  ret i32 0
+  unreachable
 }
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(read, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

@@ -1,19 +1,47 @@
-; 185467327006820271725408850295806586476
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/185467327006820271725408850295806586476_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/185467327006820271725408850295806586476.c"
+; 15084767298301064468780286172779009874
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/15084767298301064468780286172779009874_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/15084767298301064468780286172779009874.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [20 x i8] c"After Early Return\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test(i32 noundef %one, i32 noundef %bit) #0 {
+entry:
+  %one.addr = alloca i32, align 4
+  %bit.addr = alloca i32, align 4
+  %val = alloca i32, align 4
+  %zero = alloca i32, align 4
+  store i32 %one, ptr %one.addr, align 4
+  store i32 %bit, ptr %bit.addr, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %and = and i32 %call, 1
+  store i32 %and, ptr %val, align 4
+  %call1 = call i32 (...) @doNothing()
+  %shr = ashr i32 %call1, 1
+  store i32 %shr, ptr %zero, align 4
+  %0 = load i32, ptr %val, align 4
+  %inc = add i32 %0, 1
+  store i32 %inc, ptr %val, align 4
+  %1 = load i32, ptr %zero, align 4
+  %2 = load i32, ptr %val, align 4
+  %shr2 = lshr i32 %2, 1
+  %add = add i32 %1, %shr2
+  ret i32 %add
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+declare i32 @doNothing(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = sitofp i32 %call to double
-  %cmp = fcmp une double %conv, -0.000000e+00
+  %call = call i32 @test(i32 noundef 1, i32 noundef 0)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -21,11 +49,27 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @test(i32 noundef 1, i32 noundef 1)
+  %cmp2 = icmp ne i32 %call1, 1
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @test(i32 noundef 1, i32 noundef 65535)
+  %cmp6 = icmp ne i32 %call5, 1
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #4
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

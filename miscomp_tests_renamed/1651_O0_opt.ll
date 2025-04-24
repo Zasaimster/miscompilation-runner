@@ -1,127 +1,180 @@
-; 132830825704478250071900226261554710431
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132830825704478250071900226261554710431_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132830825704478250071900226261554710431.c"
+; 129432771752509260275307702703684168466
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129432771752509260275307702703684168466_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129432771752509260275307702703684168466.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@expect = dso_local global [10 x i64] [i64 0, i64 1, i64 2, i64 3, i64 4, i64 4, i64 5, i64 6, i64 7, i64 9], align 16
-@stack_base = dso_local global ptr null, align 8
-@markstack_ptr = dso_local global ptr null, align 8
-@list = dso_local global [0 x i64] zeroinitializer, align 8
-@indices = dso_local global [10 x i32] zeroinitializer, align 16
+%struct.symtab = type { ptr }
+%struct.blockvector = type { i32, [2 x ptr] }
+%struct.block = type { i64, i64, ptr, ptr, i8, i32, [1 x %struct.symbol] }
+%struct.symbol = type { i32, ptr }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @doit() #0 {
+define dso_local ptr @blockvector_for_pc_sect(i64 noundef %pc, ptr noundef %symtab) #0 {
 entry:
-  %src = alloca ptr, align 8
-  %dst = alloca ptr, align 8
-  %sp = alloca ptr, align 8
-  %diff = alloca i32, align 4
-  %shift = alloca i32, align 4
-  %count = alloca i32, align 4
-  %0 = load ptr, ptr @stack_base, align 8
-  %add.ptr = getelementptr inbounds i64, ptr %0, i64 5
-  store ptr %add.ptr, ptr %sp, align 8
-  store i32 2, ptr %diff, align 4
-  %1 = load i32, ptr %diff, align 4
-  %2 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx = getelementptr inbounds i32, ptr %2, i64 -1
-  %3 = load i32, ptr %arrayidx, align 4
-  %4 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx1 = getelementptr inbounds i32, ptr %4, i64 -2
-  %5 = load i32, ptr %arrayidx1, align 4
-  %sub = sub nsw i32 %3, %5
-  %sub2 = sub nsw i32 %1, %sub
-  store i32 %sub2, ptr %shift, align 4
-  %6 = load ptr, ptr %sp, align 8
-  %7 = load ptr, ptr @stack_base, align 8
-  %sub.ptr.lhs.cast = ptrtoint ptr %6 to i64
-  %sub.ptr.rhs.cast = ptrtoint ptr %7 to i64
-  %sub.ptr.sub = sub i64 %sub.ptr.lhs.cast, %sub.ptr.rhs.cast
-  %sub.ptr.div = sdiv exact i64 %sub.ptr.sub, 8
-  %8 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx3 = getelementptr inbounds i32, ptr %8, i64 -1
-  %9 = load i32, ptr %arrayidx3, align 4
-  %conv = sext i32 %9 to i64
-  %sub4 = sub nsw i64 %sub.ptr.div, %conv
-  %add = add nsw i64 %sub4, 2
-  %conv5 = trunc i64 %add to i32
-  store i32 %conv5, ptr %count, align 4
-  %10 = load ptr, ptr %sp, align 8
-  store ptr %10, ptr %src, align 8
-  %11 = load i32, ptr %shift, align 4
-  %12 = load ptr, ptr %sp, align 8
-  %idx.ext = sext i32 %11 to i64
-  %add.ptr6 = getelementptr inbounds i64, ptr %12, i64 %idx.ext
-  store ptr %add.ptr6, ptr %sp, align 8
-  store ptr %add.ptr6, ptr %dst, align 8
+  %retval = alloca ptr, align 8
+  %pc.addr = alloca i64, align 8
+  %symtab.addr = alloca ptr, align 8
+  %b = alloca ptr, align 8
+  %bot = alloca i32, align 4
+  %top = alloca i32, align 4
+  %half = alloca i32, align 4
+  %bl = alloca ptr, align 8
+  store i64 %pc, ptr %pc.addr, align 8
+  store ptr %symtab, ptr %symtab.addr, align 8
+  %0 = load ptr, ptr %symtab.addr, align 8
+  %blockvector = getelementptr inbounds nuw %struct.symtab, ptr %0, i32 0, i32 0
+  %1 = load ptr, ptr %blockvector, align 8
+  store ptr %1, ptr %bl, align 8
+  store ptr inttoptr (i64 10 to ptr), ptr %bl, align 8
+  %2 = load ptr, ptr %bl, align 8
+  %block = getelementptr inbounds nuw %struct.blockvector, ptr %2, i32 0, i32 1
+  %arrayidx = getelementptr inbounds [2 x ptr], ptr %block, i64 0, i64 0
+  %3 = load ptr, ptr %arrayidx, align 8
+  store ptr %3, ptr %b, align 8
+  store i32 0, ptr %bot, align 4
+  %4 = load ptr, ptr %bl, align 8
+  %nblocks = getelementptr inbounds nuw %struct.blockvector, ptr %4, i32 0, i32 0
+  %5 = load i32, ptr %nblocks, align 8
+  store i32 %5, ptr %top, align 4
   br label %while.cond
 
-while.cond:                                       ; preds = %while.body, %entry
-  %13 = load i32, ptr %count, align 4
-  %dec = add nsw i32 %13, -1
-  store i32 %dec, ptr %count, align 4
-  %tobool = icmp ne i32 %dec, 0
-  br i1 %tobool, label %while.body, label %while.end
+while.cond:                                       ; preds = %if.end, %entry
+  %6 = load i32, ptr %top, align 4
+  %7 = load i32, ptr %bot, align 4
+  %sub = sub nsw i32 %6, %7
+  %cmp = icmp sgt i32 %sub, 1
+  br i1 %cmp, label %while.body, label %while.end
 
 while.body:                                       ; preds = %while.cond
-  %14 = load ptr, ptr %src, align 8
-  %incdec.ptr = getelementptr inbounds i64, ptr %14, i32 -1
-  store ptr %incdec.ptr, ptr %src, align 8
-  %15 = load i64, ptr %14, align 8
-  %16 = load ptr, ptr %dst, align 8
-  %incdec.ptr7 = getelementptr inbounds i64, ptr %16, i32 -1
-  store ptr %incdec.ptr7, ptr %dst, align 8
-  store i64 %15, ptr %16, align 8
+  %8 = load i32, ptr %top, align 4
+  %9 = load i32, ptr %bot, align 4
+  %sub1 = sub nsw i32 %8, %9
+  %add = add nsw i32 %sub1, 1
+  %shr = ashr i32 %add, 1
+  store i32 %shr, ptr %half, align 4
+  %10 = load ptr, ptr %bl, align 8
+  %block2 = getelementptr inbounds nuw %struct.blockvector, ptr %10, i32 0, i32 1
+  %11 = load i32, ptr %bot, align 4
+  %12 = load i32, ptr %half, align 4
+  %add3 = add nsw i32 %11, %12
+  %idxprom = sext i32 %add3 to i64
+  %arrayidx4 = getelementptr inbounds [2 x ptr], ptr %block2, i64 0, i64 %idxprom
+  %13 = load ptr, ptr %arrayidx4, align 8
+  store ptr %13, ptr %b, align 8
+  %14 = load ptr, ptr %b, align 8
+  %startaddr = getelementptr inbounds nuw %struct.block, ptr %14, i32 0, i32 0
+  %15 = load i64, ptr %startaddr, align 8
+  %16 = load i64, ptr %pc.addr, align 8
+  %cmp5 = icmp ule i64 %15, %16
+  br i1 %cmp5, label %if.then, label %if.else
+
+if.then:                                          ; preds = %while.body
+  %17 = load i32, ptr %half, align 4
+  %18 = load i32, ptr %bot, align 4
+  %add6 = add nsw i32 %18, %17
+  store i32 %add6, ptr %bot, align 4
+  br label %if.end
+
+if.else:                                          ; preds = %while.body
+  %19 = load i32, ptr %bot, align 4
+  %20 = load i32, ptr %half, align 4
+  %add7 = add nsw i32 %19, %20
+  store i32 %add7, ptr %top, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
   br label %while.cond, !llvm.loop !6
 
 while.end:                                        ; preds = %while.cond
-  ret void
+  br label %while.cond8
+
+while.cond8:                                      ; preds = %if.end16, %while.end
+  %21 = load i32, ptr %bot, align 4
+  %cmp9 = icmp sge i32 %21, 0
+  br i1 %cmp9, label %while.body10, label %while.end17
+
+while.body10:                                     ; preds = %while.cond8
+  %22 = load ptr, ptr %bl, align 8
+  %block11 = getelementptr inbounds nuw %struct.blockvector, ptr %22, i32 0, i32 1
+  %23 = load i32, ptr %bot, align 4
+  %idxprom12 = sext i32 %23 to i64
+  %arrayidx13 = getelementptr inbounds [2 x ptr], ptr %block11, i64 0, i64 %idxprom12
+  %24 = load ptr, ptr %arrayidx13, align 8
+  store ptr %24, ptr %b, align 8
+  %25 = load ptr, ptr %b, align 8
+  %endaddr = getelementptr inbounds nuw %struct.block, ptr %25, i32 0, i32 1
+  %26 = load i64, ptr %endaddr, align 8
+  %27 = load i64, ptr %pc.addr, align 8
+  %cmp14 = icmp ugt i64 %26, %27
+  br i1 %cmp14, label %if.then15, label %if.end16
+
+if.then15:                                        ; preds = %while.body10
+  %28 = load ptr, ptr %bl, align 8
+  store ptr %28, ptr %retval, align 8
+  br label %return
+
+if.end16:                                         ; preds = %while.body10
+  %29 = load i32, ptr %bot, align 4
+  %dec = add nsw i32 %29, -1
+  store i32 %dec, ptr %bot, align 4
+  br label %while.cond8, !llvm.loop !8
+
+while.end17:                                      ; preds = %while.cond8
+  store ptr null, ptr %retval, align 8
+  br label %return
+
+return:                                           ; preds = %while.end17, %if.then15
+  %30 = load ptr, ptr %retval, align 8
+  ret ptr %30
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
+  %a = alloca %struct.block, align 8
+  %b = alloca %struct.block, align 8
+  %bv = alloca %struct.blockvector, align 8
+  %s = alloca %struct.symtab, align 8
+  %ret = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %i, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 10
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4
-  %conv = sext i32 %1 to i64
-  %2 = load i32, ptr %i, align 4
-  %idxprom = sext i32 %2 to i64
-  %arrayidx = getelementptr inbounds [0 x i64], ptr @list, i64 0, i64 %idxprom
-  store i64 %conv, ptr %arrayidx, align 8
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %3 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %3, 1
-  store i32 %inc, ptr %i, align 4
-  br label %for.cond, !llvm.loop !8
-
-for.end:                                          ; preds = %for.cond
-  store ptr getelementptr inbounds (i32, ptr @indices, i64 9), ptr @markstack_ptr, align 8
-  %4 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx1 = getelementptr inbounds i32, ptr %4, i64 -1
-  store i32 2, ptr %arrayidx1, align 4
-  %5 = load ptr, ptr @markstack_ptr, align 8
-  %arrayidx2 = getelementptr inbounds i32, ptr %5, i64 -2
-  store i32 1, ptr %arrayidx2, align 4
-  store ptr getelementptr inbounds (i64, ptr @list, i64 2), ptr @stack_base, align 8
-  call void @doit()
+  call void @llvm.memset.p0.i64(ptr align 8 %a, i8 0, i64 56, i1 false)
+  %0 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 1
+  store i64 65536, ptr %0, align 8
+  %1 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 4
+  store i8 1, ptr %1, align 8
+  %2 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 6
+  store i32 20, ptr %2, align 4
+  call void @llvm.memset.p0.i64(ptr align 8 %b, i8 0, i64 56, i1 false)
+  %3 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 0
+  store i64 65536, ptr %3, align 8
+  %4 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 1
+  store i64 131072, ptr %4, align 8
+  %5 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 4
+  store i8 1, ptr %5, align 8
+  %6 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 6
+  store i32 20, ptr %6, align 4
+  %nblocks = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 0
+  store i32 2, ptr %nblocks, align 8
+  %7 = getelementptr i8, ptr %bv, i64 4
+  call void @llvm.memset.p0.i64(ptr align 4 %7, i8 0, i64 4, i1 false)
+  %block = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 1
+  store ptr %a, ptr %block, align 8
+  %arrayinit.element = getelementptr inbounds ptr, ptr %block, i64 1
+  store ptr %b, ptr %arrayinit.element, align 8
+  %blockvector = getelementptr inbounds nuw %struct.symtab, ptr %s, i32 0, i32 0
+  store ptr %bv, ptr %blockvector, align 8
+  %call = call ptr @blockvector_for_pc_sect(i64 noundef 1280, ptr noundef %s)
+  store ptr %call, ptr %ret, align 8
   ret i32 0
 }
 
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

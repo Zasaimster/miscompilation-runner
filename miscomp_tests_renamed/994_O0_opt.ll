@@ -1,75 +1,82 @@
-; 134764163581236904474444992094466634139
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134764163581236904474444992094466634139_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134764163581236904474444992094466634139.c"
+; 117921187684821710045584422262890835233
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117921187684821710045584422262890835233_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117921187684821710045584422262890835233.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %call = call i32 (...) @example4()
-  ret i32 %call
-}
-
-declare i32 @example4(...) #1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@eq.i = internal global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @g() #0 {
+define dso_local void @example3() #0 {
 entry:
-  ret i32 0
+  %c = alloca i32, align 4
+  %d = alloca i32, align 4
+  store i32 3, ptr %c, align 4
+  store i32 100, ptr %d, align 4
+  %0 = load i32, ptr %c, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  ret void
 }
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @eq(i32 noundef %a, i32 noundef %b) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %1 = load i32, ptr @eq.i, align 4
+  %cmp = icmp ne i32 %0, %1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  %2 = load i32, ptr @eq.i, align 4
+  %inc = add nsw i32 %2, 1
+  store i32 %inc, ptr @eq.i, align 4
+  %3 = load i32, ptr %retval, align 4
+  ret i32 %3
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   %i = alloca i32, align 4
-  %s = alloca i32, align 4
+  %j = alloca i32, align 4
+  %k = alloca i32, align 4
   store i32 0, ptr %retval, align 4
   store i32 0, ptr %i, align 4
   br label %for.cond
 
 for.cond:                                         ; preds = %for.inc, %entry
   %0 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %0, 10
+  %cmp = icmp slt i32 %0, 4
   br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
   %1 = load i32, ptr %i, align 4
-  %call = call i32 @f(i32 noundef %1)
-  store i32 %call, ptr %s, align 4
-  %2 = load i32, ptr %i, align 4
-  %call1 = call i32 @g()
-  %cmp2 = icmp eq i32 %2, %call1
-  br i1 %cmp2, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body
-  store i32 42, ptr %s, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %for.body
-  %3 = load i32, ptr %i, align 4
-  %cmp3 = icmp eq i32 %3, 0
-  br i1 %cmp3, label %if.then5, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %if.end
-  %4 = load i32, ptr %s, align 4
-  %cmp4 = icmp eq i32 %4, 12
-  br i1 %cmp4, label %if.then5, label %if.else
-
-if.then5:                                         ; preds = %lor.lhs.false, %if.end
-  br label %if.end6
-
-if.else:                                          ; preds = %lor.lhs.false
-  call void @abort() #4
-  unreachable
-
-if.end6:                                          ; preds = %if.then5
+  store i32 %1, ptr %j, align 4
+  %call = call i32 (ptr, ...) @sub3(ptr noundef %j)
+  %2 = load i32, ptr %j, align 4
+  store i32 %2, ptr %k, align 4
+  %3 = load i32, ptr %k, align 4
+  %4 = load i32, ptr %k, align 4
+  %call1 = call i32 @eq(i32 noundef %3, i32 noundef %4)
   br label %for.inc
 
-for.inc:                                          ; preds = %if.end6
+for.inc:                                          ; preds = %for.body
   %5 = load i32, ptr %i, align 4
   %inc = add nsw i32 %5, 1
   store i32 %inc, ptr %i, align 4
@@ -80,8 +87,7 @@ for.end:                                          ; preds = %for.cond
   unreachable
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare i32 @sub3(...) #1
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #3

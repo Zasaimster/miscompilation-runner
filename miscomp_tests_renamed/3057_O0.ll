@@ -1,30 +1,42 @@
-; 132689894063589435230284067302673849707
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132689894063589435230284067302673849707.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132689894063589435230284067302673849707.c"
+; 153607277145453793682162137237168106087
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153607277145453793682162137237168106087.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153607277145453793682162137237168106087.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.S = type { i32, i32 }
+
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %f = alloca float, align 4
+  %s = alloca %struct.S, align 4
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %a, align 4
-  %0 = load i32, ptr %a, align 4
-  %add = add nsw i32 %0, 1
-  %conv = sitofp i32 %add to float
-  store float %conv, ptr %f, align 4
-  %1 = load float, ptr %f, align 4
-  %2 = load i32, ptr %a, align 4
-  %conv1 = sitofp i32 %2 to float
-  %cmp = fcmp oeq float %1, %conv1
-  %conv2 = zext i1 %cmp to i32
-  ret i32 %conv2
+  store ptr %s, ptr %p, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %x = getelementptr inbounds nuw %struct.S, ptr %s, i32 0, i32 0
+  store i32 %call, ptr %x, align 4
+  %0 = load ptr, ptr %p, align 8
+  %y = getelementptr inbounds nuw %struct.S, ptr %0, i32 0, i32 1
+  store i32 2, ptr %y, align 4
+  %1 = load ptr, ptr %p, align 8
+  %y1 = getelementptr inbounds nuw %struct.S, ptr %1, i32 0, i32 1
+  %2 = load i32, ptr %y1, align 4
+  %3 = load ptr, ptr %p, align 8
+  %x2 = getelementptr inbounds nuw %struct.S, ptr %3, i32 0, i32 0
+  %4 = load i32, ptr %x2, align 4
+  %add = add nsw i32 %2, %4
+  %sub = sub nsw i32 %add, 3
+  ret i32 %sub
 }
 
+declare i32 @printf(ptr noundef, ...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

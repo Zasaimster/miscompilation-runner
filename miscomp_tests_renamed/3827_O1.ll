@@ -1,29 +1,193 @@
-; 167479150426393879253118973553713873921
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167479150426393879253118973553713873921.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167479150426393879253118973553713873921.c"
+; 166875077686664053526138377265992139617
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/166875077686664053526138377265992139617.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/166875077686664053526138377265992139617.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @f(i32 noundef %i) local_unnamed_addr #0 {
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @foo2(i64 %x.coerce0, i32 %x.coerce1, i64 %y.coerce0, i32 %y.coerce1) local_unnamed_addr #0 {
 entry:
-  ret i32 33
-}
+  %or.cond = icmp ne i64 %x.coerce0, 17179869187
+  %cmp4 = icmp ne i32 %x.coerce1, 5
+  %or.cond15 = select i1 %or.cond, i1 true, i1 %cmp4
+  br i1 %or.cond15, label %if.then, label %if.end
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
+if.then:                                          ; preds = %entry
   tail call void @abort() #3
   unreachable
+
+if.end:                                           ; preds = %entry
+  %call = tail call i32 (...) @func5() #4
+  %or.cond16 = icmp ne i64 %y.coerce0, 30064771078
+  %cmp12 = icmp ne i32 %y.coerce1, 8
+  %or.cond17 = select i1 %or.cond16, i1 true, i1 %cmp12
+  br i1 %or.cond17, label %if.then13, label %if.end14
+
+if.then13:                                        ; preds = %if.end
+  tail call void @abort() #3
+  unreachable
+
+if.end14:                                         ; preds = %if.end
+  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+declare void @abort() local_unnamed_addr #1
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+declare i32 @func5(...) local_unnamed_addr #2
+
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @foo3(i64 %x.coerce0, i32 %x.coerce1, i64 %y.coerce0, i32 %y.coerce1, i64 %z.coerce0, i32 %z.coerce1) local_unnamed_addr #0 {
+entry:
+  %or.cond.i = icmp ne i64 %x.coerce0, 17179869187
+  %cmp4.i = icmp ne i32 %x.coerce1, 5
+  %or.cond15.i = select i1 %or.cond.i, i1 true, i1 %cmp4.i
+  br i1 %or.cond15.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %entry
+  tail call void @abort() #3
+  unreachable
+
+if.end.i:                                         ; preds = %entry
+  %call.i = tail call i32 (...) @func5() #4
+  %or.cond16.i = icmp ne i64 %y.coerce0, 30064771078
+  %cmp12.i = icmp ne i32 %y.coerce1, 8
+  %or.cond17.i = select i1 %or.cond16.i, i1 true, i1 %cmp12.i
+  br i1 %or.cond17.i, label %if.then13.i, label %foo2.exit
+
+if.then13.i:                                      ; preds = %if.end.i
+  tail call void @abort() #3
+  unreachable
+
+foo2.exit:                                        ; preds = %if.end.i
+  %or.cond = icmp ne i64 %z.coerce0, 42949672969
+  %cmp5 = icmp ne i32 %z.coerce1, 11
+  %or.cond6 = select i1 %or.cond, i1 true, i1 %cmp5
+  br i1 %or.cond6, label %if.then, label %if.end
+
+if.then:                                          ; preds = %foo2.exit
+  tail call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %foo2.exit
+  ret i32 0
+}
+
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @bar2(i64 %x.coerce0, i32 %x.coerce1, i64 %y.coerce0, i32 %y.coerce1) local_unnamed_addr #0 {
+entry:
+  %or.cond.i = icmp ne i64 %y.coerce0, 17179869187
+  %cmp4.i = icmp ne i32 %y.coerce1, 5
+  %or.cond15.i = select i1 %or.cond.i, i1 true, i1 %cmp4.i
+  br i1 %or.cond15.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %entry
+  tail call void @abort() #3
+  unreachable
+
+if.end.i:                                         ; preds = %entry
+  %call.i = tail call i32 (...) @func5() #4
+  %or.cond16.i = icmp ne i64 %x.coerce0, 30064771078
+  %cmp12.i = icmp ne i32 %x.coerce1, 8
+  %or.cond17.i = select i1 %or.cond16.i, i1 true, i1 %cmp12.i
+  br i1 %or.cond17.i, label %if.then13.i, label %foo2.exit
+
+if.then13.i:                                      ; preds = %if.end.i
+  tail call void @abort() #3
+  unreachable
+
+foo2.exit:                                        ; preds = %if.end.i
+  ret i32 0
+}
+
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @bar3(i64 %x.coerce0, i32 %x.coerce1, i64 %y.coerce0, i32 %y.coerce1, i64 %z.coerce0, i32 %z.coerce1) local_unnamed_addr #0 {
+entry:
+  %or.cond.i.i = icmp ne i64 %y.coerce0, 17179869187
+  %cmp4.i.i = icmp ne i32 %y.coerce1, 5
+  %or.cond15.i.i = select i1 %or.cond.i.i, i1 true, i1 %cmp4.i.i
+  br i1 %or.cond15.i.i, label %if.then.i.i, label %if.end.i.i
+
+if.then.i.i:                                      ; preds = %entry
+  tail call void @abort() #3
+  unreachable
+
+if.end.i.i:                                       ; preds = %entry
+  %call.i.i = tail call i32 (...) @func5() #4
+  %or.cond16.i.i = icmp ne i64 %x.coerce0, 30064771078
+  %cmp12.i.i = icmp ne i32 %x.coerce1, 8
+  %or.cond17.i.i = select i1 %or.cond16.i.i, i1 true, i1 %cmp12.i.i
+  br i1 %or.cond17.i.i, label %if.then13.i.i, label %foo2.exit.i
+
+if.then13.i.i:                                    ; preds = %if.end.i.i
+  tail call void @abort() #3
+  unreachable
+
+foo2.exit.i:                                      ; preds = %if.end.i.i
+  %or.cond.i = icmp ne i64 %z.coerce0, 42949672969
+  %cmp5.i = icmp ne i32 %z.coerce1, 11
+  %or.cond6.i = select i1 %or.cond.i, i1 true, i1 %cmp5.i
+  br i1 %or.cond6.i, label %if.then.i, label %foo3.exit
+
+if.then.i:                                        ; preds = %foo2.exit.i
+  tail call void @abort() #3
+  unreachable
+
+foo3.exit:                                        ; preds = %foo2.exit.i
+  ret i32 0
+}
+
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @baz3(i64 %x.coerce0, i32 %x.coerce1, i64 %y.coerce0, i32 %y.coerce1, i64 %z.coerce0, i32 %z.coerce1) local_unnamed_addr #0 {
+entry:
+  %or.cond.i.i = icmp ne i64 %y.coerce0, 17179869187
+  %cmp4.i.i = icmp ne i32 %y.coerce1, 5
+  %or.cond15.i.i = select i1 %or.cond.i.i, i1 true, i1 %cmp4.i.i
+  br i1 %or.cond15.i.i, label %if.then.i.i, label %if.end.i.i
+
+if.then.i.i:                                      ; preds = %entry
+  tail call void @abort() #3
+  unreachable
+
+if.end.i.i:                                       ; preds = %entry
+  %call.i.i = tail call i32 (...) @func5() #4
+  %or.cond16.i.i = icmp ne i64 %z.coerce0, 30064771078
+  %cmp12.i.i = icmp ne i32 %z.coerce1, 8
+  %or.cond17.i.i = select i1 %or.cond16.i.i, i1 true, i1 %cmp12.i.i
+  br i1 %or.cond17.i.i, label %if.then13.i.i, label %foo2.exit.i
+
+if.then13.i.i:                                    ; preds = %if.end.i.i
+  tail call void @abort() #3
+  unreachable
+
+foo2.exit.i:                                      ; preds = %if.end.i.i
+  %or.cond.i = icmp ne i64 %x.coerce0, 42949672969
+  %cmp5.i = icmp ne i32 %x.coerce1, 11
+  %or.cond6.i = select i1 %or.cond.i, i1 true, i1 %cmp5.i
+  br i1 %or.cond6.i, label %if.then.i, label %foo3.exit
+
+if.then.i:                                        ; preds = %foo2.exit.i
+  tail call void @abort() #3
+  unreachable
+
+foo3.exit:                                        ; preds = %foo2.exit.i
+  ret i32 0
+}
+
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %call.i.i = tail call i32 (...) @func5() #4
+  %call.i.i.i = tail call i32 (...) @func5() #4
+  %call.i.i.i13 = tail call i32 (...) @func5() #4
+  ret i32 0
+}
+
+attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn nounwind }
+attributes #4 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

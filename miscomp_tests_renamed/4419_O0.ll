@@ -1,48 +1,18 @@
-; 189925924068820709461555363083365855400
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189925924068820709461555363083365855400.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189925924068820709461555363083365855400.c"
+; 177640312747316750341025002541651981249
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177640312747316750341025002541651981249.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177640312747316750341025002541651981249.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @signed_poly(i64 noundef %sum, i64 noundef %x) #0 {
-entry:
-  %sum.addr = alloca i64, align 8
-  %x.addr = alloca i64, align 8
-  store i64 %sum, ptr %sum.addr, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %sum.addr, align 8
-  %add = add nsw i64 %0, 5
-  store i64 %add, ptr %sum.addr, align 8
-  %1 = load i64, ptr %sum.addr, align 8
-  %mul = mul nsw i64 %1, 2
-  ret i64 %mul
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @unsigned_poly(i64 noundef %sum, i64 noundef %x) #0 {
-entry:
-  %sum.addr = alloca i64, align 8
-  %x.addr = alloca i64, align 8
-  store i64 %sum, ptr %sum.addr, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %sum.addr, align 8
-  %1 = load i64, ptr %x.addr, align 8
-  %mul = mul i64 %0, %1
-  %2 = load i64, ptr %sum.addr, align 8
-  %add = add i64 %2, %mul
-  store i64 %add, ptr %sum.addr, align 8
-  %3 = load i64, ptr %sum.addr, align 8
-  ret i64 %3
-}
+%union.anon = type { double }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i64 @signed_poly(i64 noundef 2, i64 noundef -3)
-  %cmp = icmp ne i64 %call, -4
+  %call = call i32 @test(i32 noundef 5)
+  %cmp = icmp ne i32 %call, 2
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -50,17 +20,25 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i64 @unsigned_poly(i64 noundef 2, i64 noundef 3)
-  %cmp2 = icmp ne i64 %call1, 8
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @test(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  %a = alloca %union.anon, align 8
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %add = add nsw i32 %0, 1
+  %conv = sitofp i32 %add to double
+  store double %conv, ptr %a, align 8
+  store i32 0, ptr %a, align 8
+  %1 = load i32, ptr %x.addr, align 4
+  %2 = load i32, ptr %a, align 8
+  %shr = ashr i32 %1, %2
+  ret i32 %shr
 }
 
 ; Function Attrs: noreturn nounwind

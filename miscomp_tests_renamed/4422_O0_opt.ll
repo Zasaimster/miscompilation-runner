@@ -1,23 +1,14 @@
-; 101904942076044021870642689319459287718
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101904942076044021870642689319459287718_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101904942076044021870642689319459287718.c"
+; 177708527274574853422433254358209083984
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177708527274574853422433254358209083984_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177708527274574853422433254358209083984.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@l = dso_local global i64 -2, align 8
-@s = dso_local global i16 0, align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %t = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load i64, ptr @l, align 8
-  store i64 %0, ptr %t, align 8
-  %1 = load i64, ptr %t, align 8
-  %conv = trunc i64 %1 to i16
-  store i16 %conv, ptr @s, align 2
   ret i32 0
 }
 

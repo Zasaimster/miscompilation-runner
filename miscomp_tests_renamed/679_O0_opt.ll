@@ -1,23 +1,36 @@
-; 169217898145551774936960685476723773323
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169217898145551774936960685476723773323_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169217898145551774936960685476723773323.c"
+; 112131860698919412766265479496589051768
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112131860698919412766265479496589051768_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112131860698919412766265479496589051768.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
+@.str = private unnamed_addr constant [5 x i8] c"End\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @ll_to_int(i64 noundef %x, ptr noundef %p) #0 {
+define dso_local i32 @foo(i32 noundef %a, i32 noundef %b) #0 {
 entry:
-  %x.addr = alloca i64, align 8
-  %p.addr = alloca ptr, align 8
-  store i64 %x, ptr %x.addr, align 8
-  store ptr %p, ptr %p.addr, align 8
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
+  %0 = load i32, ptr %a.addr, align 4
+  %add = add nsw i32 %call, %0
+  %1 = load i32, ptr %b.addr, align 4
+  %sub = sub nsw i32 %add, %1
+  ret i32 %sub
 }
 
 declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  %call = call i32 @foo(i32 noundef 1, i32 noundef 3)
+  ret i32 %call
+}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

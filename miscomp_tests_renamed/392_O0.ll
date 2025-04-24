@@ -1,53 +1,42 @@
-; 119872285400236299109219633640894654746
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119872285400236299109219633640894654746.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119872285400236299109219633640894654746.c"
+; 106485258733505574156241553499069164018
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106485258733505574156241553499069164018.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106485258733505574156241553499069164018.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(double noundef %x) #0 {
-entry:
-  %x.addr = alloca double, align 8
-  %p = alloca double, align 8
-  %q = alloca double, align 8
-  store double %x, ptr %x.addr, align 8
-  store double 0.000000e+00, ptr %p, align 8
-  store double 0.000000e+00, ptr %q, align 8
-  %0 = load double, ptr %p, align 8
-  %1 = load double, ptr %q, align 8
-  %cmp = fcmp olt double %0, %1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @link_error()
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @link_error() #0 {
-entry:
-  call void @abort() #2
-  unreachable
-}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca float, align 4
+  %y = alloca float, align 4
+  %z = alloca float, align 4
+  %r = alloca float, align 4
   store i32 0, ptr %retval, align 4
-  call void @foo(double noundef 1.000000e+00)
+  %0 = load float, ptr %x, align 4
+  %add = fadd float %0, 1.000000e+00
+  store float %add, ptr %x, align 4
+  %1 = load float, ptr %x, align 4
+  %add1 = fadd float %1, 1.000000e+00
+  store float %add1, ptr %y, align 4
+  %2 = load float, ptr %x, align 4
+  %sub = fsub float %2, 1.000000e+00
+  store float %sub, ptr %z, align 4
+  %3 = load float, ptr %y, align 4
+  %4 = load float, ptr %z, align 4
+  %sub2 = fsub float %3, %4
+  store float %sub2, ptr %r, align 4
+  %5 = load float, ptr %r, align 4
+  %cmp = fcmp oeq float %5, 2.000000e+00
+  %conv = zext i1 %cmp to i32
+  %call = call i32 (i32, ...) @assert(i32 noundef %conv)
   ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare i32 @assert(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

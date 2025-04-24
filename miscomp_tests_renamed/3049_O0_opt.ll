@@ -1,200 +1,270 @@
-; 190122631679567464474012497928315616543
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190122631679567464474012497928315616543_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190122631679567464474012497928315616543.c"
+; 153488166926819766239819546637386384918
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153488166926819766239819546637386384918_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153488166926819766239819546637386384918.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@.str.1 = private unnamed_addr constant [8 x i8] c"%d, %d\0A\00", align 1
+@baz1.l = internal global i64 0, align 8
+@.str = private unnamed_addr constant [25 x i8] c"Main function executed.\0A\00", align 1
+@bar = dso_local global ptr null, align 8
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i64 @baz1(ptr noundef %a) #0 {
+entry:
+  %retval = alloca i64, align 8
+  %a.addr = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %0 = load i64, ptr %retval, align 8
+  ret i64 %0
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @baz2(ptr noundef %a) #0 {
+entry:
+  %a.addr = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  ret i32 0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @baz3(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr %i.addr, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret i32 1
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(ptr noundef %a, i64 noundef %b, i32 noundef %c) #0 {
+entry:
+  %a.addr = alloca ptr, align 8
+  %b.addr = alloca i64, align 8
+  %c.addr = alloca i32, align 4
+  %d = alloca i32, align 4
+  %e = alloca i32, align 4
+  %f = alloca i32, align 4
+  %i = alloca i32, align 4
+  %g = alloca [256 x i8], align 16
+  %h = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  store i64 %b, ptr %b.addr, align 8
+  store i32 %c, ptr %c.addr, align 4
+  store i32 0, ptr %d, align 4
+  store i32 0, ptr %f, align 4
+  %arrayidx = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 0
+  store i8 10, ptr %arrayidx, align 16
+  %arrayidx1 = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 1
+  store i8 0, ptr %arrayidx1, align 1
+  br label %while.cond
+
+while.cond:                                       ; preds = %if.end66, %if.then55, %if.then46, %if.then37, %if.then28, %if.then16, %entry
+  %0 = load ptr, ptr %a.addr, align 8
+  %call = call i64 @baz1(ptr noundef %0)
+  %1 = load i64, ptr %b.addr, align 8
+  %cmp = icmp slt i64 %call, %1
+  br i1 %cmp, label %while.body, label %while.end
+
+while.body:                                       ; preds = %while.cond
+  %arrayidx2 = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 0
+  %2 = load i8, ptr %arrayidx2, align 16
+  %conv = sext i8 %2 to i32
+  %cmp3 = icmp ne i32 %conv, 32
+  br i1 %cmp3, label %land.lhs.true, label %if.end66
+
+land.lhs.true:                                    ; preds = %while.body
+  %arrayidx5 = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 0
+  %3 = load i8, ptr %arrayidx5, align 16
+  %conv6 = sext i8 %3 to i32
+  %cmp7 = icmp ne i32 %conv6, 9
+  br i1 %cmp7, label %if.then, label %if.end66
+
+if.then:                                          ; preds = %land.lhs.true
+  store i32 1, ptr %f, align 4
+  store i32 0, ptr %e, align 4
+  %4 = load i32, ptr %d, align 4
+  %tobool = icmp ne i32 %4, 0
+  br i1 %tobool, label %if.end17, label %land.lhs.true9
+
+land.lhs.true9:                                   ; preds = %if.then
+  %arraydecay = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 0
+  %call10 = call i32 @baz2(ptr noundef %arraydecay)
+  %cmp11 = icmp eq i32 %call10, 0
+  br i1 %cmp11, label %if.then13, label %if.end17
+
+if.then13:                                        ; preds = %land.lhs.true9
+  %5 = load i32, ptr %c.addr, align 4
+  %and = and i32 %5, 16
+  %cmp14 = icmp eq i32 %and, 0
+  br i1 %cmp14, label %if.then16, label %if.end
+
+if.then16:                                        ; preds = %if.then13
+  br label %while.cond, !llvm.loop !6
+
+if.end:                                           ; preds = %if.then13
+  store i32 1, ptr %d, align 4
+  store i32 1, ptr %e, align 4
+  br label %if.end17
+
+if.end17:                                         ; preds = %if.end, %land.lhs.true9, %if.then
+  %6 = load i32, ptr %c.addr, align 4
+  %and18 = and i32 %6, 16
+  %tobool19 = icmp ne i32 %and18, 0
+  br i1 %tobool19, label %land.lhs.true20, label %land.lhs.true25
+
+land.lhs.true20:                                  ; preds = %if.end17
+  %7 = load i32, ptr %c.addr, align 4
+  %and21 = and i32 %7, 16384
+  %tobool22 = icmp ne i32 %and21, 0
+  br i1 %tobool22, label %land.lhs.true23, label %land.lhs.true25
+
+land.lhs.true23:                                  ; preds = %land.lhs.true20
+  %8 = load i32, ptr %e, align 4
+  %tobool24 = icmp ne i32 %8, 0
+  br i1 %tobool24, label %if.end29, label %land.lhs.true25
+
+land.lhs.true25:                                  ; preds = %land.lhs.true23, %land.lhs.true20, %if.end17
+  %9 = load i32, ptr %c.addr, align 4
+  %and26 = and i32 %9, 2
+  %tobool27 = icmp ne i32 %and26, 0
+  br i1 %tobool27, label %if.then28, label %if.end29
+
+if.then28:                                        ; preds = %land.lhs.true25
+  br label %while.cond, !llvm.loop !6
+
+if.end29:                                         ; preds = %land.lhs.true25, %land.lhs.true23
+  %10 = load i32, ptr %c.addr, align 4
+  %and30 = and i32 %10, 8192
+  %tobool31 = icmp ne i32 %and30, 0
+  br i1 %tobool31, label %land.lhs.true32, label %if.end38
+
+land.lhs.true32:                                  ; preds = %if.end29
+  %arraydecay33 = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 0
+  %call34 = call i32 @baz2(ptr noundef %arraydecay33)
+  %cmp35 = icmp eq i32 %call34, 0
+  br i1 %cmp35, label %if.then37, label %if.end38
+
+if.then37:                                        ; preds = %land.lhs.true32
+  br label %while.cond, !llvm.loop !6
+
+if.end38:                                         ; preds = %land.lhs.true32, %if.end29
+  %11 = load i32, ptr %c.addr, align 4
+  %and39 = and i32 %11, 5128
+  %tobool40 = icmp ne i32 %and39, 0
+  br i1 %tobool40, label %land.lhs.true41, label %if.end47
+
+land.lhs.true41:                                  ; preds = %if.end38
+  %arraydecay42 = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 0
+  %call43 = call i32 @baz2(ptr noundef %arraydecay42)
+  %cmp44 = icmp eq i32 %call43, 0
+  br i1 %cmp44, label %if.then46, label %if.end47
+
+if.then46:                                        ; preds = %land.lhs.true41
+  br label %while.cond, !llvm.loop !6
+
+if.end47:                                         ; preds = %land.lhs.true41, %if.end38
+  %12 = load i32, ptr %c.addr, align 4
+  %and48 = and i32 %12, 512
+  %tobool49 = icmp ne i32 %and48, 0
+  br i1 %tobool49, label %land.lhs.true50, label %if.end56
+
+land.lhs.true50:                                  ; preds = %if.end47
+  %arraydecay51 = getelementptr inbounds [256 x i8], ptr %g, i64 0, i64 0
+  %call52 = call i32 @baz2(ptr noundef %arraydecay51)
+  %cmp53 = icmp eq i32 %call52, 0
+  br i1 %cmp53, label %if.then55, label %if.end56
+
+if.then55:                                        ; preds = %land.lhs.true50
+  br label %while.cond, !llvm.loop !6
+
+if.end56:                                         ; preds = %land.lhs.true50, %if.end47
+  %13 = load i32, ptr %c.addr, align 4
+  %and57 = and i32 %13, 128
+  %tobool58 = icmp ne i32 %and57, 0
+  br i1 %tobool58, label %if.then59, label %if.end65
+
+if.then59:                                        ; preds = %if.end56
+  %14 = load ptr, ptr @bar, align 8
+  store ptr %14, ptr %h, align 8
+  store i32 0, ptr %i, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %if.then59
+  %15 = load ptr, ptr %h, align 8
+  %tobool60 = icmp ne ptr %15, null
+  br i1 %tobool60, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %16 = load i32, ptr %i, align 4
+  %call61 = call i32 @baz3(i32 noundef %16)
+  %tobool62 = icmp ne i32 %call61, 0
+  br i1 %tobool62, label %if.then63, label %if.end64
+
+if.then63:                                        ; preds = %for.body
+  br label %for.end
+
+if.end64:                                         ; preds = %for.body
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end64
+  %17 = load ptr, ptr %h, align 8
+  %18 = load ptr, ptr %17, align 8
+  store ptr %18, ptr %h, align 8
+  %19 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, ptr %i, align 4
+  br label %for.cond, !llvm.loop !8
+
+for.end:                                          ; preds = %if.then63, %for.cond
+  br label %if.end65
+
+if.end65:                                         ; preds = %for.end, %if.end56
+  store i32 0, ptr %f, align 4
+  br label %if.end66
+
+if.end66:                                         ; preds = %if.end65, %land.lhs.true, %while.body
+  br label %while.cond, !llvm.loop !6
+
+while.end:                                        ; preds = %while.cond
+  ret i32 0
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
-  %c = alloca i32, align 4
-  %d = alloca i32, align 4
-  %e = alloca i32, align 4
-  %f = alloca i32, align 4
-  %y = alloca i32, align 4
+  %n = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %a, align 4
-  store i32 34, ptr %b, align 4
-  store i32 56, ptr %c, align 4
-  store i32 78, ptr %d, align 4
-  store i32 0, ptr %e, align 4
-  store i32 1, ptr %f, align 4
-  %0 = load i32, ptr %c, align 4
-  %1 = load i32, ptr %d, align 4
-  %add = add nsw i32 %0, %1
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %add)
-  %2 = load i32, ptr %c, align 4
-  %3 = load i32, ptr %d, align 4
-  %add1 = add nsw i32 %2, %3
-  store i32 %add1, ptr %y, align 4
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %add1)
-  %4 = load i32, ptr %e, align 4
-  %tobool = icmp ne i32 %4, 0
-  br i1 %tobool, label %lor.end, label %lor.rhs
-
-lor.rhs:                                          ; preds = %entry
-  %5 = load i32, ptr %e, align 4
-  %tobool3 = icmp ne i32 %5, 0
-  br i1 %tobool3, label %land.rhs, label %land.end
-
-land.rhs:                                         ; preds = %lor.rhs
-  %6 = load i32, ptr %f, align 4
-  %tobool4 = icmp ne i32 %6, 0
-  br label %land.end
-
-land.end:                                         ; preds = %land.rhs, %lor.rhs
-  %7 = phi i1 [ false, %lor.rhs ], [ %tobool4, %land.rhs ]
-  br label %lor.end
-
-lor.end:                                          ; preds = %land.end, %entry
-  %8 = phi i1 [ true, %entry ], [ %7, %land.end ]
-  %lor.ext = zext i1 %8 to i32
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %lor.ext)
-  %9 = load i32, ptr %e, align 4
-  %tobool6 = icmp ne i32 %9, 0
-  br i1 %tobool6, label %lor.end12, label %lor.rhs7
-
-lor.rhs7:                                         ; preds = %lor.end
-  %10 = load i32, ptr %f, align 4
-  %tobool8 = icmp ne i32 %10, 0
-  br i1 %tobool8, label %land.rhs9, label %land.end11
-
-land.rhs9:                                        ; preds = %lor.rhs7
-  %11 = load i32, ptr %f, align 4
-  %tobool10 = icmp ne i32 %11, 0
-  br label %land.end11
-
-land.end11:                                       ; preds = %land.rhs9, %lor.rhs7
-  %12 = phi i1 [ false, %lor.rhs7 ], [ %tobool10, %land.rhs9 ]
-  br label %lor.end12
-
-lor.end12:                                        ; preds = %land.end11, %lor.end
-  %13 = phi i1 [ true, %lor.end ], [ %12, %land.end11 ]
-  %lor.ext13 = zext i1 %13 to i32
-  %call14 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %lor.ext13)
-  %14 = load i32, ptr %e, align 4
-  %tobool15 = icmp ne i32 %14, 0
-  br i1 %tobool15, label %land.lhs.true, label %lor.rhs17
-
-land.lhs.true:                                    ; preds = %lor.end12
-  %15 = load i32, ptr %e, align 4
-  %tobool16 = icmp ne i32 %15, 0
-  br i1 %tobool16, label %lor.end19, label %lor.rhs17
-
-lor.rhs17:                                        ; preds = %land.lhs.true, %lor.end12
-  %16 = load i32, ptr %f, align 4
-  %tobool18 = icmp ne i32 %16, 0
-  br label %lor.end19
-
-lor.end19:                                        ; preds = %lor.rhs17, %land.lhs.true
-  %17 = phi i1 [ true, %land.lhs.true ], [ %tobool18, %lor.rhs17 ]
-  %lor.ext20 = zext i1 %17 to i32
-  %call21 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %lor.ext20)
-  %18 = load i32, ptr %e, align 4
-  %tobool22 = icmp ne i32 %18, 0
-  br i1 %tobool22, label %land.lhs.true23, label %lor.rhs25
-
-land.lhs.true23:                                  ; preds = %lor.end19
-  %19 = load i32, ptr %f, align 4
-  %tobool24 = icmp ne i32 %19, 0
-  br i1 %tobool24, label %lor.end27, label %lor.rhs25
-
-lor.rhs25:                                        ; preds = %land.lhs.true23, %lor.end19
-  %20 = load i32, ptr %f, align 4
-  %tobool26 = icmp ne i32 %20, 0
-  br label %lor.end27
-
-lor.end27:                                        ; preds = %lor.rhs25, %land.lhs.true23
-  %21 = phi i1 [ true, %land.lhs.true23 ], [ %tobool26, %lor.rhs25 ]
-  %lor.ext28 = zext i1 %21 to i32
-  %call29 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %lor.ext28)
-  %22 = load i32, ptr %a, align 4
-  %tobool30 = icmp ne i32 %22, 0
-  br i1 %tobool30, label %land.rhs31, label %land.end33
-
-land.rhs31:                                       ; preds = %lor.end27
-  %23 = load i32, ptr %f, align 4
-  %24 = load i32, ptr %f, align 4
-  %or = or i32 %23, %24
-  %tobool32 = icmp ne i32 %or, 0
-  br label %land.end33
-
-land.end33:                                       ; preds = %land.rhs31, %lor.end27
-  %25 = phi i1 [ false, %lor.end27 ], [ %tobool32, %land.rhs31 ]
-  %land.ext = zext i1 %25 to i32
-  %call34 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %land.ext)
-  %26 = load i32, ptr %a, align 4
-  %27 = load i32, ptr %b, align 4
-  %28 = load i32, ptr %c, align 4
-  %29 = load i32, ptr %d, align 4
-  %and = and i32 %28, %29
-  %xor = xor i32 %27, %and
-  %or35 = or i32 %26, %xor
-  %call36 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %or35)
-  %30 = load i32, ptr %a, align 4
-  %31 = load i32, ptr %a, align 4
-  %cmp = icmp eq i32 %30, %31
-  %conv = zext i1 %cmp to i32
-  %32 = load i32, ptr %a, align 4
-  %33 = load i32, ptr %b, align 4
-  %cmp37 = icmp eq i32 %32, %33
-  %conv38 = zext i1 %cmp37 to i32
-  %call39 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv, i32 noundef %conv38)
-  %34 = load i32, ptr %a, align 4
-  %35 = load i32, ptr %a, align 4
-  %cmp40 = icmp ne i32 %34, %35
-  %conv41 = zext i1 %cmp40 to i32
-  %36 = load i32, ptr %a, align 4
-  %37 = load i32, ptr %b, align 4
-  %cmp42 = icmp ne i32 %36, %37
-  %conv43 = zext i1 %cmp42 to i32
-  %call44 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv41, i32 noundef %conv43)
-  %38 = load i32, ptr %a, align 4
-  %39 = load i32, ptr %b, align 4
-  %cmp45 = icmp ne i32 %38, %39
-  br i1 %cmp45, label %land.rhs47, label %land.end50
-
-land.rhs47:                                       ; preds = %land.end33
-  %40 = load i32, ptr %c, align 4
-  %41 = load i32, ptr %d, align 4
-  %cmp48 = icmp ne i32 %40, %41
-  br label %land.end50
-
-land.end50:                                       ; preds = %land.rhs47, %land.end33
-  %42 = phi i1 [ false, %land.end33 ], [ %cmp48, %land.rhs47 ]
-  %land.ext51 = zext i1 %42 to i32
-  %call52 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %land.ext51)
-  %43 = load i32, ptr %a, align 4
-  %44 = load i32, ptr %b, align 4
-  %45 = load i32, ptr %c, align 4
-  %mul = mul nsw i32 %44, %45
-  %46 = load i32, ptr %f, align 4
-  %div = sdiv i32 %mul, %46
-  %add53 = add nsw i32 %43, %div
-  %call54 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %add53)
-  %47 = load i32, ptr %a, align 4
-  %48 = load i32, ptr %b, align 4
-  %49 = load i32, ptr %c, align 4
-  %mul55 = mul nsw i32 %48, %49
-  %50 = load i32, ptr %f, align 4
-  %div56 = sdiv i32 %mul55, %50
-  %add57 = add nsw i32 %47, %div56
-  %call58 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %add57)
-  %call59 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef 64)
-  %call60 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef 4)
-  ret i32 0
+  store ptr null, ptr %n, align 8
+  store ptr %n, ptr @bar, align 8
+  %call = call i32 @foo(ptr noundef %n, i64 noundef 1, i32 noundef 51217)
+  call void @exit(i32 noundef 0) #5
+  unreachable
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -205,3 +275,6 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}

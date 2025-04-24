@@ -1,36 +1,85 @@
-; 161099150305442904060147649088526471725
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161099150305442904060147649088526471725.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161099150305442904060147649088526471725.c"
+; 101493993929504160165688427376850431590
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101493993929504160165688427376850431590.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101493993929504160165688427376850431590.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@q = dso_local global ptr null, align 8
+@b = dso_local global [32 x i64] zeroinitializer, align 16
+@r = dso_local global ptr @b, align 8
+@pars = dso_local global i64 0, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @foo(ptr noundef %p) #0 {
+define dso_local void @alpha_ep_extbl_i_eq_0() #0 {
 entry:
-  %p.addr = alloca ptr, align 8
-  %b = alloca i64, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %1 = load i16, ptr %0, align 2
-  %conv = sext i16 %1 to i64
-  store i64 %conv, ptr %b, align 8
-  %2 = load ptr, ptr %p.addr, align 8
-  %add.ptr = getelementptr inbounds i16, ptr %2, i64 1
-  store ptr %add.ptr, ptr @q, align 8
-  ret i64 0
+  %rb = alloca i32, align 4
+  %ra = alloca i32, align 4
+  %rc = alloca i32, align 4
+  %temp = alloca i64, align 8
+  %0 = load i64, ptr @pars, align 8
+  %shr = lshr i64 %0, 27
+  %and = and i64 %shr, 31
+  %conv = trunc i64 %and to i32
+  store i32 %conv, ptr %rb, align 4
+  %1 = load i32, ptr %rb, align 4
+  %inc = add i32 %1, 1
+  store i32 %inc, ptr %rb, align 4
+  %2 = load i64, ptr @pars, align 8
+  %conv1 = trunc i64 %2 to i32
+  %shr2 = lshr i32 %conv1, 5
+  %conv3 = zext i32 %shr2 to i64
+  %and4 = and i64 %conv3, 31
+  %conv5 = trunc i64 %and4 to i32
+  store i32 %conv5, ptr %ra, align 4
+  %3 = load i64, ptr @pars, align 8
+  %conv6 = trunc i64 %3 to i32
+  %shr7 = lshr i32 %conv6, 0
+  %conv8 = zext i32 %shr7 to i64
+  %and9 = and i64 %conv8, 31
+  %conv10 = trunc i64 %and9 to i32
+  store i32 %conv10, ptr %rc, align 4
+  %4 = load ptr, ptr @r, align 8
+  %5 = load i32, ptr %ra, align 4
+  %idxprom = zext i32 %5 to i64
+  %arrayidx = getelementptr inbounds nuw i64, ptr %4, i64 %idxprom
+  %6 = load i64, ptr %arrayidx, align 8
+  %7 = load ptr, ptr @r, align 8
+  %8 = load i32, ptr %rb, align 4
+  %idxprom11 = zext i32 %8 to i64
+  %arrayidx12 = getelementptr inbounds nuw i64, ptr %7, i64 %idxprom11
+  %9 = load i64, ptr %arrayidx12, align 8
+  %and13 = and i64 %9, 7
+  %shl = shl i64 %and13, 3
+  %shr14 = lshr i64 %6, %shl
+  %and15 = and i64 %shr14, 255
+  store i64 %and15, ptr %temp, align 8
+  %10 = load i32, ptr %rc, align 4
+  %cmp = icmp ne i32 %10, 31
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %11 = load i64, ptr %temp, align 8
+  %12 = load ptr, ptr @r, align 8
+  %13 = load i32, ptr %rc, align 4
+  %idxprom17 = zext i32 %13 to i64
+  %arrayidx18 = getelementptr inbounds nuw i64, ptr %12, i64 %idxprom17
+  store i64 %11, ptr %arrayidx18, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i16, align 2
   store i32 0, ptr %retval, align 4
-  store i16 -256, ptr %a, align 2
-  %call = call i64 @foo(ptr noundef %a)
-  %cmp = icmp ne i64 %call, -256
+  store i64 3160194, ptr getelementptr inbounds ([32 x i64], ptr @b, i64 0, i64 17), align 8
+  store i64 6003104017374052362, ptr getelementptr inbounds ([32 x i64], ptr @b, i64 0, i64 2), align 16
+  store i64 2281701442, ptr @pars, align 8
+  call void @alpha_ep_extbl_i_eq_0()
+  %0 = load i64, ptr getelementptr inbounds ([32 x i64], ptr @b, i64 0, i64 2), align 16
+  %cmp = icmp ne i64 %0, 77
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

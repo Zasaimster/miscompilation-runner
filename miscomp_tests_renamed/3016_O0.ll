@@ -1,46 +1,69 @@
-; 101247392963744034573890119033930284581
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101247392963744034573890119033930284581.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101247392963744034573890119033930284581.c"
+; 152929377286134961554653758124815630959
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152929377286134961554653758124815630959.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152929377286134961554653758124815630959.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [17 x i8] c"Function called\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local double @f(double noundef %x) #0 {
+define dso_local i32 @calc_mp(i32 noundef %mod) #0 {
 entry:
-  %x.addr = alloca double, align 8
-  store double %x, ptr %x.addr, align 8
-  %call = call i32 (i32, ...) @square(i32 noundef 5)
-  %conv = sitofp i32 %call to double
-  %0 = load double, ptr %x.addr, align 8
-  %mul = fmul double %conv, %0
-  ret double %mul
-}
-
-declare i32 @square(...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local double @Int(ptr noundef %f, double noundef %a) #0 {
-entry:
-  %f.addr = alloca ptr, align 8
-  %a.addr = alloca double, align 8
-  store ptr %f, ptr %f.addr, align 8
-  store double %a, ptr %a.addr, align 8
+  %mod.addr = alloca i32, align 4
+  %a = alloca i32, align 4
+  %b = alloca i32, align 4
+  %c = alloca i32, align 4
+  store i32 %mod, ptr %mod.addr, align 4
+  store i32 -1, ptr %c, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = sitofp i32 %call to double
-  ret double %conv
+  %0 = load i32, ptr %c, align 4
+  %1 = load i32, ptr %mod.addr, align 4
+  %div = udiv i32 %0, %1
+  store i32 %div, ptr %a, align 4
+  %2 = load i32, ptr %a, align 4
+  %3 = load i32, ptr %mod.addr, align 4
+  %mul = mul i32 %2, %3
+  %sub = sub i32 0, %mul
+  store i32 %sub, ptr %b, align 4
+  %4 = load i32, ptr %b, align 4
+  %5 = load i32, ptr %mod.addr, align 4
+  %cmp = icmp ugt i32 %4, %5
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %6 = load i32, ptr %a, align 4
+  %add = add i32 %6, 1
+  store i32 %add, ptr %a, align 4
+  %7 = load i32, ptr %mod.addr, align 4
+  %8 = load i32, ptr %b, align 4
+  %sub1 = sub i32 %8, %7
+  store i32 %sub1, ptr %b, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %9 = load i32, ptr %b, align 4
+  ret i32 %9
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
 entry:
   %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca ptr, align 8
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call double @Int(ptr noundef @f, double noundef 2.000000e+00)
-  %cmp = fcmp une double %call, 4.000000e+00
+  store i32 %argc, ptr %argc.addr, align 4
+  store ptr %argv, ptr %argv.addr, align 8
+  store i32 1234, ptr %x, align 4
+  %0 = load i32, ptr %x, align 4
+  %call = call i32 @calc_mp(i32 noundef %0)
+  store i32 %call, ptr %y, align 4
+  %1 = load i32, ptr %y, align 4
+  %cmp = icmp ne i32 %1, 680
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

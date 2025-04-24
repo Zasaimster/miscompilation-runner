@@ -1,57 +1,43 @@
-; 101697282931861012824112384069078593546
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101697282931861012824112384069078593546.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101697282931861012824112384069078593546.c"
+; 181656619406299679140927726324477551237
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/181656619406299679140927726324477551237.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/181656619406299679140927726324477551237.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [11 x i8] c"Loop done\0A\00", align 1
-@.str.1 = private unnamed_addr constant [3 x i8] c"a\0A\00", align 1
-@.str.2 = private unnamed_addr constant [3 x i8] c"b\0A\00", align 1
-@.str.3 = private unnamed_addr constant [3 x i8] c"c\0A\00", align 1
-@.str.4 = private unnamed_addr constant [3 x i8] c"d\0A\00", align 1
-@.str.5 = private unnamed_addr constant [3 x i8] c"e\0A\00", align 1
-@.str.6 = private unnamed_addr constant [3 x i8] c"f\0A\00", align 1
-@.str.7 = private unnamed_addr constant [3 x i8] c"g\0A\00", align 1
-@.str.8 = private unnamed_addr constant [3 x i8] c"h\0A\00", align 1
-@.str.9 = private unnamed_addr constant [3 x i8] c"i\0A\00", align 1
-@.str.10 = private unnamed_addr constant [3 x i8] c"j\0A\00", align 1
-@.str.11 = private unnamed_addr constant [3 x i8] c"k\0A\00", align 1
-@.str.12 = private unnamed_addr constant [3 x i8] c"l\0A\00", align 1
-@.str.13 = private unnamed_addr constant [3 x i8] c"m\0A\00", align 1
-@.str.14 = private unnamed_addr constant [3 x i8] c"n\0A\00", align 1
-@.str.15 = private unnamed_addr constant [3 x i8] c"o\0A\00", align 1
-@.str.16 = private unnamed_addr constant [3 x i8] c"p\0A\00", align 1
-@.str.17 = private unnamed_addr constant [3 x i8] c"q\0A\00", align 1
-@.str.18 = private unnamed_addr constant [3 x i8] c"r\0A\00", align 1
-@.str.19 = private unnamed_addr constant [3 x i8] c"s\0A\00", align 1
-@.str.20 = private unnamed_addr constant [3 x i8] c"t\0A\00", align 1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i32, align 4
+  %p = alloca i32, align 4
+  %t = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3)
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.4)
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.5)
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.6)
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.7)
-  %call8 = call i32 (ptr, ...) @printf(ptr noundef @.str.8)
-  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str.9)
-  %call10 = call i32 (ptr, ...) @printf(ptr noundef @.str.10)
-  %call11 = call i32 (ptr, ...) @printf(ptr noundef @.str.11)
-  %call12 = call i32 (ptr, ...) @printf(ptr noundef @.str.12)
-  %call13 = call i32 (ptr, ...) @printf(ptr noundef @.str.13)
-  %call14 = call i32 (ptr, ...) @printf(ptr noundef @.str.14)
-  %call15 = call i32 (ptr, ...) @printf(ptr noundef @.str.15)
-  %call16 = call i32 (ptr, ...) @printf(ptr noundef @.str.16)
-  %call17 = call i32 (ptr, ...) @printf(ptr noundef @.str.17)
-  %call18 = call i32 (ptr, ...) @printf(ptr noundef @.str.18)
-  %call19 = call i32 (ptr, ...) @printf(ptr noundef @.str.19)
-  %call20 = call i32 (ptr, ...) @printf(ptr noundef @.str.20)
+  store i32 10, ptr %a, align 4
+  store i32 0, ptr %p, align 4
+  store i32 0, ptr %t, align 4
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  %0 = load i32, ptr %a, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  %1 = load i32, ptr %a, align 4
+  store i32 %1, ptr %t, align 4
+  %2 = load i32, ptr %t, align 4
+  %3 = load i32, ptr %p, align 4
+  %add = add nsw i32 %2, %3
+  store i32 %add, ptr %a, align 4
+  %4 = load i32, ptr %t, align 4
+  store i32 %4, ptr %p, align 4
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %5 = load i32, ptr %a, align 4
+  %cmp = icmp slt i32 %5, 100
+  br i1 %cmp, label %do.body, label %do.end, !llvm.loop !6
+
+do.end:                                           ; preds = %do.cond
   ret i32 0
 }
 
@@ -69,3 +55,5 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}

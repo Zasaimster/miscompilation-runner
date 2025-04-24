@@ -1,50 +1,29 @@
-; 19980315493491091702373291255785316853
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/19980315493491091702373291255785316853_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/19980315493491091702373291255785316853.c"
+; 110718164937879581424346629644007178054
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110718164937879581424346629644007178054_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110718164937879581424346629644007178054.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
-@n = dso_local local_unnamed_addr global i32 1, align 4
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local void @check(i32 %m) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @f(i32 noundef %x) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp.not = icmp eq i32 %call, -1
-  br i1 %cmp.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  tail call void @abort() #5
-  unreachable
-
-if.end:                                           ; preds = %entry
-  ret void
+  ret i32 0
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
-
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
-
 ; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #3 {
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  tail call void @check(i32 poison)
-  tail call void @exit(i32 noundef 0) #5
+  tail call void @exit(i32 noundef 0) #3
   unreachable
 }
 
 ; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #4
+declare void @exit(i32 noundef) local_unnamed_addr #2
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

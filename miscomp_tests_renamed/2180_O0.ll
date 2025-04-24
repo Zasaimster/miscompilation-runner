@@ -1,193 +1,334 @@
-; 173796227304217836350122916456281191180
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173796227304217836350122916456281191180.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173796227304217836350122916456281191180.c"
+; 138195345609179999866381371030415473021
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138195345609179999866381371030415473021.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138195345609179999866381371030415473021.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [14 x i8] c"I'm not used\0A\00", align 1
-@g = internal global i16 0, align 2
-@p = internal global i16 0, align 2
-@e = dso_local global i8 0, align 1
+@.str = private unnamed_addr constant [7 x i8] c"Start\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @notUsed() #0 {
+define dso_local i32 @test1(i8 noundef signext %x) #0 {
 entry:
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
+  %div = sdiv i32 %call, 100
+  %cmp = icmp eq i32 %div, 3
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local signext i8 @frob(i16 noundef zeroext %a, i16 noundef zeroext %b) #0 {
+define dso_local i32 @test1u(i8 noundef zeroext %x) #0 {
 entry:
-  %a.addr = alloca i16, align 2
-  %b.addr = alloca i16, align 2
-  store i16 %a, ptr %a.addr, align 2
-  store i16 %b, ptr %b.addr, align 2
-  %0 = load i16, ptr %a.addr, align 2
-  store i16 %0, ptr @g, align 2
-  %1 = load i16, ptr %b.addr, align 2
-  store i16 %1, ptr @p, align 2
-  %call = call zeroext i16 @inc_g()
-  %call1 = call signext i8 @ring_empty()
-  ret i8 %call1
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp eq i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define internal zeroext i16 @inc_g() #0 {
+define dso_local i32 @test2(i8 noundef signext %x) #0 {
 entry:
-  %call = call i32 (...) @next_g()
-  %conv = trunc i32 %call to i16
-  store i16 %conv, ptr @g, align 2
-  ret i16 %conv
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp ne i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define internal signext i8 @ring_empty() #0 {
+define dso_local i32 @test2u(i8 noundef zeroext %x) #0 {
 entry:
-  %retval = alloca i8, align 1
-  %call = call zeroext i16 @curr_p()
-  %conv = zext i16 %call to i32
-  %call1 = call zeroext i16 @curr_g()
-  %conv2 = zext i16 %call1 to i32
-  %cmp = icmp eq i32 %conv, %conv2
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  store i8 1, ptr %retval, align 1
-  br label %return
-
-if.else:                                          ; preds = %entry
-  store i8 0, ptr %retval, align 1
-  br label %return
-
-return:                                           ; preds = %if.else, %if.then
-  %0 = load i8, ptr %retval, align 1
-  ret i8 %0
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp ne i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local zeroext i16 @get_n() #0 {
+define dso_local i32 @test3(i8 noundef signext %x) #0 {
 entry:
-  %n = alloca i16, align 2
-  %org_g = alloca i16, align 2
-  store i16 0, ptr %n, align 2
-  %call = call zeroext i16 @curr_g()
-  store i16 %call, ptr %org_g, align 2
-  br label %while.cond
-
-while.cond:                                       ; preds = %while.body, %entry
-  %call1 = call signext i8 @ring_empty()
-  %tobool = icmp ne i8 %call1, 0
-  br i1 %tobool, label %land.end, label %land.rhs
-
-land.rhs:                                         ; preds = %while.cond
-  %0 = load i16, ptr %n, align 2
-  %conv = zext i16 %0 to i32
-  %cmp = icmp slt i32 %conv, 5
-  br label %land.end
-
-land.end:                                         ; preds = %land.rhs, %while.cond
-  %1 = phi i1 [ false, %while.cond ], [ %cmp, %land.rhs ]
-  br i1 %1, label %while.body, label %while.end
-
-while.body:                                       ; preds = %land.end
-  %call3 = call zeroext i16 @inc_g()
-  %2 = load i16, ptr %n, align 2
-  %inc = add i16 %2, 1
-  store i16 %inc, ptr %n, align 2
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %land.end
-  %3 = load i16, ptr %n, align 2
-  ret i16 %3
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp slt i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define internal zeroext i16 @curr_g() #0 {
+define dso_local i32 @test3u(i8 noundef zeroext %x) #0 {
 entry:
-  %0 = load i16, ptr @g, align 2
-  ret i16 %0
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp slt i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test4(i8 noundef signext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp sle i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test4u(i8 noundef zeroext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp sle i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test5(i8 noundef signext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp sgt i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test5u(i8 noundef zeroext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp sgt i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test6(i8 noundef signext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = sext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp sge i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test6u(i8 noundef zeroext %x) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  store i8 %x, ptr %x.addr, align 1
+  %0 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %0 to i32
+  %div = sdiv i32 %conv, 100
+  %cmp = icmp sge i32 %div, 3
+  %conv1 = zext i1 %cmp to i32
+  ret i32 %conv1
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %c = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i8 3, ptr @e, align 1
-  %call = call signext i8 @frob(i16 noundef zeroext 0, i16 noundef zeroext 2)
-  %conv = sext i8 %call to i32
-  %cmp = icmp ne i32 %conv, 0
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  store i32 -128, ptr %c, align 4
+  br label %for.cond
 
-lor.lhs.false:                                    ; preds = %entry
-  %0 = load i16, ptr @g, align 2
-  %conv2 = zext i16 %0 to i32
-  %cmp3 = icmp ne i32 %conv2, 1
-  br i1 %cmp3, label %if.then, label %lor.lhs.false5
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr %c, align 4
+  %cmp = icmp slt i32 %0, 256
+  br i1 %cmp, label %for.body, label %for.end
 
-lor.lhs.false5:                                   ; preds = %lor.lhs.false
-  %1 = load i16, ptr @p, align 2
-  %conv6 = zext i16 %1 to i32
-  %cmp7 = icmp ne i32 %conv6, 2
-  br i1 %cmp7, label %if.then, label %lor.lhs.false9
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, ptr %c, align 4
+  %conv = trunc i32 %1 to i8
+  %call = call i32 @test1(i8 noundef signext %conv)
+  %cmp1 = icmp ne i32 %call, 0
+  br i1 %cmp1, label %if.then, label %if.end
 
-lor.lhs.false9:                                   ; preds = %lor.lhs.false5
-  %2 = load i8, ptr @e, align 1
-  %conv10 = zext i8 %2 to i32
-  %cmp11 = icmp ne i32 %conv10, 3
-  br i1 %cmp11, label %if.then, label %lor.lhs.false13
-
-lor.lhs.false13:                                  ; preds = %lor.lhs.false9
-  %call14 = call zeroext i16 @get_n()
-  %conv15 = zext i16 %call14 to i32
-  %cmp16 = icmp ne i32 %conv15, 1
-  br i1 %cmp16, label %if.then, label %lor.lhs.false18
-
-lor.lhs.false18:                                  ; preds = %lor.lhs.false13
-  %3 = load i16, ptr @g, align 2
-  %conv19 = zext i16 %3 to i32
-  %cmp20 = icmp ne i32 %conv19, 2
-  br i1 %cmp20, label %if.then, label %lor.lhs.false22
-
-lor.lhs.false22:                                  ; preds = %lor.lhs.false18
-  %4 = load i16, ptr @p, align 2
-  %conv23 = zext i16 %4 to i32
-  %cmp24 = icmp ne i32 %conv23, 2
-  br i1 %cmp24, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false22, %lor.lhs.false18, %lor.lhs.false13, %lor.lhs.false9, %lor.lhs.false5, %lor.lhs.false, %entry
-  call void @abort() #4
+if.then:                                          ; preds = %for.body
+  call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false22
-  call void @exit(i32 noundef 0) #5
+if.end:                                           ; preds = %for.body
+  %2 = load i32, ptr %c, align 4
+  %conv3 = trunc i32 %2 to i8
+  %call4 = call i32 @test1u(i8 noundef zeroext %conv3)
+  %cmp5 = icmp ne i32 %call4, 0
+  br i1 %cmp5, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end
+  call void @abort() #3
   unreachable
+
+if.end8:                                          ; preds = %if.end
+  %3 = load i32, ptr %c, align 4
+  %conv9 = trunc i32 %3 to i8
+  %call10 = call i32 @test2(i8 noundef signext %conv9)
+  %cmp11 = icmp ne i32 %call10, 1
+  br i1 %cmp11, label %if.then13, label %if.end14
+
+if.then13:                                        ; preds = %if.end8
+  call void @abort() #3
+  unreachable
+
+if.end14:                                         ; preds = %if.end8
+  %4 = load i32, ptr %c, align 4
+  %conv15 = trunc i32 %4 to i8
+  %call16 = call i32 @test2u(i8 noundef zeroext %conv15)
+  %cmp17 = icmp ne i32 %call16, 1
+  br i1 %cmp17, label %if.then19, label %if.end20
+
+if.then19:                                        ; preds = %if.end14
+  call void @abort() #3
+  unreachable
+
+if.end20:                                         ; preds = %if.end14
+  %5 = load i32, ptr %c, align 4
+  %conv21 = trunc i32 %5 to i8
+  %call22 = call i32 @test3(i8 noundef signext %conv21)
+  %cmp23 = icmp ne i32 %call22, 1
+  br i1 %cmp23, label %if.then25, label %if.end26
+
+if.then25:                                        ; preds = %if.end20
+  call void @abort() #3
+  unreachable
+
+if.end26:                                         ; preds = %if.end20
+  %6 = load i32, ptr %c, align 4
+  %conv27 = trunc i32 %6 to i8
+  %call28 = call i32 @test3u(i8 noundef zeroext %conv27)
+  %cmp29 = icmp ne i32 %call28, 1
+  br i1 %cmp29, label %if.then31, label %if.end32
+
+if.then31:                                        ; preds = %if.end26
+  call void @abort() #3
+  unreachable
+
+if.end32:                                         ; preds = %if.end26
+  %7 = load i32, ptr %c, align 4
+  %conv33 = trunc i32 %7 to i8
+  %call34 = call i32 @test4(i8 noundef signext %conv33)
+  %cmp35 = icmp ne i32 %call34, 1
+  br i1 %cmp35, label %if.then37, label %if.end38
+
+if.then37:                                        ; preds = %if.end32
+  call void @abort() #3
+  unreachable
+
+if.end38:                                         ; preds = %if.end32
+  %8 = load i32, ptr %c, align 4
+  %conv39 = trunc i32 %8 to i8
+  %call40 = call i32 @test4u(i8 noundef zeroext %conv39)
+  %cmp41 = icmp ne i32 %call40, 1
+  br i1 %cmp41, label %if.then43, label %if.end44
+
+if.then43:                                        ; preds = %if.end38
+  call void @abort() #3
+  unreachable
+
+if.end44:                                         ; preds = %if.end38
+  %9 = load i32, ptr %c, align 4
+  %conv45 = trunc i32 %9 to i8
+  %call46 = call i32 @test5(i8 noundef signext %conv45)
+  %cmp47 = icmp ne i32 %call46, 0
+  br i1 %cmp47, label %if.then49, label %if.end50
+
+if.then49:                                        ; preds = %if.end44
+  call void @abort() #3
+  unreachable
+
+if.end50:                                         ; preds = %if.end44
+  %10 = load i32, ptr %c, align 4
+  %conv51 = trunc i32 %10 to i8
+  %call52 = call i32 @test5u(i8 noundef zeroext %conv51)
+  %cmp53 = icmp ne i32 %call52, 0
+  br i1 %cmp53, label %if.then55, label %if.end56
+
+if.then55:                                        ; preds = %if.end50
+  call void @abort() #3
+  unreachable
+
+if.end56:                                         ; preds = %if.end50
+  %11 = load i32, ptr %c, align 4
+  %conv57 = trunc i32 %11 to i8
+  %call58 = call i32 @test6(i8 noundef signext %conv57)
+  %cmp59 = icmp ne i32 %call58, 0
+  br i1 %cmp59, label %if.then61, label %if.end62
+
+if.then61:                                        ; preds = %if.end56
+  call void @abort() #3
+  unreachable
+
+if.end62:                                         ; preds = %if.end56
+  %12 = load i32, ptr %c, align 4
+  %conv63 = trunc i32 %12 to i8
+  %call64 = call i32 @test6u(i8 noundef zeroext %conv63)
+  %cmp65 = icmp ne i32 %call64, 0
+  br i1 %cmp65, label %if.then67, label %if.end68
+
+if.then67:                                        ; preds = %if.end62
+  call void @abort() #3
+  unreachable
+
+if.end68:                                         ; preds = %if.end62
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end68
+  %13 = load i32, ptr %c, align 4
+  %inc = add nsw i32 %13, 1
+  store i32 %inc, ptr %c, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #3
-
-declare i32 @next_g(...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define internal zeroext i16 @curr_p() #0 {
-entry:
-  %0 = load i16, ptr @p, align 2
-  ret i16 %0
-}
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
-attributes #5 = { noreturn }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

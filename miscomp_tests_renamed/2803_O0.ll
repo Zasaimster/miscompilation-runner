@@ -1,38 +1,48 @@
-; 196648127631187640197031483864505297126
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196648127631187640197031483864505297126.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196648127631187640197031483864505297126.c"
+; 149035720606420000591764987696160538088
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/149035720606420000591764987696160538088.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/149035720606420000591764987696160538088.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local ptr @f(ptr noundef %p) #0 {
 entry:
-  %x = alloca i64, align 8
-  %y = alloca i64, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = sext i32 %call to i64
-  store i64 %conv, ptr %y, align 8
-  %0 = load i64, ptr %y, align 8
-  %mul = mul i64 %0, 8192
-  %sub = sub i64 %mul, 216
-  %div = udiv i64 %sub, 16
-  store i64 %div, ptr %x, align 8
-  %1 = load i64, ptr %x, align 8
-  %conv1 = trunc i64 %1 to i32
-  ret i32 %conv1
+  %p.addr = alloca ptr, align 8
+  %x = alloca i16, align 2
+  store ptr %p, ptr %p.addr, align 8
+  %0 = load ptr, ptr %p.addr, align 8
+  %incdec.ptr = getelementptr inbounds nuw i8, ptr %0, i32 1
+  store ptr %incdec.ptr, ptr %p.addr, align 8
+  %1 = load i8, ptr %0, align 1
+  %conv = sext i8 %1 to i32
+  %shl = shl i32 %conv, 16
+  %conv1 = trunc i32 %shl to i16
+  store i16 %conv1, ptr %x, align 2
+  %call = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
+  %conv2 = sext i32 %call to i64
+  %2 = inttoptr i64 %conv2 to ptr
+  ret ptr %2
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+declare i32 @calculateSquare(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 498
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = sext i32 %call to i64
+  %0 = inttoptr i64 %conv to ptr
+  store ptr %0, ptr %p, align 8
+  %1 = load ptr, ptr %p, align 8
+  %call1 = call ptr @f(ptr noundef %1)
+  %2 = load ptr, ptr %p, align 8
+  %add.ptr = getelementptr inbounds i8, ptr %2, i64 1
+  %cmp = icmp ne ptr %call1, %add.ptr
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -43,6 +53,8 @@ if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

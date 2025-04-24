@@ -1,141 +1,73 @@
-; 110666290954074609958417499653584101547
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110666290954074609958417499653584101547.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110666290954074609958417499653584101547.c"
+; 194563809049481201762523684535416117006
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194563809049481201762523684535416117006.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194563809049481201762523684535416117006.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct._RenderInfo = type { i32, float, i32 }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @bug(ptr noundef %Cref, i8 noundef signext %transb, i32 noundef %m, i32 noundef %n, i32 noundef %k, double noundef %a, ptr noundef %A, i32 noundef %fdA, ptr noundef %B, i32 noundef %fdB, double noundef %b, ptr noundef %C, i32 noundef %fdC) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %info = alloca %struct._RenderInfo, align 4
-  store i32 0, ptr %retval, align 4
-  %y = getelementptr inbounds nuw %struct._RenderInfo, ptr %info, i32 0, i32 0
-  store i32 0, ptr %y, align 4
-  %src_y = getelementptr inbounds nuw %struct._RenderInfo, ptr %info, i32 0, i32 2
-  store i32 0, ptr %src_y, align 4
-  %scaley = getelementptr inbounds nuw %struct._RenderInfo, ptr %info, i32 0, i32 1
-  store float 1.000000e+00, ptr %scaley, align 4
-  %call = call i32 @render_image_rgb_a(ptr noundef %info)
-  %cmp = icmp ne i32 %call, 256
+  %Cref.addr = alloca ptr, align 8
+  %transb.addr = alloca i8, align 1
+  %m.addr = alloca i32, align 4
+  %n.addr = alloca i32, align 4
+  %k.addr = alloca i32, align 4
+  %a.addr = alloca double, align 8
+  %A.addr = alloca ptr, align 8
+  %fdA.addr = alloca i32, align 4
+  %B.addr = alloca ptr, align 8
+  %fdB.addr = alloca i32, align 4
+  %b.addr = alloca double, align 8
+  %C.addr = alloca ptr, align 8
+  %fdC.addr = alloca i32, align 4
+  store ptr %Cref, ptr %Cref.addr, align 8
+  store i8 %transb, ptr %transb.addr, align 1
+  store i32 %m, ptr %m.addr, align 4
+  store i32 %n, ptr %n.addr, align 4
+  store i32 %k, ptr %k.addr, align 4
+  store double %a, ptr %a.addr, align 8
+  store ptr %A, ptr %A.addr, align 8
+  store i32 %fdA, ptr %fdA.addr, align 4
+  store ptr %B, ptr %B.addr, align 8
+  store i32 %fdB, ptr %fdB.addr, align 4
+  store double %b, ptr %b.addr, align 8
+  store ptr %C, ptr %C.addr, align 8
+  store i32 %fdC, ptr %fdC.addr, align 4
+  %0 = load ptr, ptr %C.addr, align 8
+  %1 = load ptr, ptr %Cref.addr, align 8
+  %cmp = icmp ne ptr %0, %1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
-  unreachable
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @render_image_rgb_a(ptr noundef %info) #0 {
-entry:
-  %info.addr = alloca ptr, align 8
-  %y = alloca i32, align 4
-  %ye = alloca i32, align 4
-  %error = alloca float, align 4
-  %step = alloca float, align 4
-  store ptr %info, ptr %info.addr, align 8
-  %0 = load float, ptr %error, align 4
-  %conv = fptosi float %0 to i32
-  %conv1 = sitofp i32 %conv to float
-  %1 = load float, ptr %step, align 4
-  %sub = fsub float %conv1, %1
-  %conv2 = fptosi float %sub to i32
-  store i32 %conv2, ptr %y, align 4
-  store i32 256, ptr %ye, align 4
-  %2 = load ptr, ptr %info.addr, align 8
-  %scaley = getelementptr inbounds nuw %struct._RenderInfo, ptr %2, i32 0, i32 1
-  %3 = load float, ptr %scaley, align 4
-  %conv3 = fpext float %3 to double
-  %div = fdiv double 1.000000e+00, %conv3
-  %conv4 = fptrunc double %div to float
-  store float %conv4, ptr %step, align 4
-  %4 = load i32, ptr %y, align 4
-  %conv5 = sitofp i32 %4 to float
-  %5 = load float, ptr %step, align 4
-  %mul = fmul float %conv5, %5
-  store float %mul, ptr %error, align 4
-  %6 = load float, ptr %error, align 4
-  %conv6 = fptosi float %6 to i32
-  %conv7 = sitofp i32 %conv6 to float
-  %7 = load float, ptr %step, align 4
-  %sub8 = fsub float %conv7, %7
-  %8 = load float, ptr %error, align 4
-  %sub9 = fsub float %8, %sub8
-  store float %sub9, ptr %error, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %9 = load i32, ptr %y, align 4
-  %10 = load i32, ptr %ye, align 4
-  %cmp = icmp slt i32 %9, %10
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %11 = load float, ptr %error, align 4
-  %conv11 = fpext float %11 to double
-  %cmp12 = fcmp oge double %conv11, 1.000000e+00
-  br i1 %cmp12, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body
-  %12 = load float, ptr %error, align 4
-  %conv14 = fptosi float %12 to i32
-  %13 = load ptr, ptr %info.addr, align 8
-  %src_y = getelementptr inbounds nuw %struct._RenderInfo, ptr %13, i32 0, i32 2
-  %14 = load i32, ptr %src_y, align 4
-  %add = add nsw i32 %14, %conv14
-  store i32 %add, ptr %src_y, align 4
-  %15 = load float, ptr %error, align 4
-  %conv15 = fptosi float %15 to i32
-  %conv16 = sitofp i32 %conv15 to float
-  %16 = load float, ptr %error, align 4
-  %sub17 = fsub float %16, %conv16
-  store float %sub17, ptr %error, align 4
-  call void @bar()
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %for.body
-  %17 = load float, ptr %step, align 4
-  %18 = load float, ptr %error, align 4
-  %add18 = fadd float %18, %17
-  store float %add18, ptr %error, align 4
-  br label %for.inc
-
-for.inc:                                          ; preds = %if.end
-  %19 = load i32, ptr %y, align 4
-  %inc = add nsw i32 %19, 1
-  store i32 %inc, ptr %y, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %20 = load ptr, ptr %info.addr, align 8
-  %src_y19 = getelementptr inbounds nuw %struct._RenderInfo, ptr %20, i32 0, i32 2
-  %21 = load i32, ptr %src_y19, align 4
-  ret i32 %21
+  ret void
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
-
 ; Function Attrs: noinline nounwind uwtable
-define internal void @bar() #0 {
+define dso_local i32 @main() #0 {
 entry:
-  ret void
+  %retval = alloca i32, align 4
+  %A = alloca [1 x double], align 8
+  %B = alloca [1 x double], align 8
+  %C = alloca [1 x double], align 8
+  store i32 0, ptr %retval, align 4
+  %arraydecay = getelementptr inbounds [1 x double], ptr %C, i64 0, i64 0
+  %arraydecay1 = getelementptr inbounds [1 x double], ptr %A, i64 0, i64 0
+  %arraydecay2 = getelementptr inbounds [1 x double], ptr %B, i64 0, i64 0
+  %arraydecay3 = getelementptr inbounds [1 x double], ptr %C, i64 0, i64 0
+  call void @bug(ptr noundef %arraydecay, i8 noundef signext 66, i32 noundef 1, i32 noundef 2, i32 noundef 3, double noundef 4.000000e+00, ptr noundef %arraydecay1, i32 noundef 5, ptr noundef %arraydecay2, i32 noundef 6, double noundef 7.000000e+00, ptr noundef %arraydecay3, i32 noundef 8)
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -146,5 +78,3 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

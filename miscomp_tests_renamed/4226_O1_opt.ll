@@ -1,33 +1,24 @@
-; 191933807444542060558141338466997847928
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191933807444542060558141338466997847928_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191933807444542060558141338466997847928.c"
+; 173966953914322956907953654875163452487
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173966953914322956907953654875163452487_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173966953914322956907953654875163452487.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [39 x i8] c"String 'hello', 'there' is '%s', '%s'\0A\00", align 1
-@.str.1 = private unnamed_addr constant [6 x i8] c"hello\00", align 1
-@.str.2 = private unnamed_addr constant [6 x i8] c"there\00", align 1
-@.str.3 = private unnamed_addr constant [12 x i8] c"Count = %d\0A\00", align 1
-@.str.4 = private unnamed_addr constant [23 x i8] c"Character 'A' is '%c'\0A\00", align 1
-@.str.5 = private unnamed_addr constant [23 x i8] c"Character 'a' is '%c'\0A\00", align 1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, ptr noundef nonnull @.str.1, ptr noundef nonnull @.str.2)
-  br label %for.body
+  br label %for.body3
 
-for.body:                                         ; preds = %for.body, %entry
-  %Count.07 = phi i32 [ -5, %entry ], [ %inc, %for.body ]
-  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.3, i32 noundef %Count.07)
-  %inc = add nsw i32 %Count.07, 1
-  %exitcond.not = icmp eq i32 %inc, 6
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !5
+for.body3:                                        ; preds = %for.body3, %entry
+  %Count.119 = phi i32 [ 0, %entry ], [ %inc7, %for.body3 ]
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef 100)
+  %inc7 = add nuw nsw i32 %Count.119, 1
+  %exitcond.not = icmp eq i32 %inc7, 10
+  br i1 %exitcond.not, label %for.end8, label %for.body3, !llvm.loop !5
 
-for.end:                                          ; preds = %for.body
-  %call2 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, ptr noundef nonnull @.str.1, ptr noundef nonnull @.str.2)
-  %call3 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.4, i32 noundef 65)
-  %call4 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.5, i32 noundef 97)
+for.end8:                                         ; preds = %for.body3
   ret i32 0
 }
 

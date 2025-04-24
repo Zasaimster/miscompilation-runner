@@ -1,8 +1,10 @@
-; 135374549381537000957303691638862063596
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135374549381537000957303691638862063596_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135374549381537000957303691638862063596.c"
+; 104692924671536337420731848250315757459
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104692924671536337420731848250315757459_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104692924671536337420731848250315757459.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@array = dso_local local_unnamed_addr global [10 x i32] zeroinitializer, align 16
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {

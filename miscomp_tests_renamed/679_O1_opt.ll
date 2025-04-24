@@ -1,23 +1,33 @@
-; 169217898145551774936960685476723773323
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169217898145551774936960685476723773323_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169217898145551774936960685476723773323.c"
+; 112131860698919412766265479496589051768
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112131860698919412766265479496589051768_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112131860698919412766265479496589051768.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [29 x i8] c"Square calculation complete.\00", align 1
+@.str = private unnamed_addr constant [5 x i8] c"End\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local void @ll_to_int(i64 noundef %x, ptr noundef readnone captures(none) %p) local_unnamed_addr #0 {
+define dso_local noundef i32 @foo(i32 noundef %a, i32 noundef %b) local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  ret void
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %add = sub i32 %a, %b
+  %sub = add i32 %add, %call
+  ret i32 %sub
 }
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %sub.i = add i32 %call.i, -2
+  ret i32 %sub.i
+}
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

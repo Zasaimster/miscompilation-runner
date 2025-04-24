@@ -1,33 +1,85 @@
-; 117355653031478552087370786898223714213
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117355653031478552087370786898223714213.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117355653031478552087370786898223714213.c"
+; 182311937702947848394544969021836717377
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182311937702947848394544969021836717377.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182311937702947848394544969021836717377.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i = dso_local global i16 -1, align 2
-@wordlist = dso_local constant [207 x ptr] zeroinitializer, align 16
+@cp = dso_local global ptr null, align 8
+@m = dso_local global i64 0, align 8
+@main.r = internal global [64 x i64] zeroinitializer, align 16
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @foo() #0 {
+define dso_local void @foo() #0 {
 entry:
-  %wordptr = alloca ptr, align 8
-  %0 = load i16, ptr @i, align 2
-  %conv = sext i16 %0 to i32
-  %add = add i32 207, %conv
-  %idxprom = zext i32 %add to i64
-  %arrayidx = getelementptr inbounds nuw [207 x ptr], ptr @wordlist, i64 0, i64 %idxprom
-  store ptr %arrayidx, ptr %wordptr, align 8
-  %1 = load ptr, ptr %wordptr, align 8
-  ret ptr %1
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @bar(i32 noundef %rop, ptr noundef %r) #0 {
+entry:
+  %rop.addr = alloca i32, align 4
+  %r.addr = alloca ptr, align 8
+  %rs1 = alloca i32, align 4
+  %rs2 = alloca i32, align 4
+  %rd = alloca i32, align 4
+  store i32 %rop, ptr %rop.addr, align 4
+  store ptr %r, ptr %r.addr, align 8
+  br label %top
+
+top:                                              ; preds = %if.then, %entry
+  store i32 1, ptr %rs2, align 4
+  %0 = load i32, ptr %rop.addr, align 4
+  %shr = lshr i32 %0, 9
+  %and = and i32 %shr, 511
+  store i32 %and, ptr %rs1, align 4
+  %1 = load i32, ptr %rop.addr, align 4
+  %and1 = and i32 %1, 511
+  store i32 %and1, ptr %rd, align 4
+  %2 = load ptr, ptr @cp, align 8
+  store i64 1, ptr %2, align 8
+  %3 = load ptr, ptr %r.addr, align 8
+  %4 = load i32, ptr %rs1, align 4
+  %idxprom = zext i32 %4 to i64
+  %arrayidx = getelementptr inbounds nuw i64, ptr %3, i64 %idxprom
+  %5 = load i64, ptr %arrayidx, align 8
+  %6 = load ptr, ptr %r.addr, align 8
+  %7 = load i32, ptr %rs2, align 4
+  %idxprom2 = zext i32 %7 to i64
+  %arrayidx3 = getelementptr inbounds nuw i64, ptr %6, i64 %idxprom2
+  %8 = load i64, ptr %arrayidx3, align 8
+  %add = add i64 %5, %8
+  store i64 %add, ptr @m, align 8
+  %9 = load ptr, ptr @cp, align 8
+  store i64 2, ptr %9, align 8
+  call void @foo()
+  %10 = load i32, ptr %rd, align 4
+  %tobool = icmp ne i32 %10, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %top
+  br label %top
+
+if.end:                                           ; preds = %top
+  %11 = load ptr, ptr %r.addr, align 8
+  %12 = load i32, ptr %rd, align 4
+  %idxprom4 = zext i32 %12 to i64
+  %arrayidx5 = getelementptr inbounds nuw i64, ptr %11, i64 %idxprom4
+  store i64 1, ptr %arrayidx5, align 8
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %cr = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %call = call ptr @foo()
-  %cmp = icmp ne ptr %call, getelementptr inbounds ([207 x ptr], ptr @wordlist, i64 0, i64 206)
+  store ptr %cr, ptr @cp, align 8
+  store i64 47, ptr getelementptr inbounds ([64 x i64], ptr @main.r, i64 0, i64 4), align 16
+  store i64 11, ptr getelementptr inbounds ([64 x i64], ptr @main.r, i64 0, i64 8), align 16
+  call void @bar(i32 noundef 67110927, ptr noundef @main.r)
+  %0 = load i64, ptr @m, align 8
+  %cmp = icmp ne i64 %0, 58
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

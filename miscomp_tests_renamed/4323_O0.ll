@@ -1,40 +1,19 @@
-; 159257066869546937382849002202229170369
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159257066869546937382849002202229170369.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159257066869546937382849002202229170369.c"
+; 175920050775547773997892829978075444484
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175920050775547773997892829978075444484.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175920050775547773997892829978075444484.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [7 x i8] c"Hello\0A\00", align 1
+@.str = private unnamed_addr constant [23 x i8] c"This won't be called.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @main() #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret i32 0
+  ret void
 }
 
 declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @example1() #0 {
-entry:
-  %x = alloca i32, align 4
-  %y = alloca i32, align 4
-  %z = alloca i32, align 4
-  store i32 10, ptr %x, align 4
-  store i32 20, ptr %y, align 4
-  %0 = load i32, ptr %x, align 4
-  %1 = load i32, ptr %y, align 4
-  %add = add nsw i32 %0, %1
-  store i32 %add, ptr %z, align 4
-  ret void
-}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

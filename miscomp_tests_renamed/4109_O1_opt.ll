@@ -1,23 +1,30 @@
-; 136892447510615864857642508187069756875
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136892447510615864857642508187069756875_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136892447510615864857642508187069756875.c"
+; 171810732256215284745268925552838629697
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171810732256215284745268925552838629697_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171810732256215284745268925552838629697.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
+@.str = private unnamed_addr constant [17 x i8] c"Loop completed!\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local range(i32 -4, 1) i32 @main() local_unnamed_addr #0 {
+define dso_local noundef i32 @foo(i32 noundef %a, i32 noundef %b) local_unnamed_addr #0 {
 entry:
   %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %div = mul nsw i32 %call, 5
-  %rem = srem i32 %div, 3
-  %sub = add nsw i32 %rem, -2
+  %add = sub i32 %a, %b
+  %sub = add i32 %add, %call
   ret i32 %sub
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %sub.i = add i32 %call.i, -2
+  ret i32 %sub.i
+}
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

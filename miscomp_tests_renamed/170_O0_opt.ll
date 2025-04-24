@@ -1,49 +1,42 @@
-; 122359169408955581400542923763052544916
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122359169408955581400542923763052544916_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122359169408955581400542923763052544916.c"
+; 102892459189220236908142973010075022529
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102892459189220236908142973010075022529_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102892459189220236908142973010075022529.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i16 -1, align 2
-@.str = private unnamed_addr constant [20 x i8] c"After Early Return\0A\00", align 1
-@c = dso_local global i8 0, align 1
-@b = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %Count = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = trunc i32 %call to i8
-  store i8 %conv, ptr @c, align 1
-  %0 = load i16, ptr @a, align 2
-  %conv1 = sext i16 %0 to i32
-  %1 = load i8, ptr @c, align 1
-  %conv2 = sext i8 %1 to i32
-  %or = or i32 %conv1, %conv2
-  store i32 %or, ptr @b, align 4
-  %2 = load i32, ptr @b, align 4
-  %cmp = icmp ne i32 %2, -1
-  br i1 %cmp, label %if.then, label %if.end
+  store i32 42, ptr %Count, align 4
+  br label %for.cond
 
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
+for.cond:                                         ; preds = %for.inc, %entry
+  br i1 true, label %for.body, label %for.end
 
-if.end:                                           ; preds = %entry
+for.body:                                         ; preds = %for.cond
+  %0 = load i32, ptr %Count, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %1 = load i32, ptr %Count, align 4
+  %inc = add nsw i32 %1, 1
+  store i32 %inc, ptr %Count, align 4
+  br label %for.cond
+
+for.end:                                          ; preds = %for.cond
   ret i32 0
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

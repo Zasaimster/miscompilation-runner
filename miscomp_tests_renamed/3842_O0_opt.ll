@@ -1,8 +1,15 @@
-; 134006247098910612867479591887434937432
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134006247098910612867479591887434937432_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134006247098910612867479591887434937432.c"
+; 167108956425147233737694090174575645277
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167108956425147233737694090174575645277_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167108956425147233737694090174575645277.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.s = type { i32, %union.anon, %struct.anon, %struct.anon.2 }
+%union.anon = type { i32 }
+%struct.anon = type { %union.anon.0 }
+%union.anon.0 = type { %struct.anon.1 }
+%struct.anon.1 = type { i32 }
+%struct.anon.2 = type { i32 }
 
 @.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
@@ -10,77 +17,75 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
+  %v = alloca %struct.s, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %x, align 4
-  br label %while.cond
-
-while.cond:                                       ; preds = %entry
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %while.body, label %while.end
-
-while.body:                                       ; preds = %while.cond
-  br label %while.end
-
-while.end:                                        ; preds = %while.body, %while.cond
-  br label %while.body2
-
-while.body2:                                      ; preds = %if.end, %while.end
-  %0 = load i32, ptr %x, align 4
-  %cmp = icmp eq i32 %0, 5
+  %a = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 0
+  store i32 %call, ptr %a, align 4
+  %0 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 1
+  store i32 2, ptr %0, align 4
+  %1 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 2
+  %2 = getelementptr inbounds nuw %struct.anon, ptr %1, i32 0, i32 0
+  %c = getelementptr inbounds nuw %struct.anon.1, ptr %2, i32 0, i32 0
+  store i32 3, ptr %c, align 4
+  %3 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 3
+  %d = getelementptr inbounds nuw %struct.anon.2, ptr %3, i32 0, i32 0
+  store i32 4, ptr %d, align 4
+  %a1 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 0
+  %4 = load i32, ptr %a1, align 4
+  %cmp = icmp ne i32 %4, 1
   br i1 %cmp, label %if.then, label %if.end
 
-if.then:                                          ; preds = %while.body2
-  br label %while.end3
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.end:                                           ; preds = %while.body2
-  %1 = load i32, ptr %x, align 4
-  %add = add nsw i32 %1, 1
-  store i32 %add, ptr %x, align 4
-  br label %while.body2
+if.end:                                           ; preds = %entry
+  %5 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 1
+  %6 = load i32, ptr %5, align 4
+  %cmp2 = icmp ne i32 %6, 2
+  br i1 %cmp2, label %land.lhs.true, label %if.end5
 
-while.end3:                                       ; preds = %if.then
-  br label %for.cond
+land.lhs.true:                                    ; preds = %if.end
+  %7 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 1
+  %8 = load i32, ptr %7, align 4
+  %cmp3 = icmp ne i32 %8, 2
+  br i1 %cmp3, label %if.then4, label %if.end5
 
-for.cond:                                         ; preds = %if.end6, %while.end3
-  %2 = load i32, ptr %x, align 4
-  %cmp4 = icmp eq i32 %2, 10
-  br i1 %cmp4, label %if.then5, label %if.end6
+if.then4:                                         ; preds = %land.lhs.true
+  store i32 2, ptr %retval, align 4
+  br label %return
 
-if.then5:                                         ; preds = %for.cond
-  br label %for.end
+if.end5:                                          ; preds = %land.lhs.true, %if.end
+  %9 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 2
+  %10 = getelementptr inbounds nuw %struct.anon, ptr %9, i32 0, i32 0
+  %c6 = getelementptr inbounds nuw %struct.anon.1, ptr %10, i32 0, i32 0
+  %11 = load i32, ptr %c6, align 4
+  %cmp7 = icmp ne i32 %11, 3
+  br i1 %cmp7, label %if.then8, label %if.end9
 
-if.end6:                                          ; preds = %for.cond
-  %3 = load i32, ptr %x, align 4
-  %add7 = add nsw i32 %3, 1
-  store i32 %add7, ptr %x, align 4
-  br label %for.cond
+if.then8:                                         ; preds = %if.end5
+  store i32 3, ptr %retval, align 4
+  br label %return
 
-for.end:                                          ; preds = %if.then5
-  br label %do.body
+if.end9:                                          ; preds = %if.end5
+  %12 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 3
+  %d10 = getelementptr inbounds nuw %struct.anon.2, ptr %12, i32 0, i32 0
+  %13 = load i32, ptr %d10, align 4
+  %cmp11 = icmp ne i32 %13, 4
+  br i1 %cmp11, label %if.then12, label %if.end13
 
-do.body:                                          ; preds = %do.cond, %for.end
-  %4 = load i32, ptr %x, align 4
-  %cmp8 = icmp eq i32 %4, 15
-  br i1 %cmp8, label %if.then9, label %if.end10
+if.then12:                                        ; preds = %if.end9
+  store i32 4, ptr %retval, align 4
+  br label %return
 
-if.then9:                                         ; preds = %do.body
-  br label %do.end
+if.end13:                                         ; preds = %if.end9
+  store i32 0, ptr %retval, align 4
+  br label %return
 
-if.end10:                                         ; preds = %do.body
-  %5 = load i32, ptr %x, align 4
-  %add11 = add nsw i32 %5, 1
-  store i32 %add11, ptr %x, align 4
-  br label %do.cond
-
-do.cond:                                          ; preds = %if.end10
-  br i1 true, label %do.body, label %do.end
-
-do.end:                                           ; preds = %do.cond, %if.then9
-  %6 = load i32, ptr %x, align 4
-  %sub = sub nsw i32 %6, 15
-  ret i32 %sub
+return:                                           ; preds = %if.end13, %if.then12, %if.then8, %if.then4, %if.then
+  %14 = load i32, ptr %retval, align 4
+  ret i32 %14
 }
 
 declare i32 @printf(ptr noundef, ...) #1

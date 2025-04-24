@@ -1,28 +1,16 @@
-; 139210277703222196548108157261566520163
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139210277703222196548108157261566520163.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139210277703222196548108157261566520163.c"
+; 111516967998777845760897347238211482760
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111516967998777845760897347238211482760.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111516967998777845760897347238211482760.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@blah = dso_local local_unnamed_addr global i32 0, align 4
-@str = private unnamed_addr constant [18 x i8] c"This won't print.\00", align 1
+@n = dso_local local_unnamed_addr global i32 1, align 4
+@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @foo() local_unnamed_addr #0 {
+define dso_local void @check(i32 noundef %m) local_unnamed_addr #0 {
 entry:
-  store i32 4044, ptr @blah, align 4, !tbaa !5
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %0 = load i32, ptr @blah, align 4, !tbaa !5
-  ret i32 %0
-}
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
-  store i32 4044, ptr @blah, align 4, !tbaa !5
-  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %0 = load i32, ptr @blah, align 4, !tbaa !5
-  %cmp.not = icmp eq i32 %0, 4044
+  %cmp.not = icmp eq i32 %m, -1
   br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
@@ -30,12 +18,25 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  tail call void @exit(i32 noundef 0) #5
-  unreachable
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  %0 = load i32, ptr @n, align 4, !tbaa !5
+  %sub = sub i32 2, %0
+  %sub1 = sub i32 0, %0
+  %or = or i32 %sub, %sub1
+  %or2 = or i32 %or, 1
+  tail call void @check(i32 noundef %or2)
+  tail call void @exit(i32 noundef 0) #5
+  unreachable
+}
 
 ; Function Attrs: nofree noreturn
 declare void @exit(i32 noundef) local_unnamed_addr #3
@@ -44,8 +45,8 @@ declare void @exit(i32 noundef) local_unnamed_addr #3
 declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #4
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { nofree nounwind }
 attributes #5 = { noreturn nounwind }

@@ -1,132 +1,131 @@
-; 106671771146994764709915286481087301647
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106671771146994764709915286481087301647_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106671771146994764709915286481087301647.c"
+; 115295109016365367569278523156337306780
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/115295109016365367569278523156337306780_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/115295109016365367569278523156337306780.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i = dso_local global i16 0, align 2
-@b = dso_local global i32 0, align 4
-@k = dso_local global i32 0, align 4
-@g = dso_local global i32 0, align 4
-@j = dso_local global i32 0, align 4
-@c = dso_local global i32 0, align 4
-@a = dso_local global i8 0, align 1
-@d = dso_local global i32 0, align 4
-@h = dso_local global i8 0, align 1
+@c = dso_local global i32 42, align 4
 @e = dso_local global i32 0, align 4
+@g = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
+@d = dso_local global i32 0, align 4
+@f = dso_local global i8 0, align 1
+@i = dso_local global i16 0, align 2
+@h = dso_local global i64 0, align 8
+@a = dso_local global i32 0, align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo() #0 {
+entry:
+  store i32 0, ptr @e, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr @e, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %1 = load i32, ptr @e, align 4
+  %inc = add nsw i32 %1, 1
+  store i32 %inc, ptr @e, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %m = alloca i32, align 4
-  %o = alloca i8, align 1
-  %p = alloca ptr, align 8
+  %j = alloca i16, align 2
+  %k = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i16, ptr @i, align 2
-  %conv = sext i16 %0 to i32
-  %xor = xor i32 %conv, 5
-  %conv1 = trunc i32 %xor to i16
-  store i16 %conv1, ptr @i, align 2
-  %conv2 = sext i16 %conv1 to i32
-  store i32 %conv2, ptr %m, align 4
-  store i32 0, ptr @b, align 4
+  %0 = load i32, ptr @g, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %1 = load volatile i32, ptr @b, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  call void @foo()
+  store i32 0, ptr @d, align 4
   br label %for.cond
 
-for.cond:                                         ; preds = %for.inc20, %entry
-  %1 = load i32, ptr @b, align 4
-  %cmp = icmp slt i32 %1, 1
-  br i1 %cmp, label %for.body, label %for.end22
+for.cond:                                         ; preds = %for.inc, %if.end
+  %2 = load i32, ptr @d, align 4
+  %cmp = icmp sge i32 %2, 0
+  br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
-  %2 = load i32, ptr %m, align 4
-  %conv4 = trunc i32 %2 to i8
-  store i8 %conv4, ptr %o, align 1
-  %3 = load i32, ptr @k, align 4
-  store i32 %3, ptr @g, align 4
-  %4 = load i32, ptr @j, align 4
-  %tobool = icmp ne i32 %4, 0
-  br i1 %tobool, label %lor.end, label %lor.rhs
+  %3 = load volatile i8, ptr @f, align 1
+  %conv = sext i8 %3 to i16
+  store i16 %conv, ptr %j, align 2
+  store i32 0, ptr %k, align 4
+  %4 = load i16, ptr %j, align 2
+  %conv1 = sext i16 %4 to i32
+  %tobool2 = icmp ne i32 %conv1, 0
+  br i1 %tobool2, label %cond.true, label %cond.false
 
-lor.rhs:                                          ; preds = %for.body
-  %5 = load volatile i32, ptr @c, align 4
-  %tobool5 = icmp ne i32 %5, 0
-  br label %lor.end
+cond.true:                                        ; preds = %for.body
+  %5 = load i16, ptr %j, align 2
+  %conv3 = sext i16 %5 to i32
+  br label %cond.end
 
-lor.end:                                          ; preds = %lor.rhs, %for.body
-  %6 = phi i1 [ true, %for.body ], [ %tobool5, %lor.rhs ]
-  %lor.ext = zext i1 %6 to i32
-  store i32 %lor.ext, ptr @j, align 4
-  %7 = load i8, ptr @a, align 1
-  %conv6 = sext i8 %7 to i32
-  %8 = load i8, ptr %o, align 1
-  %conv7 = sext i8 %8 to i32
-  %cmp8 = icmp ne i32 %conv6, %conv7
-  br i1 %cmp8, label %if.then, label %if.else
+cond.false:                                       ; preds = %for.body
+  %6 = load i16, ptr %j, align 2
+  %conv4 = sext i16 %6 to i32
+  %7 = load i32, ptr %k, align 4
+  %shl = shl i32 %conv4, %7
+  br label %cond.end
 
-if.then:                                          ; preds = %lor.end
-  br label %for.cond10
-
-for.cond10:                                       ; preds = %for.inc, %if.then
-  %9 = load i32, ptr @d, align 4
-  %cmp11 = icmp slt i32 %9, 1
-  br i1 %cmp11, label %for.body13, label %for.end
-
-for.body13:                                       ; preds = %for.cond10
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %conv3, %cond.true ], [ %shl, %cond.false ]
+  %conv5 = trunc i32 %cond to i16
+  store i16 %conv5, ptr @i, align 2
   br label %for.inc
 
-for.inc:                                          ; preds = %for.body13
-  %10 = load i32, ptr @d, align 4
-  %inc = add nsw i32 %10, 1
-  store i32 %inc, ptr @d, align 4
-  br label %for.cond10, !llvm.loop !6
+for.inc:                                          ; preds = %cond.end
+  %8 = load i32, ptr @d, align 4
+  %dec = add nsw i32 %8, -1
+  store i32 %dec, ptr @d, align 4
+  br label %for.cond, !llvm.loop !8
 
-for.end:                                          ; preds = %for.cond10
-  br label %if.end
+for.end:                                          ; preds = %for.cond
+  %9 = load i32, ptr @c, align 4
+  %cmp6 = icmp eq i32 %9, 0
+  br i1 %cmp6, label %cond.true8, label %cond.false9
 
-if.else:                                          ; preds = %lor.end
-  store ptr @h, ptr %p, align 8
-  %11 = load ptr, ptr %p, align 8
-  store i8 1, ptr %11, align 1
-  br label %for.cond14
+cond.true8:                                       ; preds = %for.end
+  br label %cond.end11
 
-for.cond14:                                       ; preds = %for.inc17, %if.else
-  %12 = load i32, ptr @e, align 4
-  %tobool15 = icmp ne i32 %12, 0
-  br i1 %tobool15, label %for.body16, label %for.end19
+cond.false9:                                      ; preds = %for.end
+  %10 = load i16, ptr @i, align 2
+  %conv10 = sext i16 %10 to i32
+  br label %cond.end11
 
-for.body16:                                       ; preds = %for.cond14
-  br label %for.inc17
+cond.end11:                                       ; preds = %cond.false9, %cond.true8
+  %cond12 = phi i32 [ 0, %cond.true8 ], [ %conv10, %cond.false9 ]
+  %conv13 = sext i32 %cond12 to i64
+  store i64 %conv13, ptr @h, align 8
+  %11 = load i64, ptr @h, align 8
+  %conv14 = trunc i64 %11 to i32
+  store i32 %conv14, ptr @a, align 4
+  %12 = load i32, ptr @a, align 4
+  %cmp15 = icmp ne i32 %12, 0
+  br i1 %cmp15, label %if.then17, label %if.end18
 
-for.inc17:                                        ; preds = %for.body16
-  %13 = load i32, ptr @e, align 4
-  %inc18 = add nsw i32 %13, 1
-  store i32 %inc18, ptr @e, align 4
-  br label %for.cond14, !llvm.loop !8
-
-for.end19:                                        ; preds = %for.cond14
-  br label %if.end
-
-if.end:                                           ; preds = %for.end19, %for.end
-  br label %for.inc20
-
-for.inc20:                                        ; preds = %if.end
-  %14 = load i32, ptr @b, align 4
-  %inc21 = add nsw i32 %14, 1
-  store i32 %inc21, ptr @b, align 4
-  br label %for.cond, !llvm.loop !9
-
-for.end22:                                        ; preds = %for.cond
-  %15 = load i8, ptr @h, align 1
-  %conv23 = sext i8 %15 to i32
-  %cmp24 = icmp ne i32 %conv23, 0
-  br i1 %cmp24, label %if.then26, label %if.end27
-
-if.then26:                                        ; preds = %for.end22
+if.then17:                                        ; preds = %cond.end11
   call void @abort() #2
   unreachable
 
-if.end27:                                         ; preds = %for.end22
+if.end18:                                         ; preds = %cond.end11
   ret i32 0
 }
 
@@ -149,4 +148,3 @@ attributes #2 = { noreturn nounwind }
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
 !8 = distinct !{!8, !7}
-!9 = distinct !{!9, !7}

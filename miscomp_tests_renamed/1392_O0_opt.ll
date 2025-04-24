@@ -1,47 +1,74 @@
-; 12642187283063689538496095746512083722
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12642187283063689538496095746512083722_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12642187283063689538496095746512083722.c"
+; 124903808605513863057475152045731516034
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/124903808605513863057475152045731516034_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/124903808605513863057475152045731516034.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.anon = type { i32, %struct.anon.0 }
-%struct.anon.0 = type { i32, %union.anon }
-%union.anon = type { i32 }
+%struct.foo = type { i32 }
 
-@foo = dso_local global %struct.anon zeroinitializer, align 4
+@.str = private unnamed_addr constant [15 x i8] c"X is negative\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local void @gcc_crash(ptr noundef %p) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
-  store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  %call = call i32 (...) @unusedFunction()
-  store i32 5, ptr getelementptr inbounds nuw (%struct.anon, ptr @foo, i32 0, i32 1), align 4
-  %0 = load i32, ptr getelementptr inbounds nuw (%struct.anon.0, ptr getelementptr inbounds nuw (%struct.anon, ptr @foo, i32 0, i32 1), i32 0, i32 1), align 4
-  %cmp = icmp ne i32 %0, 6
-  br i1 %cmp, label %if.then, label %if.end
+  %p.addr = alloca ptr, align 8
+  store ptr %p, ptr %p.addr, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
+  call void @llvm.trap()
+  br label %if.end
 
-if.end:                                           ; preds = %entry
-  ret i32 0
+if.end:                                           ; preds = %if.then, %entry
+  br label %top
+
+top:                                              ; preds = %if.then2, %if.end
+  %0 = load ptr, ptr %p.addr, align 8
+  %a = getelementptr inbounds nuw %struct.foo, ptr %0, i32 0, i32 0
+  %1 = load i32, ptr %a, align 4
+  %inc = add nsw i32 %1, 1
+  store i32 %inc, ptr %a, align 4
+  %2 = load ptr, ptr %p.addr, align 8
+  %a1 = getelementptr inbounds nuw %struct.foo, ptr %2, i32 0, i32 0
+  %3 = load i32, ptr %a1, align 4
+  %cmp = icmp sge i32 %3, 62
+  br i1 %cmp, label %if.then2, label %if.end3
+
+if.then2:                                         ; preds = %top
+  br label %top
+
+if.end3:                                          ; preds = %top
+  ret void
 }
 
-declare i32 @unusedFunction(...) #1
+declare i32 @printf(ptr noundef, ...) #1
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
+; Function Attrs: cold noreturn nounwind memory(inaccessiblemem: write)
+declare void @llvm.trap() #2
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x = alloca %struct.foo, align 4
+  store i32 0, ptr %retval, align 4
+  %a = getelementptr inbounds nuw %struct.foo, ptr %x, i32 0, i32 0
+  store i32 53, ptr %a, align 4
+  call void @gcc_crash(ptr noundef %x)
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #2 = { cold noreturn nounwind memory(inaccessiblemem: write) }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

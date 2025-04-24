@@ -1,11 +1,11 @@
-; 134262422551159748448211180310555950196
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134262422551159748448211180310555950196.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134262422551159748448211180310555950196.c"
+; 133656718130101577105836826741371191148
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133656718130101577105836826741371191148.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133656718130101577105836826741371191148.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @bug(ptr noundef readnone captures(none) %Cref, i8 noundef signext %transb, i32 noundef %m, i32 noundef %n, i32 noundef %k, double noundef %a, ptr noundef readnone captures(none) %A, i32 noundef %fdA, ptr noundef readnone captures(none) %B, i32 noundef %fdB, double noundef %b, ptr noundef readnone captures(none) %C, i32 noundef %fdC) local_unnamed_addr #0 {
+define dso_local void @f(i32 noundef %i) local_unnamed_addr #0 {
 entry:
   ret void
 }

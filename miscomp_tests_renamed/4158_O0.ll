@@ -1,65 +1,120 @@
-; 162457488290660387146373676399511628908
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/162457488290660387146373676399511628908.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/162457488290660387146373676399511628908.c"
+; 172706848081277169317728299511659754794
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172706848081277169317728299511659754794.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172706848081277169317728299511659754794.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@b = internal global i32 1, align 4
+@a = internal global i32 1, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %year = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %year, align 4
-  %0 = load i32, ptr %year, align 4
-  %rem = srem i32 %0, 400
-  %cmp = icmp eq i32 %rem, 0
-  br i1 %cmp, label %if.then, label %if.else
+  call void @foo(i8 noundef zeroext 1, i32 noundef 1)
+  call void @foo(i8 noundef zeroext -1, i32 noundef 1)
+  %0 = load i32, ptr @b, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %1 = load i32, ptr %year, align 4
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr %year, align 4
-  br label %if.end12
+  call void @abort() #2
+  unreachable
 
-if.else:                                          ; preds = %entry
-  %2 = load i32, ptr %year, align 4
-  %rem1 = srem i32 %2, 100
-  %cmp2 = icmp eq i32 %rem1, 0
-  br i1 %cmp2, label %if.then3, label %if.else5
-
-if.then3:                                         ; preds = %if.else
-  %3 = load i32, ptr %year, align 4
-  %inc4 = add nsw i32 %3, 1
-  store i32 %inc4, ptr %year, align 4
-  br label %if.end11
-
-if.else5:                                         ; preds = %if.else
-  %4 = load i32, ptr %year, align 4
-  %rem6 = srem i32 %4, 4
-  %cmp7 = icmp eq i32 %rem6, 0
-  br i1 %cmp7, label %if.then8, label %if.else10
-
-if.then8:                                         ; preds = %if.else5
-  %5 = load i32, ptr %year, align 4
-  %inc9 = add nsw i32 %5, 1
-  store i32 %inc9, ptr %year, align 4
-  br label %if.end
-
-if.else10:                                        ; preds = %if.else5
-  br label %if.end
-
-if.end:                                           ; preds = %if.else10, %if.then8
-  br label %if.end11
-
-if.end11:                                         ; preds = %if.end, %if.then3
-  br label %if.end12
-
-if.end12:                                         ; preds = %if.end11, %if.then
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
+; Function Attrs: noinline nounwind uwtable
+define internal void @foo(i8 noundef zeroext %x, i32 noundef %y) #0 {
+entry:
+  %x.addr = alloca i8, align 1
+  %y.addr = alloca i32, align 4
+  %c = alloca i32, align 4
+  %d = alloca i32, align 4
+  store i8 %x, ptr %x.addr, align 1
+  store i32 %y, ptr %y.addr, align 4
+  %0 = load i32, ptr %y.addr, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %1 = load i8, ptr %x.addr, align 1
+  %conv = zext i8 %1 to i32
+  %sub = sub nsw i32 %conv, 2
+  %div = udiv i32 28672, %sub
+  %2 = load i32, ptr @a, align 4
+  %xor = xor i32 %div, %2
+  store i32 %xor, ptr %c, align 4
+  %3 = load i32, ptr @a, align 4
+  %4 = load i32, ptr @a, align 4
+  %call = call i32 @bar(i32 noundef %3, i32 noundef %4)
+  store i32 %call, ptr %d, align 4
+  %5 = load i32, ptr @a, align 4
+  %6 = load i32, ptr %d, align 4
+  %sub1 = sub i32 %5, %6
+  %tobool2 = icmp ne i32 %sub1, 0
+  br i1 %tobool2, label %land.rhs, label %land.end
+
+land.rhs:                                         ; preds = %if.end
+  %7 = load i32, ptr @a, align 4
+  %sub3 = sub i32 %7, 1
+  %tobool4 = icmp ne i32 %sub3, 0
+  br label %land.end
+
+land.end:                                         ; preds = %land.rhs, %if.end
+  %8 = phi i1 [ false, %if.end ], [ %tobool4, %land.rhs ]
+  %land.ext = zext i1 %8 to i32
+  %9 = load i32, ptr %c, align 4
+  %add = add i32 %land.ext, %9
+  %10 = load i32, ptr @b, align 4
+  %and = and i32 %10, %add
+  store i32 %and, ptr @b, align 4
+  br label %return
+
+return:                                           ; preds = %land.end, %if.then
+  ret void
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @bar(i32 noundef %x, i32 noundef %y) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  store i32 %y, ptr %y.addr, align 4
+  %0 = load i32, ptr %y.addr, align 4
+  %cmp = icmp uge i32 %0, 32
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  %1 = load i32, ptr %x.addr, align 4
+  store i32 %1, ptr %retval, align 4
+  br label %return
+
+if.else:                                          ; preds = %entry
+  %2 = load i32, ptr %x.addr, align 4
+  %3 = load i32, ptr %y.addr, align 4
+  %shr = lshr i32 %2, %3
+  store i32 %shr, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.else, %if.then
+  %4 = load i32, ptr %retval, align 4
+  ret i32 %4
+}
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

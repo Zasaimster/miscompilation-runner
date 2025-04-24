@@ -1,44 +1,64 @@
-; 164460829481610724140245606539839066204
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164460829481610724140245606539839066204_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164460829481610724140245606539839066204.c"
+; 191949946423535674890450546166570084412
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191949946423535674890450546166570084412_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191949946423535674890450546166570084412.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @bar() #0 {
+define dso_local i32 @vfswrap_lock(ptr noundef %fsp, i32 noundef %fd, i32 noundef %op, i64 noundef %offset, i64 noundef %count, i32 noundef %type) #0 {
 entry:
-  ret i64 32768
+  %fsp.addr = alloca ptr, align 8
+  %fd.addr = alloca i32, align 4
+  %op.addr = alloca i32, align 4
+  %offset.addr = alloca i64, align 8
+  %count.addr = alloca i64, align 8
+  %type.addr = alloca i32, align 4
+  store ptr %fsp, ptr %fsp.addr, align 8
+  store i32 %fd, ptr %fd.addr, align 4
+  store i32 %op, ptr %op.addr, align 4
+  store i64 %offset, ptr %offset.addr, align 8
+  store i64 %count, ptr %count.addr, align 8
+  store i32 %type, ptr %type.addr, align 4
+  %0 = load i32, ptr %fd.addr, align 4
+  %1 = load i32, ptr %op.addr, align 4
+  %2 = load i64, ptr %offset.addr, align 8
+  %3 = load i64, ptr %count.addr, align 8
+  %4 = load i32, ptr %type.addr, align 4
+  %call = call i32 @fcntl_lock(i32 noundef %0, i32 noundef %1, i64 noundef %2, i64 noundef %3, i32 noundef %4)
+  ret i32 %call
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @fcntl_lock(i32 noundef %fd, i32 noundef %op, i64 noundef %offset, i64 noundef %count, i32 noundef %type) #0 {
+entry:
+  %fd.addr = alloca i32, align 4
+  %op.addr = alloca i32, align 4
+  %offset.addr = alloca i64, align 8
+  %count.addr = alloca i64, align 8
+  %type.addr = alloca i32, align 4
+  store i32 %fd, ptr %fd.addr, align 4
+  store i32 %op, ptr %op.addr, align 4
+  store i64 %offset, ptr %offset.addr, align 8
+  store i64 %count, ptr %count.addr, align 8
+  store i32 %type, ptr %type.addr, align 4
+  %0 = load i32, ptr %type.addr, align 4
+  ret i32 %0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %nStyle = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i64 @bar()
-  store i64 %call, ptr %nStyle, align 8
-  %0 = load i64, ptr %nStyle, align 8
-  %and = and i64 %0, 32768
-  %tobool = icmp ne i64 %and, 0
-  br i1 %tobool, label %if.then, label %if.end
+  %call = call i32 @vfswrap_lock(ptr noundef null, i32 noundef 1, i32 noundef 2, i64 noundef 3, i64 noundef 4, i32 noundef 5)
+  %cmp = icmp ne i32 %call, 5
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %1 = load i64, ptr %nStyle, align 8
-  %or = or i64 %1, 65536
-  store i64 %or, ptr %nStyle, align 8
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load i64, ptr %nStyle, align 8
-  %cmp = icmp ne i64 %2, 98304
-  br i1 %cmp, label %if.then1, label %if.end2
-
-if.then1:                                         ; preds = %if.end
   call void @abort() #2
   unreachable
 
-if.end2:                                          ; preds = %if.end
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

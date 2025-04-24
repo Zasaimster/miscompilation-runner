@@ -1,36 +1,24 @@
-; 114559431273551389852948726850834896016
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/114559431273551389852948726850834896016.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/114559431273551389852948726850834896016.c"
+; 139573776121080724328717778274515826862
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139573776121080724328717778274515826862.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139573776121080724328717778274515826862.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
+@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
+@x = dso_local local_unnamed_addr global i32 0, align 4
 
-; Function Attrs: nounwind uwtable
+; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
   %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %0 = zext i32 %call to i64
-  %vla = alloca i8, i64 %0, align 16
-  %call1 = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #4
-  %arrayidx = getelementptr inbounds nuw i8, ptr %vla, i64 1
-  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %arrayidx)
-  ret i32 0
+  ret i32 %call
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-declare i32 @calculateSquare(...) local_unnamed_addr #2
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #3
-
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree nounwind }
-attributes #4 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

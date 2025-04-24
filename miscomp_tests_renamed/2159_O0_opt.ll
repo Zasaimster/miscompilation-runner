@@ -1,24 +1,33 @@
-; 198078185510453754942642160359737824707
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/198078185510453754942642160359737824707_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/198078185510453754942642160359737824707.c"
+; 13796203375063025613620653060036267952
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13796203375063025613620653060036267952_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13796203375063025613620653060036267952.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i = dso_local global i16 10, align 2
-@wordlist = dso_local constant [20 x ptr] zeroinitializer, align 16
+@glob_dbl = dso_local global double 0.000000e+00, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @foo() #0 {
+define dso_local i32 @f(ptr noundef %pdbl, double noundef %value) #0 {
 entry:
-  %wordptr = alloca ptr, align 8
-  %0 = load i16, ptr @i, align 2
-  %conv = sext i16 %0 to i32
-  %add = add i32 207, %conv
-  %idxprom = zext i32 %add to i64
-  %arrayidx = getelementptr inbounds nuw [20 x ptr], ptr @wordlist, i64 0, i64 %idxprom
-  store ptr %arrayidx, ptr %wordptr, align 8
-  %1 = load ptr, ptr %wordptr, align 8
-  ret ptr %1
+  %retval = alloca i32, align 4
+  %pdbl.addr = alloca ptr, align 8
+  %value.addr = alloca double, align 8
+  store ptr %pdbl, ptr %pdbl.addr, align 8
+  store double %value, ptr %value.addr, align 8
+  %call = call i32 @f(ptr noundef null, double noundef 5.510000e+01)
+  %cmp = icmp eq i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store ptr @glob_dbl, ptr %pdbl.addr, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %0 = load double, ptr %value.addr, align 8
+  %1 = load ptr, ptr %pdbl.addr, align 8
+  store double %0, ptr %1, align 8
+  %2 = load i32, ptr %retval, align 4
+  ret i32 %2
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -26,8 +35,9 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call ptr @foo()
-  %cmp = icmp ne ptr %call, getelementptr inbounds ([20 x ptr], ptr @wordlist, i64 0, i64 206)
+  %call = call i32 @f(ptr noundef null, double noundef 5.510000e+01)
+  %0 = load double, ptr @glob_dbl, align 8
+  %cmp = fcmp une double %0, 5.510000e+01
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

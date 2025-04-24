@@ -1,133 +1,64 @@
-; 126237757781062417226094522925523356508
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126237757781062417226094522925523356508.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126237757781062417226094522925523356508.c"
+; 192991602983760714397075540604844041991
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192991602983760714397075540604844041991.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192991602983760714397075540604844041991.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 @str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @f(i32 noundef %n, i32 %x.coerce, i32 %y.coerce, i32 %z.coerce, i64 noundef %l) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @foo(ptr noundef readnone captures(none) %v, i32 noundef %w, i32 noundef %x, ptr noundef readnone captures(none) %y, ptr noundef readnone captures(none) %z) local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %0 = and i32 %x.coerce, 65280
-  %cmp.not = icmp eq i32 %0, 5120
-  br i1 %cmp.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  tail call void @abort() #5
-  unreachable
-
-if.end:                                           ; preds = %entry
-  %1 = and i32 %x.coerce, 16711680
-  %cmp3.not = icmp eq i32 %1, 1966080
-  br i1 %cmp3.not, label %if.end6, label %if.then5
-
-if.then5:                                         ; preds = %if.end
-  tail call void @abort() #5
-  unreachable
-
-if.end6:                                          ; preds = %if.end
-  %conv7.mask = and i32 %x.coerce, -16777216
-  %cmp8.not = icmp eq i32 %conv7.mask, 671088640
-  br i1 %cmp8.not, label %if.end11, label %if.then10
-
-if.then10:                                        ; preds = %if.end6
-  tail call void @abort() #5
-  unreachable
-
-if.end11:                                         ; preds = %if.end6
-  %sext.mask = and i32 %y.coerce, 255
-  %cmp13.not = icmp eq i32 %sext.mask, 11
-  br i1 %cmp13.not, label %if.end16, label %if.then15
-
-if.then15:                                        ; preds = %if.end11
-  tail call void @abort() #5
-  unreachable
-
-if.end16:                                         ; preds = %if.end11
-  %2 = and i32 %y.coerce, 65280
-  %cmp19.not = icmp eq i32 %2, 5376
-  br i1 %cmp19.not, label %if.end22, label %if.then21
-
-if.then21:                                        ; preds = %if.end16
-  tail call void @abort() #5
-  unreachable
-
-if.end22:                                         ; preds = %if.end16
-  %3 = and i32 %y.coerce, 16711680
-  %cmp25.not = icmp eq i32 %3, 2031616
-  br i1 %cmp25.not, label %if.end28, label %if.then27
-
-if.then27:                                        ; preds = %if.end22
-  tail call void @abort() #5
-  unreachable
-
-if.end28:                                         ; preds = %if.end22
-  %conv30.mask = and i32 %y.coerce, -16777216
-  %cmp31.not = icmp eq i32 %conv30.mask, 687865856
-  br i1 %cmp31.not, label %if.end34, label %if.then33
-
-if.then33:                                        ; preds = %if.end28
-  tail call void @abort() #5
-  unreachable
-
-if.end34:                                         ; preds = %if.end28
-  %sext.mask63 = and i32 %z.coerce, 255
-  %cmp37.not = icmp eq i32 %sext.mask63, 12
-  br i1 %cmp37.not, label %if.end40, label %if.then39
-
-if.then39:                                        ; preds = %if.end34
-  tail call void @abort() #5
-  unreachable
-
-if.end40:                                         ; preds = %if.end34
-  %4 = and i32 %z.coerce, 65280
-  %cmp43.not = icmp eq i32 %4, 5632
-  br i1 %cmp43.not, label %if.end46, label %if.then45
-
-if.then45:                                        ; preds = %if.end40
-  tail call void @abort() #5
-  unreachable
-
-if.end46:                                         ; preds = %if.end40
-  %5 = and i32 %z.coerce, 16711680
-  %cmp49.not = icmp eq i32 %5, 2097152
-  br i1 %cmp49.not, label %if.end52, label %if.then51
-
-if.then51:                                        ; preds = %if.end46
-  tail call void @abort() #5
-  unreachable
-
-if.end52:                                         ; preds = %if.end46
-  %conv54.mask = and i32 %z.coerce, -16777216
-  %cmp55.not = icmp eq i32 %conv54.mask, 704643072
-  br i1 %cmp55.not, label %if.end58, label %if.then57
-
-if.then57:                                        ; preds = %if.end52
-  tail call void @abort() #5
-  unreachable
-
-if.end58:                                         ; preds = %if.end52
-  %cmp59.not = icmp eq i64 %l, 123
-  br i1 %cmp59.not, label %if.end62, label %if.then61
-
-if.then61:                                        ; preds = %if.end58
-  tail call void @abort() #5
-  unreachable
-
-if.end62:                                         ; preds = %if.end58
-  ret i32 undef
+  ret void
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @bar(ptr noundef captures(none) %v, i32 noundef %x, i32 noundef %y, i32 noundef %w, i32 noundef %h) local_unnamed_addr #1 {
+entry:
+  %0 = load i32, ptr %v, align 4, !tbaa !5
+  %cmp.not = icmp eq i32 %0, %x
+  br i1 %cmp.not, label %lor.lhs.false, label %if.then
+
+lor.lhs.false:                                    ; preds = %entry
+  %b = getelementptr inbounds nuw i8, ptr %v, i64 4
+  %1 = load i32, ptr %b, align 4, !tbaa !10
+  %cmp1.not = icmp eq i32 %1, %y
+  br i1 %cmp1.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  %e2 = getelementptr inbounds nuw i8, ptr %v, i64 16
+  %2 = load i32, ptr %e2, align 4, !tbaa !11
+  %f3 = getelementptr inbounds nuw i8, ptr %v, i64 20
+  %3 = load i32, ptr %f3, align 4, !tbaa !12
+  %conv4 = sitofp i32 %2 to double
+  %mul = tail call double @llvm.copysign.f64(double 0.000000e+00, double %conv4)
+  %div = fmul double %mul, 5.000000e-01
+  %conv5 = fptosi double %div to i32
+  %conv8 = sitofp i32 %3 to double
+  %mul9 = tail call double @llvm.copysign.f64(double 0.000000e+00, double %conv8)
+  %div10 = fmul double %mul9, 5.000000e-01
+  %conv11 = fptosi double %div10 to i32
+  %add = add nsw i32 %x, %conv5
+  %add12 = add nsw i32 %y, %conv11
+  store i32 %add, ptr %v, align 4, !tbaa !5
+  %b14 = getelementptr inbounds nuw i8, ptr %v, i64 4
+  store i32 %add12, ptr %b14, align 4, !tbaa !10
+  %c = getelementptr inbounds nuw i8, ptr %v, i64 8
+  store i32 %w, ptr %c, align 4, !tbaa !13
+  %d = getelementptr inbounds nuw i8, ptr %v, i64 12
+  store i32 %h, ptr %d, align 4, !tbaa !14
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %lor.lhs.false
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
+}
 
 ; Function Attrs: nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
   %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  tail call void @exit(i32 noundef 0) #5
+  tail call void @exit(i32 noundef 0) #6
   unreachable
 }
 
@@ -137,12 +68,16 @@ declare void @exit(i32 noundef) local_unnamed_addr #3
 ; Function Attrs: nofree nounwind
 declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #4
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare double @llvm.copysign.f64(double, double) #5
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { nofree nounwind }
-attributes #5 = { noreturn nounwind }
+attributes #5 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #6 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -152,3 +87,13 @@ attributes #5 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!5 = !{!6, !7, i64 0}
+!6 = !{!"", !7, i64 0, !7, i64 4, !7, i64 8, !7, i64 12, !7, i64 16, !7, i64 20}
+!7 = !{!"int", !8, i64 0}
+!8 = !{!"omnipotent char", !9, i64 0}
+!9 = !{!"Simple C/C++ TBAA"}
+!10 = !{!6, !7, i64 4}
+!11 = !{!6, !7, i64 16}
+!12 = !{!6, !7, i64 20}
+!13 = !{!6, !7, i64 8}
+!14 = !{!6, !7, i64 12}

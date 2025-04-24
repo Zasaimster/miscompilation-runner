@@ -1,15 +1,15 @@
-; 16256741480168412484900857045309876046
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/16256741480168412484900857045309876046_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/16256741480168412484900857045309876046.c"
+; 155641834099418760981126477315285147123
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155641834099418760981126477315285147123_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155641834099418760981126477315285147123.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @main() #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  ret i32 0
+  %z = alloca i32, align 4
+  store i32 100, ptr %z, align 4
+  ret void
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

@@ -1,25 +1,28 @@
-; 123568683783411064696088609613799684960
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123568683783411064696088609613799684960_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123568683783411064696088609613799684960.c"
+; 125797681766389600681535532278663381740
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/125797681766389600681535532278663381740_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/125797681766389600681535532278663381740.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  ret i32 4
-}
+@main.a = internal global [2 x i32] [i32 10, i32 0], align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %b = alloca ptr, align 8
+  %c = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef -1)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %if.end
+  store ptr @main.a, ptr %b, align 8
+  %0 = load ptr, ptr %b, align 8
+  %incdec.ptr = getelementptr inbounds nuw i32, ptr %0, i32 1
+  store ptr %incdec.ptr, ptr %b, align 8
+  %1 = load i32, ptr %0, align 4
+  %rem = srem i32 %1, 8
+  store i32 %rem, ptr %c, align 4
+  %2 = load i32, ptr %c, align 4
+  %cmp = icmp ne i32 %2, 3
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

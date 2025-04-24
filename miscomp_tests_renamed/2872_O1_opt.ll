@@ -1,52 +1,102 @@
-; 182134282286530378311744650918070168551
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182134282286530378311744650918070168551_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182134282286530378311744650918070168551.c"
+; 150350652954944641083050602203204376175
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150350652954944641083050602203204376175_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150350652954944641083050602203204376175.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = internal unnamed_addr global [0 x i32] zeroinitializer, align 4
+%struct.input_ty = type { ptr, ptr }
+
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@b = dso_local global [6 x i8] zeroinitializer, align 1
+@s = dso_local local_unnamed_addr global %struct.input_ty zeroinitializer, align 8
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @input_getc_complicated(ptr noundef readnone captures(none) %x) local_unnamed_addr #0 {
+entry:
+  ret i32 0
+}
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local noundef i32 @check_header(ptr noundef captures(none) %deeper) local_unnamed_addr #1 {
 entry:
-  br label %for.body.i
+  %call9 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp10 = icmp slt i32 %call9, 6
+  br i1 %cmp10, label %for.body.lr.ph, label %cleanup
 
-for.body.i:                                       ; preds = %for.body.i, %entry
-  %indvars.iv.i = phi i64 [ 198, %entry ], [ %indvars.iv.next.i, %for.body.i ]
-  %arrayidx.i = getelementptr inbounds nuw [0 x i32], ptr @a, i64 0, i64 %indvars.iv.i
-  %0 = trunc nuw nsw i64 %indvars.iv.i to i32
-  store i32 %0, ptr %arrayidx.i, align 4, !tbaa !5
-  %indvars.iv.next.i = add nsw i64 %indvars.iv.i, -1
-  %cmp.not.i = icmp eq i64 %indvars.iv.i, 0
-  br i1 %cmp.not.i, label %for.body, label %for.body.i, !llvm.loop !9
+for.body.lr.ph:                                   ; preds = %entry
+  %buffer_end = getelementptr inbounds nuw i8, ptr %deeper, i64 8
+  br label %for.body
 
-for.cond:                                         ; preds = %for.body
-  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  %exitcond.not = icmp eq i64 %indvars.iv.next, 199
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !12
+for.body:                                         ; preds = %for.inc, %for.body.lr.ph
+  %0 = load ptr, ptr %deeper, align 8, !tbaa !5
+  %1 = load ptr, ptr %buffer_end, align 8, !tbaa !11
+  %cmp1 = icmp ult ptr %0, %1
+  br i1 %cmp1, label %cond.true, label %for.inc
 
-for.body:                                         ; preds = %for.cond, %for.body.i
-  %indvars.iv = phi i64 [ %indvars.iv.next, %for.cond ], [ 0, %for.body.i ]
-  %arrayidx = getelementptr inbounds nuw [0 x i32], ptr @a, i64 0, i64 %indvars.iv
-  %1 = load i32, ptr %arrayidx, align 4, !tbaa !5
-  %2 = zext i32 %1 to i64
-  %cmp1.not = icmp eq i64 %indvars.iv, %2
-  br i1 %cmp1.not, label %for.cond, label %if.then
+cond.true:                                        ; preds = %for.body
+  %incdec.ptr = getelementptr inbounds nuw i8, ptr %0, i64 1
+  store ptr %incdec.ptr, ptr %deeper, align 8, !tbaa !5
+  br label %for.inc
 
-if.then:                                          ; preds = %for.body
-  tail call void @abort() #2
+for.inc:                                          ; preds = %cond.true, %for.body
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp = icmp slt i32 %call, 6
+  br i1 %cmp, label %for.body, label %cleanup, !llvm.loop !12
+
+cleanup:                                          ; preds = %for.inc, %entry
+  ret i32 1
+}
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #2
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  store ptr @b, ptr @s, align 8, !tbaa !5
+  store ptr getelementptr inbounds nuw (i8, ptr @b, i64 6), ptr getelementptr inbounds nuw (i8, ptr @s, i64 8), align 8, !tbaa !11
+  %call9.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp10.i = icmp slt i32 %call9.i, 6
+  br i1 %cmp10.i, label %for.body.i, label %check_header.exit
+
+for.body.i:                                       ; preds = %for.inc.i, %entry
+  %0 = load ptr, ptr @s, align 8, !tbaa !5
+  %1 = load ptr, ptr getelementptr inbounds nuw (i8, ptr @s, i64 8), align 8, !tbaa !11
+  %cmp1.i = icmp ult ptr %0, %1
+  br i1 %cmp1.i, label %cond.true.i, label %for.inc.i
+
+cond.true.i:                                      ; preds = %for.body.i
+  %incdec.ptr.i = getelementptr inbounds nuw i8, ptr %0, i64 1
+  store ptr %incdec.ptr.i, ptr @s, align 8, !tbaa !5
+  br label %for.inc.i
+
+for.inc.i:                                        ; preds = %cond.true.i, %for.body.i
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp.i = icmp slt i32 %call.i, 6
+  br i1 %cmp.i, label %for.body.i, label %check_header.exit, !llvm.loop !12
+
+check_header.exit:                                ; preds = %for.inc.i, %entry
+  %2 = load ptr, ptr @s, align 8, !tbaa !5
+  %3 = load ptr, ptr getelementptr inbounds nuw (i8, ptr @s, i64 8), align 8, !tbaa !11
+  %cmp.not = icmp eq ptr %2, %3
+  br i1 %cmp.not, label %if.end2, label %if.then1
+
+if.then1:                                         ; preds = %check_header.exit
+  tail call void @abort() #4
   unreachable
 
-for.end:                                          ; preds = %for.cond
+if.end2:                                          ; preds = %check_header.exit
   ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+declare void @abort() local_unnamed_addr #3
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -56,11 +106,13 @@ attributes #2 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = distinct !{!9, !10, !11}
-!10 = !{!"llvm.loop.mustprogress"}
-!11 = !{!"llvm.loop.unroll.disable"}
-!12 = distinct !{!12, !10, !11}
+!5 = !{!6, !7, i64 0}
+!6 = !{!"input_ty", !7, i64 0, !7, i64 8}
+!7 = !{!"p1 omnipotent char", !8, i64 0}
+!8 = !{!"any pointer", !9, i64 0}
+!9 = !{!"omnipotent char", !10, i64 0}
+!10 = !{!"Simple C/C++ TBAA"}
+!11 = !{!6, !7, i64 8}
+!12 = distinct !{!12, !13, !14}
+!13 = !{!"llvm.loop.mustprogress"}
+!14 = !{!"llvm.loop.unroll.disable"}

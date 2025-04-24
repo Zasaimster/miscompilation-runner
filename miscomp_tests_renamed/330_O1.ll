@@ -1,50 +1,29 @@
-; 168553015220629523785012632209201565930
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168553015220629523785012632209201565930.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168553015220629523785012632209201565930.c"
+; 105605680784031717811001944785124820633
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105605680784031717811001944785124820633.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105605680784031717811001944785124820633.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@g_list = dso_local global [1 x i8] c"1", align 1
-@str = private unnamed_addr constant [18 x i8] c"This won't print.\00", align 1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local void @g(ptr noundef readnone captures(none) %p, ptr noundef readnone captures(none) %list, i32 noundef %length, ptr noundef readnone captures(none) %elementPtr, ptr noundef readonly captures(none) %nextPtr) local_unnamed_addr #0 {
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @f(i32 noundef %x, i32 noundef %y) local_unnamed_addr #0 {
 entry:
-  %0 = load ptr, ptr %nextPtr, align 8, !tbaa !5
-  %cmp.not = icmp eq ptr %0, @g_list
-  br i1 %cmp.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %1 = load ptr, ptr %nextPtr, align 8, !tbaa !5
-  store i8 0, ptr %1, align 1, !tbaa !10
-  ret void
+  tail call void @abort() #2
+  unreachable
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %g_list.promoted = load i8, ptr @g_list, align 1, !tbaa !10
-  %cmp.not8 = icmp eq i8 %g_list.promoted, 0
-  br i1 %cmp.not8, label %for.end, label %g.exit.lr.ph
-
-g.exit.lr.ph:                                     ; preds = %entry
-  store i8 0, ptr @g_list, align 1, !tbaa !10
-  br label %for.end
-
-for.end:                                          ; preds = %g.exit.lr.ph, %entry
-  ret i32 0
+  tail call void @abort() #2
+  unreachable
 }
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
-
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -54,9 +33,3 @@ attributes #2 = { nofree nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"p1 omnipotent char", !7, i64 0}
-!7 = !{!"any pointer", !8, i64 0}
-!8 = !{!"omnipotent char", !9, i64 0}
-!9 = !{!"Simple C/C++ TBAA"}
-!10 = !{!8, !8, i64 0}

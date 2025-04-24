@@ -1,26 +1,24 @@
-; 186841962455093249195309504722808584196
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/186841962455093249195309504722808584196_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/186841962455093249195309504722808584196.c"
+; 197281838978732621200254566987220412353
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197281838978732621200254566987220412353_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197281838978732621200254566987220412353.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.anon = type { [0 x i8], [4 x i8] }
+@array = dso_local local_unnamed_addr global [10 x i32] [i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1, i32 1], align 16
+@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
-@u = dso_local local_unnamed_addr constant { %struct.anon, [4 x i8] } { %struct.anon { [0 x i8] zeroinitializer, [4 x i8] c"567\00" }, [4 x i8] zeroinitializer }, align 1
-
-; Function Attrs: cold nofree noreturn nounwind uwtable
+; Function Attrs: nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  tail call void @abort() #2
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   unreachable
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
 
-attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

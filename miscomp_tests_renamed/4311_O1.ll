@@ -1,13 +1,27 @@
-; 156996285952816061577416823756083903525
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/156996285952816061577416823756083903525.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/156996285952816061577416823756083903525.c"
+; 175673282892800519974709616283869746438
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175673282892800519974709616283869746438.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175673282892800519974709616283869746438.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@cfb_tab8_be = internal constant [16 x i32] [i32 0, i32 255, i32 65280, i32 65535, i32 16711680, i32 16711935, i32 16776960, i32 16777215, i32 -16777216, i32 -16776961, i32 -16711936, i32 -16711681, i32 -65536, i32 -65281, i32 -256, i32 -1], align 16
+@cfb_tab16_be = internal constant [4 x i32] [i32 0, i32 65535, i32 -65536, i32 -1], align 16
+@cfb_tab32 = internal constant [2 x i32] [i32 0, i32 -1], align 4
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef nonnull ptr @xxx(i32 noundef %bpp) local_unnamed_addr #0 {
+entry:
+  %switch.selectcmp = icmp eq i32 %bpp, 16
+  %switch.select = select i1 %switch.selectcmp, ptr @cfb_tab16_be, ptr @cfb_tab32
+  %switch.selectcmp3 = icmp eq i32 %bpp, 8
+  %switch.select4 = select i1 %switch.selectcmp3, ptr @cfb_tab8_be, ptr %switch.select
+  ret ptr %switch.select4
+}
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  ret i32 1
+  ret i32 0
 }
 
 attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

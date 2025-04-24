@@ -1,30 +1,36 @@
-; 134246061375040698087250189935746171889
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134246061375040698087250189935746171889.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134246061375040698087250189935746171889.c"
+; 138156832552730099086510904344485578134
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138156832552730099086510904344485578134.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138156832552730099086510904344485578134.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.delay_block = type { ptr }
+
+@Timer_Queue = internal global %struct.delay_block zeroinitializer, align 8
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local ptr @time_enqueue(ptr noundef %d) #0 {
+entry:
+  %d.addr = alloca ptr, align 8
+  %q = alloca ptr, align 8
+  store ptr %d, ptr %d.addr, align 8
+  store ptr inttoptr (i64 10 to ptr), ptr %q, align 8
+  %0 = load ptr, ptr %d.addr, align 8
+  %succ = getelementptr inbounds nuw %struct.delay_block, ptr %0, i32 0, i32 0
+  store ptr null, ptr %succ, align 8
+  %1 = load ptr, ptr @Timer_Queue, align 8
+  ret ptr %1
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %ssi = alloca i16, align 2
-  %usi = alloca i16, align 2
-  %fail = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i16 0, ptr %ssi, align 2
-  store i16 -256, ptr %usi, align 2
-  %0 = load i16, ptr %ssi, align 2
-  %conv = sext i16 %0 to i32
-  %1 = load i16, ptr %usi, align 2
-  %conv1 = zext i16 %1 to i32
-  %cmp = icmp slt i32 %conv, %conv1
-  %lnot = xor i1 %cmp, true
-  %lnot.ext = zext i1 %lnot to i32
-  store i32 %lnot.ext, ptr %fail, align 4
-  %2 = load i32, ptr %fail, align 4
-  %tobool = icmp ne i32 %2, 0
-  br i1 %tobool, label %if.then, label %if.end
+  store ptr @Timer_Queue, ptr @Timer_Queue, align 8
+  %call = call ptr @time_enqueue(ptr noundef @Timer_Queue)
+  %cmp = icmp ne ptr %call, null
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #2

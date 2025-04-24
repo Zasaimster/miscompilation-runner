@@ -1,36 +1,49 @@
-; 184477531667024886439733338528112053692
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184477531667024886439733338528112053692.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184477531667024886439733338528112053692.c"
+; 137854430574724128203453121332129427544
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137854430574724128203453121332129427544.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137854430574724128203453121332129427544.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.U = type { i32 }
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @DisplayNumber(i64 noundef %v) #0 {
+entry:
+  %v.addr = alloca i64, align 8
+  store i64 %v, ptr %v.addr, align 8
+  %0 = load i64, ptr %v.addr, align 8
+  %inc = add i64 %0, 1
+  store i64 %inc, ptr %v.addr, align 8
+  %cmp = icmp ne i64 %0, 154
+  br i1 %cmp, label %if.then, label %if.end
 
-@u = internal global %union.U { i32 305419896 }, align 4
-@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
+if.then:                                          ; preds = %entry
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i64 @ReadNumber() #0 {
+entry:
+  ret i64 10092544
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %tmp = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %bf.load = load i32, ptr @u, align 4
-  %bf.clear = and i32 %bf.load, 1048575
-  %sub = sub nsw i32 %bf.clear, 284280
-  ret i32 %sub
+  %call = call i64 @ReadNumber()
+  %and = and i64 %call, 16711680
+  %shr = lshr i64 %and, 16
+  store i64 %shr, ptr %tmp, align 8
+  %0 = load i64, ptr %tmp, align 8
+  call void @DisplayNumber(i64 noundef %0)
+  ret i32 0
 }
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @deadFunction() #0 {
-entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
-}
-
-declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

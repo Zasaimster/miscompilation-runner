@@ -1,79 +1,84 @@
-; 136507613474137046825801271385457322952
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136507613474137046825801271385457322952.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136507613474137046825801271385457322952.c"
+; 162373844221122253161776147235152739867
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/162373844221122253161776147235152739867.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/162373844221122253161776147235152739867.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S2 = type { i32, i32, %union.anon, %struct.S1 }
-%union.anon = type { i32 }
-%struct.S1 = type { i32, i32 }
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
-@v = dso_local global %struct.S2 { i32 20, i32 2, %union.anon { i32 3 }, %struct.S1 { i32 4, i32 5 } }, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @test(i32 noundef %one, i32 noundef %bit) #0 {
+entry:
+  %one.addr = alloca i32, align 4
+  %bit.addr = alloca i32, align 4
+  %val = alloca i32, align 4
+  %zero = alloca i32, align 4
+  store i32 %one, ptr %one.addr, align 4
+  store i32 %bit, ptr %bit.addr, align 4
+  %0 = load i32, ptr %bit.addr, align 4
+  %and = and i32 %0, 1
+  store i32 %and, ptr %val, align 4
+  %1 = load i32, ptr %one.addr, align 4
+  %shr = lshr i32 %1, 1
+  store i32 %shr, ptr %zero, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %2 = load i32, ptr %zero, align 4
+  %3 = load i32, ptr %val, align 4
+  %shr1 = lshr i32 %3, 1
+  %add = add i32 %2, %shr1
+  ret i32 %add
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @v, align 4
-  %cmp = icmp ne i32 %0, 1
+  %call = call i32 @test(i32 noundef 1, i32 noundef 0)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
+  call void @abort() #4
+  unreachable
 
 if.end:                                           ; preds = %entry
-  %1 = load i32, ptr getelementptr inbounds nuw (%struct.S2, ptr @v, i32 0, i32 1), align 4
-  %cmp1 = icmp ne i32 %1, 2
-  br i1 %cmp1, label %if.then2, label %if.end3
+  %call1 = call i32 @test(i32 noundef 1, i32 noundef 1)
+  %cmp2 = icmp ne i32 %call1, 1
+  br i1 %cmp2, label %if.then3, label %if.end4
 
-if.then2:                                         ; preds = %if.end
-  store i32 2, ptr %retval, align 4
-  br label %return
+if.then3:                                         ; preds = %if.end
+  call void @abort() #4
+  unreachable
 
-if.end3:                                          ; preds = %if.end
-  %2 = load i32, ptr getelementptr inbounds nuw (%struct.S2, ptr @v, i32 0, i32 2), align 4
-  %cmp4 = icmp ne i32 %2, 3
-  br i1 %cmp4, label %if.then6, label %lor.lhs.false
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @test(i32 noundef 1, i32 noundef 65535)
+  %cmp6 = icmp ne i32 %call5, 1
+  br i1 %cmp6, label %if.then7, label %if.end8
 
-lor.lhs.false:                                    ; preds = %if.end3
-  %3 = load i32, ptr getelementptr inbounds nuw (%struct.S2, ptr @v, i32 0, i32 2), align 4
-  %cmp5 = icmp ne i32 %3, 3
-  br i1 %cmp5, label %if.then6, label %if.end7
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #4
+  unreachable
 
-if.then6:                                         ; preds = %lor.lhs.false, %if.end3
-  store i32 3, ptr %retval, align 4
-  br label %return
-
-if.end7:                                          ; preds = %lor.lhs.false
-  %4 = load i32, ptr getelementptr inbounds nuw (%struct.S2, ptr @v, i32 0, i32 3), align 4
-  %cmp8 = icmp ne i32 %4, 4
-  br i1 %cmp8, label %if.then9, label %if.end10
-
-if.then9:                                         ; preds = %if.end7
-  store i32 4, ptr %retval, align 4
-  br label %return
-
-if.end10:                                         ; preds = %if.end7
-  %5 = load i32, ptr getelementptr inbounds nuw (%struct.S1, ptr getelementptr inbounds nuw (%struct.S2, ptr @v, i32 0, i32 3), i32 0, i32 1), align 4
-  %cmp11 = icmp ne i32 %5, 5
-  br i1 %cmp11, label %if.then12, label %if.end13
-
-if.then12:                                        ; preds = %if.end10
-  store i32 5, ptr %retval, align 4
-  br label %return
-
-if.end13:                                         ; preds = %if.end10
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end13, %if.then12, %if.then9, %if.then6, %if.then2, %if.then
-  %6 = load i32, ptr %retval, align 4
-  ret i32 %6
+if.end8:                                          ; preds = %if.end4
+  call void @exit(i32 noundef 0) #5
+  unreachable
 }
 
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

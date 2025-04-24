@@ -1,27 +1,22 @@
-; 117602067997494683633085376332172538716
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117602067997494683633085376332172538716.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117602067997494683633085376332172538716.c"
+; 129668618556033238862172893364130787935
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129668618556033238862172893364130787935.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129668618556033238862172893364130787935.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@count = dso_local local_unnamed_addr global i32 0, align 4
+@a = dso_local local_unnamed_addr global [2 x i32] zeroinitializer, align 4
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @a1() local_unnamed_addr #0 {
+define dso_local noundef i32 @f(i32 noundef %b) local_unnamed_addr #0 {
 entry:
-  ret void
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @b(i16 noundef zeroext %data) local_unnamed_addr #0 {
-entry:
-  ret void
+  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  store i32 0, ptr @count, align 4, !tbaa !5
+  store i32 0, ptr getelementptr inbounds nuw (i8, ptr @a, i64 4), align 4, !tbaa !5
+  store i32 0, ptr @a, align 4, !tbaa !5
   tail call void @abort() #3
   unreachable
 }

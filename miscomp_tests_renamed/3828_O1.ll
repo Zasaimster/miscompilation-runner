@@ -1,83 +1,67 @@
-; 169705454095081731978854613016240307762
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169705454095081731978854613016240307762.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169705454095081731978854613016240307762.c"
+; 166915905954934920576119103412810251817
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/166915905954934920576119103412810251817.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/166915905954934920576119103412810251817.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.super_block = type { i32, i8, i32 }
-%struct.inode = type { i64, ptr }
-%struct.file = type { i64 }
-
-@s = dso_local global %struct.super_block zeroinitializer, align 4
-@i = dso_local local_unnamed_addr global %struct.inode zeroinitializer, align 8
-@f = dso_local local_unnamed_addr global %struct.file zeroinitializer, align 8
-@str = private unnamed_addr constant [16 x i8] c"Function called\00", align 1
-
-; Function Attrs: cold noreturn nounwind uwtable
-define dso_local noundef i32 @main(i32 noundef %argc, ptr noundef readnone captures(none) %argv) local_unnamed_addr #0 {
+; Function Attrs: nofree norecurse nosync nounwind memory(read, inaccessiblemem: none) uwtable
+define dso_local noundef ptr @blockvector_for_pc_sect(i64 noundef %pc, ptr noundef readonly captures(none) %symtab) local_unnamed_addr #0 {
 entry:
-  store i32 512, ptr @s, align 4, !tbaa !5
-  store i8 9, ptr getelementptr inbounds nuw (i8, ptr @s, i64 4), align 4, !tbaa !10
-  store i64 2048, ptr @i, align 8, !tbaa !11
-  store ptr @s, ptr getelementptr inbounds nuw (i8, ptr @i, i64 8), align 8, !tbaa !16
-  store i64 0, ptr @f, align 8, !tbaa !17
-  tail call fastcc void @do_isofs_readdir()
-  tail call void @abort() #7
-  unreachable
+  %0 = load ptr, ptr %symtab, align 8, !tbaa !5
+  %block = getelementptr inbounds nuw i8, ptr %0, i64 8
+  %1 = load i32, ptr %0, align 8, !tbaa !11
+  %cmp38 = icmp sgt i32 %1, 1
+  br i1 %cmp38, label %while.body, label %while.body10.preheader
+
+while.body:                                       ; preds = %entry, %while.body
+  %sub41 = phi i32 [ %sub, %while.body ], [ %1, %entry ]
+  %top.040 = phi i32 [ %add3.top.0, %while.body ], [ %1, %entry ]
+  %bot.039 = phi i32 [ %bot.0.add3, %while.body ], [ 0, %entry ]
+  %add = add nuw nsw i32 %sub41, 1
+  %shr = lshr i32 %add, 1
+  %add3 = add nuw nsw i32 %shr, %bot.039
+  %idxprom = zext nneg i32 %add3 to i64
+  %arrayidx4 = getelementptr inbounds nuw [2 x ptr], ptr %block, i64 0, i64 %idxprom
+  %2 = load ptr, ptr %arrayidx4, align 8, !tbaa !14
+  %3 = load i64, ptr %2, align 8, !tbaa !16
+  %cmp5.not = icmp ugt i64 %3, %pc
+  %bot.0.add3 = select i1 %cmp5.not, i32 %bot.039, i32 %add3
+  %add3.top.0 = select i1 %cmp5.not, i32 %add3, i32 %top.040
+  %sub = sub nsw i32 %add3.top.0, %bot.0.add3
+  %cmp = icmp sgt i32 %sub, 1
+  br i1 %cmp, label %while.body, label %while.body10.preheader, !llvm.loop !20
+
+while.body10.preheader:                           ; preds = %while.body, %entry
+  %bot.243.ph = phi i32 [ 0, %entry ], [ %bot.0.add3, %while.body ]
+  br label %while.body10
+
+while.cond8:                                      ; preds = %while.body10
+  %dec = add nsw i32 %bot.243, -1
+  %cmp9 = icmp sgt i32 %bot.243, 0
+  br i1 %cmp9, label %while.body10, label %cleanup, !llvm.loop !23
+
+while.body10:                                     ; preds = %while.body10.preheader, %while.cond8
+  %bot.243 = phi i32 [ %dec, %while.cond8 ], [ %bot.243.ph, %while.body10.preheader ]
+  %idxprom12 = zext nneg i32 %bot.243 to i64
+  %arrayidx13 = getelementptr inbounds nuw [2 x ptr], ptr %block, i64 0, i64 %idxprom12
+  %4 = load ptr, ptr %arrayidx13, align 8, !tbaa !14
+  %endaddr = getelementptr inbounds nuw i8, ptr %4, i64 8
+  %5 = load i64, ptr %endaddr, align 8, !tbaa !24
+  %cmp14 = icmp ugt i64 %5, %pc
+  br i1 %cmp14, label %cleanup, label %while.cond8
+
+cleanup:                                          ; preds = %while.body10, %while.cond8
+  %retval.0.ph = phi ptr [ %0, %while.body10 ], [ null, %while.cond8 ]
+  ret ptr %retval.0.ph
 }
 
-; Function Attrs: nounwind uwtable
-define internal fastcc void @do_isofs_readdir() unnamed_addr #1 {
+; Function Attrs: nofree norecurse nosync nounwind memory(read, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i64, ptr @f, align 8, !tbaa !17
-  %1 = load i64, ptr @i, align 8, !tbaa !11
-  %cmp.not = icmp slt i64 %0, %1
-  br i1 %cmp.not, label %if.end, label %cleanup
-
-if.end:                                           ; preds = %entry
-  tail call fastcc void @isofs_bread()
-  unreachable
-
-cleanup:                                          ; preds = %entry
-  ret void
+  ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
-
-; Function Attrs: noreturn nounwind uwtable
-define internal fastcc void @isofs_bread() unnamed_addr #3 {
-entry:
-  %call = tail call i32 (i32, ...) @square(i32 noundef 5) #8
-  %tobool.not = icmp eq i32 %call, 0
-  br i1 %tobool.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  tail call void @exit(i32 noundef 0) #7
-  unreachable
-}
-
-declare i32 @square(...) local_unnamed_addr #4
-
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #5
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #6
-
-attributes #0 = { cold noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #6 = { nofree nounwind }
-attributes #7 = { noreturn nounwind }
-attributes #8 = { nounwind }
+attributes #0 = { nofree norecurse nosync nounwind memory(read, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -88,16 +72,22 @@ attributes #8 = { nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !7, i64 0}
-!6 = !{!"super_block", !7, i64 0, !8, i64 4, !7, i64 8}
-!7 = !{!"int", !8, i64 0}
-!8 = !{!"omnipotent char", !9, i64 0}
-!9 = !{!"Simple C/C++ TBAA"}
-!10 = !{!6, !8, i64 4}
+!6 = !{!"symtab", !7, i64 0}
+!7 = !{!"p1 _ZTS11blockvector", !8, i64 0}
+!8 = !{!"any pointer", !9, i64 0}
+!9 = !{!"omnipotent char", !10, i64 0}
+!10 = !{!"Simple C/C++ TBAA"}
 !11 = !{!12, !13, i64 0}
-!12 = !{!"inode", !13, i64 0, !14, i64 8}
-!13 = !{!"long long", !8, i64 0}
-!14 = !{!"p1 _ZTS11super_block", !15, i64 0}
-!15 = !{!"any pointer", !8, i64 0}
-!16 = !{!12, !14, i64 8}
-!17 = !{!18, !13, i64 0}
-!18 = !{!"file", !13, i64 0}
+!12 = !{!"blockvector", !13, i64 0, !9, i64 8}
+!13 = !{!"int", !9, i64 0}
+!14 = !{!15, !15, i64 0}
+!15 = !{!"p1 _ZTS5block", !8, i64 0}
+!16 = !{!17, !18, i64 0}
+!17 = !{!"block", !18, i64 0, !18, i64 8, !19, i64 16, !15, i64 24, !9, i64 32, !13, i64 36, !9, i64 40}
+!18 = !{!"long long", !9, i64 0}
+!19 = !{!"p1 _ZTS6symbol", !8, i64 0}
+!20 = distinct !{!20, !21, !22}
+!21 = !{!"llvm.loop.mustprogress"}
+!22 = !{!"llvm.loop.unroll.disable"}
+!23 = distinct !{!23, !21, !22}
+!24 = !{!17, !18, i64 8}

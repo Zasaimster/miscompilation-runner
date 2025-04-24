@@ -1,74 +1,29 @@
-; 162458565904207901803199695682944115752
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/162458565904207901803199695682944115752.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/162458565904207901803199695682944115752.c"
+; 100646123303858982221449321745107941716
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/100646123303858982221449321745107941716.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/100646123303858982221449321745107941716.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.tiny = type { i16, i16 }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %n, i32 %x.coerce, i32 %y.coerce, i32 %z.coerce, i64 noundef %l) #0 {
+define dso_local i32 @foo(i32 noundef %a, i32 noundef %b) #0 {
 entry:
-  %x = alloca %struct.tiny, align 2
-  %y = alloca %struct.tiny, align 2
-  %z = alloca %struct.tiny, align 2
-  %n.addr = alloca i32, align 4
-  %l.addr = alloca i64, align 8
-  store i32 %x.coerce, ptr %x, align 2
-  store i32 %y.coerce, ptr %y, align 2
-  store i32 %z.coerce, ptr %z, align 2
-  store i32 %n, ptr %n.addr, align 4
-  store i64 %l, ptr %l.addr, align 8
-  call void @abort() #3
-  unreachable
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  ret i32 0
 }
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca [3 x %struct.tiny], align 2
   store i32 0, ptr %retval, align 4
-  %arrayidx = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
-  %c = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx, i32 0, i32 0
-  store i16 10, ptr %c, align 2
-  %arrayidx1 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
-  %c2 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx1, i32 0, i32 0
-  store i16 11, ptr %c2, align 2
-  %arrayidx3 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
-  %c4 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx3, i32 0, i32 0
-  store i16 12, ptr %c4, align 2
-  %arrayidx5 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
-  %d = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx5, i32 0, i32 1
-  store i16 20, ptr %d, align 2
-  %arrayidx6 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
-  %d7 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx6, i32 0, i32 1
-  store i16 21, ptr %d7, align 2
-  %arrayidx8 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
-  %d9 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx8, i32 0, i32 1
-  store i16 22, ptr %d9, align 2
-  %arrayidx10 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
-  %arrayidx11 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
-  %arrayidx12 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
-  %0 = load i32, ptr %arrayidx10, align 2
-  %1 = load i32, ptr %arrayidx11, align 2
-  %2 = load i32, ptr %arrayidx12, align 2
-  %call = call i32 @f(i32 noundef 3, i32 %0, i32 %1, i32 %2, i64 noundef 123)
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  %call = call i32 @foo(i32 noundef 1, i32 noundef 3)
+  ret i32 %call
 }
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,30 +1,26 @@
-; 189079135789617066060580994951107439063
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189079135789617066060580994951107439063_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189079135789617066060580994951107439063.c"
+; 136892447510615864857642508187069756875
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136892447510615864857642508187069756875_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136892447510615864857642508187069756875.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree nosync nounwind memory(none) uwtable
-define dso_local i32 @f(i32 %x) local_unnamed_addr #0 {
-entry:
-  br label %tailrecurse
+@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
 
-tailrecurse:                                      ; preds = %tailrecurse, %entry
-  %ret.tr = phi i32 [ poison, %entry ], [ %current.ret.tr, %tailrecurse ]
-  %ret.known.tr = phi i1 [ false, %entry ], [ true, %tailrecurse ]
-  %current.ret.tr = select i1 %ret.known.tr, i32 %ret.tr, i32 undef
-  br label %tailrecurse
+; Function Attrs: nofree nounwind uwtable
+define dso_local range(i32 -4, 1) i32 @main() local_unnamed_addr #0 {
+entry:
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %div = mul nsw i32 %call, 5
+  %rem = srem i32 %div, 3
+  %sub = add nsw i32 %rem, -2
+  ret i32 %sub
 }
 
-; Function Attrs: nofree noreturn nosync nounwind memory(none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
-  %call = tail call i32 @f(i32 poison)
-  unreachable
-}
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-attributes #0 = { nofree nosync nounwind memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn nosync nounwind memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

@@ -1,45 +1,156 @@
-; 122438136186208796816900940844175427652
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/122438136186208796816900940844175427652_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/122438136186208796816900940844175427652.c"
+; 152906030923706133171699912308209794656
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152906030923706133171699912308209794656_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152906030923706133171699912308209794656.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: nofree norecurse nosync nounwind memory(argmem: readwrite) uwtable
+define dso_local void @foo(ptr noundef readnone captures(address) %start, ptr noundef captures(address) %end) local_unnamed_addr #0 {
 entry:
-  br label %for.body.i
+  %cmp4 = icmp ugt ptr %end, %start
+  br i1 %cmp4, label %while.body, label %while.end
 
-for.body.i:                                       ; preds = %for.body.i, %entry
-  %info.sroa.5.0 = phi i32 [ 0, %entry ], [ %info.sroa.5.1, %for.body.i ]
-  %y.032.i = phi i32 [ 0, %entry ], [ %inc.i, %for.body.i ]
-  %info.sroa.5.1 = add nuw nsw i32 %info.sroa.5.0, 1
-  %inc.i = add nuw nsw i32 %y.032.i, 1
-  %exitcond.not.i = icmp eq i32 %inc.i, 256
-  br i1 %exitcond.not.i, label %render_image_rgb_a.exit, label %for.body.i, !llvm.loop !5
+while.body:                                       ; preds = %while.body, %entry
+  %end.pn6 = phi ptr [ %temp.0, %while.body ], [ %end, %entry ]
+  %temp.0 = getelementptr i8, ptr %end.pn6, i64 -8
+  %0 = load i64, ptr %temp.0, align 8, !tbaa !5
+  store i64 %0, ptr %end.pn6, align 8, !tbaa !5
+  %cmp = icmp ugt ptr %temp.0, %start
+  br i1 %cmp, label %while.body, label %while.end, !llvm.loop !9
 
-render_image_rgb_a.exit:                          ; preds = %for.body.i
-  %cmp.not = icmp eq i32 %info.sroa.5.1, 256
-  br i1 %cmp.not, label %if.end, label %if.then
+while.end:                                        ; preds = %while.body, %entry
+  ret void
+}
 
-if.then:                                          ; preds = %render_image_rgb_a.exit
-  tail call void @abort() #3
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  %a = alloca [5 x i64], align 16
+  call void @llvm.lifetime.start.p0(i64 40, ptr nonnull %a) #4
+  br label %for.cond1.preheader
+
+for.cond1.preheader:                              ; preds = %for.inc54, %entry
+  %indvars.iv114 = phi i64 [ 1, %entry ], [ %indvars.iv.next115, %for.inc54 ]
+  %indvars.iv99 = phi i64 [ 0, %entry ], [ %indvars.iv.next100, %for.inc54 ]
+  %add.ptr = getelementptr inbounds nuw i64, ptr %a, i64 %indvars.iv99
+  br label %for.cond4.preheader
+
+for.cond1.loopexit:                               ; preds = %for.cond37, %for.end35
+  %indvars.iv.next105 = add nuw nsw i64 %indvars.iv104, 1
+  %exitcond113.not = icmp eq i64 %indvars.iv.next111, 5
+  br i1 %exitcond113.not, label %for.inc54, label %for.cond4.preheader, !llvm.loop !12
+
+for.cond4.preheader:                              ; preds = %for.cond1.loopexit, %for.cond1.preheader
+  %indvars.iv110 = phi i64 [ 0, %for.cond1.preheader ], [ %indvars.iv.next111, %for.cond1.loopexit ]
+  %indvars.iv104 = phi i64 [ 1, %for.cond1.preheader ], [ %indvars.iv.next105, %for.cond1.loopexit ]
+  br label %for.body6
+
+for.body6:                                        ; preds = %for.body6, %for.cond4.preheader
+  %indvars.iv = phi i64 [ 0, %for.cond4.preheader ], [ %indvars.iv.next, %for.body6 ]
+  %arrayidx = getelementptr inbounds nuw [5 x i64], ptr %a, i64 0, i64 %indvars.iv
+  store i64 %indvars.iv, ptr %arrayidx, align 8, !tbaa !5
+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
+  %exitcond.not = icmp eq i64 %indvars.iv.next, 5
+  br i1 %exitcond.not, label %for.end, label %for.body6, !llvm.loop !13
+
+for.end:                                          ; preds = %for.body6
+  %cmp4.i = icmp samesign ugt i64 %indvars.iv110, %indvars.iv99
+  br i1 %cmp4.i, label %while.body.i.preheader, label %for.body13.preheader
+
+while.body.i.preheader:                           ; preds = %for.end
+  %add.ptr9 = getelementptr inbounds nuw i64, ptr %a, i64 %indvars.iv110
+  br label %while.body.i
+
+while.body.i:                                     ; preds = %while.body.i, %while.body.i.preheader
+  %end.pn6.i = phi ptr [ %temp.0.i, %while.body.i ], [ %add.ptr9, %while.body.i.preheader ]
+  %temp.0.i = getelementptr i8, ptr %end.pn6.i, i64 -8
+  %0 = load i64, ptr %temp.0.i, align 8, !tbaa !5
+  store i64 %0, ptr %end.pn6.i, align 8, !tbaa !5
+  %cmp.i = icmp ugt ptr %temp.0.i, %add.ptr
+  br i1 %cmp.i, label %while.body.i, label %for.body13.preheader, !llvm.loop !9
+
+for.body13.preheader:                             ; preds = %while.body.i, %for.end
+  br label %for.body13
+
+for.cond10:                                       ; preds = %for.body13
+  %indvars.iv.next94 = add nuw nsw i64 %indvars.iv93, 1
+  %exitcond98.not = icmp eq i64 %indvars.iv.next94, %indvars.iv114
+  br i1 %exitcond98.not, label %for.cond22, label %for.body13, !llvm.loop !14
+
+for.body13:                                       ; preds = %for.cond10, %for.body13.preheader
+  %indvars.iv93 = phi i64 [ %indvars.iv.next94, %for.cond10 ], [ 0, %for.body13.preheader ]
+  %arrayidx15 = getelementptr inbounds nuw [5 x i64], ptr %a, i64 0, i64 %indvars.iv93
+  %1 = load i64, ptr %arrayidx15, align 8, !tbaa !5
+  %cmp17.not = icmp eq i64 %1, %indvars.iv93
+  br i1 %cmp17.not, label %for.cond10, label %if.then
+
+if.then:                                          ; preds = %for.body13
+  call void @abort() #5
   unreachable
 
-if.end:                                           ; preds = %render_image_rgb_a.exit
-  tail call void @exit(i32 noundef 0) #3
+for.cond22:                                       ; preds = %for.body25, %for.cond10
+  %indvars.iv101 = phi i64 [ %indvars.iv.next102, %for.body25 ], [ %indvars.iv99, %for.cond10 ]
+  %cmp23.not.not = icmp samesign ult i64 %indvars.iv101, %indvars.iv110
+  br i1 %cmp23.not.not, label %for.body25, label %for.end35
+
+for.body25:                                       ; preds = %for.cond22
+  %indvars.iv.next102 = add nuw nsw i64 %indvars.iv101, 1
+  %arrayidx27 = getelementptr inbounds nuw [5 x i64], ptr %a, i64 0, i64 %indvars.iv.next102
+  %2 = load i64, ptr %arrayidx27, align 8, !tbaa !5
+  %cmp29.not = icmp eq i64 %2, %indvars.iv101
+  br i1 %cmp29.not, label %for.cond22, label %if.then31, !llvm.loop !15
+
+if.then31:                                        ; preds = %for.body25
+  call void @abort() #5
   unreachable
+
+for.end35:                                        ; preds = %for.cond22
+  %indvars.iv.next111 = add nuw nsw i64 %indvars.iv110, 1
+  %cmp3882 = icmp samesign ult i64 %indvars.iv110, 4
+  br i1 %cmp3882, label %for.body40, label %for.cond1.loopexit
+
+for.cond37:                                       ; preds = %for.body40
+  %indvars.iv.next107 = add nuw nsw i64 %indvars.iv106, 1
+  %exitcond109.not = icmp eq i64 %indvars.iv.next107, 5
+  br i1 %exitcond109.not, label %for.cond1.loopexit, label %for.body40, !llvm.loop !16
+
+for.body40:                                       ; preds = %for.cond37, %for.end35
+  %indvars.iv106 = phi i64 [ %indvars.iv.next107, %for.cond37 ], [ %indvars.iv104, %for.end35 ]
+  %arrayidx42 = getelementptr inbounds nuw [5 x i64], ptr %a, i64 0, i64 %indvars.iv106
+  %3 = load i64, ptr %arrayidx42, align 8, !tbaa !5
+  %cmp44.not = icmp eq i64 %3, %indvars.iv106
+  br i1 %cmp44.not, label %for.cond37, label %if.then46
+
+if.then46:                                        ; preds = %for.body40
+  call void @abort() #5
+  unreachable
+
+for.inc54:                                        ; preds = %for.cond1.loopexit
+  %indvars.iv.next100 = add nuw nsw i64 %indvars.iv99, 1
+  %indvars.iv.next115 = add nuw nsw i64 %indvars.iv114, 1
+  %exitcond119.not = icmp eq i64 %indvars.iv.next100, 5
+  br i1 %exitcond119.not, label %for.end56, label %for.cond1.preheader, !llvm.loop !17
+
+for.end56:                                        ; preds = %for.inc54
+  call void @llvm.lifetime.end.p0(i64 40, ptr nonnull %a) #4
+  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+declare void @abort() local_unnamed_addr #3
 
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #2
-
-attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #0 = { nofree norecurse nosync nounwind memory(argmem: readwrite) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nounwind }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -49,6 +160,16 @@ attributes #3 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = distinct !{!5, !6, !7}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = !{!"llvm.loop.unroll.disable"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"long", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C/C++ TBAA"}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}
+!12 = distinct !{!12, !10, !11}
+!13 = distinct !{!13, !10, !11}
+!14 = distinct !{!14, !10, !11}
+!15 = distinct !{!15, !10, !11}
+!16 = distinct !{!16, !10, !11}
+!17 = distinct !{!17, !10, !11}

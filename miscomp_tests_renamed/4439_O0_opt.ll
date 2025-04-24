@@ -1,51 +1,88 @@
-; 171577722695840809621122838245765764290
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171577722695840809621122838245765764290_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171577722695840809621122838245765764290.c"
+; 177949937025407241262337053818575764112
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177949937025407241262337053818575764112_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177949937025407241262337053818575764112.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(i16 noundef zeroext %x) #0 {
+entry:
+  %x.addr = alloca i16, align 2
+  %y = alloca i16, align 2
+  store i16 %x, ptr %x.addr, align 2
+  %0 = load i16, ptr %x.addr, align 2
+  %conv = zext i16 %0 to i32
+  %cmp = icmp sgt i32 %conv, 32767
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %1 = load i16, ptr %x.addr, align 2
+  %conv2 = zext i16 %1 to i32
+  %sub = sub nsw i32 %conv2, 32768
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %sub, %cond.true ], [ 0, %cond.false ]
+  %conv3 = trunc i32 %cond to i16
+  store i16 %conv3, ptr %y, align 2
+  %2 = load i16, ptr %y, align 2
+  %conv4 = zext i16 %2 to i32
+  ret i32 %conv4
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %l = alloca i64, align 8
-  %n = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i64 2, ptr %l, align 8
-  store i32 0, ptr %n, align 4
-  br label %for.cond
+  %call = call i32 @foo(i16 noundef zeroext 0)
+  %cmp = icmp ne i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.end
 
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %n, align 4
-  %cmp = icmp slt i32 %0, 8
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %1 = load i64, ptr %l, align 8
-  %2 = load i32, ptr %n, align 4
-  %sh_prom = zext i32 %2 to i64
-  %shl = shl i64 8589934592, %sh_prom
-  %div = udiv i64 %1, %shl
-  %3 = load i32, ptr %n, align 4
-  %shr = ashr i32 512, %3
-  %conv = sext i32 %shr to i64
-  %cmp1 = icmp ne i64 %div, %conv
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body
+if.then:                                          ; preds = %entry
   call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %for.body
-  br label %for.inc
+if.end:                                           ; preds = %entry
+  %call1 = call i32 @foo(i16 noundef zeroext 32767)
+  %cmp2 = icmp ne i32 %call1, 0
+  br i1 %cmp2, label %if.then3, label %if.end4
 
-for.inc:                                          ; preds = %if.end
-  %4 = load i32, ptr %n, align 4
-  %inc = add nsw i32 %4, 1
-  store i32 %inc, ptr %n, align 4
-  br label %for.cond, !llvm.loop !6
+if.then3:                                         ; preds = %if.end
+  call void @abort() #2
+  unreachable
 
-for.end:                                          ; preds = %for.cond
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @foo(i16 noundef zeroext -32768)
+  %cmp6 = icmp ne i32 %call5, 0
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #2
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
+  %call9 = call i32 @foo(i16 noundef zeroext -32767)
+  %cmp10 = icmp ne i32 %call9, 1
+  br i1 %cmp10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  call void @abort() #2
+  unreachable
+
+if.end12:                                         ; preds = %if.end8
+  %call13 = call i32 @foo(i16 noundef zeroext -1)
+  %cmp14 = icmp ne i32 %call13, 32767
+  br i1 %cmp14, label %if.then15, label %if.end16
+
+if.then15:                                        ; preds = %if.end12
+  call void @abort() #2
+  unreachable
+
+if.end16:                                         ; preds = %if.end12
   ret i32 0
 }
 
@@ -65,5 +102,3 @@ attributes #2 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

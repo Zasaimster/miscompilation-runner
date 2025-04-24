@@ -1,97 +1,80 @@
-; 181073004623819118378173988277008369445
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/181073004623819118378173988277008369445_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/181073004623819118378173988277008369445.c"
+; 164505179025619587327290937156230916607
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164505179025619587327290937156230916607_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164505179025619587327290937156230916607.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @div1(i8 noundef signext %x) local_unnamed_addr #0 {
+@.str = private unnamed_addr constant [20 x i8] c"This code is dead.\0A\00", align 1
+@.str.1 = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local range(i32 -1, 1) i32 @test(i32 noundef %arg) local_unnamed_addr #0 {
 entry:
-  ret i32 20
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp = icmp sgt i32 %call, 0
+  br i1 %cmp, label %return, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1)
+  %cmp2 = icmp ne i32 %call1, 0
+  %spec.select = sext i1 %cmp2 to i32
+  br label %return
+
+return:                                           ; preds = %lor.lhs.false, %entry
+  %retval.0 = phi i32 [ 0, %entry ], [ %spec.select, %lor.lhs.false ]
+  ret i32 %retval.0
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @div2(i16 noundef signext %x) local_unnamed_addr #0 {
-entry:
-  ret i32 0
-}
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 -128, 129) i32 @div3(i8 noundef signext %x, i8 noundef signext %y) local_unnamed_addr #0 {
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
-  %conv = sext i8 %x to i32
-  %conv1 = sext i8 %y to i32
-  %div = sdiv i32 %conv, %conv1
-  ret i32 %div
-}
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp.i = icmp sgt i32 %call.i, 0
+  br i1 %cmp.i, label %if.end, label %lor.lhs.false.i
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 -32768, 32769) i32 @div4(i16 noundef signext %x, i16 noundef signext %y) local_unnamed_addr #0 {
-entry:
-  %conv = sext i16 %x to i32
-  %conv1 = sext i16 %y to i32
-  %div = sdiv i32 %conv, %conv1
-  ret i32 %div
-}
+lor.lhs.false.i:                                  ; preds = %entry
+  %call1.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1)
+  %cmp2.i.not = icmp eq i32 %call1.i, 0
+  br i1 %cmp2.i.not, label %if.end, label %if.then
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef range(i32 -128, 1) i32 @mod1(i8 noundef signext %x) local_unnamed_addr #0 {
-entry:
-  ret i32 0
-}
+if.then:                                          ; preds = %lor.lhs.false.i
+  tail call void @abort() #5
+  unreachable
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef range(i32 -32768, 1) i32 @mod2(i16 noundef signext %x) local_unnamed_addr #0 {
-entry:
-  ret i32 0
-}
+if.end:                                           ; preds = %lor.lhs.false.i, %entry
+  %call.i5 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp.i6 = icmp sgt i32 %call.i5, 0
+  br i1 %cmp.i6, label %if.then3, label %lor.lhs.false.i7
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 -127, 128) i32 @mod3(i8 noundef signext %x, i8 noundef signext %y) local_unnamed_addr #0 {
-entry:
-  %conv = sext i8 %x to i32
-  %conv1 = sext i8 %y to i32
-  %rem = srem i32 %conv, %conv1
-  ret i32 %rem
-}
+lor.lhs.false.i7:                                 ; preds = %if.end
+  %call1.i8 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1)
+  %cmp2.i9.not = icmp eq i32 %call1.i8, 0
+  br i1 %cmp2.i9.not, label %if.then3, label %if.end4
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 -32767, 32768) i32 @mod4(i16 noundef signext %x, i16 noundef signext %y) local_unnamed_addr #0 {
-entry:
-  %conv = sext i16 %x to i32
-  %conv1 = sext i16 %y to i32
-  %rem = srem i32 %conv, %conv1
-  ret i32 %rem
-}
+if.then3:                                         ; preds = %lor.lhs.false.i7, %if.end
+  tail call void @abort() #5
+  unreachable
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i64 @mod5(i64 noundef %x, i64 noundef %y) local_unnamed_addr #0 {
-entry:
-  %rem = srem i64 %x, %y
-  ret i64 %rem
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i64 @mod6(i64 noundef %x, i64 noundef %y) local_unnamed_addr #0 {
-entry:
-  %rem = urem i64 %x, %y
-  ret i64 %rem
-}
-
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
-  tail call void @abort() #3
+if.end4:                                          ; preds = %lor.lhs.false.i7
+  tail call void @exit(i32 noundef 0) #5
   unreachable
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+declare void @abort() local_unnamed_addr #3
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #4
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

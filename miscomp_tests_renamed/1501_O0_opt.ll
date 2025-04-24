@@ -1,34 +1,39 @@
-; 19722773641627032501024273911925516407
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/19722773641627032501024273911925516407_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/19722773641627032501024273911925516407.c"
+; 126824110488253839772566761251627824957
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126824110488253839772566761251627824957_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126824110488253839772566761251627824957.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @signed_poly(i64 noundef %sum, i64 noundef %x) #0 {
+define dso_local i32 @add(i32 noundef %a, i32 noundef %b, i32 noundef %c, i32 noundef %d, i32 noundef %e, i32 noundef %f, i32 noundef %g, i32 noundef %h, i32 noundef %i, i32 noundef %j, i32 noundef %k, i32 noundef %l, i32 noundef %m) #0 {
 entry:
-  %sum.addr = alloca i64, align 8
-  %x.addr = alloca i64, align 8
-  store i64 %sum, ptr %sum.addr, align 8
-  store i64 %x, ptr %x.addr, align 8
-  ret i64 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @unsigned_poly(i64 noundef %sum, i64 noundef %x) #0 {
-entry:
-  %sum.addr = alloca i64, align 8
-  %x.addr = alloca i64, align 8
-  store i64 %sum, ptr %sum.addr, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %sum.addr, align 8
-  %1 = load i64, ptr %x.addr, align 8
-  %mul = mul i64 %0, %1
-  %2 = load i64, ptr %sum.addr, align 8
-  %add = add i64 %2, %mul
-  store i64 %add, ptr %sum.addr, align 8
-  %3 = load i64, ptr %sum.addr, align 8
-  ret i64 %3
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  %c.addr = alloca i32, align 4
+  %d.addr = alloca i32, align 4
+  %e.addr = alloca i32, align 4
+  %f.addr = alloca i32, align 4
+  %g.addr = alloca i32, align 4
+  %h.addr = alloca i32, align 4
+  %i.addr = alloca i32, align 4
+  %j.addr = alloca i32, align 4
+  %k.addr = alloca i32, align 4
+  %l.addr = alloca i32, align 4
+  %m.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  store i32 %c, ptr %c.addr, align 4
+  store i32 %d, ptr %d.addr, align 4
+  store i32 %e, ptr %e.addr, align 4
+  store i32 %f, ptr %f.addr, align 4
+  store i32 %g, ptr %g.addr, align 4
+  store i32 %h, ptr %h.addr, align 4
+  store i32 %i, ptr %i.addr, align 4
+  store i32 %j, ptr %j.addr, align 4
+  store i32 %k, ptr %k.addr, align 4
+  store i32 %l, ptr %l.addr, align 4
+  store i32 %m, ptr %m.addr, align 4
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -36,8 +41,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i64 @signed_poly(i64 noundef 2, i64 noundef -3)
-  %cmp = icmp ne i64 %call, -4
+  %call = call i32 @add(i32 noundef 1, i32 noundef 2, i32 noundef 3, i32 noundef 4, i32 noundef 5, i32 noundef 6, i32 noundef 7, i32 noundef 8, i32 noundef 9, i32 noundef 10, i32 noundef 11, i32 noundef 12, i32 noundef 13)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -45,15 +50,6 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i64 @unsigned_poly(i64 noundef 2, i64 noundef 3)
-  %cmp2 = icmp ne i64 %call1, 8
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }

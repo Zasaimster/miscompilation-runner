@@ -1,25 +1,32 @@
-; 153716470520506023414510087758487091707
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153716470520506023414510087758487091707_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153716470520506023414510087758487091707.c"
+; 142266085610404428703233793517341924621
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/142266085610404428703233793517341924621_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/142266085610404428703233793517341924621.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %f = alloca float, align 4
+  %c = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %a, align 4
-  %0 = load i32, ptr %a, align 4
-  %add = add nsw i32 %0, 1
-  %conv = sitofp i32 %add to float
-  store float %conv, ptr %f, align 4
-  ret i32 0
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  br label %do.body
+
+do.body:                                          ; preds = %entry
+  br label %do.end
+
+do.end:                                           ; preds = %do.body
+  %0 = load i32, ptr %c, align 4
+  ret i32 %0
 }
 
+declare i32 @printf(ptr noundef, ...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

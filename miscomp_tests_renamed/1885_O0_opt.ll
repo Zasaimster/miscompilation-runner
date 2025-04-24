@@ -1,6 +1,6 @@
-; 176264537085343283836509637036498319502
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176264537085343283836509637036498319502_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176264537085343283836509637036498319502.c"
+; 133362793446530738042383317855672850315
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133362793446530738042383317855672850315_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133362793446530738042383317855672850315.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,19 +8,13 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %p = alloca ptr, align 8
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store ptr null, ptr %p, align 8
-  %0 = load ptr, ptr %p, align 8
-  %call = call i32 @strlen(ptr noundef %0)
-  %sub = sub nsw i32 %call, 5
-  ret i32 %sub
+  store i32 1, ptr %x, align 4
+  ret i32 0
 }
 
-declare i32 @strlen(ptr noundef) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

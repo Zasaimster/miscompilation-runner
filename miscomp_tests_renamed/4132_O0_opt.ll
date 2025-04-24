@@ -1,25 +1,26 @@
-; 196167761603657467325220234413624616666
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196167761603657467325220234413624616666_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196167761603657467325220234413624616666.c"
+; 172208750419339738444830646192032814797
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172208750419339738444830646192032814797_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172208750419339738444830646192032814797.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i32 274686410, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %rem = srem i32 %0, 4
+  ret i32 %rem
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %b = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 53671368, ptr %b, align 4
-  %0 = load i32, ptr %b, align 4
-  %conv = trunc i32 %0 to i8
-  %1 = load i32, ptr @a, align 4
-  %conv1 = trunc i32 %1 to i8
-  %call = call signext i8 @foo(i8 noundef signext %conv, i8 noundef signext %conv1)
-  %conv2 = sext i8 %call to i32
-  %cmp = icmp sgt i32 %conv2, 0
+  %call = call i32 @f(i32 noundef -1)
+  %cmp = icmp ne i32 %call, -1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -28,22 +29,6 @@ if.then:                                          ; preds = %entry
 
 if.end:                                           ; preds = %entry
   ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal signext i8 @foo(i8 noundef signext %si1, i8 noundef signext %si2) #0 {
-entry:
-  %si1.addr = alloca i8, align 1
-  %si2.addr = alloca i8, align 1
-  store i8 %si1, ptr %si1.addr, align 1
-  store i8 %si2, ptr %si2.addr, align 1
-  %0 = load i8, ptr %si1.addr, align 1
-  %conv = sext i8 %0 to i32
-  %1 = load i8, ptr %si2.addr, align 1
-  %conv1 = sext i8 %1 to i32
-  %mul = mul nsw i32 %conv, %conv1
-  %conv2 = trunc i32 %mul to i8
-  ret i8 %conv2
 }
 
 ; Function Attrs: noreturn nounwind

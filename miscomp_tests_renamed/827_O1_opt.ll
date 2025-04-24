@@ -1,33 +1,36 @@
-; 123895288659815349829984366760961383635
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123895288659815349829984366760961383635_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123895288659815349829984366760961383635.c"
+; 114559431273551389852948726850834896016
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/114559431273551389852948726850834896016_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/114559431273551389852948726850834896016.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.1 = private unnamed_addr constant [26 x i8] c"Size of float: %zu bytes\0A\00", align 1
-@.str.2 = private unnamed_addr constant [27 x i8] c"Size of double: %zu bytes\0A\00", align 1
-@.str.3 = private unnamed_addr constant [24 x i8] c"Size of char: %zu byte\0A\00", align 1
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
 
-; Function Attrs: nofree nounwind uwtable
+; Function Attrs: nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i64 noundef 4)
-  %call2 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef 8)
-  %call3 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.3, i64 noundef 1)
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %0 = zext i32 %call to i64
+  %vla = alloca i8, i64 %0, align 16
+  %call1 = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #4
+  %arrayidx = getelementptr inbounds nuw i8, ptr %vla, i64 1
+  %puts = call i32 @puts(ptr nonnull dereferenceable(1) %arrayidx)
   ret i32 0
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+declare i32 @calculateSquare(...) local_unnamed_addr #2
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #3
+
+attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree nounwind }
+attributes #4 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

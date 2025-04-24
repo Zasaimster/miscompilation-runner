@@ -1,13 +1,13 @@
-; 180625804299626592789826354961286540774
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/180625804299626592789826354961286540774_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/180625804299626592789826354961286540774.c"
+; 158211576486355063584387743912353018318
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/158211576486355063584387743912353018318_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/158211576486355063584387743912353018318.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @add(i32 noundef %a, i32 noundef %b, i32 noundef %c, i32 noundef %d, i32 noundef %e, i32 noundef %f, i32 noundef %g, i32 noundef %h, i32 noundef %i, i32 noundef %j, i32 noundef %k, i32 noundef %l, i32 noundef %m) local_unnamed_addr #0 {
+define dso_local noundef i32 @f(ptr noundef readnone captures(none) %a) local_unnamed_addr #0 {
 entry:
-  ret i32 20
+  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable

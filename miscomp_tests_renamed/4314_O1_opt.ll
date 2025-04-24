@@ -1,10 +1,10 @@
-; 119644349081482491562440742116224344907
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119644349081482491562440742116224344907_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119644349081482491562440742116224344907.c"
+; 175734630947689457430622518016127503708
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175734630947689457430622518016127503708_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175734630947689457430622518016127503708.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [19 x i8] c"Never reaches here\00", align 1
+@str = private unnamed_addr constant [12 x i8] c"Hello World\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {

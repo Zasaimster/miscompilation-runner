@@ -1,36 +1,26 @@
-; 192423444729894448975624651586019545882
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192423444729894448975624651586019545882_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192423444729894448975624651586019545882.c"
+; 170913970470961703208983044326007863795
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170913970470961703208983044326007863795_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170913970470961703208983044326007863795.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
-entry:
-  %x = alloca i64, align 8
-  %y = alloca i64, align 8
-  %0 = load i64, ptr %y, align 8
-  %mul = mul i64 %0, 8192
-  %sub = sub i64 %mul, 216
-  %div = udiv i64 %sub, 16
-  store i64 %div, ptr %y, align 8
-  %1 = load i64, ptr %y, align 8
-  %mul1 = mul i64 %1, 8192
-  %sub2 = sub i64 %mul1, 216
-  %div3 = udiv i64 %sub2, 16
-  store i64 %div3, ptr %x, align 8
-  %2 = load i64, ptr %x, align 8
-  %conv = trunc i64 %2 to i32
-  ret i32 %conv
-}
+%struct.adjust_template = type { i16, i16, i16, i16 }
+
+@adjust = internal global %struct.adjust_template { i16 0, i16 0, i16 1, i16 1 }, align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca i16, align 2
+  %y = alloca i16, align 2
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 498
+  store i16 1, ptr %x, align 2
+  store i16 1, ptr %y, align 2
+  call void @adjust_xy(ptr noundef %x, ptr noundef %y)
+  %0 = load i16, ptr %x, align 2
+  %conv = sext i16 %0 to i32
+  %cmp = icmp ne i32 %conv, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -40,6 +30,35 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @adjust_xy(ptr noundef %x, ptr noundef %y) #0 {
+entry:
+  %x.addr = alloca ptr, align 8
+  %y.addr = alloca ptr, align 8
+  store ptr %x, ptr %x.addr, align 8
+  store ptr %y, ptr %y.addr, align 8
+  %0 = load i16, ptr @adjust, align 2
+  %conv = sext i16 %0 to i32
+  %1 = load ptr, ptr %x.addr, align 8
+  %2 = load i16, ptr %1, align 2
+  %conv1 = sext i16 %2 to i32
+  %mul = mul nsw i32 %conv, %conv1
+  %3 = load i16, ptr getelementptr inbounds nuw (%struct.adjust_template, ptr @adjust, i32 0, i32 1), align 2
+  %conv2 = sext i16 %3 to i32
+  %4 = load ptr, ptr %y.addr, align 8
+  %5 = load i16, ptr %4, align 2
+  %conv3 = sext i16 %5 to i32
+  %mul4 = mul nsw i32 %conv2, %conv3
+  %add = add nsw i32 %mul, %mul4
+  %6 = load i16, ptr getelementptr inbounds nuw (%struct.adjust_template, ptr @adjust, i32 0, i32 2), align 2
+  %conv5 = sext i16 %6 to i32
+  %add6 = add nsw i32 %add, %conv5
+  %conv7 = trunc i32 %add6 to i16
+  %7 = load ptr, ptr %x.addr, align 8
+  store i16 %conv7, ptr %7, align 2
+  ret void
 }
 
 ; Function Attrs: noreturn nounwind

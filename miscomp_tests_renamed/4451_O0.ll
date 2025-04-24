@@ -1,6 +1,6 @@
-; 134354816188868856500977769200120156816
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134354816188868856500977769200120156816.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134354816188868856500977769200120156816.c"
+; 178171869392978002621734763436296861785
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/178171869392978002621734763436296861785.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/178171869392978002621734763436296861785.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -10,28 +10,38 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %Count = alloca i32, align 4
+  %a = alloca i32, align 4
+  %p = alloca i32, align 4
+  %t = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %Count, align 4
-  br label %for.cond
+  %call = call i32 (...) @pointlessFunction()
+  store i32 0, ptr %p, align 4
+  store i32 0, ptr %t, align 4
+  br label %while.cond
 
-for.cond:                                         ; preds = %for.inc, %entry
-  br i1 true, label %for.body, label %for.end
+while.cond:                                       ; preds = %while.body, %entry
+  %0 = load i32, ptr %a, align 4
+  %cmp = icmp slt i32 %0, 100
+  br i1 %cmp, label %while.body, label %while.end
 
-for.body:                                         ; preds = %for.cond
-  %0 = load i32, ptr %Count, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
-  br label %for.inc
+while.body:                                       ; preds = %while.cond
+  %1 = load i32, ptr %a, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %1)
+  %2 = load i32, ptr %a, align 4
+  store i32 %2, ptr %t, align 4
+  %3 = load i32, ptr %t, align 4
+  %4 = load i32, ptr %p, align 4
+  %add = add nsw i32 %3, %4
+  store i32 %add, ptr %a, align 4
+  %5 = load i32, ptr %t, align 4
+  store i32 %5, ptr %p, align 4
+  br label %while.cond, !llvm.loop !6
 
-for.inc:                                          ; preds = %for.body
-  %1 = load i32, ptr %Count, align 4
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr %Count, align 4
-  br label %for.cond
-
-for.end:                                          ; preds = %for.cond
+while.end:                                        ; preds = %while.cond
   ret i32 0
 }
+
+declare i32 @pointlessFunction(...) #1
 
 declare i32 @printf(ptr noundef, ...) #1
 
@@ -47,3 +57,5 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}

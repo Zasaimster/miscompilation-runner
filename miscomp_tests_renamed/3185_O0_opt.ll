@@ -1,40 +1,44 @@
-; 18303344918177721183119932343944552623
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/18303344918177721183119932343944552623_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/18303344918177721183119932343944552623.c"
+; 155742129056036632970698281495661441204
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155742129056036632970698281495661441204_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155742129056036632970698281495661441204.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local ptr @f(ptr noundef %p) #0 {
+entry:
+  %p.addr = alloca ptr, align 8
+  %a = alloca i64, align 8
+  store ptr %p, ptr %p.addr, align 8
+  %0 = load ptr, ptr %p.addr, align 8
+  %incdec.ptr = getelementptr inbounds nuw i64, ptr %0, i32 1
+  store ptr %incdec.ptr, ptr %p.addr, align 8
+  %1 = load i64, ptr %0, align 8
+  %shr = lshr i64 %1, 24
+  store i64 %shr, ptr %a, align 8
+  %2 = load ptr, ptr %p.addr, align 8
+  %3 = load i64, ptr %a, align 8
+  %add.ptr = getelementptr inbounds nuw i64, ptr %2, i64 %3
+  ret ptr %add.ptr
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
+  %x = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  store i32 2, ptr %i, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  br i1 true, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %0 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %0, 1
-  store i32 %inc, ptr %i, align 4
-  br label %for.cond
-
-for.end:                                          ; preds = %for.cond
-  %1 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %1, 10
+  store i64 2147483648, ptr %x, align 8
+  %call = call ptr @f(ptr noundef %x)
+  %add.ptr = getelementptr inbounds i64, ptr %x, i64 129
+  %cmp = icmp ne ptr %call, %add.ptr
   br i1 %cmp, label %if.then, label %if.end
 
-if.then:                                          ; preds = %for.end
+if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %for.end
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }

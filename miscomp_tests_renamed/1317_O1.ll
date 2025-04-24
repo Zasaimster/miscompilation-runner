@@ -1,57 +1,75 @@
-; 106456249475329203969476357314019356000
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106456249475329203969476357314019356000.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106456249475329203969476357314019356000.c"
+; 123488613924433782383068316356287810907
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123488613924433782383068316356287810907.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123488613924433782383068316356287810907.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
-; Function Attrs: nounwind uwtable
-define dso_local range(i32 0, 2) i32 @f(i32 noundef %a) local_unnamed_addr #0 {
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @f1(i32 noundef %diff) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %a)
-  %cmp = icmp slt i32 %call, 12
-  br i1 %cmp, label %if.then, label %return
-
-if.then:                                          ; preds = %entry
-  %call1 = tail call i32 (...) @example7() #7
-  %cmp2 = icmp sgt i32 %call1, -15
-  br i1 %cmp2, label %if.then3, label %return
-
-if.then3:                                         ; preds = %if.then
-  %cond = tail call i32 @llvm.abs.i32(i32 %a, i1 true)
-  %cmp5 = icmp ne i32 %cond, 2
-  %. = zext i1 %cmp5 to i32
-  br label %return
-
-return:                                           ; preds = %entry, %if.then, %if.then3
-  %retval.0 = phi i32 [ %., %if.then3 ], [ 1, %if.then ], [ 1, %entry ]
-  ret i32 %retval.0
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  ret i32 %call
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-declare i32 @example7(...) local_unnamed_addr #2
-
-; Function Attrs: noreturn nounwind uwtable
-define dso_local noundef i32 @main(i32 noundef %argc, ptr noundef readnone captures(none) %argv) local_unnamed_addr #3 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef range(i32 0, -2147483647) i32 @f2(i32 noundef %diff) local_unnamed_addr #2 {
 entry:
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef -2)
-  %cmp.i = icmp slt i32 %call.i, 12
-  br i1 %cmp.i, label %if.then.i, label %if.then
+  %cond = tail call i32 @llvm.abs.i32(i32 %diff, i1 false)
+  ret i32 %cond
+}
 
-if.then.i:                                        ; preds = %entry
-  %call1.i = tail call i32 (...) @example7() #7
-  %cmp2.i = icmp sgt i32 %call1.i, -15
-  br i1 %cmp2.i, label %if.end, label %if.then
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i64 0, -9223372036854775808) i64 @f3(i64 noundef %diff) local_unnamed_addr #2 {
+entry:
+  %cond = tail call i64 @llvm.abs.i64(i64 %diff, i1 true)
+  ret i64 %cond
+}
 
-if.then:                                          ; preds = %entry, %if.then.i
-  tail call void @abort() #8
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef range(i64 0, -9223372036854775807) i64 @f4(i64 noundef %diff) local_unnamed_addr #2 {
+entry:
+  %cond = tail call i64 @llvm.abs.i64(i64 %diff, i1 false)
+  ret i64 %cond
+}
+
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #3 {
+entry:
+  br label %for.body
+
+for.body:                                         ; preds = %entry, %if.end35
+  %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %if.end35 ]
+  %call.i = tail call noundef i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %0 = zext i32 %call.i to i64
+  %cmp1.not = icmp eq i64 %indvars.iv, %0
+  br i1 %cmp1.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %for.body
+  tail call void @abort() #7
   unreachable
 
-if.end:                                           ; preds = %if.then.i
-  tail call void @exit(i32 noundef 0) #8
+if.end:                                           ; preds = %for.body
+  %call.i61 = tail call noundef i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %1 = zext i32 %call.i61 to i64
+  %cmp3.not = icmp eq i64 %indvars.iv, %1
+  br i1 %cmp3.not, label %if.end35, label %if.then4
+
+if.then4:                                         ; preds = %if.end
+  tail call void @abort() #7
+  unreachable
+
+if.end35:                                         ; preds = %if.end
+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
+  %exitcond.not = icmp eq i64 %indvars.iv.next, 11
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !5
+
+for.end:                                          ; preds = %if.end35
+  tail call void @exit(i32 noundef 0) #7
   unreachable
 }
 
@@ -64,15 +82,17 @@ declare void @exit(i32 noundef) local_unnamed_addr #5
 ; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
 declare i32 @llvm.abs.i32(i32, i1 immarg) #6
 
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i64 @llvm.abs.i64(i64, i1 immarg) #6
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #5 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #6 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
-attributes #7 = { nounwind }
-attributes #8 = { noreturn nounwind }
+attributes #7 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -82,3 +102,6 @@ attributes #8 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!5 = distinct !{!5, !6, !7}
+!6 = !{!"llvm.loop.mustprogress"}
+!7 = !{!"llvm.loop.unroll.disable"}

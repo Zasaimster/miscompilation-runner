@@ -1,45 +1,45 @@
-; 174610923917394327948022440021415321874
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/174610923917394327948022440021415321874_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/174610923917394327948022440021415321874.c"
+; 136487676306013934212480740916915108916
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136487676306013934212480740916915108916_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136487676306013934212480740916915108916.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [10 x i8] c"Positive\0A\00", align 1
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  tail call fastcc void @bug()
-  tail call void @exit(i32 noundef 0) #4
-  unreachable
-}
+@str = private unnamed_addr constant [29 x i8] c"This function is never used.\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define internal fastcc void @bug() unnamed_addr #1 {
+define dso_local range(i32 1, -2147483648) i32 @blah(i32 noundef %zzz) local_unnamed_addr #0 {
 entry:
-  %call6 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp7 = icmp slt i32 %call6, 5
-  br i1 %cmp7, label %for.cond.preheader, label %while.end
+  %cmp = icmp sgt i32 %zzz, -1
+  br i1 %cmp, label %cleanup, label %if.end
 
-for.cond.preheader:                               ; preds = %for.cond.preheader, %entry
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %cmp = icmp slt i32 %call, 5
-  br i1 %cmp, label %for.cond.preheader, label %while.end, !llvm.loop !5
+if.end:                                           ; preds = %entry
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %sub = sub nsw i32 0, %zzz
+  br label %cleanup
 
-while.end:                                        ; preds = %for.cond.preheader, %entry
-  ret void
+cleanup:                                          ; preds = %if.end, %entry
+  %retval.0 = phi i32 [ %sub, %if.end ], [ 1, %entry ]
+  ret i32 %retval.0
+}
+
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  tail call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
 ; Function Attrs: nofree noreturn
 declare void @exit(i32 noundef) local_unnamed_addr #2
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #3
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #3
 
-attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree nounwind }
 attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
@@ -50,6 +50,3 @@ attributes #4 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = distinct !{!5, !6, !7}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = !{!"llvm.loop.unroll.disable"}

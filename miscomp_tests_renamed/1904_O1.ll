@@ -1,23 +1,30 @@
-; 171913850496645133450476304151404083825
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171913850496645133450476304151404083825.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171913850496645133450476304151404083825.c"
+; 13361962379749781684765549875901567042
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13361962379749781684765549875901567042.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13361962379749781684765549875901567042.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@fptr = dso_local local_unnamed_addr global ptr null, align 8
-
-; Function Attrs: nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local <2 x float> @f(float noundef %a, float noundef %b) local_unnamed_addr #0 {
 entry:
-  %call = tail call i32 (...) @uselessFunction() #2
-  ret i32 0
+  %retval.sroa.0.4.vec.insert = insertelement <2 x float> <float 0.000000e+00, float poison>, float %b, i64 1
+  ret <2 x float> %retval.sroa.0.4.vec.insert
 }
 
-declare i32 @uselessFunction(...) local_unnamed_addr #1
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  tail call void @abort() #3
+  unreachable
+}
 
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nounwind }
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #2
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="64" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="64" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

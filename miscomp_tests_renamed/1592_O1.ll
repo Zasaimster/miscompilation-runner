@@ -1,45 +1,133 @@
-; 139053964581672517394739975384759346771
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139053964581672517394739975384759346771.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139053964581672517394739975384759346771.c"
+; 12843292380416105900318651613232445748
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12843292380416105900318651613232445748.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12843292380416105900318651613232445748.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.1 = private unnamed_addr constant [7 x i8] c"hello\0A\00", align 1
-@.str.2 = private unnamed_addr constant [2 x i8] c"a\00", align 1
-@.str.3 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
-@.str.4 = private unnamed_addr constant [3 x i8] c"%s\00", align 1
-@.str.5 = private unnamed_addr constant [6 x i8] c"hello\00", align 1
-@.str.6 = private unnamed_addr constant [3 x i8] c"%c\00", align 1
-@.str.7 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
-@.str.8 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@str = private unnamed_addr constant [10 x i8] c"Loop done\00", align 1
+@str = private unnamed_addr constant [13 x i8] c"I'm not used\00", align 1
 
-; Function Attrs: nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 112) i32 @foo(i8 noundef signext %x) local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %call1 = tail call i32 (i32, ptr, ...) @test(i32 noundef 6, ptr noundef nonnull @.str.1) #3
-  %call2 = tail call i32 (i32, ptr, ...) @test(i32 noundef 1, ptr noundef nonnull @.str.2) #3
-  %call3 = tail call i32 (i32, ptr, ...) @test(i32 noundef 0, ptr noundef nonnull @.str.3) #3
-  %call4 = tail call i32 (i32, ptr, ptr, ...) @test(i32 noundef 5, ptr noundef nonnull @.str.4, ptr noundef nonnull @.str.5) #3
-  %call5 = tail call i32 (i32, ptr, ptr, ...) @test(i32 noundef 6, ptr noundef nonnull @.str.4, ptr noundef nonnull @.str.1) #3
-  %call6 = tail call i32 (i32, ptr, ptr, ...) @test(i32 noundef 1, ptr noundef nonnull @.str.4, ptr noundef nonnull @.str.2) #3
-  %call7 = tail call i32 (i32, ptr, ptr, ...) @test(i32 noundef 0, ptr noundef nonnull @.str.4, ptr noundef nonnull @.str.3) #3
-  %call8 = tail call i32 (i32, ptr, i32, ...) @test(i32 noundef 1, ptr noundef nonnull @.str.6, i32 noundef 120) #3
-  %call9 = tail call i32 (i32, ptr, ptr, ...) @test(i32 noundef 7, ptr noundef nonnull @.str.7, ptr noundef nonnull @.str.1) #3
-  %call10 = tail call i32 (i32, ptr, i32, ...) @test(i32 noundef 2, ptr noundef nonnull @.str.8, i32 noundef 0) #3
-  ret i32 0
+  switch i8 %x, label %sw.epilog [
+    i8 0, label %sw.bb
+    i8 1, label %sw.bb1
+    i8 2, label %sw.bb2
+    i8 3, label %sw.bb3
+    i8 4, label %sw.bb4
+    i8 5, label %sw.bb5
+    i8 6, label %sw.bb6
+    i8 7, label %sw.bb7
+    i8 8, label %sw.bb8
+    i8 9, label %sw.bb9
+    i8 10, label %sw.bb6
+    i8 11, label %sw.bb11
+    i8 12, label %sw.bb12
+    i8 13, label %sw.bb13
+    i8 14, label %sw.bb5
+    i8 15, label %sw.bb15
+    i8 16, label %sw.bb6
+    i8 17, label %sw.bb1
+    i8 18, label %sw.bb2
+    i8 19, label %sw.bb3
+    i8 20, label %sw.bb4
+    i8 21, label %sw.bb21
+    i8 22, label %sw.bb6
+    i8 23, label %sw.bb7
+    i8 24, label %sw.bb8
+    i8 25, label %sw.bb25
+    i8 26, label %sw.bb6
+    i8 27, label %sw.bb27
+    i8 28, label %sw.bb28
+    i8 29, label %sw.bb13
+    i8 30, label %sw.bb5
+    i8 31, label %sw.bb15
+    i8 32, label %sw.bb6
+    i8 98, label %sw.bb33
+    i8 -62, label %sw.bb3
+  ]
+
+sw.bb:                                            ; preds = %entry
+  br label %sw.epilog
+
+sw.bb1:                                           ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb2:                                           ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb3:                                           ; preds = %entry, %entry, %entry
+  br label %sw.epilog
+
+sw.bb4:                                           ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb5:                                           ; preds = %entry, %entry, %entry
+  br label %sw.epilog
+
+sw.bb6:                                           ; preds = %entry, %entry, %entry, %entry, %entry, %entry
+  br label %sw.epilog
+
+sw.bb7:                                           ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb8:                                           ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb9:                                           ; preds = %entry
+  br label %sw.epilog
+
+sw.bb11:                                          ; preds = %entry
+  br label %sw.epilog
+
+sw.bb12:                                          ; preds = %entry
+  br label %sw.epilog
+
+sw.bb13:                                          ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb15:                                          ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb21:                                          ; preds = %entry
+  br label %sw.epilog
+
+sw.bb25:                                          ; preds = %entry
+  br label %sw.epilog
+
+sw.bb27:                                          ; preds = %entry
+  br label %sw.epilog
+
+sw.bb28:                                          ; preds = %entry
+  br label %sw.epilog
+
+sw.bb33:                                          ; preds = %entry
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %entry, %sw.bb33, %sw.bb28, %sw.bb27, %sw.bb25, %sw.bb21, %sw.bb15, %sw.bb13, %sw.bb12, %sw.bb11, %sw.bb9, %sw.bb8, %sw.bb7, %sw.bb6, %sw.bb5, %sw.bb4, %sw.bb3, %sw.bb2, %sw.bb1, %sw.bb
+  %y.0 = phi i32 [ 0, %entry ], [ 18, %sw.bb33 ], [ 105, %sw.bb28 ], [ 102, %sw.bb27 ], [ 106, %sw.bb25 ], [ 107, %sw.bb21 ], [ 10, %sw.bb15 ], [ 111, %sw.bb13 ], [ 15, %sw.bb12 ], [ 12, %sw.bb11 ], [ 16, %sw.bb9 ], [ 28, %sw.bb8 ], [ 8, %sw.bb7 ], [ 31, %sw.bb6 ], [ 17, %sw.bb5 ], [ 5, %sw.bb4 ], [ 19, %sw.bb3 ], [ 2, %sw.bb2 ], [ 7, %sw.bb1 ], [ 1, %sw.bb ]
+  ret i32 %y.0
 }
 
-declare i32 @test(...) local_unnamed_addr #1
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @notUsed() local_unnamed_addr #1 {
+entry:
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  ret i32 0
+}
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
 
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { nofree nounwind }
-attributes #3 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

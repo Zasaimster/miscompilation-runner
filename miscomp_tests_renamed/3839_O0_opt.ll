@@ -1,18 +1,69 @@
-; 157727802687991487751212497427212847123
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157727802687991487751212497427212847123_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157727802687991487751212497427212847123.c"
+; 167032472911951913427234917427753411838
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167032472911951913427234917427753411838_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167032472911951913427234917427753411838.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.complex = type { float, float }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local <2 x float> @f(float noundef %a, float noundef %b) #0 {
+entry:
+  %retval = alloca %struct.complex, align 4
+  %a.addr = alloca float, align 4
+  %b.addr = alloca float, align 4
+  store float %a, ptr %a.addr, align 4
+  store float %b, ptr %b.addr, align 4
+  %r = getelementptr inbounds nuw %struct.complex, ptr %retval, i32 0, i32 0
+  store float 0.000000e+00, ptr %r, align 4
+  %0 = load float, ptr %b.addr, align 4
+  %i = getelementptr inbounds nuw %struct.complex, ptr %retval, i32 0, i32 1
+  store float %0, ptr %i, align 4
+  %1 = load <2 x float>, ptr %retval, align 4
+  ret <2 x float> %1
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %z = alloca %struct.complex, align 4
   store i32 0, ptr %retval, align 4
-  ret i32 0
+  %call = call <2 x float> @f(float noundef 1.000000e+00, float noundef 0.000000e+00)
+  store <2 x float> %call, ptr %z, align 4
+  %r = getelementptr inbounds nuw %struct.complex, ptr %z, i32 0, i32 0
+  %0 = load float, ptr %r, align 4
+  %conv = fpext float %0 to double
+  %cmp = fcmp une double %conv, 1.000000e+00
+  br i1 %cmp, label %if.then, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %i = getelementptr inbounds nuw %struct.complex, ptr %z, i32 0, i32 1
+  %1 = load float, ptr %i, align 4
+  %conv2 = fpext float %1 to double
+  %cmp3 = fcmp une double %conv2, 0.000000e+00
+  br i1 %cmp3, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %lor.lhs.false
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
-attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
+attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="64" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

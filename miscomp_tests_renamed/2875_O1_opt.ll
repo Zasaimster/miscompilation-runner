@@ -1,26 +1,26 @@
-; 161191036988205047860423539144925035372
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161191036988205047860423539144925035372_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161191036988205047860423539144925035372.c"
+; 150371821754084320509332281073507698306
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150371821754084320509332281073507698306_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150371821754084320509332281073507698306.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@main_argc = dso_local local_unnamed_addr global i32 0, align 4
+@x = dso_local local_unnamed_addr global i32 0, align 4
 
-; Function Attrs: nofree norecurse nosync nounwind memory(read, argmem: none, inaccessiblemem: none) uwtable
-define dso_local void @main() local_unnamed_addr #0 {
+; Function Attrs: nounwind uwtable
+define dso_local range(i32 0, 2) i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @main_argc, align 4, !tbaa !5
-  %tobool.not = icmp eq i32 %0, 0
-  br i1 %tobool.not, label %if.end, label %for.cond
-
-for.cond:                                         ; preds = %for.cond, %entry
-  br label %for.cond, !llvm.loop !9
-
-if.end:                                           ; preds = %entry
-  ret void
+  %call = tail call i32 (...) @example7() #2
+  %0 = load i32, ptr @x, align 4, !tbaa !5
+  %cond11 = icmp ne i32 %0, 0
+  %retval.0 = zext i1 %cond11 to i32
+  ret i32 %retval.0
 }
 
-attributes #0 = { nofree norecurse nosync nounwind memory(read, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+declare i32 @example7(...) local_unnamed_addr #1
+
+attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -34,5 +34,3 @@ attributes #0 = { nofree norecurse nosync nounwind memory(read, argmem: none, in
 !6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = distinct !{!9, !10}
-!10 = !{!"llvm.loop.unroll.disable"}

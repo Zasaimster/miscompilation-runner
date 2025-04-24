@@ -1,36 +1,40 @@
-; 192379712632014318277393818192286271080
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192379712632014318277393818192286271080.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192379712632014318277393818192286271080.c"
+; 181937680786350460503552446043390028503
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/181937680786350460503552446043390028503.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/181937680786350460503552446043390028503.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"aab\00", align 1
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(ptr noundef %a) #0 {
+entry:
+  %a.addr = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  ret i32 42
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %out = alloca [4 x i8], align 1
   store i32 0, ptr %retval, align 4
-  %arraydecay = getelementptr inbounds [4 x i8], ptr %out, i64 0, i64 0
-  %call = call ptr @test(ptr noundef @.str, ptr noundef %arraydecay)
+  %call = call i32 @foo(ptr noundef null)
+  %cmp = icmp ne i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #2
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
-; Function Attrs: noinline nounwind uwtable
-define internal ptr @test(ptr noundef %in, ptr noundef %out) #0 {
-entry:
-  %in.addr = alloca ptr, align 8
-  %out.addr = alloca ptr, align 8
-  store ptr %in, ptr %in.addr, align 8
-  store ptr %out, ptr %out.addr, align 8
-  br label %while.body
-
-while.body:                                       ; preds = %entry, %while.body
-  br label %while.body
-}
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

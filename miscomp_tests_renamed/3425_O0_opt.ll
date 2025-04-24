@@ -1,96 +1,181 @@
-; 151874999867940438595522498251865579157
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151874999867940438595522498251865579157_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151874999867940438595522498251865579157.c"
+; 159980212991436399494019987649788525659
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159980212991436399494019987649788525659_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159980212991436399494019987649788525659.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [19 x i8] c"This won't print.\0A\00", align 1
+@.str = private unnamed_addr constant [16 x i8] c"I am not used!\0A\00", align 1
+@__const.main.f = private unnamed_addr constant [3 x float] [float 2.000000e+00, float 3.000000e+00, float 4.000000e+00], align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %ty) #0 {
+define dso_local i32 @t1(ptr noundef %f, i32 noundef %i, ptr noundef %f1, ptr noundef %f2) #0 {
 entry:
   %retval = alloca i32, align 4
-  %ty.addr = alloca ptr, align 8
-  store ptr %ty, ptr %ty.addr, align 8
-  %0 = load ptr, ptr %ty.addr, align 8
-  store double -1.000000e+00, ptr %0, align 8
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
+  %f.addr = alloca ptr, align 8
+  %i.addr = alloca i32, align 4
+  %f1.addr = alloca ptr, align 8
+  %f2.addr = alloca ptr, align 8
+  store ptr %f, ptr %f.addr, align 8
+  store i32 %i, ptr %i.addr, align 4
+  store ptr %f1, ptr %f1.addr, align 8
+  store ptr %f2, ptr %f2.addr, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %0 = load ptr, ptr %f.addr, align 8
+  %1 = load i32, ptr %i.addr, align 4
+  %add = add nsw i32 %1, 1
+  %idxprom = sext i32 %add to i64
+  %arrayidx = getelementptr inbounds float, ptr %0, i64 %idxprom
+  %2 = load float, ptr %arrayidx, align 4
+  %3 = load ptr, ptr %f.addr, align 8
+  %4 = load i32, ptr %i.addr, align 4
+  %idxprom1 = sext i32 %4 to i64
+  %arrayidx2 = getelementptr inbounds float, ptr %3, i64 %idxprom1
+  store float %2, ptr %arrayidx2, align 4
+  %5 = load ptr, ptr %f2.addr, align 8
+  call void %5(float noundef 2.500000e+00, float noundef 3.500000e+00)
+  %6 = load i32, ptr %retval, align 4
+  ret i32 %6
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @t2(ptr noundef %f, i32 noundef %i, ptr noundef %f1, ptr noundef %f2, ptr noundef %f3) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %f.addr = alloca ptr, align 8
+  %i.addr = alloca i32, align 4
+  %f1.addr = alloca ptr, align 8
+  %f2.addr = alloca ptr, align 8
+  %f3.addr = alloca ptr, align 8
+  store ptr %f, ptr %f.addr, align 8
+  store i32 %i, ptr %i.addr, align 4
+  store ptr %f1, ptr %f1.addr, align 8
+  store ptr %f2, ptr %f2.addr, align 8
+  store ptr %f3, ptr %f3.addr, align 8
+  %0 = load ptr, ptr %f3.addr, align 8
+  call void %0(float noundef 6.000000e+00)
+  %1 = load ptr, ptr %f1.addr, align 8
+  call void %1(double noundef 3.000000e+00)
+  %2 = load ptr, ptr %f.addr, align 8
+  %3 = load i32, ptr %i.addr, align 4
+  %add = add nsw i32 %3, 1
+  %idxprom = sext i32 %add to i64
+  %arrayidx = getelementptr inbounds float, ptr %2, i64 %idxprom
+  %4 = load float, ptr %arrayidx, align 4
+  %5 = load ptr, ptr %f.addr, align 8
+  %6 = load i32, ptr %i.addr, align 4
+  %idxprom1 = sext i32 %6 to i64
+  %arrayidx2 = getelementptr inbounds float, ptr %5, i64 %idxprom1
+  store float %4, ptr %arrayidx2, align 4
+  %7 = load ptr, ptr %f2.addr, align 8
+  call void %7(float noundef 2.500000e+00, float noundef 3.500000e+00)
+  %8 = load i32, ptr %retval, align 4
+  ret i32 %8
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f1(double noundef %d) #0 {
+entry:
+  %d.addr = alloca double, align 8
+  store double %d, ptr %d.addr, align 8
+  %0 = load double, ptr %d.addr, align 8
+  %cmp = fcmp une double %0, 3.000000e+00
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #5
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret void
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f2(float noundef %f1, float noundef %f2) #0 {
+entry:
+  %f1.addr = alloca float, align 4
+  %f2.addr = alloca float, align 4
+  store float %f1, ptr %f1.addr, align 4
+  store float %f2, ptr %f2.addr, align 4
+  %0 = load float, ptr %f1.addr, align 4
+  %cmp = fcmp une float %0, 2.500000e+00
+  br i1 %cmp, label %if.then, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load float, ptr %f2.addr, align 4
+  %cmp1 = fcmp une float %1, 3.500000e+00
+  br i1 %cmp1, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #5
+  unreachable
+
+if.end:                                           ; preds = %lor.lhs.false
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f3(float noundef %f) #0 {
+entry:
+  %f.addr = alloca float, align 4
+  store float %f, ptr %f.addr, align 4
+  %0 = load float, ptr %f.addr, align 4
+  %cmp = fcmp une float %0, 6.000000e+00
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #5
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %saved_stack = alloca ptr, align 8
-  %__vla_expr0 = alloca i64, align 8
-  %tx = alloca double, align 8
-  %ty = alloca double, align 8
-  %d = alloca double, align 8
+  %f = alloca [3 x float], align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %0 = zext i32 %call to i64
-  %1 = call ptr @llvm.stacksave.p0()
-  store ptr %1, ptr %saved_stack, align 8
-  store i64 %0, ptr %__vla_expr0, align 8
-  store double 0.000000e+00, ptr %tx, align 8
-  %call1 = call i32 @f(ptr noundef %ty)
-  %2 = load double, ptr %ty, align 8
-  %cmp = fcmp olt double %2, 1.000000e+01
-  br i1 %cmp, label %if.then, label %if.end
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %f, ptr align 4 @__const.main.f, i64 12, i1 false)
+  %arraydecay = getelementptr inbounds [3 x float], ptr %f, i64 0, i64 0
+  %call = call i32 @t1(ptr noundef %arraydecay, i32 noundef 0, ptr noundef @f1, ptr noundef @f2)
+  %arraydecay1 = getelementptr inbounds [3 x float], ptr %f, i64 0, i64 0
+  %call2 = call i32 @t2(ptr noundef %arraydecay1, i32 noundef 1, ptr noundef @f1, ptr noundef @f2, ptr noundef @f3)
+  %arrayidx = getelementptr inbounds [3 x float], ptr %f, i64 0, i64 0
+  %0 = load float, ptr %arrayidx, align 4
+  %cmp = fcmp une float %0, 3.000000e+00
+  br i1 %cmp, label %land.lhs.true, label %if.end
 
-if.then:                                          ; preds = %entry
-  %3 = load double, ptr %ty, align 8
-  %fneg = fneg double %3
-  store double %fneg, ptr %ty, align 8
-  br label %if.end
+land.lhs.true:                                    ; preds = %entry
+  %arrayidx3 = getelementptr inbounds [3 x float], ptr %f, i64 0, i64 1
+  %1 = load float, ptr %arrayidx3, align 4
+  %cmp4 = fcmp une float %1, 4.000000e+00
+  br i1 %cmp4, label %if.then, label %if.end
 
-if.end:                                           ; preds = %if.then, %entry
-  %4 = load double, ptr %tx, align 8
-  %5 = load double, ptr %ty, align 8
-  %cmp2 = fcmp ogt double %4, %5
-  br i1 %cmp2, label %cond.true, label %cond.false
-
-cond.true:                                        ; preds = %if.end
-  %6 = load double, ptr %tx, align 8
-  br label %cond.end
-
-cond.false:                                       ; preds = %if.end
-  %7 = load double, ptr %ty, align 8
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi double [ %6, %cond.true ], [ %7, %cond.false ]
-  store double %cond, ptr %d, align 8
-  %8 = load double, ptr %ty, align 8
-  %9 = load double, ptr %d, align 8
-  %cmp3 = fcmp une double %8, %9
-  br i1 %cmp3, label %if.then4, label %if.end5
-
-if.then4:                                         ; preds = %cond.end
+if.then:                                          ; preds = %land.lhs.true
   call void @abort() #5
   unreachable
 
-if.end5:                                          ; preds = %cond.end
+if.end:                                           ; preds = %land.lhs.true, %entry
   call void @exit(i32 noundef 0) #6
   unreachable
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare ptr @llvm.stacksave.p0() #2
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #3
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #3
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #4
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nosync nounwind willreturn }
-attributes #3 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 attributes #4 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #5 = { noreturn nounwind }
 attributes #6 = { noreturn }

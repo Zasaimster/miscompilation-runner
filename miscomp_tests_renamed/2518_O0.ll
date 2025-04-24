@@ -1,32 +1,50 @@
-; 184128596872463741481473341072488257881
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184128596872463741481473341072488257881.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184128596872463741481473341072488257881.c"
+; 143538496898332933451570270013234651867
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/143538496898332933451570270013234651867.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/143538496898332933451570270013234651867.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@rule_text_needs_stack_pop = internal global i32 0, align 4
-@input_stack_pos = internal global i32 1, align 4
+%struct.Test1 = type { [4 x i32] }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local i32 @func1() #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 1, ptr @rule_text_needs_stack_pop, align 4
-  %0 = load i32, ptr @input_stack_pos, align 4
-  %cmp = icmp sle i32 %0, 0
-  br i1 %cmp, label %if.then, label %if.else
+  %test = alloca %struct.Test1, align 4
+  %tmp = alloca %struct.Test1, align 4
+  %call = call { i64, i64 } @func2()
+  %coerce.dive = getelementptr inbounds nuw %struct.Test1, ptr %tmp, i32 0, i32 0
+  %0 = getelementptr inbounds nuw { i64, i64 }, ptr %coerce.dive, i32 0, i32 0
+  %1 = extractvalue { i64, i64 } %call, 0
+  store i64 %1, ptr %0, align 4
+  %2 = getelementptr inbounds nuw { i64, i64 }, ptr %coerce.dive, i32 0, i32 1
+  %3 = extractvalue { i64, i64 } %call, 1
+  store i64 %3, ptr %2, align 4
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %test, ptr align 4 %tmp, i64 16, i1 false)
+  ret i32 0
+}
 
-if.then:                                          ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
 
-if.else:                                          ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.else, %if.then
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
+; Function Attrs: noinline nounwind uwtable
+define dso_local { i64, i64 } @func2() #0 {
+entry:
+  %retval = alloca %struct.Test1, align 4
+  %v = getelementptr inbounds nuw %struct.Test1, ptr %retval, i32 0, i32 0
+  %arrayidx = getelementptr inbounds [4 x i32], ptr %v, i64 0, i64 0
+  store i32 10, ptr %arrayidx, align 4
+  %v1 = getelementptr inbounds nuw %struct.Test1, ptr %retval, i32 0, i32 0
+  %arrayidx2 = getelementptr inbounds [4 x i32], ptr %v1, i64 0, i64 1
+  store i32 20, ptr %arrayidx2, align 4
+  %v3 = getelementptr inbounds nuw %struct.Test1, ptr %retval, i32 0, i32 0
+  %arrayidx4 = getelementptr inbounds [4 x i32], ptr %v3, i64 0, i64 2
+  store i32 30, ptr %arrayidx4, align 4
+  %v5 = getelementptr inbounds nuw %struct.Test1, ptr %retval, i32 0, i32 0
+  %arrayidx6 = getelementptr inbounds [4 x i32], ptr %v5, i64 0, i64 3
+  store i32 40, ptr %arrayidx6, align 4
+  %coerce.dive = getelementptr inbounds nuw %struct.Test1, ptr %retval, i32 0, i32 0
+  %0 = load { i64, i64 }, ptr %coerce.dive, align 4
+  ret { i64, i64 } %0
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -34,17 +52,18 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  call void @exit(i32 noundef 0) #2
+  %call = call i32 @func1()
+  call void @exit(i32 noundef 0) #3
   unreachable
 }
 
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #1
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,107 +1,55 @@
-; 188650337484891078962112145749319269119
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188650337484891078962112145749319269119.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188650337484891078962112145749319269119.c"
+; 114164078682872308523960210561026147609
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/114164078682872308523960210561026147609.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/114164078682872308523960210561026147609.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@f.values = internal global [1 x i16] [i16 -27904], align 2
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local x86_fp80 @f(x86_fp80 noundef %d, i32 noundef %i) #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %d.addr = alloca x86_fp80, align 16
-  %i.addr = alloca i32, align 4
-  %e = alloca x86_fp80, align 16
-  store x86_fp80 %d, ptr %d.addr, align 16
-  store i32 %i, ptr %i.addr, align 4
-  %0 = load x86_fp80, ptr %d.addr, align 16
-  %fneg = fneg x86_fp80 %0
-  store x86_fp80 %fneg, ptr %d.addr, align 16
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = sitofp i32 %call to x86_fp80
-  store x86_fp80 %conv, ptr %e, align 16
-  %1 = load i32, ptr %i.addr, align 4
-  %cmp = icmp eq i32 %1, 1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  %2 = load x86_fp80, ptr %d.addr, align 16
-  %mul = fmul x86_fp80 %2, 0xK40008000000000000000
-  store x86_fp80 %mul, ptr %d.addr, align 16
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %3 = load x86_fp80, ptr %e, align 16
-  %4 = load x86_fp80, ptr %d.addr, align 16
-  %5 = load x86_fp80, ptr %d.addr, align 16
-  %neg = fneg x86_fp80 %3
-  %6 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg, x86_fp80 %4, x86_fp80 %5)
-  store x86_fp80 %6, ptr %d.addr, align 16
-  %7 = load x86_fp80, ptr %e, align 16
-  %8 = load x86_fp80, ptr %d.addr, align 16
-  %9 = load x86_fp80, ptr %d.addr, align 16
-  %neg4 = fneg x86_fp80 %7
-  %10 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg4, x86_fp80 %8, x86_fp80 %9)
-  store x86_fp80 %10, ptr %d.addr, align 16
-  %11 = load x86_fp80, ptr %e, align 16
-  %12 = load x86_fp80, ptr %d.addr, align 16
-  %13 = load x86_fp80, ptr %d.addr, align 16
-  %neg6 = fneg x86_fp80 %11
-  %14 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg6, x86_fp80 %12, x86_fp80 %13)
-  store x86_fp80 %14, ptr %d.addr, align 16
-  %15 = load x86_fp80, ptr %e, align 16
-  %16 = load x86_fp80, ptr %d.addr, align 16
-  %17 = load x86_fp80, ptr %d.addr, align 16
-  %neg8 = fneg x86_fp80 %15
-  %18 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg8, x86_fp80 %16, x86_fp80 %17)
-  store x86_fp80 %18, ptr %d.addr, align 16
-  %19 = load x86_fp80, ptr %e, align 16
-  %20 = load x86_fp80, ptr %d.addr, align 16
-  %21 = load x86_fp80, ptr %d.addr, align 16
-  %neg10 = fneg x86_fp80 %19
-  %22 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg10, x86_fp80 %20, x86_fp80 %21)
-  store x86_fp80 %22, ptr %d.addr, align 16
-  %23 = load x86_fp80, ptr %d.addr, align 16
-  ret x86_fp80 %23
+  %token = alloca i16, align 2
+  %count = alloca i32, align 4
+  %0 = load i16, ptr @f.values, align 2
+  store i16 %0, ptr %token, align 2
+  %1 = load i16, ptr %token, align 2
+  %conv = zext i16 %1 to i32
+  %shr = ashr i32 %conv, 8
+  store i32 %shr, ptr %count, align 4
+  %2 = load i32, ptr %count, align 4
+  ret i32 %2
 }
-
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
-declare x86_fp80 @llvm.fmuladd.f80(x86_fp80, x86_fp80, x86_fp80) #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call x86_fp80 @f(x86_fp80 noundef 0xK40008000000000000000, i32 noundef 1)
-  %conv = fptosi x86_fp80 %call to i32
-  %tobool = icmp ne i32 %conv, 0
-  br i1 %tobool, label %if.end, label %if.then
+  %call = call i32 @f()
+  %cmp = icmp ne i32 %call, 147
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #5
+  call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #6
+  call void @exit(i32 noundef 0) #4
   unreachable
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #3
+declare void @abort() #1
 
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #4
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
-attributes #3 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { noreturn nounwind }
-attributes #6 = { noreturn }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,11 +1,11 @@
-; 108364613747433729275516544294566293913
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108364613747433729275516544294566293913.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108364613747433729275516544294566293913.c"
+; 148216948268939783027574489966300460885
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/148216948268939783027574489966300460885.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/148216948268939783027574489966300460885.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @utest(i32 noundef %x) local_unnamed_addr #0 {
+define dso_local void @foo(double noundef %x) local_unnamed_addr #0 {
 entry:
   ret void
 }
@@ -15,12 +15,6 @@ define dso_local void @link_error() local_unnamed_addr #1 {
 entry:
   tail call void @abort() #3
   unreachable
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @stest(i32 noundef %x) local_unnamed_addr #0 {
-entry:
-  ret void
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable

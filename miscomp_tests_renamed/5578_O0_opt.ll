@@ -1,56 +1,51 @@
-; 104666141095689956435865759427645982320
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104666141095689956435865759427645982320_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104666141095689956435865759427645982320.c"
+; 198878010982193370029149088405850452081
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/198878010982193370029149088405850452081_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/198878010982193370029149088405850452081.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
-@.str.1 = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+%struct.A = type { i32, i32, i32 }
+
+@e = dso_local global %struct.A zeroinitializer, align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local { i64, i32 } @foo() #0 {
+entry:
+  %retval = alloca %struct.A, align 4
+  %h = alloca [42 x %struct.A], align 16
+  %retval.coerce = alloca { i64, i32 }, align 8
+  call void @llvm.memset.p0.i64(ptr align 16 %h, i8 0, i64 504, i1 false)
+  %arrayidx = getelementptr inbounds [42 x %struct.A], ptr %h, i64 0, i64 29
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %retval, ptr align 4 %arrayidx, i64 12, i1 false)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %retval.coerce, ptr align 4 %retval, i64 12, i1 false)
+  %0 = load { i64, i32 }, ptr %retval.coerce, align 8
+  ret { i64, i32 } %0
+}
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i8, align 1
-  %b = alloca i64, align 8
-  %c = alloca i32, align 4
+  %tmp = alloca %struct.A, align 4
+  %tmp.coerce = alloca { i64, i32 }, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = trunc i32 %call to i8
-  store volatile i8 %conv, ptr %a, align 1
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %conv2 = sext i32 %call1 to i64
-  store i64 %conv2, ptr %b, align 8
-  %0 = load i64, ptr %b, align 8
-  %sub = sub nsw i64 0, %0
-  %conv3 = trunc i64 %sub to i32
-  %1 = load volatile i8, ptr %a, align 1
-  %conv4 = zext i8 %1 to i32
-  %mul = mul nsw i32 -2147483647, %conv4
-  %sub5 = sub nsw i32 %conv3, %mul
-  %sub6 = sub nsw i32 0, %sub5
-  store i32 %sub6, ptr %c, align 4
-  %2 = load i32, ptr %c, align 4
-  %cmp = icmp ne i32 %2, 1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %entry
-  ret i32 0
+  %call = call { i64, i32 } @foo()
+  store { i64, i32 } %call, ptr %tmp.coerce, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %tmp, ptr align 8 %tmp.coerce, i64 12, i1 false)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 @e, ptr align 4 %tmp, i64 12, i1 false)
+  %0 = load i32, ptr @e, align 4
+  ret i32 %0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

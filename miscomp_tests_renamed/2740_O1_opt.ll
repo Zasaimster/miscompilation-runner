@@ -1,36 +1,27 @@
-; 104411473682375704862784530581816663875
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/104411473682375704862784530581816663875_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/104411473682375704862784530581816663875.c"
+; 147777602021593483069997875181276629663
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/147777602021593483069997875181276629663_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/147777602021593483069997875181276629663.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local range(i32 0, 2) i32 @g(i32 noundef %i, i32 noundef %j) local_unnamed_addr #0 {
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str.1 = private unnamed_addr constant [29 x i8] c"This will never be printed.\0A\00", align 1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local range(i32 0, 2) i32 @main() local_unnamed_addr #0 {
 entry:
-  %cmp = icmp slt i32 %i, 2
-  br i1 %cmp, label %if.then, label %if.end6
-
-if.then:                                          ; preds = %entry
-  %cmp1 = icmp ne i32 %i, %j
-  %cmp3 = icmp ne i32 %j, 0
-  %or.cond = and i1 %cmp1, %cmp3
-  br i1 %or.cond, label %return, label %if.end6
-
-if.end6:                                          ; preds = %if.then, %entry
-  br label %return
-
-return:                                           ; preds = %if.end6, %if.then
-  %retval.0 = phi i32 [ 1, %if.end6 ], [ 0, %if.then ]
-  ret i32 %retval.0
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1)
+  %cmp.not = icmp ne i32 %call, %call1
+  %. = zext i1 %cmp.not to i32
+  ret i32 %.
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  ret i32 0
-}
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

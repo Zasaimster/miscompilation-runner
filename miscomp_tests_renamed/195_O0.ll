@@ -1,37 +1,34 @@
-; 151591730771650001708179904739352833468
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151591730771650001708179904739352833468.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151591730771650001708179904739352833468.c"
+; 103441349324812942778342760588755461672
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103441349324812942778342760588755461672.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103441349324812942778342760588755461672.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.anon = type { i32, i32 }
-
-@.str = private unnamed_addr constant [18 x i8] c"Done processing!\0A\00", align 1
+@.str = private unnamed_addr constant [7 x i8] c"abcdef\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s = alloca %struct.anon, align 4
+  %a = alloca [10 x i8], align 1
   store i32 0, ptr %retval, align 4
-  %x = getelementptr inbounds nuw %struct.anon, ptr %s, i32 0, i32 0
-  store i32 3, ptr %x, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %y = getelementptr inbounds nuw %struct.anon, ptr %s, i32 0, i32 1
-  store i32 5, ptr %y, align 4
-  %y1 = getelementptr inbounds nuw %struct.anon, ptr %s, i32 0, i32 1
-  %0 = load i32, ptr %y1, align 4
-  %x2 = getelementptr inbounds nuw %struct.anon, ptr %s, i32 0, i32 0
-  %1 = load i32, ptr %x2, align 4
-  %sub = sub nsw i32 %0, %1
-  %sub3 = sub nsw i32 %sub, 2
-  ret i32 %sub3
+  %arraydecay = getelementptr inbounds [10 x i8], ptr %a, i64 0, i64 0
+  %call = call ptr @strcpy(ptr noundef %arraydecay, ptr noundef @.str) #3
+  %arrayidx = getelementptr inbounds [10 x i8], ptr %a, i64 0, i64 1
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, ptr noundef %arrayidx)
+  ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: nounwind
+declare ptr @strcpy(ptr noundef, ptr noundef) #1
+
+declare i32 @printf(ptr noundef, ...) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

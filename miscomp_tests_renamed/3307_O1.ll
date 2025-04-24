@@ -1,15 +1,15 @@
-; 108173521555702609096257598267155249194
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108173521555702609096257598267155249194.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108173521555702609096257598267155249194.c"
+; 157719334555029738667609810194170183077
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157719334555029738667609810194170183077.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157719334555029738667609810194170183077.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [17 x i8] c"Done processing!\00", align 1
+@str = private unnamed_addr constant [20 x i8] c"Count is completed.\00", align 1
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   tail call void @abort() #3
   unreachable
 }

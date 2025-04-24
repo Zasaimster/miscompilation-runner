@@ -1,29 +1,57 @@
-; 174065552942313733513484452557020875014
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/174065552942313733513484452557020875014_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/174065552942313733513484452557020875014.c"
+; 101936485298864697252939422782979862694
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101936485298864697252939422782979862694_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101936485298864697252939422782979862694.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @foo(i32 noundef %x) local_unnamed_addr #0 {
+%struct.Scf10 = type { { double, double }, { double, double } }
+
+@g1s = dso_local local_unnamed_addr global %struct.Scf10 zeroinitializer, align 8
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @check(ptr noundef readonly byval(%struct.Scf10) align 8 captures(none) %x, double noundef %y.coerce0, double noundef %y.coerce1) local_unnamed_addr #0 {
 entry:
-  tail call void @abort() #2
+  %a.real = load double, ptr %x, align 8
+  %a.imagp = getelementptr inbounds nuw i8, ptr %x, i64 8
+  %a.imag = load double, ptr %a.imagp, align 8
+  %cmp.r = fcmp une double %a.real, %y.coerce0
+  %cmp.i = fcmp une double %a.imag, %y.coerce1
+  %or.ri = or i1 %cmp.r, %cmp.i
+  br i1 %or.ri, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  tail call void @abort() #4
   unreachable
+
+if.end:                                           ; preds = %entry
+  ret void
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #1
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write) uwtable
+define dso_local void @init(ptr noundef writeonly captures(none) initializes((0, 16)) %p, double noundef %y.coerce0, double noundef %y.coerce1) local_unnamed_addr #2 {
 entry:
-  tail call void @abort() #2
-  unreachable
+  %a.imagp = getelementptr inbounds nuw i8, ptr %p, i64 8
+  store double %y.coerce0, ptr %p, align 8
+  store double %y.coerce1, ptr %a.imagp, align 8
+  ret void
 }
 
-attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #3 {
+entry:
+  store double 1.000000e+00, ptr @g1s, align 8
+  store double 0.000000e+00, ptr getelementptr inbounds nuw (i8, ptr @g1s, i64 8), align 8
+  ret i32 0
+}
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

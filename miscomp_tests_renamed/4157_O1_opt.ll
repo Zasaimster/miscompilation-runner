@@ -1,15 +1,30 @@
-; 161839871515524631416955406526148372407
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161839871515524631416955406526148372407_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161839871515524631416955406526148372407.c"
+; 172693158391632876629499330005105447455
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172693158391632876629499330005105447455_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172693158391632876629499330005105447455.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 @str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
+define dso_local range(i32 0, 2) i32 @foo(ptr noundef readnone captures(address_is_null) %a) local_unnamed_addr #0 {
+entry:
+  %tobool.not = icmp eq ptr %a, null
+  br i1 %tobool.not, label %if.end, label %return
+
+if.end:                                           ; preds = %entry
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  br label %return
+
+return:                                           ; preds = %if.end, %entry
+  %retval.0 = phi i32 [ 0, %if.end ], [ 1, %entry ]
+  ret i32 %retval.0
+}
+
+; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   ret i32 0
 }
 

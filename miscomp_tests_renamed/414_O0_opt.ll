@@ -1,26 +1,33 @@
-; 175734630947689457430622518016127503708
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175734630947689457430622518016127503708_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175734630947689457430622518016127503708.c"
+; 106791208727487820476203146545595525944
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/106791208727487820476203146545595525944_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/106791208727487820476203146545595525944.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
-  %p = alloca ptr, align 8
+  %a = alloca i32, align 4
+  %b = alloca i32, align 4
+  %c = alloca i32, align 4
+  %d = alloca i32, align 4
   store i32 0, ptr %retval, align 4
+  store i32 24680, ptr %a, align 4
+  store i32 342391, ptr %b, align 4
+  store i32 2386092, ptr %c, align 4
+  store i32 2386092, ptr %d, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %x, align 4
-  store ptr %x, ptr %p, align 8
-  %0 = load ptr, ptr %p, align 8
-  %arrayidx = getelementptr inbounds i32, ptr %0, i64 0
-  store i32 0, ptr %arrayidx, align 4
-  %1 = load i32, ptr %x, align 4
-  ret i32 %1
+  %0 = load i32, ptr %b, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %0)
+  %1 = load i32, ptr %c, align 4
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %1)
+  %2 = load i32, ptr %d, align 4
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %2)
+  ret i32 0
 }
 
 declare i32 @printf(ptr noundef, ...) #1

@@ -1,66 +1,31 @@
-; 101936485298864697252939422782979862694
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101936485298864697252939422782979862694.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101936485298864697252939422782979862694.c"
+; 144758301514921539988316791161517823787
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/144758301514921539988316791161517823787.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/144758301514921539988316791161517823787.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.Scf10 = type { { double, double }, { double, double } }
-
-@g1s = dso_local global %struct.Scf10 zeroinitializer, align 8
+@N = dso_local global i32 10, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @check(ptr noundef byval(%struct.Scf10) align 8 %x, double noundef %y.coerce0, double noundef %y.coerce1) #0 {
+define dso_local void @foo() #0 {
 entry:
-  %y = alloca { double, double }, align 8
-  %0 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 0
-  store double %y.coerce0, ptr %0, align 8
-  %1 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 1
-  store double %y.coerce1, ptr %1, align 8
-  %a = getelementptr inbounds nuw %struct.Scf10, ptr %x, i32 0, i32 0
-  %a.realp = getelementptr inbounds nuw { double, double }, ptr %a, i32 0, i32 0
-  %a.real = load double, ptr %a.realp, align 8
-  %a.imagp = getelementptr inbounds nuw { double, double }, ptr %a, i32 0, i32 1
-  %a.imag = load double, ptr %a.imagp, align 8
-  %y.realp = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 0
-  %y.real = load double, ptr %y.realp, align 8
-  %y.imagp = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 1
-  %y.imag = load double, ptr %y.imagp, align 8
-  %cmp.r = fcmp une double %a.real, %y.real
-  %cmp.i = fcmp une double %a.imag, %y.imag
-  %or.ri = or i1 %cmp.r, %cmp.i
-  br i1 %or.ri, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #2
-  unreachable
-
-if.end:                                           ; preds = %entry
   ret void
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @init(ptr noundef %p, double noundef %y.coerce0, double noundef %y.coerce1) #0 {
+define dso_local void @bar(ptr noundef %a) #0 {
 entry:
-  %y = alloca { double, double }, align 8
-  %p.addr = alloca ptr, align 8
-  %0 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 0
-  store double %y.coerce0, ptr %0, align 8
-  %1 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 1
-  store double %y.coerce1, ptr %1, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %y.realp = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 0
-  %y.real = load double, ptr %y.realp, align 8
-  %y.imagp = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 1
-  %y.imag = load double, ptr %y.imagp, align 8
-  %2 = load ptr, ptr %p.addr, align 8
-  %a = getelementptr inbounds nuw %struct.Scf10, ptr %2, i32 0, i32 0
-  %a.realp = getelementptr inbounds nuw { double, double }, ptr %a, i32 0, i32 0
-  %a.imagp = getelementptr inbounds nuw { double, double }, ptr %a, i32 0, i32 1
-  store double %y.real, ptr %a.realp, align 8
-  store double %y.imag, ptr %a.imagp, align 8
+  %a.addr = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  %0 = load i32, ptr @N, align 4
+  %1 = zext i32 %0 to i64
+  %2 = load i32, ptr @N, align 4
+  %conv = trunc i32 %2 to i8
+  %3 = load ptr, ptr %a.addr, align 8
+  %4 = mul nsw i64 1, %1
+  %arrayidx = getelementptr inbounds i8, ptr %3, i64 %4
+  %arrayidx1 = getelementptr inbounds i8, ptr %arrayidx, i64 0
+  store i8 %conv, ptr %arrayidx1, align 1
   ret void
 }
 
@@ -68,33 +33,55 @@ entry:
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %coerce = alloca { double, double }, align 8
-  %coerce1 = alloca { double, double }, align 8
+  %x = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %coerce.realp = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 0
-  %coerce.imagp = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 1
-  store double 1.000000e+00, ptr %coerce.realp, align 8
-  store double 0.000000e+00, ptr %coerce.imagp, align 8
-  %0 = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 0
-  %1 = load double, ptr %0, align 8
-  %2 = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 1
-  %3 = load double, ptr %2, align 8
-  call void @init(ptr noundef @g1s, double noundef %1, double noundef %3)
-  %coerce1.realp = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 0
-  %coerce1.imagp = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 1
-  store double 1.000000e+00, ptr %coerce1.realp, align 8
-  store double 0.000000e+00, ptr %coerce1.imagp, align 8
-  %4 = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 0
-  %5 = load double, ptr %4, align 8
-  %6 = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 1
-  %7 = load double, ptr %6, align 8
-  call void @check(ptr noundef byval(%struct.Scf10) align 8 @g1s, double noundef %5, double noundef %7)
-  ret i32 0
+  store i32 4, ptr @N, align 4
+  %0 = load i32, ptr @N, align 4
+  %mul = mul nsw i32 2, %0
+  %conv = sext i32 %mul to i64
+  %1 = alloca i8, i64 %conv, align 16
+  store ptr %1, ptr %x, align 8
+  %2 = load ptr, ptr %x, align 8
+  %3 = load i32, ptr @N, align 4
+  %mul1 = mul nsw i32 2, %3
+  %conv2 = sext i32 %mul1 to i64
+  call void @llvm.memset.p0.i64(ptr align 1 %2, i8 0, i64 %conv2, i1 false)
+  %4 = load ptr, ptr %x, align 8
+  call void @bar(ptr noundef %4)
+  %5 = load i32, ptr @N, align 4
+  %6 = load ptr, ptr %x, align 8
+  %idxprom = sext i32 %5 to i64
+  %arrayidx = getelementptr inbounds i8, ptr %6, i64 %idxprom
+  %7 = load i8, ptr %arrayidx, align 1
+  %conv3 = sext i8 %7 to i32
+  %8 = load i32, ptr @N, align 4
+  %cmp = icmp ne i32 %conv3, %8
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #5
+  unreachable
 }
 
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

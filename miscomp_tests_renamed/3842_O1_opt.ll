@@ -1,23 +1,25 @@
-; 134006247098910612867479591887434937432
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134006247098910612867479591887434937432_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134006247098910612867479591887434937432.c"
+; 167108956425147233737694090174575645277
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167108956425147233737694090174575645277_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167108956425147233737694090174575645277.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local range(i32 0, 2) i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  ret i32 0
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp.not = icmp ne i32 %call, 1
+  %retval.0 = zext i1 %cmp.not to i32
+  ret i32 %retval.0
 }
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

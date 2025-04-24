@@ -1,31 +1,25 @@
-; 126646362482186385155844878765967503673
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126646362482186385155844878765967503673.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126646362482186385155844878765967503673.c"
+; 121755939182214849205896455922625083014
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121755939182214849205896455922625083014.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121755939182214849205896455922625083014.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@x = dso_local global [5 x i32] [i32 2, i32 0, i32 0, i32 0, i32 0], align 16
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo() #0 {
-entry:
-  %0 = load i32, ptr @x, align 16
-  %or = or i32 %0, 128
-  store i32 %or, ptr @x, align 16
-  ret i32 1
-}
+@a = dso_local global i32 274686410, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %b = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo()
-  %0 = load i32, ptr @x, align 16
-  %or = or i32 %0, %call
-  store i32 %or, ptr @x, align 16
-  %1 = load i32, ptr @x, align 16
-  %cmp = icmp ne i32 %1, 131
+  store i32 53671368, ptr %b, align 4
+  %0 = load i32, ptr %b, align 4
+  %conv = trunc i32 %0 to i8
+  %1 = load i32, ptr @a, align 4
+  %conv1 = trunc i32 %1 to i8
+  %call = call signext i8 @foo(i8 noundef signext %conv, i8 noundef signext %conv1)
+  %conv2 = sext i8 %call to i32
+  %cmp = icmp sgt i32 %conv2, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -34,6 +28,16 @@ if.then:                                          ; preds = %entry
 
 if.end:                                           ; preds = %entry
   ret i32 0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal signext i8 @foo(i8 noundef signext %si1, i8 noundef signext %si2) #0 {
+entry:
+  %si1.addr = alloca i8, align 1
+  %si2.addr = alloca i8, align 1
+  store i8 %si1, ptr %si1.addr, align 1
+  store i8 %si2, ptr %si2.addr, align 1
+  ret i8 0
 }
 
 ; Function Attrs: noreturn nounwind

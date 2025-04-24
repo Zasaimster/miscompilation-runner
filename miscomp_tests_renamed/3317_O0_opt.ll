@@ -1,18 +1,26 @@
-; 130753657164551075387561393240516575429
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/130753657164551075387561393240516575429_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/130753657164551075387561393240516575429.c"
+; 157796567958715494473574050886772808585
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157796567958715494473574050886772808585_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157796567958715494473574050886772808585.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @fp(double noundef %a, i32 noundef %b) #0 {
+define dso_local i32 @g(i32 noundef %x, i32 noundef %y) #0 {
 entry:
-  %a.addr = alloca double, align 8
-  %b.addr = alloca i32, align 4
-  store double %a, ptr %a.addr, align 8
-  store i32 %b, ptr %b.addr, align 4
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  store i32 %y, ptr %y.addr, align 4
+  %0 = load i32, ptr %x.addr, align 4
+  %cmp = icmp ne i32 %0, 3
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
+
+if.end:                                           ; preds = %entry
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
@@ -22,14 +30,29 @@ declare void @abort() #1
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %f = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store ptr @fp, ptr %f, align 8
-  %call = call i32 @fp(double noundef 3.300000e+01, i32 noundef 11)
-  %0 = load ptr, ptr %f, align 8
-  %call1 = call i32 %0(double noundef 3.300000e+01, i32 noundef 11)
+  %call = call i32 @f(i32 noundef 3)
   call void @exit(i32 noundef 0) #4
   unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @f(i32 noundef %i) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %i.addr = alloca i32, align 4
+  %tmp = alloca ptr, align 8
+  store i32 %i, ptr %i.addr, align 4
+  %0 = alloca i8, i64 4, align 16
+  store ptr %0, ptr %tmp, align 8
+  %1 = load i32, ptr %i.addr, align 4
+  %2 = load ptr, ptr %tmp, align 8
+  store i32 %1, ptr %2, align 4
+  %3 = load ptr, ptr %tmp, align 8
+  %4 = load i32, ptr %3, align 4
+  %call = call i32 @g(i32 noundef %4, i32 noundef 0)
+  %5 = load i32, ptr %retval, align 4
+  ret i32 %5
 }
 
 ; Function Attrs: noreturn

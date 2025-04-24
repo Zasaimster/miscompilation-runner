@@ -1,20 +1,62 @@
-; 101872181644837737926294839785664083505
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101872181644837737926294839785664083505.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101872181644837737926294839785664083505.c"
+; 139202307654013961073938299770763203886
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139202307654013961073938299770763203886.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139202307654013961073938299770763203886.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@u = dso_local global i32 0, align 4
+%struct.S = type { i8, i64 }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local { i8, i64 } @foo(i8 %x.coerce0, i64 %x.coerce1, i8 %y.coerce0, i64 %y.coerce1) #0 {
+entry:
+  %retval = alloca %struct.S, align 8
+  %x = alloca %struct.S, align 8
+  %y = alloca %struct.S, align 8
+  %0 = getelementptr inbounds nuw { i8, i64 }, ptr %x, i32 0, i32 0
+  store i8 %x.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { i8, i64 }, ptr %x, i32 0, i32 1
+  store i64 %x.coerce1, ptr %1, align 8
+  %2 = getelementptr inbounds nuw { i8, i64 }, ptr %y, i32 0, i32 0
+  store i8 %y.coerce0, ptr %2, align 8
+  %3 = getelementptr inbounds nuw { i8, i64 }, ptr %y, i32 0, i32 1
+  store i64 %y.coerce1, ptr %3, align 8
+  %b = getelementptr inbounds nuw %struct.S, ptr %retval, i32 0, i32 1
+  store i64 5, ptr %b, align 8
+  %4 = load { i8, i64 }, ptr %retval, align 8
+  ret { i8, i64 } %4
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca %struct.S, align 8
+  %b = alloca %struct.S, align 8
+  %coerce = alloca %struct.S, align 8
+  %coerce7 = alloca %struct.S, align 8
   store i32 0, ptr %retval, align 4
-  %call = call zeroext i16 @foo(ptr noundef @u)
-  %conv = zext i16 %call to i32
-  %and = and i32 %conv, 32768
-  %cmp = icmp ne i32 %and, 0
+  %b1 = getelementptr inbounds nuw %struct.S, ptr %a, i32 0, i32 1
+  store i64 32, ptr %b1, align 8
+  %b2 = getelementptr inbounds nuw %struct.S, ptr %b, i32 0, i32 1
+  store i64 4, ptr %b2, align 8
+  %0 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 0
+  %1 = load i8, ptr %0, align 8
+  %2 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 1
+  %3 = load i64, ptr %2, align 8
+  %4 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 0
+  %5 = load i8, ptr %4, align 8
+  %6 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 1
+  %7 = load i64, ptr %6, align 8
+  %call = call { i8, i64 } @foo(i8 %1, i64 %3, i8 %5, i64 %7)
+  %8 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce, i32 0, i32 0
+  %9 = extractvalue { i8, i64 } %call, 0
+  store i8 %9, ptr %8, align 8
+  %10 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce, i32 0, i32 1
+  %11 = extractvalue { i8, i64 } %call, 1
+  store i64 %11, ptr %10, align 8
+  %b3 = getelementptr inbounds nuw %struct.S, ptr %coerce, i32 0, i32 1
+  %12 = load i64, ptr %b3, align 8
+  %cmp = icmp ne i64 %12, 8
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -22,18 +64,36 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret i32 0
-}
+  %b4 = getelementptr inbounds nuw %struct.S, ptr %a, i32 0, i32 1
+  store i64 -8, ptr %b4, align 8
+  %b5 = getelementptr inbounds nuw %struct.S, ptr %b, i32 0, i32 1
+  store i64 -2, ptr %b5, align 8
+  %13 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 0
+  %14 = load i8, ptr %13, align 8
+  %15 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 1
+  %16 = load i64, ptr %15, align 8
+  %17 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 0
+  %18 = load i8, ptr %17, align 8
+  %19 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 1
+  %20 = load i64, ptr %19, align 8
+  %call6 = call { i8, i64 } @foo(i8 %14, i64 %16, i8 %18, i64 %20)
+  %21 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce7, i32 0, i32 0
+  %22 = extractvalue { i8, i64 } %call6, 0
+  store i8 %22, ptr %21, align 8
+  %23 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce7, i32 0, i32 1
+  %24 = extractvalue { i8, i64 } %call6, 1
+  store i64 %24, ptr %23, align 8
+  %b8 = getelementptr inbounds nuw %struct.S, ptr %coerce7, i32 0, i32 1
+  %25 = load i64, ptr %b8, align 8
+  %cmp9 = icmp ne i64 %25, 4
+  br i1 %cmp9, label %if.then10, label %if.end11
 
-; Function Attrs: noinline nounwind uwtable
-define internal zeroext i16 @foo(ptr noundef %p) #0 {
-entry:
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %1 = load i32, ptr %0, align 4
-  %conv = trunc i32 %1 to i16
-  ret i16 %conv
+if.then10:                                        ; preds = %if.end
+  call void @abort() #2
+  unreachable
+
+if.end11:                                         ; preds = %if.end
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind

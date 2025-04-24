@@ -1,30 +1,29 @@
-; 10274145712784447631654087493287897668
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10274145712784447631654087493287897668.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10274145712784447631654087493287897668.c"
+; 145209906081172563396264762675815221074
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145209906081172563396264762675815221074.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145209906081172563396264762675815221074.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [14 x i8] c"Program runs!\00", align 1
-@str.2 = private unnamed_addr constant [15 x i8] c"I am not used!\00", align 1
+@str = private unnamed_addr constant [20 x i8] c"Before Early Return\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @f(i32 noundef %n) local_unnamed_addr #0 {
+define dso_local void @brother(i32 noundef %a, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
 entry:
-  %cmp = icmp sgt i32 %n, -1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
   %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %if.end
+  ret void
+}
 
-if.end:                                           ; preds = %if.then, %entry
-  ret i32 undef
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @sister(i64 %f.coerce0, i32 %f.coerce1, i32 noundef %b, i32 noundef %c) local_unnamed_addr #0 {
+entry:
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret void
 }
 
 ; Function Attrs: nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.2)
+  %puts.i.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   tail call void @exit(i32 noundef 0) #4
   unreachable
 }

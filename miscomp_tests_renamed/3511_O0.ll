@@ -1,27 +1,15 @@
-; 161855576479051404527375042928705809142
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161855576479051404527375042928705809142.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161855576479051404527375042928705809142.c"
+; 161343979943254412484344988718829868982
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/161343979943254412484344988718829868982.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/161343979943254412484344988718829868982.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @foo(i64 noundef %n) #0 {
+define dso_local i32 @test(i32 noundef %arg) #0 {
 entry:
-  %n.addr = alloca i64, align 8
-  store i64 %n, ptr %n.addr, align 8
-  %0 = load i64, ptr %n.addr, align 8
-  %not = xor i64 %0, -1
-  %shr = lshr i64 %not, 3
-  %and = and i64 %shr, 1
-  ret i64 %and
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @process(i32 noundef %data) #0 {
-entry:
-  %data.addr = alloca i32, align 4
-  store i32 %data, ptr %data.addr, align 4
-  ret void
+  %arg.addr = alloca i32, align 4
+  store i32 %arg, ptr %arg.addr, align 4
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -29,8 +17,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i64 @foo(i64 noundef 8)
-  %cmp = icmp ne i64 %call, 0
+  %call = call i32 @test(i32 noundef 0)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -38,8 +26,8 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i64 @foo(i64 noundef 0)
-  %cmp2 = icmp ne i64 %call1, 1
+  %call1 = call i32 @test(i32 noundef -1)
+  %cmp2 = icmp ne i32 %call1, -1
   br i1 %cmp2, label %if.then3, label %if.end4
 
 if.then3:                                         ; preds = %if.end

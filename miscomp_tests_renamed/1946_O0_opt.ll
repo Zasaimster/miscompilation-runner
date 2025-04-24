@@ -1,77 +1,120 @@
-; 150317687283576263463518398009993662717
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150317687283576263463518398009993662717_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150317687283576263463518398009993662717.c"
+; 134553779124297194086368409857776407888
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134553779124297194086368409857776407888_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134553779124297194086368409857776407888.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.baz = type { i32, i32, i32 }
-
-@__const.main.x = private unnamed_addr constant %struct.baz { i32 3, i32 4, i32 5 }, align 4
+@.str = private unnamed_addr constant [23 x i8] c"This won't be called.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(i32 noundef %a, i32 noundef %b, i32 noundef %c) #0 {
+define dso_local void @fail1() #0 {
 entry:
-  %a.addr = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %c.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 %c, ptr %c.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %add = add nsw i32 %0, 1
-  %cmp = icmp ne i32 %add, 4
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  ret void
+}
 
-if.then:                                          ; preds = %entry
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @fail2() #0 {
+entry:
   call void @abort() #4
   unreachable
-
-if.end:                                           ; preds = %entry
-  ret void
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare void @abort() #2
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @bar(i64 %x.coerce0, i32 %x.coerce1, i32 noundef %b, i32 noundef %c) #0 {
+define dso_local void @fail3() #0 {
 entry:
-  %x = alloca %struct.baz, align 4
-  %coerce = alloca { i64, i32 }, align 4
-  %b.addr = alloca i32, align 4
-  %c.addr = alloca i32, align 4
-  %0 = getelementptr inbounds nuw { i64, i32 }, ptr %coerce, i32 0, i32 0
-  store i64 %x.coerce0, ptr %0, align 4
-  %1 = getelementptr inbounds nuw { i64, i32 }, ptr %coerce, i32 0, i32 1
-  store i32 %x.coerce1, ptr %1, align 4
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %x, ptr align 4 %coerce, i64 12, i1 false)
-  store i32 %b, ptr %b.addr, align 4
-  store i32 %c, ptr %c.addr, align 4
-  %b1 = getelementptr inbounds nuw %struct.baz, ptr %x, i32 0, i32 1
-  %2 = load i32, ptr %b1, align 4
-  %3 = load i32, ptr %b.addr, align 4
-  %4 = load i32, ptr %c.addr, align 4
-  call void @foo(i32 noundef %2, i32 noundef %3, i32 noundef %4)
-  ret void
+  call void @abort() #4
+  unreachable
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @fail4() #0 {
+entry:
+  call void @abort() #4
+  unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @foo(i64 noundef %x) #0 {
+entry:
+  %x.addr = alloca i64, align 8
+  store i64 %x, ptr %x.addr, align 8
+  %0 = load i64, ptr %x.addr, align 8
+  switch i64 %0, label %sw.default [
+    i64 -6, label %sw.bb
+    i64 0, label %sw.bb1
+    i64 1, label %sw.bb2
+    i64 2, label %sw.bb2
+    i64 3, label %sw.bb3
+    i64 4, label %sw.bb3
+    i64 5, label %sw.bb3
+  ]
+
+sw.bb:                                            ; preds = %entry
+  call void @fail1()
+  br label %sw.epilog
+
+sw.bb1:                                           ; preds = %entry
+  call void @fail2()
+  br label %sw.epilog
+
+sw.bb2:                                           ; preds = %entry, %entry
+  br label %sw.epilog
+
+sw.bb3:                                           ; preds = %entry, %entry, %entry
+  call void @fail3()
+  br label %sw.epilog
+
+sw.default:                                       ; preds = %entry
+  call void @fail4()
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %sw.default, %sw.bb3, %sw.bb2, %sw.bb1, %sw.bb
+  %1 = load i64, ptr %x.addr, align 8
+  switch i64 %1, label %sw.default8 [
+    i64 -3, label %sw.bb4
+    i64 0, label %sw.bb5
+    i64 4, label %sw.bb5
+    i64 1, label %sw.bb6
+    i64 3, label %sw.bb6
+    i64 2, label %sw.bb7
+    i64 8, label %sw.bb7
+  ]
+
+sw.bb4:                                           ; preds = %sw.epilog
+  call void @fail1()
+  br label %sw.epilog9
+
+sw.bb5:                                           ; preds = %sw.epilog, %sw.epilog
+  call void @fail2()
+  br label %sw.epilog9
+
+sw.bb6:                                           ; preds = %sw.epilog, %sw.epilog
+  br label %sw.epilog9
+
+sw.bb7:                                           ; preds = %sw.epilog, %sw.epilog
+  call void @abort() #4
+  unreachable
+
+sw.default8:                                      ; preds = %sw.epilog
+  call void @fail4()
+  br label %sw.epilog9
+
+sw.epilog9:                                       ; preds = %sw.default8, %sw.bb6, %sw.bb5, %sw.bb4
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca %struct.baz, align 4
-  %x.coerce = alloca { i64, i32 }, align 4
   store i32 0, ptr %retval, align 4
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %x, ptr align 4 @__const.main.x, i64 12, i1 false)
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %x.coerce, ptr align 4 %x, i64 12, i1 false)
-  %0 = getelementptr inbounds nuw { i64, i32 }, ptr %x.coerce, i32 0, i32 0
-  %1 = load i64, ptr %0, align 4
-  %2 = getelementptr inbounds nuw { i64, i32 }, ptr %x.coerce, i32 0, i32 1
-  %3 = load i32, ptr %2, align 4
-  call void @bar(i64 %1, i32 %3, i32 noundef 1, i32 noundef 2)
+  call void @foo(i64 noundef 1)
   call void @exit(i32 noundef 0) #5
   unreachable
 }
@@ -80,8 +123,8 @@ entry:
 declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { noreturn nounwind }
 attributes #5 = { noreturn }

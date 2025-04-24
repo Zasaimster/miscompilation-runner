@@ -1,49 +1,55 @@
-; 197982854894424774001833422980634589542
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197982854894424774001833422980634589542_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197982854894424774001833422980634589542.c"
+; 184224210627791138118966709805720273257
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184224210627791138118966709805720273257_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184224210627791138118966709805720273257.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [21 x i8] c"Before Early Return\0A\00", align 1
+%struct.a = type { i32 }
+%struct.c = type { %struct.b }
+%struct.b = type { %struct.a }
+
+@a = dso_local global %struct.a { i32 1 }, align 4
+@val = dso_local global i32 0, align 4
+@cptr = dso_local global ptr @val, align 8
+@a2 = dso_local global %struct.a zeroinitializer, align 4
+@.str = private unnamed_addr constant [26 x i8] c"This branch is executed.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %saved_stack = alloca ptr, align 8
-  %__vla_expr0 = alloca i64, align 8
-  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
+  %0 = load ptr, ptr @cptr, align 8
+  %b = getelementptr inbounds nuw %struct.c, ptr %0, i32 0, i32 0
+  %a = getelementptr inbounds nuw %struct.b, ptr %b, i32 0, i32 0
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %a, ptr align 4 @a, i64 4, i1 false)
+  store i32 2, ptr @val, align 4
+  %1 = load ptr, ptr @cptr, align 8
+  %b1 = getelementptr inbounds nuw %struct.c, ptr %1, i32 0, i32 0
+  %a2 = getelementptr inbounds nuw %struct.b, ptr %b1, i32 0, i32 0
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 @a2, ptr align 4 %a2, i64 4, i1 false)
+  %2 = load i32, ptr @a2, align 4
+  %3 = load i32, ptr @a, align 4
+  %cmp = icmp eq i32 %2, %3
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %0 = zext i32 %call to i64
-  %1 = call ptr @llvm.stacksave.p0()
-  store ptr %1, ptr %saved_stack, align 8
-  %vla = alloca i32, i64 %0, align 16
-  store i64 %0, ptr %__vla_expr0, align 8
-  %arrayidx = getelementptr inbounds i32, ptr %vla, i64 1
-  store ptr %arrayidx, ptr %p, align 8
-  %2 = load ptr, ptr %p, align 8
-  store i32 0, ptr %2, align 4
-  %arrayidx1 = getelementptr inbounds i32, ptr %vla, i64 1
-  %3 = load i32, ptr %arrayidx1, align 4
-  store i32 %3, ptr %retval, align 4
-  %4 = load ptr, ptr %saved_stack, align 8
-  call void @llvm.stackrestore.p0(ptr %4)
-  %5 = load i32, ptr %retval, align 4
-  ret i32 %5
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %4 = load i32, ptr %retval, align 4
+  ret i32 %4
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
 
-; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare ptr @llvm.stacksave.p0() #2
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn
-declare void @llvm.stackrestore.p0(ptr) #2
+declare i32 @printf(ptr noundef, ...) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nosync nounwind willreturn }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

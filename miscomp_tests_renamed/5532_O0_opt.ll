@@ -1,24 +1,34 @@
-; 10193894403594831186822771656856196588
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10193894403594831186822771656856196588_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10193894403594831186822771656856196588.c"
+; 197954644089364423612826417967624217204
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197954644089364423612826417967624217204_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197954644089364423612826417967624217204.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"hello world\0A\00", align 1
+%union.aun = type { [8 x i8] }
+
+@.str = private unnamed_addr constant [16 x i8] c"Value of a: %d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca %union.aun, align 1
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  call void @llvm.memset.p0.i64(ptr align 1 %a, i8 0, i64 8, i1 false)
+  %coerce.dive = getelementptr inbounds nuw %union.aun, ptr %a, i32 0, i32 0
+  %0 = load i64, ptr %coerce.dive, align 1
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i64 %0)
   ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+
+declare i32 @printf(ptr noundef, ...) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,41 +1,53 @@
-; 120763215081036843217226743853541190112
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/120763215081036843217226743853541190112.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/120763215081036843217226743853541190112.c"
+; 156486750308362467263205489933379483594
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/156486750308362467263205489933379483594.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/156486750308362467263205489933379483594.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %a, ptr noundef %y) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  %y.addr = alloca ptr, align 8
-  %x = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  store ptr %y, ptr %y.addr, align 8
-  store i32 1, ptr %x, align 4
-  %0 = load ptr, ptr %y.addr, align 8
-  %1 = load i32, ptr %0, align 4
-  ret i32 %1
-}
+@a = dso_local global i32 -1, align 4
+@b = dso_local global i32 -1, align 4
+@c = dso_local global i32 1, align 4
+@d = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
+  %e = alloca double, align 8
+  %f = alloca double, align 8
+  %g = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  %call = call i32 @f(i32 noundef 100, ptr noundef null)
-  %cmp = icmp ne i32 %call, 1
-  br i1 %cmp, label %if.then, label %if.end
+  %0 = load i32, ptr @c, align 4
+  %conv = sitofp i32 %0 to double
+  store double %conv, ptr %f, align 8
+  %1 = load i32, ptr @d, align 4
+  %conv1 = sitofp i32 %1 to double
+  store double %conv1, ptr %g, align 8
+  %2 = load i32, ptr @a, align 4
+  %3 = load i32, ptr @b, align 4
+  %cmp = icmp slt i32 %2, %3
+  br i1 %cmp, label %cond.true, label %cond.false
 
-if.then:                                          ; preds = %entry
+cond.true:                                        ; preds = %entry
+  %4 = load double, ptr %f, align 8
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %5 = load double, ptr %g, align 8
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi double [ %4, %cond.true ], [ %5, %cond.false ]
+  store double %cond, ptr %e, align 8
+  %6 = load double, ptr %e, align 8
+  %tobool = fcmp une double %6, 0.000000e+00
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %cond.end
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %cond.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }

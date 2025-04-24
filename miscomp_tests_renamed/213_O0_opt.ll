@@ -1,89 +1,140 @@
-; 182709950489053140947200217883857107630
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182709950489053140947200217883857107630_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182709950489053140947200217883857107630.c"
+; 103684809465505732650670486524377944653
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103684809465505732650670486524377944653_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103684809465505732650670486524377944653.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global [7 x double] [double 0.000000e+00, double 1.000000e+00, double 2.000000e+00, double 0.000000e+00, double 0.000000e+00, double 0.000000e+00, double 0.000000e+00], align 16
+@a = internal global [4 x i32] zeroinitializer, align 16
+@t = internal global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @bar(i32 noundef %x, ptr noundef %y) #0 {
+define dso_local i32 @main() #0 {
 entry:
-  %x.addr = alloca i32, align 4
-  %y.addr = alloca ptr, align 8
-  store i32 %x, ptr %x.addr, align 4
-  store ptr %y, ptr %y.addr, align 8
-  %0 = load i32, ptr %x.addr, align 4
-  %tobool = icmp ne i32 %0, 0
-  br i1 %tobool, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load ptr, ptr %y.addr, align 8
-  %2 = load double, ptr %1, align 8
-  %cmp = fcmp une double %2, 1.000000e+00
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  call void @testit()
+  %0 = load i32, ptr @a, align 16
+  %cmp = icmp ne i32 %0, 0
   br i1 %cmp, label %if.then, label %if.end
 
-if.then:                                          ; preds = %lor.lhs.false, %entry
+if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false
+if.end:                                           ; preds = %entry
+  %1 = load i32, ptr getelementptr inbounds ([4 x i32], ptr @a, i64 0, i64 1), align 4
+  %cmp1 = icmp ne i32 %1, 3
+  br i1 %cmp1, label %if.then2, label %if.end3
+
+if.then2:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end3:                                          ; preds = %if.end
+  %2 = load i32, ptr getelementptr inbounds ([4 x i32], ptr @a, i64 0, i64 2), align 8
+  %cmp4 = icmp ne i32 %2, 2
+  br i1 %cmp4, label %if.then5, label %if.end6
+
+if.then5:                                         ; preds = %if.end3
+  call void @abort() #3
+  unreachable
+
+if.end6:                                          ; preds = %if.end3
+  %3 = load i32, ptr getelementptr inbounds ([4 x i32], ptr @a, i64 0, i64 3), align 4
+  %cmp7 = icmp ne i32 %3, 1
+  br i1 %cmp7, label %if.then8, label %if.end9
+
+if.then8:                                         ; preds = %if.end6
+  call void @abort() #3
+  unreachable
+
+if.end9:                                          ; preds = %if.end6
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @testit() #0 {
+entry:
+  %ir = alloca [0 x i32], align 4
+  %ix = alloca i32, align 4
+  %n = alloca i32, align 4
+  %m = alloca i32, align 4
+  store i32 1, ptr %n, align 4
+  store i32 3, ptr %m, align 4
+  store i32 1, ptr %ix, align 4
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr %ix, align 4
+  %cmp = icmp sle i32 %0, 4
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, ptr %n, align 4
+  %cmp1 = icmp eq i32 %1, 1
+  br i1 %cmp1, label %if.then, label %if.else
+
+if.then:                                          ; preds = %for.body
+  store i32 4, ptr %m, align 4
+  br label %if.end
+
+if.else:                                          ; preds = %for.body
+  %2 = load i32, ptr %n, align 4
+  %sub = sub nsw i32 %2, 1
+  store i32 %sub, ptr %m, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %3 = load i32, ptr %n, align 4
+  %sub2 = sub nsw i32 %3, 1
+  %idxprom = sext i32 %sub2 to i64
+  %arrayidx = getelementptr inbounds [0 x i32], ptr %ir, i64 0, i64 %idxprom
+  %4 = load i32, ptr %arrayidx, align 4
+  %call = call i32 @ap(i32 noundef %4)
+  %5 = load i32, ptr %m, align 4
+  store i32 %5, ptr %n, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %6 = load i32, ptr %ix, align 4
+  %inc = add nsw i32 %6, 1
+  store i32 %inc, ptr %ix, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
   ret void
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  %c = alloca double, align 8
-  %d = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  store i32 0, ptr %d, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr %d, align 4
-  %cmp = icmp slt i32 %0, 3
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr %d, align 4
-  %idxprom = sext i32 %1 to i64
-  %arrayidx = getelementptr inbounds [7 x double], ptr @a, i64 0, i64 %idxprom
-  %2 = load double, ptr %arrayidx, align 8
-  store double %2, ptr %c, align 8
-  %3 = load double, ptr %c, align 8
-  %cmp1 = fcmp ogt double %3, 0.000000e+00
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body
-  br label %e
-
-if.end:                                           ; preds = %for.body
-  br label %for.inc
-
-for.inc:                                          ; preds = %if.end
-  %4 = load i32, ptr %d, align 4
-  %inc = add nsw i32 %4, 1
-  store i32 %inc, ptr %d, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  call void @bar(i32 noundef 1, ptr noundef %c)
-  call void @exit(i32 noundef 1) #4
-  unreachable
-
-e:                                                ; preds = %if.then
-  call void @bar(i32 noundef 0, ptr noundef %c)
-  call void @exit(i32 noundef 0) #4
-  unreachable
-}
-
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2
+
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @ap(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load i32, ptr @t, align 4
+  %cmp = icmp sgt i32 %0, 3
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
+  %1 = load i32, ptr %i.addr, align 4
+  %2 = load i32, ptr @t, align 4
+  %inc = add nsw i32 %2, 1
+  store i32 %inc, ptr @t, align 4
+  %idxprom = sext i32 %2 to i64
+  %arrayidx = getelementptr inbounds [4 x i32], ptr @a, i64 0, i64 %idxprom
+  store i32 %1, ptr %arrayidx, align 4
+  ret i32 1
+}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

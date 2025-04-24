@@ -1,18 +1,40 @@
-; 19489013160638810015581828202720205522
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/19489013160638810015581828202720205522.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/19489013160638810015581828202720205522.c"
+; 113083695055663989545549831248422988817
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/113083695055663989545549831248422988817.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/113083695055663989545549831248422988817.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.S = type { i32, i32 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %s = alloca %struct.S, align 4
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  ret i32 42
+  store ptr null, ptr %p, align 8
+  %call = call i32 (...) @example4()
+  %x = getelementptr inbounds nuw %struct.S, ptr %s, i32 0, i32 0
+  store i32 %call, ptr %x, align 4
+  %0 = load ptr, ptr %p, align 8
+  %y = getelementptr inbounds nuw %struct.S, ptr %0, i32 0, i32 1
+  store i32 2, ptr %y, align 4
+  %1 = load ptr, ptr %p, align 8
+  %y1 = getelementptr inbounds nuw %struct.S, ptr %1, i32 0, i32 1
+  %2 = load i32, ptr %y1, align 4
+  %3 = load ptr, ptr %p, align 8
+  %x2 = getelementptr inbounds nuw %struct.S, ptr %3, i32 0, i32 0
+  %4 = load i32, ptr %x2, align 4
+  %add = add nsw i32 %2, %4
+  %sub = sub nsw i32 %add, 3
+  ret i32 %sub
 }
 
+declare i32 @example4(...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

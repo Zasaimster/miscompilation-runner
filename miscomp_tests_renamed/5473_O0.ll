@@ -1,35 +1,22 @@
-; 196312215498963445496947072148670456194
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196312215498963445496947072148670456194.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196312215498963445496947072148670456194.c"
+; 197033794237355451163289749815714824706
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197033794237355451163289749815714824706.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197033794237355451163289749815714824706.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@acc = dso_local global i64 0, align 8
+@j = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @addhi(i16 noundef signext %a) #0 {
+define dso_local void @func6() #0 {
 entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i16, align 2
-  store i16 %a, ptr %a.addr, align 2
-  %0 = load i64, ptr @acc, align 8
-  %add = add nsw i64 %0, poison
-  store i64 %add, ptr @acc, align 8
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @subhi(i16 noundef signext %a) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i16, align 2
-  store i16 %a, ptr %a.addr, align 2
-  %0 = load i64, ptr @acc, align 8
-  %sub = sub nsw i64 %0, poison
-  store i64 %sub, ptr @acc, align 8
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
+  %ch = alloca i8, align 1
+  store i8 65, ptr %ch, align 1
+  %0 = load i8, ptr %ch, align 1
+  %conv = sext i8 %0 to i32
+  %add = add nsw i32 %conv, 1
+  %conv1 = trunc i32 %add to i8
+  store i8 %conv1, ptr %ch, align 1
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -37,42 +24,28 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i64 281470681743360, ptr @acc, align 8
-  %call = call i32 @addhi(i16 noundef signext 1)
-  %0 = load i64, ptr @acc, align 8
-  %cmp = icmp ne i64 %0, 281474976710656
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 (i32, ...) @bla(i32 noundef 0)
+  %0 = load i32, ptr @j, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i32 @subhi(i16 noundef signext 1)
-  %1 = load i64, ptr @acc, align 8
-  %cmp2 = icmp ne i64 %1, 281470681743360
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end4:                                          ; preds = %if.end
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare i32 @bla(...) #1
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

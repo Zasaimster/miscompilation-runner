@@ -1,35 +1,37 @@
-; 132579772469323946653018528370219955090
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/132579772469323946653018528370219955090.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/132579772469323946653018528370219955090.c"
+; 150542079409641863769727297004513778401
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/150542079409641863769727297004513778401.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/150542079409641863769727297004513778401.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = internal constant [2 x i32] [i32 1, i32 2], align 4
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(ptr noundef %x, i32 noundef %y) #0 {
-entry:
-  %x.addr = alloca ptr, align 8
-  %y.addr = alloca i32, align 4
-  %i = alloca i32, align 4
-  %b = alloca i32, align 4
-  %c = alloca i32, align 4
-  store ptr %x, ptr %x.addr, align 8
-  store i32 %y, ptr %y.addr, align 4
-  store i32 0, ptr %b, align 4
-  ret void
-}
+@flag = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @foo(ptr noundef @a, i32 noundef 2)
+  store i32 -1, ptr %x, align 4
+  %0 = load i32, ptr %x, align 4
+  %and = and i32 %0, -256
+  %tobool = icmp ne i32 %and, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #2
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

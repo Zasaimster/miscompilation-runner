@@ -1,50 +1,52 @@
-; 120842456837884862929398383832303442923
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/120842456837884862929398383832303442923.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/120842456837884862929398383832303442923.c"
+; 109800664819251702286737381309337382253
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/109800664819251702286737381309337382253.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/109800664819251702286737381309337382253.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@var = dso_local global i32 42, align 4
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %b, i32 noundef %c) #0 {
+define dso_local i32 @g() #0 {
 entry:
-  %b.addr = alloca i32, align 4
-  %c.addr = alloca i32, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 %c, ptr %c.addr, align 4
-  %0 = load i32, ptr %b.addr, align 4
-  %cmp = icmp ne i32 %0, 0
-  br i1 %cmp, label %land.lhs.true, label %if.end
-
-land.lhs.true:                                    ; preds = %entry
-  %1 = load i32, ptr %b.addr, align 4
-  %cmp1 = icmp ne i32 %1, 1
-  br i1 %cmp1, label %land.lhs.true2, label %if.end
-
-land.lhs.true2:                                   ; preds = %land.lhs.true
-  %2 = load i32, ptr %c.addr, align 4
-  %cmp3 = icmp ne i32 %2, 0
-  br i1 %cmp3, label %if.then, label %if.end
-
-if.then:                                          ; preds = %land.lhs.true2
-  store i32 0, ptr %b.addr, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %land.lhs.true2, %land.lhs.true, %entry
-  %call = call i32 (...) @example4()
-  %3 = load i32, ptr %b.addr, align 4
-  ret i32 %3
+  %retval = alloca i32, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  store i32 %call, ptr @var, align 4
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
 }
 
-declare i32 @example4(...) #1
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %f2 = alloca i32, align 4
+  store i32 0, ptr %f2, align 4
+  %0 = load i32, ptr %f2, align 4
+  %cmp = icmp eq i32 %0, 0
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %call = call i32 @g()
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 1, i32 noundef 2)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.end, label %if.then
+  %call = call i32 @f()
+  %0 = load i32, ptr @var, align 4
+  %cmp = icmp ne i32 %0, 1
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #4

@@ -1,48 +1,33 @@
-; 170576130110709801602383018877026612674
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170576130110709801602383018877026612674_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170576130110709801602383018877026612674.c"
+; 173069434714166763916025113969181238556
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173069434714166763916025113969181238556_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173069434714166763916025113969181238556.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @func_44(i32 noundef %p_45) #0 {
-entry:
-  %p_45.addr = alloca i32, align 4
-  store i32 %p_45, ptr %p_45.addr, align 4
-  %0 = load i32, ptr %p_45.addr, align 4
-  %mul = mul i32 %0, -9
-  %call = call i32 @mod_rhs(i32 noundef -9)
-  %rem = urem i32 %mul, %call
-  %tobool = icmp ne i32 %rem, 0
-  br i1 %tobool, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  call void @abort() #2
-  unreachable
-
-if.end:                                           ; preds = %entry
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @mod_rhs(i32 noundef %rhs) #0 {
-entry:
-  %rhs.addr = alloca i32, align 4
-  store i32 %rhs, ptr %rhs.addr, align 4
-  ret i32 0
-}
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+@x = dso_local global { i8, i8, [2 x i8] } { i8 2, i8 67, [2 x i8] zeroinitializer }, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @func_44(i32 noundef 2)
+  %bf.load = load i16, ptr @x, align 4
+  %bf.shl = shl i16 %bf.load, 12
+  %bf.ashr = ashr i16 %bf.shl, 12
+  %bf.cast = sext i16 %bf.ashr to i32
+  %cmp = icmp ne i32 %bf.cast, 2
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #2
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

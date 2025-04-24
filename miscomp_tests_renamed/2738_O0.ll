@@ -1,35 +1,35 @@
-; 135881828933823952921471622682397644837
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135881828933823952921471622682397644837.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135881828933823952921471622682397644837.c"
+; 147750984094584379072854155330167727641
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/147750984094584379072854155330167727641.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/147750984094584379072854155330167727641.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.test = type { i16 }
+%struct.S = type { i32, i32, i32, i32, i32 }
+
+@i = dso_local global i32 0, align 4
+@h = internal global %struct.S zeroinitializer, align 4
+@f = dso_local global %struct.S zeroinitializer, align 4
+@g = internal global %struct.S zeroinitializer, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local signext i8 @foo() #0 {
 entry:
-  %a = alloca i32, align 4
-  %p = alloca ptr, align 8
-  %call = call i32 (...) @doNothing()
-  store i32 %call, ptr %a, align 4
-  store ptr %a, ptr %p, align 8
-  %0 = load ptr, ptr %p, align 8
-  %x = getelementptr inbounds nuw %struct.test, ptr %0, i32 0, i32 0
-  store i16 1, ptr %x, align 2
-  %1 = load i32, ptr %a, align 4
-  ret i32 %1
+  %0 = load i32, ptr @i, align 4
+  %conv = trunc i32 %0 to i8
+  ret i8 %conv
 }
-
-declare i32 @doNothing(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %tmp = alloca %struct.S, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp eq i32 %call, 10
+  call void @bar(ptr dead_on_unwind writable sret(%struct.S) align 4 %tmp)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 @h, ptr align 4 %tmp, i64 20, i1 true)
+  store i32 1, ptr getelementptr inbounds nuw (%struct.S, ptr @f, i32 0, i32 1), align 4
+  %0 = load i32, ptr getelementptr inbounds nuw (%struct.S, ptr @h, i32 0, i32 1), align 4
+  %cmp = icmp ne i32 %0, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -40,11 +40,33 @@ if.end:                                           ; preds = %entry
   ret i32 0
 }
 
+; Function Attrs: noinline nounwind uwtable
+define internal void @bar(ptr dead_on_unwind noalias writable sret(%struct.S) align 4 %agg.result) #0 {
+entry:
+  %call = call signext i8 @foo()
+  %tobool = icmp ne i8 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %agg.result, ptr align 4 @f, i64 20, i1 false)
+  br label %return
+
+if.end:                                           ; preds = %entry
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %agg.result, ptr align 4 @g, i64 20, i1 false)
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  ret void
+}
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
+
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn nounwind }
 

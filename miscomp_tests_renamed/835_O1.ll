@@ -1,32 +1,28 @@
-; 108902595137724983757371265577941225250
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108902595137724983757371265577941225250.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108902595137724983757371265577941225250.c"
+; 11473325348450516624840102372810572777
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11473325348450516624840102372810572777.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11473325348450516624840102372810572777.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write) uwtable
-define dso_local void @bar(ptr noundef writeonly captures(none) initializes((0, 4)) %p) local_unnamed_addr #0 {
-entry:
-  store float 4.000000e+00, ptr %p, align 4, !tbaa !5
-  ret void
-}
+%struct.S = type { i8, [3 x i8] }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write) uwtable
-define dso_local noundef i32 @foo(ptr noundef writeonly captures(none) initializes((4, 8)) %locp, i32 noundef %i, i32 noundef %str) local_unnamed_addr #0 {
-entry:
-  %i2 = getelementptr inbounds nuw i8, ptr %locp, i64 4
-  store i32 1, ptr %i2, align 4, !tbaa !9
-  ret i32 1
-}
+@v = dso_local local_unnamed_addr global i32 -1, align 4
+@s = dso_local local_unnamed_addr global %struct.S zeroinitializer, align 4
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
+  %0 = load i32, ptr @v, align 4, !tbaa !5
+  %.lobit = lshr i32 %0, 31
+  %1 = trunc nuw nsw i32 %.lobit to i8
+  %bf.load = load i8, ptr @s, align 4
+  %bf.clear = and i8 %bf.load, -2
+  %bf.set = or disjoint i8 %bf.clear, %1
+  store i8 %bf.set, ptr @s, align 4
   ret i32 0
 }
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: write) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -37,8 +33,6 @@ attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memor
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"float", !7, i64 0}
+!6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!10, !10, i64 0}
-!10 = !{!"int", !7, i64 0}

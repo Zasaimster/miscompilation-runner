@@ -1,23 +1,43 @@
-; 157484980841619169010633247660314382353
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157484980841619169010633247660314382353_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157484980841619169010633247660314382353.c"
+; 181821229704060770860715099578356150294
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/181821229704060770860715099578356150294_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/181821229704060770860715099578356150294.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.B = type { %struct.C, ptr }
-%struct.C = type { %struct.D, i64, i64, i64, i64, i64 }
-%struct.D = type { i32, ptr }
-
-@y = dso_local global %struct.B zeroinitializer, align 8
-@x = dso_local global %struct.B zeroinitializer, align 8
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(ptr noundef %x, ptr noundef %y) #0 {
+define dso_local i32 @do_layer3(i32 noundef %single) #0 {
 entry:
-  %x.addr = alloca ptr, align 8
-  %y.addr = alloca ptr, align 8
-  store ptr %x, ptr %x.addr, align 8
-  store ptr %y, ptr %y.addr, align 8
+  %single.addr = alloca i32, align 4
+  %stereo1 = alloca i32, align 4
+  store i32 %single, ptr %single.addr, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %cmp = icmp sge i32 %call, 0
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %stereo1, align 4
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  store i32 2, ptr %stereo1, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %0 = load i32, ptr %single.addr, align 4
+  call void @f(i32 noundef %0)
+  %1 = load i32, ptr %stereo1, align 4
+  ret i32 %1
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f(i32 noundef %i) #0 {
+entry:
+  %i.addr = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
   ret void
 }
 
@@ -26,21 +46,25 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 6, ptr @y, align 8
-  store i64 145, ptr getelementptr inbounds nuw (%struct.C, ptr @y, i32 0, i32 2), align 8
-  store i64 2448, ptr getelementptr inbounds nuw (%struct.C, ptr @y, i32 0, i32 3), align 8
-  store i64 -1, ptr getelementptr inbounds nuw (%struct.C, ptr @x, i32 0, i32 2), align 8
-  call void @foo(ptr noundef @x, ptr noundef @y)
-  call void @exit(i32 noundef 0) #2
+  %call = call i32 @do_layer3(i32 noundef -1)
+  %cmp = icmp ne i32 %call, 2
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
   unreachable
+
+if.end:                                           ; preds = %entry
+  ret i32 0
 }
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

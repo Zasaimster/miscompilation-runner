@@ -1,75 +1,73 @@
-; 186666117870887822883048845625453513651
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/186666117870887822883048845625453513651.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/186666117870887822883048845625453513651.c"
+; 120350993654070091225955902713985656295
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/120350993654070091225955902713985656295.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/120350993654070091225955902713985656295.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.2 = private unnamed_addr constant [13 x i8] c"timeout=%ld\0A\00", align 1
-@str = private unnamed_addr constant [6 x i8] c"begin\00", align 1
-@str.4 = private unnamed_addr constant [4 x i8] c"end\00", align 1
+@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
+@n = dso_local global i32 0, align 4
+@q = dso_local local_unnamed_addr global ptr null, align 8
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local void @foo() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %do.body.i
+  br label %for.cond
 
-do.body.i:                                        ; preds = %do.body.i, %entry
-  %timeout.0.i = phi i64 [ 2, %entry ], [ %dec.i, %do.body.i ]
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i)
-  %dec.i = add nsw i64 %timeout.0.i, -1
-  %tobool.not.i = icmp eq i64 %dec.i, 0
-  br i1 %tobool.not.i, label %do.body.i3, label %do.body.i, !llvm.loop !5
-
-do.body.i3:                                       ; preds = %do.body.i, %do.body.i3
-  %timeout.0.i4 = phi i64 [ %dec.i6, %do.body.i3 ], [ 2, %do.body.i ]
-  %call.i5 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i4)
-  %dec.i6 = add nsw i64 %timeout.0.i4, -1
-  %tobool.not.i7 = icmp eq i64 %dec.i6, 0
-  br i1 %tobool.not.i7, label %do.body.i8, label %do.body.i3, !llvm.loop !8
-
-do.body.i8:                                       ; preds = %do.body.i3, %do.body.i8
-  %timeout.0.i9 = phi i64 [ %dec.i11, %do.body.i8 ], [ 2, %do.body.i3 ]
-  %call.i10 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i9)
-  %dec.i11 = add nsw i64 %timeout.0.i9, -1
-  %tobool.not.i12 = icmp eq i64 %dec.i11, 0
-  br i1 %tobool.not.i12, label %do.body.i13, label %do.body.i8, !llvm.loop !9
-
-do.body.i13:                                      ; preds = %do.body.i8, %do.body.i13
-  %timeout.0.i14 = phi i64 [ %dec.i16, %do.body.i13 ], [ 2, %do.body.i8 ]
-  %call.i15 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i14)
-  %dec.i16 = add nsw i64 %timeout.0.i14, -1
-  %tobool.not.i17 = icmp eq i64 %dec.i16, 0
-  br i1 %tobool.not.i17, label %do.body.i18, label %do.body.i13, !llvm.loop !10
-
-do.body.i18:                                      ; preds = %do.body.i13, %do.body.i18
-  %timeout.0.i19 = phi i64 [ %dec.i21, %do.body.i18 ], [ 2, %do.body.i13 ]
-  %call.i20 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i19)
-  %dec.i21 = add nsw i64 %timeout.0.i19, -1
-  %tobool.not.i22 = icmp eq i64 %dec.i21, 0
-  br i1 %tobool.not.i22, label %do.body.i23, label %do.body.i18, !llvm.loop !11
-
-do.body.i23:                                      ; preds = %do.body.i18, %do.body.i23
-  %timeout.0.i24 = phi i64 [ %dec.i26, %do.body.i23 ], [ 2, %do.body.i18 ]
-  %call.i25 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i24)
-  %dec.i26 = add nsw i64 %timeout.0.i24, -1
-  %tobool.not.i27 = icmp eq i64 %dec.i26, 0
-  br i1 %tobool.not.i27, label %kb_wait_4.exit, label %do.body.i23, !llvm.loop !12
-
-kb_wait_4.exit:                                   ; preds = %do.body.i23
-  %puts2 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
-  ret i32 0
+for.cond:                                         ; preds = %for.cond, %entry
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  store volatile i32 %call, ptr @n, align 4, !tbaa !5
+  %0 = load ptr, ptr @q, align 8, !tbaa !9
+  %arrayidx = getelementptr inbounds nuw i8, ptr %0, i64 2
+  %1 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv = sext i8 %1 to i32
+  store volatile i32 %conv, ptr @n, align 4, !tbaa !5
+  %2 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv2 = sext i8 %2 to i32
+  store volatile i32 %conv2, ptr @n, align 4, !tbaa !5
+  %3 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv4 = sext i8 %3 to i32
+  store volatile i32 %conv4, ptr @n, align 4, !tbaa !5
+  %4 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv6 = sext i8 %4 to i32
+  store volatile i32 %conv6, ptr @n, align 4, !tbaa !5
+  %5 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv8 = sext i8 %5 to i32
+  store volatile i32 %conv8, ptr @n, align 4, !tbaa !5
+  %6 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv10 = sext i8 %6 to i32
+  store volatile i32 %conv10, ptr @n, align 4, !tbaa !5
+  %7 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv12 = sext i8 %7 to i32
+  store volatile i32 %conv12, ptr @n, align 4, !tbaa !5
+  %8 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv14 = sext i8 %8 to i32
+  store volatile i32 %conv14, ptr @n, align 4, !tbaa !5
+  %9 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv16 = sext i8 %9 to i32
+  store volatile i32 %conv16, ptr @n, align 4, !tbaa !5
+  %10 = load i8, ptr %arrayidx, align 1, !tbaa !12
+  %conv18 = sext i8 %10 to i32
+  store volatile i32 %conv18, ptr @n, align 4, !tbaa !5
+  br label %for.cond, !llvm.loop !13
 }
 
 ; Function Attrs: nofree nounwind
 declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  tail call void @exit(i32 noundef 0) #3
+  unreachable
+}
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #2
+
+attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -79,11 +77,13 @@ attributes #2 = { nofree nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = distinct !{!5, !6, !7}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = !{!"llvm.loop.unroll.disable"}
-!8 = distinct !{!8, !6, !7}
-!9 = distinct !{!9, !6, !7}
-!10 = distinct !{!10, !6, !7}
-!11 = distinct !{!11, !6, !7}
-!12 = distinct !{!12, !6, !7}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"int", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C/C++ TBAA"}
+!9 = !{!10, !10, i64 0}
+!10 = !{!"p1 omnipotent char", !11, i64 0}
+!11 = !{!"any pointer", !7, i64 0}
+!12 = !{!7, !7, i64 0}
+!13 = distinct !{!13, !14}
+!14 = !{!"llvm.loop.unroll.disable"}

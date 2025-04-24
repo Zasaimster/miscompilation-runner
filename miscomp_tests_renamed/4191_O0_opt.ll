@@ -1,24 +1,38 @@
-; 114164078682872308523960210561026147609
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/114164078682872308523960210561026147609_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/114164078682872308523960210561026147609.c"
+; 173465011339963216900239151528821097153
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173465011339963216900239151528821097153_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173465011339963216900239151528821097153.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@f.values = internal global [1 x i16] [i16 -27904], align 2
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(i32 noundef %a) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %mul = mul i32 %0, 65536
+  %div = udiv i32 %mul, 8
+  ret i32 %div
+}
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local i32 @g(i32 noundef %a) #0 {
 entry:
-  %token = alloca i16, align 2
-  %count = alloca i32, align 4
-  %0 = load i16, ptr @f.values, align 2
-  store i16 %0, ptr %token, align 2
-  %1 = load i16, ptr %token, align 2
-  %conv = zext i16 %1 to i32
-  %shr = ashr i32 %conv, 8
-  store i32 %shr, ptr %count, align 4
-  %2 = load i32, ptr %count, align 4
-  ret i32 %2
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %mul = mul i32 %0, 65536
+  ret i32 %mul
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @h(i32 noundef %a) #0 {
+entry:
+  %a.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %div = udiv i32 %0, 8
+  ret i32 %div
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -26,8 +40,10 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 147
+  %call = call i32 @f(i32 noundef 65536)
+  %call1 = call i32 @g(i32 noundef 65536)
+  %call2 = call i32 @h(i32 noundef %call1)
+  %cmp = icmp ne i32 %call, %call2
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

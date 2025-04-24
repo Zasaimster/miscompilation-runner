@@ -1,85 +1,65 @@
-; 165545216830897498870933416536009188986
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/165545216830897498870933416536009188986_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/165545216830897498870933416536009188986.c"
+; 141420862220217687210576308472250861237
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141420862220217687210576308472250861237_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141420862220217687210576308472250861237.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.B = type { i32, i32 }
-%struct.A = type { i32, %struct.B }
-
-@__const.f.b = private unnamed_addr constant %struct.B { i32 0, i32 1 }, align 4
+%struct.T = type { i8 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local { i64, i32 } @f() #0 {
+define dso_local i8 @f(i8 %s1.coerce) #0 {
 entry:
-  %retval = alloca %struct.A, align 4
-  %b = alloca %struct.B, align 4
-  %retval.coerce = alloca { i64, i32 }, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %b, ptr align 4 @__const.f.b, i64 8, i1 false)
-  %z = getelementptr inbounds nuw %struct.A, ptr %retval, i32 0, i32 0
-  store i32 2, ptr %z, align 4
-  %b1 = getelementptr inbounds nuw %struct.A, ptr %retval, i32 0, i32 1
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %b1, ptr align 4 %b, i64 8, i1 false)
-  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %retval.coerce, ptr align 4 %retval, i64 12, i1 false)
-  %0 = load { i64, i32 }, ptr %retval.coerce, align 8
-  ret { i64, i32 } %0
-}
-
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @func1() #0 {
-entry:
-  %x = alloca i32, align 4
-  %y = alloca i32, align 4
-  %z = alloca i32, align 4
-  store i32 10, ptr %x, align 4
-  store i32 20, ptr %y, align 4
-  %0 = load i32, ptr %x, align 4
-  %1 = load i32, ptr %y, align 4
-  %add = add nsw i32 %0, %1
-  store i32 %add, ptr %z, align 4
-  ret void
+  %retval = alloca %struct.T, align 1
+  %s1 = alloca %struct.T, align 1
+  %coerce.dive = getelementptr inbounds nuw %struct.T, ptr %s1, i32 0, i32 0
+  store i8 %s1.coerce, ptr %coerce.dive, align 1
+  %x = getelementptr inbounds nuw %struct.T, ptr %retval, i32 0, i32 0
+  store i8 17, ptr %x, align 1
+  %coerce.dive1 = getelementptr inbounds nuw %struct.T, ptr %retval, i32 0, i32 0
+  %0 = load i8, ptr %coerce.dive1, align 1
+  ret i8 %0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca %struct.A, align 4
-  %tmp.coerce = alloca { i64, i32 }, align 8
+  %s1a = alloca %struct.T, align 1
+  %s1b = alloca %struct.T, align 1
+  %tmp = alloca %struct.T, align 1
   store i32 0, ptr %retval, align 4
-  %call = call { i64, i32 } @f()
-  store { i64, i32 } %call, ptr %tmp.coerce, align 8
-  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %a, ptr align 8 %tmp.coerce, i64 12, i1 false)
-  %z = getelementptr inbounds nuw %struct.A, ptr %a, i32 0, i32 0
-  %0 = load i32, ptr %z, align 4
-  %cmp = icmp ne i32 %0, 2
+  %x = getelementptr inbounds nuw %struct.T, ptr %s1a, i32 0, i32 0
+  store i8 13, ptr %x, align 1
+  %coerce.dive = getelementptr inbounds nuw %struct.T, ptr %s1a, i32 0, i32 0
+  %0 = load i8, ptr %coerce.dive, align 1
+  %call = call i8 @f(i8 %0)
+  %coerce.dive1 = getelementptr inbounds nuw %struct.T, ptr %tmp, i32 0, i32 0
+  store i8 %call, ptr %coerce.dive1, align 1
+  call void @llvm.memcpy.p0.p0.i64(ptr align 1 %s1b, ptr align 1 %tmp, i64 1, i1 false)
+  %x2 = getelementptr inbounds nuw %struct.T, ptr %s1a, i32 0, i32 0
+  %1 = load i8, ptr %x2, align 1
+  %conv = sext i8 %1 to i32
+  %cmp = icmp ne i32 %conv, 13
   br i1 %cmp, label %if.then, label %lor.lhs.false
 
 lor.lhs.false:                                    ; preds = %entry
-  %b = getelementptr inbounds nuw %struct.A, ptr %a, i32 0, i32 1
-  %x = getelementptr inbounds nuw %struct.B, ptr %b, i32 0, i32 0
-  %1 = load i32, ptr %x, align 4
-  %cmp1 = icmp ne i32 %1, 0
-  br i1 %cmp1, label %if.then, label %lor.lhs.false2
+  %x4 = getelementptr inbounds nuw %struct.T, ptr %s1b, i32 0, i32 0
+  %2 = load i8, ptr %x4, align 1
+  %conv5 = sext i8 %2 to i32
+  %cmp6 = icmp ne i32 %conv5, 17
+  br i1 %cmp6, label %if.then, label %if.end
 
-lor.lhs.false2:                                   ; preds = %lor.lhs.false
-  %b3 = getelementptr inbounds nuw %struct.A, ptr %a, i32 0, i32 1
-  %y = getelementptr inbounds nuw %struct.B, ptr %b3, i32 0, i32 1
-  %2 = load i32, ptr %y, align 4
-  %cmp4 = icmp ne i32 %2, 1
-  br i1 %cmp4, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false2, %lor.lhs.false, %entry
+if.then:                                          ; preds = %lor.lhs.false, %entry
   call void @abort() #4
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false2
+if.end:                                           ; preds = %lor.lhs.false
   call void @exit(i32 noundef 0) #5
   unreachable
 }
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

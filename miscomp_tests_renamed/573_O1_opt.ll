@@ -1,67 +1,31 @@
-; 180615477659938148926774583430034658949
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/180615477659938148926774583430034658949_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/180615477659938148926774583430034658949.c"
+; 110297630663897352249434618342841385790
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110297630663897352249434618342841385790_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110297630663897352249434618342841385790.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i8, [100 x i8], float }
-
-@A = dso_local global [4 x i8] c"1234", align 4
+@str = private unnamed_addr constant [16 x i8] c"Loop completed!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local void @foo(ptr noundef readonly byval(%struct.S) align 8 captures(none) %s) local_unnamed_addr #0 {
+define dso_local i32 @f(i32 %x) local_unnamed_addr #0 {
 entry:
-  %arr = getelementptr inbounds nuw i8, ptr %s, i64 1
-  %bcmp = call i32 @bcmp(ptr noundef nonnull dereferenceable(4) %arr, ptr noundef nonnull dereferenceable(4) @A, i64 4)
-  %tobool.not = icmp eq i32 %bcmp, 0
-  br i1 %tobool.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %entry
-  tail call void @abort() #4
-  unreachable
-
-if.end:                                           ; preds = %entry
-  ret void
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret i32 undef
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  %s1 = alloca %struct.S, align 8
-  %0 = load i32, ptr @A, align 4
-  call void @llvm.lifetime.start.p0(i64 108, ptr nonnull %s1)
-  %s.sroa.3.0.s1.sroa_idx = getelementptr inbounds nuw i8, ptr %s1, i64 1
-  store i32 %0, ptr %s.sroa.3.0.s1.sroa_idx, align 1
-  %bcmp.i = call i32 @bcmp(ptr noundef nonnull readonly dereferenceable(4) %s.sroa.3.0.s1.sroa_idx, ptr noundef nonnull dereferenceable(4) @A, i64 4)
-  %tobool.not.i = icmp eq i32 %bcmp.i, 0
-  br i1 %tobool.not.i, label %foo.exit, label %if.then.i
-
-if.then.i:                                        ; preds = %entry
-  tail call void @abort() #4
+  %call = tail call i32 @f(i32 poison)
   unreachable
-
-foo.exit:                                         ; preds = %entry
-  call void @llvm.lifetime.end.p0(i64 108, ptr nonnull %s1)
-  ret i32 0
 }
 
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #2
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #2
-
-; Function Attrs: nofree nounwind willreturn memory(argmem: read)
-declare i32 @bcmp(ptr captures(none), ptr captures(none), i64) local_unnamed_addr #3
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #3 = { nofree nounwind willreturn memory(argmem: read) }
-attributes #4 = { noreturn nounwind }
+attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

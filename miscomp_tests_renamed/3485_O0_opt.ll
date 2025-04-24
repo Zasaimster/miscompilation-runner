@@ -1,34 +1,18 @@
-; 136655052032012314539911935961602154905
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136655052032012314539911935961602154905_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136655052032012314539911935961602154905.c"
+; 160980080013492517409439478483461559642
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/160980080013492517409439478483461559642_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/160980080013492517409439478483461559642.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.T = type { %struct.anon }
-%struct.anon = type { i8, i8 }
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %x) #0 {
-entry:
-  %x.addr = alloca i32, align 4
-  %num = alloca i32, align 4
-  %reg = alloca %union.T, align 1
-  store i32 %x, ptr %x.addr, align 4
-  store i32 0, ptr %num, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %conv = trunc i32 %0 to i8
-  %l = getelementptr inbounds nuw %struct.anon, ptr %reg, i32 0, i32 1
-  store i8 %conv, ptr %l, align 1
-  ret i32 0
-}
+@buf = dso_local global [5 x i16] [i16 0, i16 4, i16 16, i16 64, i16 256], align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 2)
-  %cmp = icmp ne i32 %call, 1
+  %call = call i32 @bug(i16 noundef zeroext 512, ptr noundef @buf, ptr noundef getelementptr inbounds (i16, ptr @buf, i64 3))
+  %cmp = icmp ne i32 %call, 491
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -38,6 +22,49 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @bug(i16 noundef zeroext %value, ptr noundef %buffer, ptr noundef %bufend) #0 {
+entry:
+  %value.addr = alloca i16, align 2
+  %buffer.addr = alloca ptr, align 8
+  %bufend.addr = alloca ptr, align 8
+  %tmp = alloca ptr, align 8
+  store i16 %value, ptr %value.addr, align 2
+  store ptr %buffer, ptr %buffer.addr, align 8
+  store ptr %bufend, ptr %bufend.addr, align 8
+  %0 = load ptr, ptr %buffer.addr, align 8
+  store ptr %0, ptr %tmp, align 8
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc, %entry
+  %1 = load ptr, ptr %tmp, align 8
+  %2 = load ptr, ptr %bufend.addr, align 8
+  %cmp = icmp ult ptr %1, %2
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %3 = load ptr, ptr %tmp, align 8
+  %4 = load i16, ptr %3, align 2
+  %conv = zext i16 %4 to i32
+  %5 = load i16, ptr %value.addr, align 2
+  %conv1 = zext i16 %5 to i32
+  %sub = sub nsw i32 %conv1, %conv
+  %conv2 = trunc i32 %sub to i16
+  store i16 %conv2, ptr %value.addr, align 2
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %6 = load ptr, ptr %tmp, align 8
+  %incdec.ptr = getelementptr inbounds nuw i16, ptr %6, i32 1
+  store ptr %incdec.ptr, ptr %tmp, align 8
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  %7 = load i16, ptr %value.addr, align 2
+  %conv3 = zext i16 %7 to i32
+  ret i32 %conv3
 }
 
 ; Function Attrs: noreturn nounwind
@@ -61,3 +88,5 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}

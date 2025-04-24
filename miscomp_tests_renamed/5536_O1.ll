@@ -1,23 +1,32 @@
-; 113606647206737159319170848413241198994
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/113606647206737159319170848413241198994.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/113606647206737159319170848413241198994.c"
+; 197989951682864748373310362627671538293
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197989951682864748373310362627671538293.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197989951682864748373310362627671538293.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+@a = dso_local local_unnamed_addr global i64 1, align 8
+@str = private unnamed_addr constant [17 x i8] c"Done processing!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local i32 @foo() local_unnamed_addr #0 {
 entry:
   %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  ret i32 0
+  ret i32 undef
+}
+
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  %call = tail call i32 @foo()
+  unreachable
 }
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind }
+attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

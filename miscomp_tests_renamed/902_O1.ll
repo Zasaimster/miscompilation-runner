@@ -1,79 +1,93 @@
-; 183351765706160415524481715965911904210
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/183351765706160415524481715965911904210.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/183351765706160415524481715965911904210.c"
+; 116207509483518832012293157991115903844
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/116207509483518832012293157991115903844.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/116207509483518832012293157991115903844.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+@a = dso_local local_unnamed_addr global i32 2, align 4
+@b = dso_local local_unnamed_addr global i32 0, align 4
+@d = dso_local local_unnamed_addr global i32 0, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@c = dso_local local_unnamed_addr global i32 0, align 4
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @foo() local_unnamed_addr #0 {
 entry:
-  %x1 = alloca i32, align 4
-  %x2 = alloca i64, align 8
-  %x3 = alloca i32, align 4
-  %x4 = alloca i32, align 4
-  %x5 = alloca i32, align 4
-  %x6 = alloca i64, align 8
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x1)
-  store volatile i32 0, ptr %x1, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %x2)
-  store volatile i64 0, ptr %x2, align 8, !tbaa !9
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x3)
-  store volatile i32 0, ptr %x3, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x4)
-  store volatile i32 1, ptr %x4, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 4, ptr nonnull %x5)
-  store volatile i32 1, ptr %x5, align 4, !tbaa !5
-  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %x6)
-  store volatile i64 1, ptr %x6, align 8, !tbaa !9
-  %x1.0.x1.0.x1.0.x1.0. = load volatile i32, ptr %x1, align 4, !tbaa !5
-  %conv = sext i32 %x1.0.x1.0.x1.0.x1.0. to i64
-  %x2.0.x2.0.x2.0.x2.0. = load volatile i64, ptr %x2, align 8, !tbaa !9
-  %x3.0.x3.0.x3.0.x3.0. = load volatile i32, ptr %x3, align 4, !tbaa !5
-  %sh_prom = zext nneg i32 %x3.0.x3.0.x3.0.x3.0. to i64
-  %shl = shl i64 %x2.0.x2.0.x2.0.x2.0., %sh_prom
-  %mul = mul nsw i64 %shl, %conv
-  %x4.0.x4.0.x4.0.x4.0. = load volatile i32, ptr %x4, align 4, !tbaa !5
-  %x5.0.x5.0.x5.0.x5.0. = load volatile i32, ptr %x5, align 4, !tbaa !5
-  %mul1 = mul nsw i32 %x5.0.x5.0.x5.0.x5.0., %x4.0.x4.0.x4.0.x4.0.
-  %conv2 = sext i32 %mul1 to i64
-  %div = sdiv i64 %mul, %conv2
-  %x6.0.x6.0.x6.0.x6.0. = load volatile i64, ptr %x6, align 8, !tbaa !9
-  %add = add nsw i64 %x6.0.x6.0.x6.0.x6.0., %div
-  %cmp.not = icmp eq i64 %add, 1
-  br i1 %cmp.not, label %if.end, label %if.then
+  %0 = load i32, ptr @b, align 4, !tbaa !5
+  %cmp1 = icmp sgt i32 %0, 0
+  %conv2 = zext i1 %cmp1 to i32
+  %1 = load i32, ptr @a, align 4, !tbaa !5
+  %and3 = and i32 %1, 1
+  %or4 = or i32 %and3, %conv2
+  %tobool.not5 = icmp eq i32 %or4, 0
+  br i1 %tobool.not5, label %if.else, label %for.inc
 
-if.then:                                          ; preds = %entry
-  tail call void @abort() #4
-  unreachable
-
-if.end:                                           ; preds = %entry
-  %call = tail call i32 (i32, ...) @calculateSquare(i32 noundef 4) #5
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %x6)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x5)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x4)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x3)
-  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %x2)
-  call void @llvm.lifetime.end.p0(i64 4, ptr nonnull %x1)
+if.else:                                          ; preds = %for.inc, %entry
+  %.lcssa = phi i32 [ %1, %entry ], [ %4, %for.inc ]
+  store i32 %.lcssa, ptr @d, align 4, !tbaa !5
   ret i32 0
+
+for.inc:                                          ; preds = %entry, %for.inc
+  %2 = load i32, ptr @c, align 4, !tbaa !5
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %2)
+  %3 = load i32, ptr @b, align 4, !tbaa !5
+  %cmp = icmp sgt i32 %3, 0
+  %conv = zext i1 %cmp to i32
+  %4 = load i32, ptr @a, align 4, !tbaa !5
+  %and = and i32 %4, 1
+  %or = or i32 %and, %conv
+  %tobool.not = icmp eq i32 %or, 0
+  br i1 %tobool.not, label %if.else, label %for.inc, !llvm.loop !9
 }
 
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %0 = load i32, ptr @b, align 4, !tbaa !5
+  %cmp1.i = icmp sgt i32 %0, 0
+  %conv2.i = zext i1 %cmp1.i to i32
+  %1 = load i32, ptr @a, align 4, !tbaa !5
+  %and3.i = and i32 %1, 1
+  %or4.i = or i32 %and3.i, %conv2.i
+  %tobool.not5.i = icmp eq i32 %or4.i, 0
+  br i1 %tobool.not5.i, label %foo.exit, label %for.inc.i
+
+for.inc.i:                                        ; preds = %entry, %for.inc.i
+  %2 = load i32, ptr @c, align 4, !tbaa !5
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef %2)
+  %3 = load i32, ptr @b, align 4, !tbaa !5
+  %cmp.i = icmp sgt i32 %3, 0
+  %conv.i = zext i1 %cmp.i to i32
+  %4 = load i32, ptr @a, align 4, !tbaa !5
+  %and.i = and i32 %4, 1
+  %or.i = or i32 %and.i, %conv.i
+  %tobool.not.i = icmp eq i32 %or.i, 0
+  br i1 %tobool.not.i, label %foo.exit, label %for.inc.i, !llvm.loop !9
+
+foo.exit:                                         ; preds = %for.inc.i, %entry
+  %.lcssa.i = phi i32 [ %1, %entry ], [ %4, %for.inc.i ]
+  store i32 %.lcssa.i, ptr @d, align 4, !tbaa !5
+  %cmp.not = icmp eq i32 %.lcssa.i, 2
+  br i1 %cmp.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %foo.exit
+  tail call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %foo.exit
+  ret i32 0
+}
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #2
 
-declare i32 @calculateSquare(...) local_unnamed_addr #3
-
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
-
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
-attributes #5 = { nounwind }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -87,5 +101,5 @@ attributes #5 = { nounwind }
 !6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!10, !10, i64 0}
-!10 = !{!"long long", !7, i64 0}
+!9 = distinct !{!9, !10}
+!10 = !{!"llvm.loop.unroll.disable"}

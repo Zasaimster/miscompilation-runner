@@ -1,57 +1,60 @@
-; 197715080575131354292534060506807230170
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/197715080575131354292534060506807230170_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/197715080575131354292534060506807230170.c"
+; 102261659789830780458181961910166144775
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102261659789830780458181961910166144775_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102261659789830780458181961910166144775.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [9 x i8] c"qfunc()\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @myfunc(i32 noundef %x) #0 {
-entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  ret i32 5
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @vfunc(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @qfunc() #0 {
-entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
-}
-
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @zfunc() #0 {
-entry:
-  call void null()
-  ret void
-}
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i32, align 4
+  %b = alloca i32, align 4
+  %d = alloca ptr, align 8
+  %e = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @myfunc(i32 noundef 3)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %call)
-  %call2 = call i32 @myfunc(i32 noundef 4)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %call2)
-  call void @vfunc(i32 noundef 1234)
-  call void @qfunc()
+  %0 = load ptr, ptr %d, align 8
+  %1 = load i32, ptr %0, align 4
+  %conv = sext i32 %1 to i64
+  %2 = inttoptr i64 %conv to ptr
+  store ptr %2, ptr %d, align 8
+  store ptr %b, ptr %e, align 8
+  store i32 12, ptr %a, align 4
+  store i32 34, ptr %b, align 4
+  %3 = load ptr, ptr %d, align 8
+  %4 = load i32, ptr %3, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %4)
+  %5 = load ptr, ptr %e, align 8
+  %6 = load i32, ptr %5, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %6)
+  %7 = load ptr, ptr %d, align 8
+  %8 = load ptr, ptr %e, align 8
+  %cmp = icmp eq ptr %7, %8
+  %conv2 = zext i1 %cmp to i32
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %conv2)
+  %9 = load ptr, ptr %d, align 8
+  %10 = load ptr, ptr %e, align 8
+  %cmp4 = icmp ne ptr %9, %10
+  %conv5 = zext i1 %cmp4 to i32
+  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %conv5)
+  %11 = load ptr, ptr %e, align 8
+  store ptr %11, ptr %d, align 8
+  %12 = load ptr, ptr %d, align 8
+  %13 = load ptr, ptr %e, align 8
+  %cmp7 = icmp eq ptr %12, %13
+  %conv8 = zext i1 %cmp7 to i32
+  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %conv8)
+  %14 = load ptr, ptr %d, align 8
+  %15 = load ptr, ptr %e, align 8
+  %cmp10 = icmp ne ptr %14, %15
+  %conv11 = zext i1 %cmp10 to i32
+  %call12 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %conv11)
   ret i32 0
 }
+
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

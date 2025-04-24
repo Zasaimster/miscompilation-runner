@@ -1,71 +1,91 @@
-; 176102784799407474788308789852967946224
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176102784799407474788308789852967946224_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176102784799407474788308789852967946224.c"
+; 167286619160320505146851309894229803810
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167286619160320505146851309894229803810_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167286619160320505146851309894229803810.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.tree_common = type { ptr, ptr, i16 }
-%union.tree_node = type { %struct.tree_common }
-
-@.str = private unnamed_addr constant [33 x i8] c"unsigned enum bit-fields broken\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @blah() #0 {
-entry:
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @convert_like_real(ptr noundef %convs) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %convs.addr = alloca ptr, align 8
-  store ptr %convs, ptr %convs.addr, align 8
-  %0 = load ptr, ptr %convs.addr, align 8
-  %code = getelementptr inbounds nuw %struct.tree_common, ptr %0, i32 0, i32 2
-  %bf.load = load i16, ptr %code, align 8
-  %bf.clear = and i16 %bf.load, 255
-  %bf.cast = zext i16 %bf.clear to i32
-  switch i32 %bf.cast, label %sw.default [
-    i32 9, label %sw.bb
-  ]
-
-sw.bb:                                            ; preds = %entry
-  %call = call i32 @blah()
-  store i32 %call, ptr %retval, align 4
-  br label %return
-
-sw.default:                                       ; preds = %entry
-  br label %sw.epilog
-
-sw.epilog:                                        ; preds = %sw.default
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %return
-
-return:                                           ; preds = %sw.epilog, %sw.bb
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
-}
-
-declare i32 @printf(ptr noundef, ...) #1
+%struct.s = type { i32, %union.anon, %struct.anon, %struct.anon.2 }
+%union.anon = type { i32 }
+%struct.anon = type { %union.anon.0 }
+%union.anon.0 = type { %struct.anon.1 }
+%struct.anon.1 = type { i32 }
+%struct.anon.2 = type { i32 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %convs = alloca %union.tree_node, align 8
+  %v = alloca %struct.s, align 4
   store i32 0, ptr %retval, align 4
-  %code = getelementptr inbounds nuw %struct.tree_common, ptr %convs, i32 0, i32 2
-  %bf.load = load i16, ptr %code, align 8
-  %bf.clear = and i16 %bf.load, -256
-  %bf.set = or i16 %bf.clear, 9
-  store i16 %bf.set, ptr %code, align 8
-  %call = call i32 @convert_like_real(ptr noundef %convs)
-  ret i32 0
+  %a = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 0
+  store i32 0, ptr %a, align 4
+  %0 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 1
+  store i32 2, ptr %0, align 4
+  %1 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 2
+  %2 = getelementptr inbounds nuw %struct.anon, ptr %1, i32 0, i32 0
+  %c = getelementptr inbounds nuw %struct.anon.1, ptr %2, i32 0, i32 0
+  store i32 3, ptr %c, align 4
+  %3 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 3
+  %d = getelementptr inbounds nuw %struct.anon.2, ptr %3, i32 0, i32 0
+  store i32 4, ptr %d, align 4
+  %a1 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 0
+  %4 = load i32, ptr %a1, align 4
+  %cmp = icmp ne i32 %4, 1
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %5 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 1
+  %6 = load i32, ptr %5, align 4
+  %cmp2 = icmp ne i32 %6, 2
+  br i1 %cmp2, label %land.lhs.true, label %if.end5
+
+land.lhs.true:                                    ; preds = %if.end
+  %7 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 1
+  %8 = load i32, ptr %7, align 4
+  %cmp3 = icmp ne i32 %8, 2
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %land.lhs.true
+  store i32 2, ptr %retval, align 4
+  br label %return
+
+if.end5:                                          ; preds = %land.lhs.true, %if.end
+  %9 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 2
+  %10 = getelementptr inbounds nuw %struct.anon, ptr %9, i32 0, i32 0
+  %c6 = getelementptr inbounds nuw %struct.anon.1, ptr %10, i32 0, i32 0
+  %11 = load i32, ptr %c6, align 4
+  %cmp7 = icmp ne i32 %11, 3
+  br i1 %cmp7, label %if.then8, label %if.end9
+
+if.then8:                                         ; preds = %if.end5
+  store i32 3, ptr %retval, align 4
+  br label %return
+
+if.end9:                                          ; preds = %if.end5
+  %12 = getelementptr inbounds nuw %struct.s, ptr %v, i32 0, i32 3
+  %d10 = getelementptr inbounds nuw %struct.anon.2, ptr %12, i32 0, i32 0
+  %13 = load i32, ptr %d10, align 4
+  %cmp11 = icmp ne i32 %13, 4
+  br i1 %cmp11, label %if.then12, label %if.end13
+
+if.then12:                                        ; preds = %if.end9
+  store i32 4, ptr %retval, align 4
+  br label %return
+
+if.end13:                                         ; preds = %if.end9
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end13, %if.then12, %if.then8, %if.then4, %if.then
+  %14 = load i32, ptr %retval, align 4
+  ret i32 %14
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

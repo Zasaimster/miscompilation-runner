@@ -1,134 +1,33 @@
-; 175644608576922926306870094572695908812
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175644608576922926306870094572695908812_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175644608576922926306870094572695908812.c"
+; 12086774709385541896654637186800108829
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12086774709385541896654637186800108829_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12086774709385541896654637186800108829.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @test(x86_fp80 noundef %val, ptr noundef %eval) #0 {
-entry:
-  %val.addr = alloca x86_fp80, align 16
-  %eval.addr = alloca ptr, align 8
-  %tmp = alloca x86_fp80, align 16
-  %i = alloca i32, align 4
-  store x86_fp80 %val, ptr %val.addr, align 16
-  store ptr %eval, ptr %eval.addr, align 8
-  store x86_fp80 0xK4002A000000000000000, ptr %tmp, align 16
-  store i32 0, ptr %i, align 4
-  %0 = load x86_fp80, ptr %val.addr, align 16
-  %cmp = fcmp olt x86_fp80 %0, 0xK00000000000000000000
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  %1 = load x86_fp80, ptr %val.addr, align 16
-  %fneg = fneg x86_fp80 %1
-  store x86_fp80 %fneg, ptr %val.addr, align 16
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load x86_fp80, ptr %val.addr, align 16
-  %3 = load x86_fp80, ptr %tmp, align 16
-  %cmp1 = fcmp oge x86_fp80 %2, %3
-  br i1 %cmp1, label %if.then2, label %if.else
-
-if.then2:                                         ; preds = %if.end
-  br label %while.cond
-
-while.cond:                                       ; preds = %if.end6, %if.then2
-  %4 = load x86_fp80, ptr %tmp, align 16
-  %5 = load x86_fp80, ptr %val.addr, align 16
-  %cmp3 = fcmp olt x86_fp80 %4, %5
-  br i1 %cmp3, label %while.body, label %while.end
-
-while.body:                                       ; preds = %while.cond
-  %6 = load x86_fp80, ptr %tmp, align 16
-  %mul = fmul x86_fp80 %6, 0xK40008000000000000000
-  store x86_fp80 %mul, ptr %tmp, align 16
-  %7 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %7, 1
-  store i32 %inc, ptr %i, align 4
-  %cmp4 = icmp sge i32 %7, 10
-  br i1 %cmp4, label %if.then5, label %if.end6
-
-if.then5:                                         ; preds = %while.body
-  call void @abort() #3
-  unreachable
-
-if.end6:                                          ; preds = %while.body
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %while.cond
-  br label %if.end18
-
-if.else:                                          ; preds = %if.end
-  %8 = load x86_fp80, ptr %val.addr, align 16
-  %cmp7 = fcmp une x86_fp80 %8, 0xK00000000000000000000
-  br i1 %cmp7, label %if.then8, label %if.end17
-
-if.then8:                                         ; preds = %if.else
-  br label %while.cond9
-
-while.cond9:                                      ; preds = %if.end15, %if.then8
-  %9 = load x86_fp80, ptr %val.addr, align 16
-  %10 = load x86_fp80, ptr %tmp, align 16
-  %cmp10 = fcmp olt x86_fp80 %9, %10
-  br i1 %cmp10, label %while.body11, label %while.end16
-
-while.body11:                                     ; preds = %while.cond9
-  %11 = load x86_fp80, ptr %tmp, align 16
-  %div = fdiv x86_fp80 %11, 0xK40008000000000000000
-  store x86_fp80 %div, ptr %tmp, align 16
-  %12 = load i32, ptr %i, align 4
-  %inc12 = add nsw i32 %12, 1
-  store i32 %inc12, ptr %i, align 4
-  %cmp13 = icmp sge i32 %12, 10
-  br i1 %cmp13, label %if.then14, label %if.end15
-
-if.then14:                                        ; preds = %while.body11
-  call void @abort() #3
-  unreachable
-
-if.end15:                                         ; preds = %while.body11
-  br label %while.cond9, !llvm.loop !8
-
-while.end16:                                      ; preds = %while.cond9
-  br label %if.end17
-
-if.end17:                                         ; preds = %while.end16, %if.else
-  br label %if.end18
-
-if.end18:                                         ; preds = %if.end17, %while.end
-  %13 = load i32, ptr %i, align 4
-  %14 = load ptr, ptr %eval.addr, align 8
-  store i32 %13, ptr %14, align 4
-  ret void
-}
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %eval = alloca i32, align 4
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @test(x86_fp80 noundef 0xK4000C000000000000000, ptr noundef %eval)
-  call void @test(x86_fp80 noundef 0xK4000E000000000000000, ptr noundef %eval)
-  call void @test(x86_fp80 noundef 0xK40018000000000000000, ptr noundef %eval)
-  call void @test(x86_fp80 noundef 0xK4001A000000000000000, ptr noundef %eval)
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  %call = call i32 (...) @compute()
+  store i32 %call, ptr %x, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %xor = xor i32 %call1, 3
+  store i32 %xor, ptr %x, align 4
+  %0 = load i32, ptr %x, align 4
+  %sub = sub nsw i32 %0, 2
+  ret i32 %sub
 }
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
+declare i32 @compute(...) #1
+
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -139,6 +38,3 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}
-!8 = distinct !{!8, !7}

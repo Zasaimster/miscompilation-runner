@@ -1,20 +1,44 @@
-; 13163109524062396143519094757366860984
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13163109524062396143519094757366860984.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13163109524062396143519094757366860984.c"
+; 11768333488021243867096582671555385897
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11768333488021243867096582671555385897.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11768333488021243867096582671555385897.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.s = type { i32, i32, i16, [3 x i32] }
+@a = dso_local global i8 -4, align 1
 
-@s = dso_local global { i32, i32, i16, [2 x i8], [3 x i32] } { i32 0, i32 3, i16 0, [2 x i8] zeroinitializer, [3 x i32] [i32 2, i32 0, i32 0] }, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo() #0 {
+entry:
+  %0 = load i8, ptr @a, align 1
+  %conv = sext i8 %0 to i32
+  %conv1 = zext i32 %conv to i64
+  %div = sdiv i64 %conv1, 2
+  %conv2 = trunc i64 %div to i32
+  ret i32 %conv2
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @bar() #0 {
+entry:
+  %0 = load i8, ptr @a, align 1
+  %conv = sext i8 %0 to i32
+  %conv1 = zext i32 %conv to i64
+  %rem = srem i64 %conv1, 5
+  %conv2 = trunc i64 %rem to i32
+  ret i32 %conv2
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %r = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr getelementptr inbounds nuw (%struct.s, ptr @s, i32 0, i32 1), align 4
-  %cmp = icmp ne i32 %0, 3
+  %call = call i32 @foo()
+  store i32 %call, ptr %r, align 4
+  %0 = load i32, ptr %r, align 4
+  %conv = sext i32 %0 to i64
+  %cmp = icmp ne i64 %conv, 2147483646
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -22,6 +46,18 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call2 = call i32 @bar()
+  store i32 %call2, ptr %r, align 4
+  %1 = load i32, ptr %r, align 4
+  %conv3 = sext i32 %1 to i64
+  %cmp4 = icmp ne i64 %conv3, 2
+  br i1 %cmp4, label %if.then6, label %if.end7
+
+if.then6:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end7:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }

@@ -1,85 +1,60 @@
-; 153098167798255081058315744820788253817
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153098167798255081058315744820788253817_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153098167798255081058315744820788253817.c"
+; 119909352194109648325353279507411228068
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119909352194109648325353279507411228068_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119909352194109648325353279507411228068.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %i) #0 {
-entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  ret i32 4
-}
+%struct.s = type { i64, i64, i64 }
+
+@a = dso_local global { i8, i8, i8, i8, i8, [3 x i8], i8, i8, i8, i8, i8, [3 x i8], i8, i8, i8, i8, i8, i8, [2 x i8] } { i8 0, i8 0, i8 16, i8 0, i8 0, [3 x i8] zeroinitializer, i8 0, i8 0, i8 16, i8 0, i8 0, [3 x i8] zeroinitializer, i8 0, i8 0, i8 16, i8 0, i8 0, i8 0, [2 x i8] zeroinitializer }, align 8
+@b = dso_local global { i8, i8, i8, i8, i8, [3 x i8], i8, i8, i8, i8, i8, [3 x i8], i8, i8, i8, i8, i8, i8, [2 x i8] } { i8 0, i8 0, i8 0, i8 0, i8 1, [3 x i8] zeroinitializer, i8 0, i8 0, i8 0, i8 0, i8 1, [3 x i8] zeroinitializer, i8 0, i8 0, i8 0, i8 0, i8 1, i8 0, [2 x i8] zeroinitializer }, align 8
+@c = dso_local global { i8, i8, i8, i8, i8, [3 x i8], i8, i8, i8, i8, i8, [3 x i8], i8, i8, i8, i8, i8, i8, [2 x i8] } { i8 -1, i8 -1, i8 -1, i8 -1, i8 1, [3 x i8] zeroinitializer, i8 0, i8 0, i8 0, i8 0, i8 0, [3 x i8] zeroinitializer, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, [2 x i8] zeroinitializer }, align 8
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef -1)
-  %cmp = icmp ne i32 %call, 4
-  br i1 %cmp, label %if.then, label %if.end
+  %bf.load = load i64, ptr @a, align 8
+  %bf.clear = and i64 %bf.load, 8589934591
+  %bf.load1 = load i64, ptr @a, align 8
+  %bf.clear2 = and i64 %bf.load1, 8589934591
+  %mul = mul i64 %bf.clear, %bf.clear2
+  %cmp = icmp ne i64 %mul, 0
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
+lor.lhs.false:                                    ; preds = %entry
+  %bf.load3 = load i64, ptr @a, align 8
+  %bf.clear4 = and i64 %bf.load3, 8589934591
+  %bf.load5 = load i64, ptr getelementptr inbounds nuw (%struct.s, ptr @a, i32 0, i32 1), align 8
+  %bf.clear6 = and i64 %bf.load5, 1099511627775
+  %mul7 = mul i64 %bf.clear4, %bf.clear6
+  %cmp8 = icmp ne i64 %mul7, 0
+  br i1 %cmp8, label %if.then, label %lor.lhs.false9
+
+lor.lhs.false9:                                   ; preds = %lor.lhs.false
+  %bf.load10 = load i64, ptr getelementptr inbounds nuw (%struct.s, ptr @a, i32 0, i32 1), align 8
+  %bf.clear11 = and i64 %bf.load10, 1099511627775
+  %bf.load12 = load i64, ptr @a, align 8
+  %bf.clear13 = and i64 %bf.load12, 8589934591
+  %mul14 = mul i64 %bf.clear11, %bf.clear13
+  %cmp15 = icmp ne i64 %mul14, 0
+  br i1 %cmp15, label %if.then, label %lor.lhs.false16
+
+lor.lhs.false16:                                  ; preds = %lor.lhs.false9
+  %bf.load17 = load i64, ptr getelementptr inbounds nuw (%struct.s, ptr @a, i32 0, i32 1), align 8
+  %bf.clear18 = and i64 %bf.load17, 1099511627775
+  %bf.load19 = load i64, ptr getelementptr inbounds nuw (%struct.s, ptr @a, i32 0, i32 1), align 8
+  %bf.clear20 = and i64 %bf.load19, 1099511627775
+  %mul21 = mul i64 %bf.clear18, %bf.clear20
+  %cmp22 = icmp ne i64 %mul21, 0
+  br i1 %cmp22, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false16, %lor.lhs.false9, %lor.lhs.false, %entry
   call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %entry
-  %call1 = call i32 @foo(i32 noundef 0)
-  %cmp2 = icmp ne i32 %call1, 0
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #2
-  unreachable
-
-if.end4:                                          ; preds = %if.end
-  %call5 = call i32 @foo(i32 noundef 1)
-  %cmp6 = icmp ne i32 %call5, 1
-  br i1 %cmp6, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %if.end4
-  call void @abort() #2
-  unreachable
-
-if.end8:                                          ; preds = %if.end4
-  %call9 = call i32 @foo(i32 noundef 2)
-  %cmp10 = icmp ne i32 %call9, 2
-  br i1 %cmp10, label %if.then11, label %if.end12
-
-if.then11:                                        ; preds = %if.end8
-  call void @abort() #2
-  unreachable
-
-if.end12:                                         ; preds = %if.end8
-  %call13 = call i32 @foo(i32 noundef 3)
-  %cmp14 = icmp ne i32 %call13, 3
-  br i1 %cmp14, label %if.then15, label %if.end16
-
-if.then15:                                        ; preds = %if.end12
-  call void @abort() #2
-  unreachable
-
-if.end16:                                         ; preds = %if.end12
-  %call17 = call i32 @foo(i32 noundef 4)
-  %cmp18 = icmp ne i32 %call17, 4
-  br i1 %cmp18, label %if.then19, label %if.end20
-
-if.then19:                                        ; preds = %if.end16
-  call void @abort() #2
-  unreachable
-
-if.end20:                                         ; preds = %if.end16
-  %call21 = call i32 @foo(i32 noundef 5)
-  %cmp22 = icmp ne i32 %call21, 4
-  br i1 %cmp22, label %if.then23, label %if.end24
-
-if.then23:                                        ; preds = %if.end20
-  call void @abort() #2
-  unreachable
-
-if.end24:                                         ; preds = %if.end20
+if.end:                                           ; preds = %lor.lhs.false16
   ret i32 0
 }
 

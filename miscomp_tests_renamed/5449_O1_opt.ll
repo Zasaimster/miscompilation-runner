@@ -1,63 +1,49 @@
-; 13685524217514682652698231570495199080
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13685524217514682652698231570495199080_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13685524217514682652698231570495199080.c"
+; 196633462066855698754153549368561573924
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/196633462066855698754153549368561573924_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/196633462066855698754153549368561573924.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+
 ; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @bar(i32 noundef %i, i64 %t.coerce0, i32 %t.coerce1) local_unnamed_addr #0 {
+define dso_local range(i32 0, 2) i32 @foo(i32 noundef %x, i32 noundef %y, i32 noundef %i, i32 noundef %j) local_unnamed_addr #0 {
 entry:
-  %t.sroa.2.0.extract.shift.mask = and i64 %t.coerce0, -4294967296
-  %cmp = icmp eq i64 %t.sroa.2.0.extract.shift.mask, 42949672960
-  %t.sroa.0.0.extract.trunc = trunc i64 %t.coerce0 to i32
-  %cmp1 = icmp eq i32 %t.coerce1, %t.sroa.0.0.extract.trunc
-  %or.cond = select i1 %cmp, i1 true, i1 %cmp1
-  br i1 %or.cond, label %if.then, label %if.end
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %conv = sitofp i32 %call to double
+  %conv1 = sitofp i32 %i to double
+  %conv2 = sitofp i32 %j to double
+  %div = fdiv double %conv1, %conv2
+  %cmp = fcmp ogt double %div, %conv
+  %conv3 = zext i1 %cmp to i32
+  ret i32 %conv3
+}
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp.i = icmp sgt i32 %call.i, 0
+  br i1 %cmp.i, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  tail call void @abort() #4
+  tail call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret i32 undef
+  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @foo(i64 %t.coerce0, i32 %t.coerce1, i32 noundef %i) local_unnamed_addr #0 {
-entry:
-  %t.sroa.2.0.extract.shift.mask.i = and i64 %t.coerce0, -4294967296
-  %cmp.i = icmp eq i64 %t.sroa.2.0.extract.shift.mask.i, 42949672960
-  %t.sroa.0.0.extract.trunc.i = trunc i64 %t.coerce0 to i32
-  %cmp1.i = icmp eq i32 %t.coerce1, %t.sroa.0.0.extract.trunc.i
-  %or.cond.i = select i1 %cmp.i, i1 true, i1 %cmp1.i
-  br i1 %or.cond.i, label %if.then.i, label %bar.exit
-
-if.then.i:                                        ; preds = %entry
-  tail call void @abort() #4
-  unreachable
-
-bar.exit:                                         ; preds = %entry
-  ret i32 undef
-}
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
-entry:
-  tail call void @exit(i32 noundef 0) #4
-  unreachable
-}
-
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #3
+declare void @abort() local_unnamed_addr #2
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

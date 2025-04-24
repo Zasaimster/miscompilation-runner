@@ -1,23 +1,48 @@
-; 101958075458931045053179401574692481478
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101958075458931045053179401574692481478_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101958075458931045053179401574692481478.c"
+; 153577899448138302110220055726223849647
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153577899448138302110220055726223849647_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153577899448138302110220055726223849647.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local i32 @f(i32 noundef %number_of_digits_to_use) #0 {
 entry:
-  %x = alloca i64, align 8
-  %y = alloca i64, align 8
-  store i64 1, ptr %y, align 8
-  %0 = load i64, ptr %y, align 8
-  %mul = mul i64 %0, 8192
-  %sub = sub i64 %mul, 216
-  %div = udiv i64 %sub, 16
-  store i64 %div, ptr %x, align 8
-  %1 = load i64, ptr %x, align 8
-  %conv = trunc i64 %1 to i32
-  ret i32 %conv
+  %retval = alloca i32, align 4
+  %number_of_digits_to_use.addr = alloca i32, align 4
+  store i32 %number_of_digits_to_use, ptr %number_of_digits_to_use.addr, align 4
+  %0 = load i32, ptr %number_of_digits_to_use.addr, align 4
+  %cmp = icmp ugt i32 %0, 1294
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %1 = load i32, ptr %number_of_digits_to_use.addr, align 4
+  %mul = mul i32 %1, 3321928
+  %div = udiv i32 %mul, 1000000
+  %add = add i32 %div, 1
+  %div1 = udiv i32 %add, 16
+  store i32 %div1, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %2 = load i32, ptr %retval, align 4
+  ret i32 %2
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @func3() #0 {
+entry:
+  %u = alloca i32, align 4
+  %v = alloca i32, align 4
+  store i32 0, ptr %u, align 4
+  store i32 0, ptr %v, align 4
+  %0 = load i32, ptr %u, align 4
+  %add = add nsw i32 %0, 5
+  store i32 %add, ptr %v, align 4
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -25,8 +50,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 498
+  %call = call i32 @f(i32 noundef 11)
+  %cmp = icmp ne i32 %call, 2
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

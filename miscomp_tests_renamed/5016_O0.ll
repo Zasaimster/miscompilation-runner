@@ -1,281 +1,107 @@
-; 18648690019797487892772824222586752716
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/18648690019797487892772824222586752716.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/18648690019797487892772824222586752716.c"
+; 188650337484891078962112145749319269119
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188650337484891078962112145749319269119.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188650337484891078962112145749319269119.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i8 noundef signext %x) #0 {
+define dso_local x86_fp80 @f(x86_fp80 noundef %d, i32 noundef %i) #0 {
 entry:
-  %x.addr = alloca i8, align 1
-  %y = alloca i32, align 4
-  store i8 %x, ptr %x.addr, align 1
-  store i32 0, ptr %y, align 4
-  %0 = load i8, ptr %x.addr, align 1
-  %conv = sext i8 %0 to i32
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %conv)
-  switch i32 %call, label %sw.epilog [
-    i32 0, label %sw.bb
-    i32 1, label %sw.bb2
-    i32 2, label %sw.bb3
-    i32 3, label %sw.bb4
-    i32 4, label %sw.bb5
-    i32 5, label %sw.bb6
-    i32 6, label %sw.bb7
-    i32 7, label %sw.bb8
-    i32 8, label %sw.bb9
-    i32 9, label %sw.bb10
-    i32 10, label %sw.bb11
-    i32 11, label %sw.bb12
-    i32 12, label %sw.bb13
-    i32 13, label %sw.bb14
-    i32 14, label %sw.bb15
-    i32 15, label %sw.bb16
-    i32 16, label %sw.bb17
-    i32 17, label %sw.bb18
-    i32 18, label %sw.bb19
-    i32 19, label %sw.bb20
-    i32 20, label %sw.bb21
-    i32 21, label %sw.bb22
-    i32 22, label %sw.bb23
-    i32 23, label %sw.bb24
-    i32 24, label %sw.bb25
-    i32 25, label %sw.bb26
-    i32 26, label %sw.bb27
-    i32 27, label %sw.bb28
-    i32 28, label %sw.bb29
-    i32 29, label %sw.bb30
-    i32 30, label %sw.bb31
-    i32 31, label %sw.bb32
-    i32 32, label %sw.bb33
-    i32 98, label %sw.bb34
-    i32 -62, label %sw.bb35
-  ]
+  %d.addr = alloca x86_fp80, align 16
+  %i.addr = alloca i32, align 4
+  %e = alloca x86_fp80, align 16
+  store x86_fp80 %d, ptr %d.addr, align 16
+  store i32 %i, ptr %i.addr, align 4
+  %0 = load x86_fp80, ptr %d.addr, align 16
+  %fneg = fneg x86_fp80 %0
+  store x86_fp80 %fneg, ptr %d.addr, align 16
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = sitofp i32 %call to x86_fp80
+  store x86_fp80 %conv, ptr %e, align 16
+  %1 = load i32, ptr %i.addr, align 4
+  %cmp = icmp eq i32 %1, 1
+  br i1 %cmp, label %if.then, label %if.end
 
-sw.bb:                                            ; preds = %entry
-  %call1 = call i32 (...) @example3()
-  store i32 %call1, ptr %y, align 4
-  br label %sw.epilog
+if.then:                                          ; preds = %entry
+  %2 = load x86_fp80, ptr %d.addr, align 16
+  %mul = fmul x86_fp80 %2, 0xK40008000000000000000
+  store x86_fp80 %mul, ptr %d.addr, align 16
+  br label %if.end
 
-sw.bb2:                                           ; preds = %entry
-  store i32 7, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb3:                                           ; preds = %entry
-  store i32 2, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb4:                                           ; preds = %entry
-  store i32 19, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb5:                                           ; preds = %entry
-  store i32 5, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb6:                                           ; preds = %entry
-  store i32 17, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb7:                                           ; preds = %entry
-  store i32 31, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb8:                                           ; preds = %entry
-  store i32 8, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb9:                                           ; preds = %entry
-  store i32 28, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb10:                                          ; preds = %entry
-  store i32 16, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb11:                                          ; preds = %entry
-  store i32 31, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb12:                                          ; preds = %entry
-  store i32 12, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb13:                                          ; preds = %entry
-  store i32 15, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb14:                                          ; preds = %entry
-  store i32 111, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb15:                                          ; preds = %entry
-  store i32 17, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb16:                                          ; preds = %entry
-  store i32 10, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb17:                                          ; preds = %entry
-  store i32 31, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb18:                                          ; preds = %entry
-  store i32 7, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb19:                                          ; preds = %entry
-  store i32 2, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb20:                                          ; preds = %entry
-  store i32 19, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb21:                                          ; preds = %entry
-  store i32 5, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb22:                                          ; preds = %entry
-  store i32 107, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb23:                                          ; preds = %entry
-  store i32 31, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb24:                                          ; preds = %entry
-  store i32 8, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb25:                                          ; preds = %entry
-  store i32 28, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb26:                                          ; preds = %entry
-  store i32 106, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb27:                                          ; preds = %entry
-  store i32 31, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb28:                                          ; preds = %entry
-  store i32 102, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb29:                                          ; preds = %entry
-  store i32 105, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb30:                                          ; preds = %entry
-  store i32 111, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb31:                                          ; preds = %entry
-  store i32 17, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb32:                                          ; preds = %entry
-  store i32 10, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb33:                                          ; preds = %entry
-  store i32 31, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb34:                                          ; preds = %entry
-  store i32 18, ptr %y, align 4
-  br label %sw.epilog
-
-sw.bb35:                                          ; preds = %entry
-  store i32 19, ptr %y, align 4
-  br label %sw.epilog
-
-sw.epilog:                                        ; preds = %entry, %sw.bb35, %sw.bb34, %sw.bb33, %sw.bb32, %sw.bb31, %sw.bb30, %sw.bb29, %sw.bb28, %sw.bb27, %sw.bb26, %sw.bb25, %sw.bb24, %sw.bb23, %sw.bb22, %sw.bb21, %sw.bb20, %sw.bb19, %sw.bb18, %sw.bb17, %sw.bb16, %sw.bb15, %sw.bb14, %sw.bb13, %sw.bb12, %sw.bb11, %sw.bb10, %sw.bb9, %sw.bb8, %sw.bb7, %sw.bb6, %sw.bb5, %sw.bb4, %sw.bb3, %sw.bb2, %sw.bb
-  %1 = load i32, ptr %y, align 4
-  ret i32 %1
+if.end:                                           ; preds = %if.then, %entry
+  %3 = load x86_fp80, ptr %e, align 16
+  %4 = load x86_fp80, ptr %d.addr, align 16
+  %5 = load x86_fp80, ptr %d.addr, align 16
+  %neg = fneg x86_fp80 %3
+  %6 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg, x86_fp80 %4, x86_fp80 %5)
+  store x86_fp80 %6, ptr %d.addr, align 16
+  %7 = load x86_fp80, ptr %e, align 16
+  %8 = load x86_fp80, ptr %d.addr, align 16
+  %9 = load x86_fp80, ptr %d.addr, align 16
+  %neg4 = fneg x86_fp80 %7
+  %10 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg4, x86_fp80 %8, x86_fp80 %9)
+  store x86_fp80 %10, ptr %d.addr, align 16
+  %11 = load x86_fp80, ptr %e, align 16
+  %12 = load x86_fp80, ptr %d.addr, align 16
+  %13 = load x86_fp80, ptr %d.addr, align 16
+  %neg6 = fneg x86_fp80 %11
+  %14 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg6, x86_fp80 %12, x86_fp80 %13)
+  store x86_fp80 %14, ptr %d.addr, align 16
+  %15 = load x86_fp80, ptr %e, align 16
+  %16 = load x86_fp80, ptr %d.addr, align 16
+  %17 = load x86_fp80, ptr %d.addr, align 16
+  %neg8 = fneg x86_fp80 %15
+  %18 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg8, x86_fp80 %16, x86_fp80 %17)
+  store x86_fp80 %18, ptr %d.addr, align 16
+  %19 = load x86_fp80, ptr %e, align 16
+  %20 = load x86_fp80, ptr %d.addr, align 16
+  %21 = load x86_fp80, ptr %d.addr, align 16
+  %neg10 = fneg x86_fp80 %19
+  %22 = call x86_fp80 @llvm.fmuladd.f80(x86_fp80 %neg10, x86_fp80 %20, x86_fp80 %21)
+  store x86_fp80 %22, ptr %d.addr, align 16
+  %23 = load x86_fp80, ptr %d.addr, align 16
+  ret x86_fp80 %23
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
-declare i32 @example3(...) #1
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare x86_fp80 @llvm.fmuladd.f80(x86_fp80, x86_fp80, x86_fp80) #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i8 noundef signext 98)
-  %cmp = icmp ne i32 %call, 18
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  %call = call x86_fp80 @f(x86_fp80 noundef 0xK40008000000000000000, i32 noundef 1)
+  %conv = fptosi x86_fp80 %call to i32
+  %tobool = icmp ne i32 %conv, 0
+  br i1 %tobool, label %if.end, label %if.then
 
-lor.lhs.false:                                    ; preds = %entry
-  %call1 = call i32 @foo(i8 noundef signext 97)
-  %cmp2 = icmp ne i32 %call1, 0
-  br i1 %cmp2, label %if.then, label %lor.lhs.false3
-
-lor.lhs.false3:                                   ; preds = %lor.lhs.false
-  %call4 = call i32 @foo(i8 noundef signext 99)
-  %cmp5 = icmp ne i32 %call4, 0
-  br i1 %cmp5, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false3, %lor.lhs.false, %entry
-  call void @abort() #3
+if.then:                                          ; preds = %entry
+  call void @abort() #5
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false3
-  %call6 = call i32 @foo(i8 noundef signext -62)
-  %cmp7 = icmp ne i32 %call6, 19
-  br i1 %cmp7, label %if.then14, label %lor.lhs.false8
-
-lor.lhs.false8:                                   ; preds = %if.end
-  %call9 = call i32 @foo(i8 noundef signext -63)
-  %cmp10 = icmp ne i32 %call9, 0
-  br i1 %cmp10, label %if.then14, label %lor.lhs.false11
-
-lor.lhs.false11:                                  ; preds = %lor.lhs.false8
-  %call12 = call i32 @foo(i8 noundef signext -61)
-  %cmp13 = icmp ne i32 %call12, 0
-  br i1 %cmp13, label %if.then14, label %if.end15
-
-if.then14:                                        ; preds = %lor.lhs.false11, %lor.lhs.false8, %if.end
-  call void @abort() #3
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #6
   unreachable
-
-if.end15:                                         ; preds = %lor.lhs.false11
-  %call16 = call i32 @foo(i8 noundef signext 28)
-  %cmp17 = icmp ne i32 %call16, 105
-  br i1 %cmp17, label %if.then24, label %lor.lhs.false18
-
-lor.lhs.false18:                                  ; preds = %if.end15
-  %call19 = call i32 @foo(i8 noundef signext 27)
-  %cmp20 = icmp ne i32 %call19, 102
-  br i1 %cmp20, label %if.then24, label %lor.lhs.false21
-
-lor.lhs.false21:                                  ; preds = %lor.lhs.false18
-  %call22 = call i32 @foo(i8 noundef signext 29)
-  %cmp23 = icmp ne i32 %call22, 111
-  br i1 %cmp23, label %if.then24, label %if.end25
-
-if.then24:                                        ; preds = %lor.lhs.false21, %lor.lhs.false18, %if.end15
-  call void @abort() #3
-  unreachable
-
-if.end25:                                         ; preds = %lor.lhs.false21
-  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare void @abort() #3
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #4
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #2 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #3 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn nounwind }
+attributes #6 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,66 +1,65 @@
-; 137883656080354283827688870585899775705
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137883656080354283827688870585899775705_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137883656080354283827688870585899775705.c"
+; 153554980413335590721210912885171945379
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153554980413335590721210912885171945379_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153554980413335590721210912885171945379.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
-entry:
-  %j = alloca i32, align 4
-  %i = alloca i64, align 8
-  store i32 -1610612736, ptr %j, align 4
-  store i64 1610612736, ptr %i, align 8
-  br label %do.body
+%struct.fred = type { i32, i32 }
 
-do.body:                                          ; preds = %do.cond, %entry
-  %0 = load i32, ptr %j, align 4
-  %shl = shl i32 %0, 1
-  store i32 %shl, ptr %j, align 4
-  %1 = load i64, ptr %i, align 8
-  %add = add nsw i64 %1, 268435456
-  store i64 %add, ptr %i, align 8
-  br label %do.cond
-
-do.cond:                                          ; preds = %do.body
-  %2 = load i64, ptr %i, align 8
-  %cmp = icmp slt i64 %2, -1610612736
-  br i1 %cmp, label %do.body, label %do.end, !llvm.loop !6
-
-do.end:                                           ; preds = %do.cond
-  %3 = load i32, ptr %j, align 4
-  ret i32 %3
-}
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %bloggs = alloca %struct.fred, align 4
+  %jones = alloca [2 x %struct.fred], align 16
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 2
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
-  unreachable
+  %boris = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 0
+  store i32 12, ptr %boris, align 4
+  %natasha = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 1
+  store i32 34, ptr %natasha, align 4
+  %boris1 = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 0
+  %0 = load i32, ptr %boris1, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  %natasha2 = getelementptr inbounds nuw %struct.fred, ptr %bloggs, i32 0, i32 1
+  %1 = load i32, ptr %natasha2, align 4
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %1)
+  %arrayidx = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %boris4 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx, i32 0, i32 0
+  store i32 12, ptr %boris4, align 16
+  %arrayidx5 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %natasha6 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx5, i32 0, i32 1
+  store i32 34, ptr %natasha6, align 4
+  %arrayidx7 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %boris8 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx7, i32 0, i32 0
+  store i32 56, ptr %boris8, align 8
+  %arrayidx9 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %natasha10 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx9, i32 0, i32 1
+  store i32 78, ptr %natasha10, align 4
+  %arrayidx11 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %boris12 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx11, i32 0, i32 0
+  %2 = load i32, ptr %boris12, align 16
+  %call13 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %2)
+  %arrayidx14 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 0
+  %natasha15 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx14, i32 0, i32 1
+  %3 = load i32, ptr %natasha15, align 4
+  %call16 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %3)
+  %arrayidx17 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %boris18 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx17, i32 0, i32 0
+  %4 = load i32, ptr %boris18, align 8
+  %call19 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %4)
+  %arrayidx20 = getelementptr inbounds [2 x %struct.fred], ptr %jones, i64 0, i64 1
+  %natasha21 = getelementptr inbounds nuw %struct.fred, ptr %arrayidx20, i32 0, i32 1
+  %5 = load i32, ptr %natasha21, align 4
+  %call22 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %5)
+  ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -71,5 +70,3 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

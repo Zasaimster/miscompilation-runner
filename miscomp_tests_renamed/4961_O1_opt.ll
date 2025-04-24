@@ -1,14 +1,19 @@
-; 195457754356834521250014615303292182352
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195457754356834521250014615303292182352_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195457754356834521250014615303292182352.c"
+; 187586790631354358005834696186989251982
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187586790631354358005834696186989251982_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187586790631354358005834696186989251982.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef range(i64 -922337203, 922337204) i64 @f(i64 noundef %x) local_unnamed_addr #0 {
+define dso_local noundef double @foo() local_unnamed_addr #0 {
 entry:
-  %div = sdiv i64 %x, 10000000000
-  ret i64 %div
+  ret double 0.000000e+00
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @do_sibcall() local_unnamed_addr #0 {
+entry:
+  ret void
 }
 
 ; Function Attrs: nofree noreturn nounwind uwtable

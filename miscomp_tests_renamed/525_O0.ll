@@ -1,41 +1,28 @@
-; 192446608498256443057508660353157212279
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192446608498256443057508660353157212279.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192446608498256443057508660353157212279.c"
+; 109344076266424246479672245741217446672
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/109344076266424246479672245741217446672.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/109344076266424246479672245741217446672.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-@.str.1 = private unnamed_addr constant [6 x i8] c"b=%d\0A\00", align 1
-@.str.2 = private unnamed_addr constant [6 x i8] c"c=%d\0A\00", align 1
-@.str.3 = private unnamed_addr constant [6 x i8] c"e=%d\0A\00", align 1
-@.str.4 = private unnamed_addr constant [6 x i8] c"f=%d\0A\00", align 1
-@.str.5 = private unnamed_addr constant [6 x i8] c"g=%d\0A\00", align 1
-@.str.6 = private unnamed_addr constant [6 x i8] c"i=%d\0A\00", align 1
-@.str.7 = private unnamed_addr constant [6 x i8] c"j=%d\0A\00", align 1
-@.str.8 = private unnamed_addr constant [6 x i8] c"k=%d\0A\00", align 1
+%struct.A = type { i32, i32 }
+%struct.B = type { ptr, ptr }
+%struct.C = type { ptr, ptr }
+
+@.compoundliteral = internal global %struct.A { i32 1, i32 2 }, align 4
+@.compoundliteral.1 = internal global %struct.A { i32 3, i32 4 }, align 4
+@.compoundliteral.2 = internal global %struct.B { ptr @.compoundliteral, ptr @.compoundliteral.1 }, align 8
+@.compoundliteral.3 = internal global %struct.A { i32 5, i32 6 }, align 4
+@e = dso_local global %struct.C { ptr @.compoundliteral.2, ptr @.compoundliteral.3 }, align 8
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %d = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef 1)
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef 2)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3, i32 noundef 0)
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i32 noundef 1)
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.5, i32 noundef 2)
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.6, i32 noundef 0)
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.7, i32 noundef 1)
-  %call8 = call i32 (ptr, ...) @printf(ptr noundef @.str.8, i32 noundef 2)
   ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

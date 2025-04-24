@@ -1,86 +1,24 @@
-; 15543231975877598029368750849260339699
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/15543231975877598029368750849260339699_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/15543231975877598029368750849260339699.c"
+; 152918624657145587200174148304501865549
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152918624657145587200174148304501865549_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152918624657145587200174148304501865549.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree norecurse nosync nounwind memory(argmem: write) uwtable
-define dso_local void @foo(ptr noundef writeonly captures(address) %BM_tab, i32 noundef %j) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) uwtable
+define dso_local i32 @f(i32 noundef %a, ptr noundef readonly captures(none) %y) local_unnamed_addr #0 {
 entry:
-  %cmp.not12 = icmp eq ptr %BM_tab, inttoptr (i64 10 to ptr)
-  br i1 %cmp.not12, label %while.end, label %while.body
-
-while.body:                                       ; preds = %while.body, %entry
-  %BM_tab.addr.013 = phi ptr [ %incdec.ptr3, %while.body ], [ %BM_tab, %entry ]
-  %incdec.ptr = getelementptr inbounds i8, ptr %BM_tab.addr.013, i64 -4
-  store i32 %j, ptr %incdec.ptr, align 4, !tbaa !5
-  %incdec.ptr1 = getelementptr inbounds i8, ptr %BM_tab.addr.013, i64 -8
-  store i32 %j, ptr %incdec.ptr1, align 4, !tbaa !5
-  %incdec.ptr2 = getelementptr inbounds i8, ptr %BM_tab.addr.013, i64 -12
-  store i32 %j, ptr %incdec.ptr2, align 4, !tbaa !5
-  %incdec.ptr3 = getelementptr inbounds i8, ptr %BM_tab.addr.013, i64 -16
-  store i32 %j, ptr %incdec.ptr3, align 4, !tbaa !5
-  %cmp.not = icmp eq ptr %incdec.ptr3, inttoptr (i64 10 to ptr)
-  br i1 %cmp.not, label %while.end, label %while.body, !llvm.loop !9
-
-while.end:                                        ; preds = %while.body, %entry
-  ret void
+  %0 = load i32, ptr %y, align 4, !tbaa !5
+  ret i32 %0
 }
 
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
+; Function Attrs: mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @main(i32 noundef %argc, ptr noundef readnone captures(none) %argv) local_unnamed_addr #1 {
 entry:
-  %BM_tab = alloca [256 x i32], align 16
-  call void @llvm.lifetime.start.p0(i64 1024, ptr nonnull %BM_tab) #5
-  call void @llvm.memset.p0.i64(ptr noundef nonnull align 16 dereferenceable(1024) %BM_tab, i8 0, i64 1024, i1 false)
-  br label %while.body.i
-
-while.body.i:                                     ; preds = %while.body.i, %entry
-  %BM_tab.addr.013.i = phi ptr [ %incdec.ptr3.i, %while.body.i ], [ %BM_tab, %entry ]
-  %incdec.ptr.i = getelementptr inbounds i8, ptr %BM_tab.addr.013.i, i64 -4
-  store i32 6, ptr %incdec.ptr.i, align 4, !tbaa !5
-  %incdec.ptr1.i = getelementptr inbounds i8, ptr %BM_tab.addr.013.i, i64 -8
-  store i32 6, ptr %incdec.ptr1.i, align 4, !tbaa !5
-  %incdec.ptr2.i = getelementptr inbounds i8, ptr %BM_tab.addr.013.i, i64 -12
-  store i32 6, ptr %incdec.ptr2.i, align 4, !tbaa !5
-  %incdec.ptr3.i = getelementptr inbounds i8, ptr %BM_tab.addr.013.i, i64 -16
-  store i32 6, ptr %incdec.ptr3.i, align 4, !tbaa !5
-  %cmp.not.i = icmp eq ptr %incdec.ptr3.i, inttoptr (i64 10 to ptr)
-  br i1 %cmp.not.i, label %foo.exit, label %while.body.i, !llvm.loop !9
-
-foo.exit:                                         ; preds = %while.body.i
-  %0 = load i32, ptr %BM_tab, align 16, !tbaa !5
-  %cmp.not = icmp eq i32 %0, 6
-  br i1 %cmp.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %foo.exit
-  call void @abort() #6
   unreachable
-
-if.end:                                           ; preds = %foo.exit
-  call void @llvm.lifetime.end.p0(i64 1024, ptr nonnull %BM_tab) #5
-  ret i32 0
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #3
-
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #4
-
-attributes #0 = { nofree norecurse nosync nounwind memory(argmem: write) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nocallback nofree nounwind willreturn memory(argmem: write) }
-attributes #4 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { nounwind }
-attributes #6 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(argmem: read) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nofree norecurse noreturn nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -94,6 +32,3 @@ attributes #6 = { noreturn nounwind }
 !6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = distinct !{!9, !10, !11}
-!10 = !{!"llvm.loop.mustprogress"}
-!11 = !{!"llvm.loop.unroll.disable"}

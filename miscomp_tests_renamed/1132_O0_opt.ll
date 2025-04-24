@@ -1,50 +1,23 @@
-; 112261033181500952933907453102948320103
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112261033181500952933907453102948320103_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112261033181500952933907453102948320103.c"
+; 120134837393320741634842049238813417907
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/120134837393320741634842049238813417907_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/120134837393320741634842049238813417907.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @fpEq(double noundef %x, double noundef %y) #0 {
+define dso_local i32 @f(i32 noundef %x) #0 {
 entry:
-  %x.addr = alloca double, align 8
-  %y.addr = alloca double, align 8
-  store double %x, ptr %x.addr, align 8
-  store double %y, ptr %y.addr, align 8
-  %0 = load double, ptr %y.addr, align 8
-  %cmp = fcmp une double 0.000000e+00, %0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %entry
-  ret void
-}
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @fpTest(double noundef %x, double noundef %y) #0 {
-entry:
-  %x.addr = alloca double, align 8
-  %y.addr = alloca double, align 8
-  %result1 = alloca double, align 8
-  %result2 = alloca double, align 8
-  store double %x, ptr %x.addr, align 8
-  store double %y, ptr %y.addr, align 8
-  store double 0x4053D55555555556, ptr %result1, align 8
-  %0 = load double, ptr %x.addr, align 8
-  %mul = fmul double %0, 1.000000e+02
-  %1 = load double, ptr %y.addr, align 8
-  %div = fdiv double %mul, %1
-  store double %div, ptr %result2, align 8
-  %2 = load double, ptr %result1, align 8
-  %3 = load double, ptr %result2, align 8
-  call void @fpEq(double noundef %2, double noundef %3)
-  ret void
+  %x.addr = alloca i32, align 4
+  %y = alloca i32, align 4
+  %p = alloca ptr, align 8
+  store i32 %x, ptr %x.addr, align 4
+  store i32 5, ptr %y, align 4
+  %0 = load i32, ptr %y, align 4
+  %sub = sub nsw i32 0, %0
+  store i32 %sub, ptr %y, align 4
+  store ptr %x.addr, ptr %p, align 8
+  %1 = load i32, ptr %y, align 4
+  ret i32 %1
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -52,10 +25,21 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @fpTest(double noundef 3.570000e+01, double noundef 4.500000e+01)
+  %call = call i32 @f(i32 noundef 0)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

@@ -1,50 +1,27 @@
-; 103803889471061748305722467282713596162
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103803889471061748305722467282713596162_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103803889471061748305722467282713596162.c"
+; 128415389173375590457461345357479786716
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128415389173375590457461345357479786716_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128415389173375590457461345357479786716.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i32, i32 }
-
-@s = dso_local global %struct.S { i32 1, i32 2 }, align 4
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(i32 noundef %f) #0 {
+entry:
+  %f.addr = alloca i32, align 4
+  store i32 %f, ptr %f.addr, align 4
+  ret i32 10
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr @s, align 4
-  %cmp = icmp ne i32 %0, 1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %1 = load i32, ptr getelementptr inbounds nuw (%struct.S, ptr @s, i32 0, i32 1), align 4
-  %cmp1 = icmp ne i32 %1, 2
-  br i1 %cmp1, label %if.then2, label %if.end3
-
-if.then2:                                         ; preds = %if.end
-  store i32 2, ptr %retval, align 4
-  br label %return
-
-if.end3:                                          ; preds = %if.end
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end3, %if.then2, %if.then
-  %2 = load i32, ptr %retval, align 4
-  ret i32 %2
+  %call = call i32 @f(i32 noundef 0)
+  ret i32 %call
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,43 +1,69 @@
-; 147288491035795975667630282535538662468
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/147288491035795975667630282535538662468.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/147288491035795975667630282535538662468.c"
+; 153183157372207331006666128896549594829
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153183157372207331006666128896549594829.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153183157372207331006666128896549594829.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+@cfb_tab8_be = internal constant [16 x i32] [i32 0, i32 255, i32 65280, i32 65535, i32 16711680, i32 16711935, i32 16776960, i32 16777215, i32 -16777216, i32 -16776961, i32 -16711936, i32 -16711681, i32 -65536, i32 -65281, i32 -256, i32 -1], align 16
+@cfb_tab16_be = internal constant [4 x i32] [i32 0, i32 65535, i32 -65536, i32 -1], align 16
+@cfb_tab32 = internal constant [2 x i32] [i32 0, i32 -1], align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local ptr @xxx(i32 noundef %bpp) #0 {
+entry:
+  %bpp.addr = alloca i32, align 4
+  %tab = alloca ptr, align 8
+  store i32 %bpp, ptr %bpp.addr, align 4
+  %0 = load i32, ptr %bpp.addr, align 4
+  switch i32 %0, label %sw.default [
+    i32 8, label %sw.bb
+    i32 16, label %sw.bb1
+    i32 32, label %sw.bb2
+  ]
+
+sw.bb:                                            ; preds = %entry
+  store ptr @cfb_tab8_be, ptr %tab, align 8
+  br label %sw.epilog
+
+sw.bb1:                                           ; preds = %entry
+  store ptr @cfb_tab16_be, ptr %tab, align 8
+  br label %sw.epilog
+
+sw.bb2:                                           ; preds = %entry
+  br label %sw.default
+
+sw.default:                                       ; preds = %entry, %sw.bb2
+  store ptr @cfb_tab32, ptr %tab, align 8
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %sw.default, %sw.bb1, %sw.bb
+  %1 = load ptr, ptr %tab, align 8
+  ret ptr %1
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i8, align 1
-  %b = alloca i8, align 1
+  %a = alloca ptr, align 8
+  %b = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i8 -30, ptr %a, align 1
-  store i8 -31, ptr %b, align 1
-  %0 = load i8, ptr %a, align 1
-  %conv = sext i8 %0 to i32
-  %1 = load i8, ptr %b, align 1
-  %conv1 = sext i8 %1 to i16
-  %conv2 = zext i16 %conv1 to i32
-  %cmp = icmp sgt i32 %conv, %conv2
-  br i1 %cmp, label %if.then, label %if.end10
+  %call = call ptr @xxx(i32 noundef 8)
+  store ptr %call, ptr %a, align 8
+  %0 = load ptr, ptr %a, align 8
+  %arrayidx = getelementptr inbounds i32, ptr %0, i64 0
+  %1 = load i32, ptr %arrayidx, align 4
+  store i32 %1, ptr %b, align 4
+  %2 = load i32, ptr %b, align 4
+  %3 = load i32, ptr @cfb_tab8_be, align 16
+  %cmp = icmp ne i32 %2, %3
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %2 = load i8, ptr %a, align 1
-  %conv4 = sext i8 %2 to i64
-  %3 = load i8, ptr %b, align 1
-  %conv5 = sext i8 %3 to i16
-  %conv6 = zext i16 %conv5 to i64
-  %cmp7 = icmp sgt i64 %conv4, %conv6
-  br i1 %cmp7, label %if.then9, label %if.end
-
-if.then9:                                         ; preds = %if.then
   call void @abort() #2
   unreachable
 
-if.end:                                           ; preds = %if.then
-  br label %if.end10
-
-if.end10:                                         ; preds = %if.end, %entry
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

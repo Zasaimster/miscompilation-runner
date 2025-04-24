@@ -1,62 +1,54 @@
-; 111274523727250517296588782251200869687
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111274523727250517296588782251200869687.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111274523727250517296588782251200869687.c"
+; 108425061858225695094452333946998013683
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108425061858225695094452333946998013683.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108425061858225695094452333946998013683.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.three_byte_t = type <{ i8, i16 }>
-
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-@.str.1 = private unnamed_addr constant [23 x i8] c"This won't be called.\0A\00", align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local zeroext i8 @f() #0 {
+define dso_local i32 @f(i32 noundef %number_of_digits_to_use) #0 {
 entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = trunc i32 %call to i8
-  ret i8 %conv
+  %retval = alloca i32, align 4
+  %number_of_digits_to_use.addr = alloca i32, align 4
+  store i32 %number_of_digits_to_use, ptr %number_of_digits_to_use.addr, align 4
+  %0 = load i32, ptr %number_of_digits_to_use.addr, align 4
+  %cmp = icmp ugt i32 %0, 1294
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %call = call i32 (...) @doNothing()
+  %1 = load i32, ptr %number_of_digits_to_use.addr, align 4
+  %mul = mul i32 %1, 3321928
+  %div = udiv i32 %mul, 1000000
+  %add = add i32 %div, 1
+  %div1 = udiv i32 %add, 16
+  store i32 %div1, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %2 = load i32, ptr %retval, align 4
+  ret i32 %2
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local zeroext i16 @g() #0 {
-entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %conv = trunc i32 %call to i16
-  ret i16 %conv
-}
+declare i32 @doNothing(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %three_byte = alloca %struct.three_byte_t, align 1
   store i32 0, ptr %retval, align 4
-  %call = call zeroext i8 @f()
-  %a = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 0
-  store i8 %call, ptr %a, align 1
-  %call1 = call zeroext i16 @g()
-  %b = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 1
-  store i16 %call1, ptr %b, align 1
-  %a2 = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 0
-  %0 = load i8, ptr %a2, align 1
-  %conv = zext i8 %0 to i32
-  %cmp = icmp ne i32 %conv, 171
-  br i1 %cmp, label %if.then, label %lor.lhs.false
+  %call = call i32 @f(i32 noundef 11)
+  %cmp = icmp ne i32 %call, 2
+  br i1 %cmp, label %if.then, label %if.end
 
-lor.lhs.false:                                    ; preds = %entry
-  %b4 = getelementptr inbounds nuw %struct.three_byte_t, ptr %three_byte, i32 0, i32 1
-  %1 = load i16, ptr %b4, align 1
-  %conv5 = zext i16 %1 to i32
-  %cmp6 = icmp ne i32 %conv5, 4660
-  br i1 %cmp6, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
+if.then:                                          ; preds = %entry
   call void @abort() #4
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }

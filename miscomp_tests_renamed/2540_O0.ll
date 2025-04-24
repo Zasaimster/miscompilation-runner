@@ -1,45 +1,43 @@
-; 135714035340472701770205492556169610595
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135714035340472701770205492556169610595.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135714035340472701770205492556169610595.c"
+; 143939876926332502838019782031615566608
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/143939876926332502838019782031615566608.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/143939876926332502838019782031615566608.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @f(ptr noundef %p) #0 {
+define dso_local i64 @f(i64 noundef %x, i64 noundef %y) #0 {
 entry:
-  %retval = alloca ptr, align 8
-  %p.addr = alloca ptr, align 8
-  %x = alloca i16, align 2
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %incdec.ptr = getelementptr inbounds nuw i8, ptr %0, i32 1
-  store ptr %incdec.ptr, ptr %p.addr, align 8
-  %1 = load i8, ptr %0, align 1
-  %conv = sext i8 %1 to i32
-  %shl = shl i32 %conv, 16
-  %conv1 = trunc i32 %shl to i16
-  store i16 %conv1, ptr %x, align 2
-  %call = call i32 (...) @example7()
-  %2 = load ptr, ptr %retval, align 8
-  ret ptr %2
+  %x.addr = alloca i64, align 8
+  %y.addr = alloca i64, align 8
+  store i64 %x, ptr %x.addr, align 8
+  store i64 %y, ptr %y.addr, align 8
+  %call = call i32 (...) @unusedFunction()
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %0 = load i64, ptr %y.addr, align 8
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  %1 = load i64, ptr %y.addr, align 8
+  %and = and i64 %1, 1
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i64 [ %0, %cond.true ], [ %and, %cond.false ]
+  ret i64 %cond
 }
 
-declare i32 @example7(...) #1
+declare i32 @unusedFunction(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store ptr @.str, ptr %p, align 8
-  %0 = load ptr, ptr %p, align 8
-  %call = call ptr @f(ptr noundef %0)
-  %1 = load ptr, ptr %p, align 8
-  %add.ptr = getelementptr inbounds i8, ptr %1, i64 1
-  %cmp = icmp ne ptr %call, %add.ptr
+  %call = call i64 @f(i64 noundef 2, i64 noundef 14600926)
+  %cmp = icmp ne i64 %call, 14600926
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

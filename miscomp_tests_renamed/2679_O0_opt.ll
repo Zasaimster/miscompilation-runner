@@ -1,38 +1,24 @@
-; 130602730852385048656188189677968338084
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/130602730852385048656188189677968338084_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/130602730852385048656188189677968338084.c"
+; 146538265633210449509531843074982917404
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/146538265633210449509531843074982917404_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/146538265633210449509531843074982917404.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @bar() #0 {
+define dso_local i32 @test(float noundef %c) #0 {
 entry:
-  ret i32 -2
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @foo() #0 {
-entry:
-  %retval = alloca i64, align 8
-  %retval1 = alloca i64, align 8
-  %call = call i32 @bar()
-  %conv = sext i32 %call to i64
-  store i64 %conv, ptr %retval1, align 8
-  %0 = load i64, ptr %retval1, align 8
-  %cmp = icmp eq i64 %0, -1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i64 0, ptr %retval, align 8
-  br label %return
-
-if.end:                                           ; preds = %entry
-  store i64 3, ptr %retval, align 8
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %1 = load i64, ptr %retval, align 8
-  ret i64 %1
+  %c.addr = alloca float, align 4
+  store float %c, ptr %c.addr, align 4
+  %0 = load float, ptr %c.addr, align 4
+  %tobool = fcmp une float %0, 0.000000e+00
+  %lnot = xor i1 %tobool, true
+  %lnot1 = xor i1 %lnot, true
+  %lnot.ext = zext i1 %lnot1 to i32
+  %conv = sext i32 %lnot.ext to i64
+  %mul = mul nsw i64 %conv, 7
+  %cmp = icmp eq i64 %mul, 0
+  %conv2 = zext i1 %cmp to i32
+  ret i32 %conv2
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -40,8 +26,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i64 @foo()
-  %cmp = icmp ne i64 %call, 0
+  %call = call i32 @test(float noundef 1.000000e+00)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

@@ -1,42 +1,28 @@
-; 194241542878252484620233438665831704905
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194241542878252484620233438665831704905_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194241542878252484620233438665831704905.c"
+; 101064568016161225246736784870436372222
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101064568016161225246736784870436372222_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101064568016161225246736784870436372222.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree nounwind uwtable
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @big(i64 noundef %u) local_unnamed_addr #0 {
+entry:
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @doit(i32 noundef %a, i32 noundef %b, ptr noundef readonly captures(none) %id) local_unnamed_addr #0 {
+entry:
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  br label %for.body
-
-for.cond:                                         ; preds = %for.body
-  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  %exitcond.not = icmp eq i64 %indvars.iv.next, 8
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !5
-
-for.body:                                         ; preds = %for.cond, %entry
-  %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %for.cond ]
-  %div6 = lshr i64 512, %indvars.iv
-  %0 = trunc nuw nsw i64 %indvars.iv to i32
-  %shr = lshr exact i32 512, %0
-  %conv = zext nneg i32 %shr to i64
-  %cmp1.not = icmp eq i64 %div6, %conv
-  br i1 %cmp1.not, label %for.cond, label %if.then
-
-if.then:                                          ; preds = %for.body
-  tail call void @abort() #2
-  unreachable
-
-for.end:                                          ; preds = %for.cond
   ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -46,6 +32,3 @@ attributes #2 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = distinct !{!5, !6, !7}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = !{!"llvm.loop.unroll.disable"}
