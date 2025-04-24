@@ -6,7 +6,7 @@ miscomp_tests
 .vscode
 *_modified_crc.ll
 miscomp_tests_runner/test_outs/*
-miscomp_tests_runner/*.txt
+# miscomp_tests_runner/*.txt
 csmith_crc_minimal.o
-miscomp_tests_renamed/*
-miscomp_tests_renamed_filtered/*
+miscomp_tests_renamed
+miscomp_tests_renamed_filtered

@@ -1,0 +1,13 @@
+total_programs: 42
+timed_out: 0
+regular_executed: 42
+regular_compile_crash: 0
+regular_same_output: 3
+regular_different_output: 6
+regular_undeterminable_output: 33
+crc_executed: 24
+crc_crashed: 15
+crc_no_globals_found: 1
+crc_no_hash_found: 6
+crc_logic_failed: 0
+crc_succeeded: 18
