@@ -1,21 +1,30 @@
-; 184190869733734158578918803799328573568
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184190869733734158578918803799328573568.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184190869733734158578918803799328573568.c"
+; 140647100025670896458911731635319008883
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/140647100025670896458911731635319008883.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/140647100025670896458911731635319008883.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.s = type { i32, i32, i16, [0 x i32] }
+@one = internal global double 1.000000e+00, align 8
 
-@s = dso_local global { i32, i32, i16, [2 x i8], [0 x i32] } { i32 0, i32 3, i16 0, [2 x i8] zeroinitializer, [0 x i32] zeroinitializer }, align 4
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f() #0 {
+entry:
+  %colinear = alloca i32, align 4
+  %0 = load double, ptr @one, align 8
+  %cmp = fcmp oeq double %0, 0.000000e+00
+  %conv = zext i1 %cmp to i32
+  store i32 %conv, ptr %colinear, align 4
+  ret i32 0
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr getelementptr inbounds nuw (%struct.s, ptr @s, i32 0, i32 1), align 4
-  %cmp = icmp ne i32 %0, 3
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 @f()
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

@@ -1,62 +1,47 @@
-; 102153428780954163292478682426364641648
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102153428780954163292478682426364641648_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102153428780954163292478682426364641648.c"
+; 143420764875634923536316732811398835580
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/143420764875634923536316732811398835580_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/143420764875634923536316732811398835580.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+@p = dso_local local_unnamed_addr global ptr null, align 8
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
+define dso_local i32 @g(ptr noundef %a) local_unnamed_addr #0 {
 entry:
-  %k = alloca [42 x i32], align 16
-  call void @llvm.lifetime.start.p0(i64 168, ptr nonnull %k) #4
-  br label %for.body
+  store ptr %a, ptr @p, align 8, !tbaa !5
+  ret i32 undef
+}
 
-for.body:                                         ; preds = %for.body, %entry
-  %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %for.body ]
-  %indvars19 = trunc i64 %indvars.iv to i32
-  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  %arrayidx = getelementptr inbounds nuw [42 x i32], ptr %k, i64 0, i64 %indvars.iv
-  store i32 %indvars19, ptr %arrayidx, align 4, !tbaa !5
-  %exitcond.not = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not, label %for.body4, label %for.body, !llvm.loop !9
+; Function Attrs: nounwind uwtable
+define dso_local noundef i32 @f() local_unnamed_addr #1 {
+entry:
+  %call = tail call i32 (...) @example4() #5
+  %0 = load ptr, ptr @p, align 8, !tbaa !5
+  store i16 1, ptr %0, align 2, !tbaa !9
+  ret i32 10
+}
 
-for.cond2:                                        ; preds = %for.body4
-  %dec = add nsw i32 %i.118, -1
-  %cmp3.not = icmp eq i32 %i.118, 0
-  br i1 %cmp3.not, label %for.end9, label %for.body4, !llvm.loop !12
+declare i32 @example4(...) local_unnamed_addr #2
 
-for.body4:                                        ; preds = %for.cond2, %for.body
-  %i.118 = phi i32 [ %dec, %for.cond2 ], [ 2, %for.body ]
-  %idxprom5 = zext nneg i32 %i.118 to i64
-  %arrayidx6 = getelementptr inbounds nuw [42 x i32], ptr %k, i64 0, i64 %idxprom5
-  %0 = load i32, ptr %arrayidx6, align 4, !tbaa !5
-  %cmp7.not = icmp eq i32 %0, %i.118
-  br i1 %cmp7.not, label %for.cond2, label %if.then
-
-if.then:                                          ; preds = %for.body4
-  tail call void @abort() #5
-  unreachable
-
-for.end9:                                         ; preds = %for.cond2
-  tail call void @exit(i32 noundef 0) #5
+; Function Attrs: cold noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #3 {
+entry:
+  %call = tail call i32 @f()
+  tail call void @abort() #6
   unreachable
 }
 
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
-
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+declare void @abort() local_unnamed_addr #4
 
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #3
-
-attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { nounwind }
-attributes #5 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { nounwind }
+attributes #6 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -67,10 +52,7 @@ attributes #5 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
+!6 = !{!"any pointer", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
-!9 = distinct !{!9, !10, !11}
-!10 = !{!"llvm.loop.mustprogress"}
-!11 = !{!"llvm.loop.unroll.disable"}
-!12 = distinct !{!12, !10, !11}
+!9 = !{!7, !7, i64 0}

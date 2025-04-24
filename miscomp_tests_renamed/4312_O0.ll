@@ -1,24 +1,22 @@
-; 176692814443938503429887275671648693654
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176692814443938503429887275671648693654.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176692814443938503429887275671648693654.c"
+; 175694226450935146354033897435498542776
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175694226450935146354033897435498542776.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175694226450935146354033897435498542776.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"This function is never used.\0A\00", align 1
+@x = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [16 x i8] c"Value of a: %d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @show(i32 noundef %a, i32 noundef %b) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %x = alloca [2 x i32], align 4
-  store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %x, align 4
-  %arrayinit.element = getelementptr inbounds i32, ptr %x, i64 1
-  store i32 0, ptr %arrayinit.element, align 4
-  %arrayidx = getelementptr inbounds [2 x i32], ptr %x, i64 0, i64 1
-  %0 = load i32, ptr %arrayidx, align 4
-  ret i32 %0
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  %0 = load i32, ptr %a.addr, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  ret void
 }
 
 declare i32 @printf(ptr noundef, ...) #1

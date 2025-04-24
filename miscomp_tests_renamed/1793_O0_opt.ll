@@ -1,68 +1,42 @@
-; 100993254246384672161417768838326828010
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/100993254246384672161417768838326828010_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/100993254246384672161417768838326828010.c"
+; 131835173161864568148783916011097667780
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/131835173161864568148783916011097667780_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/131835173161864568148783916011097667780.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @vfswrap_lock(ptr noundef %fsp, i32 noundef %fd, i32 noundef %op, i64 noundef %offset, i64 noundef %count, i32 noundef %type) #0 {
-entry:
-  %fsp.addr = alloca ptr, align 8
-  %fd.addr = alloca i32, align 4
-  %op.addr = alloca i32, align 4
-  %offset.addr = alloca i64, align 8
-  %count.addr = alloca i64, align 8
-  %type.addr = alloca i32, align 4
-  store ptr %fsp, ptr %fsp.addr, align 8
-  store i32 %fd, ptr %fd.addr, align 4
-  store i32 %op, ptr %op.addr, align 4
-  store i64 %offset, ptr %offset.addr, align 8
-  store i64 %count, ptr %count.addr, align 8
-  store i32 %type, ptr %type.addr, align 4
-  %call = call i32 @vfswrap_lock(ptr noundef null, i32 noundef 1, i32 noundef 2, i64 noundef 3, i64 noundef 4, i32 noundef 5)
-  ret i32 %call
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @fcntl_lock(i32 noundef %fd, i32 noundef %op, i64 noundef %offset, i64 noundef %count, i32 noundef %type) #0 {
-entry:
-  %fd.addr = alloca i32, align 4
-  %op.addr = alloca i32, align 4
-  %offset.addr = alloca i64, align 8
-  %count.addr = alloca i64, align 8
-  %type.addr = alloca i32, align 4
-  store i32 %fd, ptr %fd.addr, align 4
-  store i32 %op, ptr %op.addr, align 4
-  store i64 %offset, ptr %offset.addr, align 8
-  store i64 %count, ptr %count.addr, align 8
-  store i32 %type, ptr %type.addr, align 4
-  %0 = load i32, ptr %type.addr, align 4
-  ret i32 %0
-}
+@fp = internal global ptr null, align 8
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @vfswrap_lock(ptr noundef null, i32 noundef 1, i32 noundef 2, i64 noundef 3, i64 noundef 4, i32 noundef 5)
-  %cmp = icmp ne i32 %call, 5
+  store ptr null, ptr @fp, align 8
+  %0 = load ptr, ptr @fp, align 8
+  %call = call double %0(float noundef 1.000000e+00)
+  %cmp = fcmp une double %call, 1.000000e+00
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #2
+  call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret i32 0
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
 
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,62 +1,75 @@
-; 119212811654681192664396789733310585010
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119212811654681192664396789733310585010.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119212811654681192664396789733310585010.c"
+; 172915701251689847049612755407042656853
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172915701251689847049612755407042656853.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172915701251689847049612755407042656853.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [3 x i8] c"a\0A\00", align 1
-@.str.1 = private unnamed_addr constant [3 x i8] c"b\0A\00", align 1
-@.str.2 = private unnamed_addr constant [3 x i8] c"c\0A\00", align 1
-@.str.3 = private unnamed_addr constant [3 x i8] c"d\0A\00", align 1
-@.str.4 = private unnamed_addr constant [3 x i8] c"e\0A\00", align 1
-@.str.5 = private unnamed_addr constant [3 x i8] c"f\0A\00", align 1
-@.str.6 = private unnamed_addr constant [3 x i8] c"g\0A\00", align 1
-@.str.7 = private unnamed_addr constant [3 x i8] c"h\0A\00", align 1
-@.str.8 = private unnamed_addr constant [3 x i8] c"i\0A\00", align 1
-@.str.9 = private unnamed_addr constant [3 x i8] c"j\0A\00", align 1
-@.str.10 = private unnamed_addr constant [3 x i8] c"k\0A\00", align 1
-@.str.11 = private unnamed_addr constant [3 x i8] c"l\0A\00", align 1
-@.str.12 = private unnamed_addr constant [3 x i8] c"m\0A\00", align 1
-@.str.13 = private unnamed_addr constant [3 x i8] c"n\0A\00", align 1
-@.str.14 = private unnamed_addr constant [3 x i8] c"o\0A\00", align 1
-@.str.15 = private unnamed_addr constant [3 x i8] c"p\0A\00", align 1
-@.str.16 = private unnamed_addr constant [3 x i8] c"q\0A\00", align 1
-@.str.17 = private unnamed_addr constant [3 x i8] c"r\0A\00", align 1
-@.str.18 = private unnamed_addr constant [3 x i8] c"s\0A\00", align 1
-@.str.19 = private unnamed_addr constant [3 x i8] c"t\0A\00", align 1
+@b = dso_local global i32 10, align 4
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @func() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @testit(i32 noundef %x) #0 {
+entry:
+  %x.addr = alloca i32, align 4
+  store i32 %x, ptr %x.addr, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %cmp = icmp ne i32 %call, 20
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret void
+}
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3)
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.4)
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.5)
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.6)
-  %call7 = call i32 (ptr, ...) @printf(ptr noundef @.str.7)
-  %call8 = call i32 (ptr, ...) @printf(ptr noundef @.str.8)
-  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str.9)
-  %call10 = call i32 (ptr, ...) @printf(ptr noundef @.str.10)
-  %call11 = call i32 (ptr, ...) @printf(ptr noundef @.str.11)
-  %call12 = call i32 (ptr, ...) @printf(ptr noundef @.str.12)
-  %call13 = call i32 (ptr, ...) @printf(ptr noundef @.str.13)
-  %call14 = call i32 (ptr, ...) @printf(ptr noundef @.str.14)
-  %call15 = call i32 (ptr, ...) @printf(ptr noundef @.str.15)
-  %call16 = call i32 (ptr, ...) @printf(ptr noundef @.str.16)
-  %call17 = call i32 (ptr, ...) @printf(ptr noundef @.str.17)
-  %call18 = call i32 (ptr, ...) @printf(ptr noundef @.str.18)
-  %call19 = call i32 (ptr, ...) @printf(ptr noundef @.str.19)
-  ret i32 0
+  store i32 0, ptr %a, align 4
+  %0 = load i32, ptr @b, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  %call = call i32 @func()
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %1 = load i32, ptr %a, align 4
+  %add = add nsw i32 %1, 23
+  %and = and i32 %add, -4
+  call void @testit(i32 noundef %and)
+  call void @exit(i32 noundef 0) #5
+  unreachable
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

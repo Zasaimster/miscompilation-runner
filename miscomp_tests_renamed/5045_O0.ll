@@ -1,58 +1,83 @@
-; 140793822552988889482410545774990582031
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/140793822552988889482410545774990582031.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/140793822552988889482410545774990582031.c"
+; 189012599324174209662637272247526038999
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189012599324174209662637272247526038999.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189012599324174209662637272247526038999.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@.str = private unnamed_addr constant [12 x i8] c"Dead code.\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
-  %d = alloca ptr, align 8
-  %e = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store ptr inttoptr (i64 1 to ptr), ptr %d, align 8
-  store ptr %b, ptr %e, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %a, align 4
-  store i32 34, ptr %b, align 4
-  %0 = load ptr, ptr %d, align 8
-  %1 = load i32, ptr %0, align 4
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %1)
-  %2 = load ptr, ptr %e, align 8
-  %3 = load i32, ptr %2, align 4
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %3)
-  %4 = load ptr, ptr %d, align 8
-  %5 = load ptr, ptr %e, align 8
-  %cmp = icmp eq ptr %4, %5
-  %conv = zext i1 %cmp to i32
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv)
-  %6 = load ptr, ptr %d, align 8
-  %7 = load ptr, ptr %e, align 8
-  %cmp4 = icmp ne ptr %6, %7
-  %conv5 = zext i1 %cmp4 to i32
-  %call6 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv5)
-  %8 = load ptr, ptr %e, align 8
-  store ptr %8, ptr %d, align 8
-  %9 = load ptr, ptr %d, align 8
-  %10 = load ptr, ptr %e, align 8
-  %cmp7 = icmp eq ptr %9, %10
-  %conv8 = zext i1 %cmp7 to i32
-  %call9 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv8)
-  %11 = load ptr, ptr %d, align 8
-  %12 = load ptr, ptr %e, align 8
-  %cmp10 = icmp ne ptr %11, %12
-  %conv11 = zext i1 %cmp10 to i32
-  %call12 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %conv11)
-  ret i32 0
+  %call = call i32 (i32, ...) @ZERO_1(i32 noundef 1)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %call1 = call i32 (i32, i32, ...) @ZERO_2(i32 noundef 1, i32 noundef 2)
+  %tobool2 = icmp ne i32 %call1, 0
+  br i1 %tobool2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 (i32, ...) @ZERO_VAR(i32 noundef 1)
+  %tobool6 = icmp ne i32 %call5, 0
+  br i1 %tobool6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end8:                                          ; preds = %if.end4
+  %call9 = call i32 (i32, i32, ...) @ZERO_VAR(i32 noundef 1, i32 noundef 2)
+  %tobool10 = icmp ne i32 %call9, 0
+  br i1 %tobool10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end12:                                         ; preds = %if.end8
+  %call13 = call i32 (i32, i32, ...) @ZERO_1_VAR(i32 noundef 1, i32 noundef 2)
+  %tobool14 = icmp ne i32 %call13, 0
+  br i1 %tobool14, label %if.then15, label %if.end16
+
+if.then15:                                        ; preds = %if.end12
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end16:                                         ; preds = %if.end12
+  %call17 = call i32 (i32, i32, i32, ...) @ZERO_1_VAR(i32 noundef 1, i32 noundef 2, i32 noundef 3)
+  %tobool18 = icmp ne i32 %call17, 0
+  br i1 %tobool18, label %if.then19, label %if.end20
+
+if.then19:                                        ; preds = %if.end16
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end20:                                         ; preds = %if.end16
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end20, %if.then19, %if.then15, %if.then11, %if.then7, %if.then3, %if.then
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+declare i32 @ZERO_1(...) #1
+
+declare i32 @ZERO_2(...) #1
+
+declare i32 @ZERO_VAR(...) #1
+
+declare i32 @ZERO_1_VAR(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

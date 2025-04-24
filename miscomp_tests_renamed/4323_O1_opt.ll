@@ -1,34 +1,23 @@
-; 159257066869546937382849002202229170369
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159257066869546937382849002202229170369_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159257066869546937382849002202229170369.c"
+; 175920050775547773997892829978075444484
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175920050775547773997892829978075444484_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175920050775547773997892829978075444484.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str.4 = private unnamed_addr constant [6 x i8] c"Hello\00", align 1
+@str = private unnamed_addr constant [22 x i8] c"This won't be called.\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local void @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
-  %puts5 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
-  %puts6 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
-  %puts7 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
-  %puts8 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.4)
-  ret i32 0
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @example1() local_unnamed_addr #1 {
-entry:
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   ret void
 }
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #1 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

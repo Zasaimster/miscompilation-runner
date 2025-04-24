@@ -1,39 +1,44 @@
-; 173396204329515340595260757626981317916
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173396204329515340595260757626981317916_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173396204329515340595260757626981317916.c"
+; 138957699325513164571049589317938696459
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138957699325513164571049589317938696459_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138957699325513164571049589317938696459.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [10 x i8] c"Positive\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %b = alloca i32, align 4
-  %c = alloca i32, align 4
-  %d = alloca i32, align 4
+  %a = alloca [10 x i32], align 16
+  %p = alloca ptr, align 8
+  %q = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (...) @uselessFunction()
-  store i32 %call, ptr %a, align 4
-  store i32 342391, ptr %b, align 4
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call1, ptr %c, align 4
-  store i32 2386092, ptr %d, align 4
-  %0 = load i32, ptr %a, align 4
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %0)
-  %1 = load i32, ptr %b, align 4
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %1)
-  %2 = load i32, ptr %c, align 4
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %2)
-  %3 = load i32, ptr %d, align 4
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %3)
-  ret i32 0
-}
+  %arrayidx = getelementptr inbounds [10 x i32], ptr %a, i64 0, i64 1
+  store ptr %arrayidx, ptr %q, align 8
+  %0 = load ptr, ptr %q, align 8
+  %arrayidx1 = getelementptr inbounds i32, ptr %0, i64 -1
+  store ptr %arrayidx1, ptr %p, align 8
+  %arraydecay = getelementptr inbounds [10 x i32], ptr %a, i64 0, i64 0
+  %cmp = icmp ugt ptr %arraydecay, null
+  br i1 %cmp, label %if.then, label %if.else
 
-declare i32 @uselessFunction(...) #1
+if.then:                                          ; preds = %entry
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %if.then
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end, %if.else
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
+}
 
 declare i32 @printf(ptr noundef, ...) #1
 

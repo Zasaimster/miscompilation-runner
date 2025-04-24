@@ -1,59 +1,23 @@
-; 110137586503239386515120202911244631400
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110137586503239386515120202911244631400_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110137586503239386515120202911244631400.c"
+; 167939503547536550027549686383948471304
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167939503547536550027549686383948471304_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167939503547536550027549686383948471304.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"This function is never used.\0A\00", align 1
-
-; Function Attrs: nofree nounwind uwtable
-define dso_local range(i32 -2147483648, 1) i32 @foo(i32 noundef %i) local_unnamed_addr #0 {
-entry:
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %sub = add nsw i32 %call, -2
-  %0 = tail call i32 @llvm.abs.i32(i32 %sub, i1 true)
-  %mul = mul nsw i32 %0, -2
-  ret i32 %mul
-}
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
-
-; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
-declare i32 @llvm.abs.i32(i32, i1 immarg) #2
+@str = private unnamed_addr constant [19 x i8] c"This is dead code.\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %sub.i = add nsw i32 %call.i, -2
-  %0 = tail call i32 @llvm.abs.i32(i32 %sub.i, i1 true)
-  %cmp.not = icmp eq i32 %0, 1
-  br i1 %cmp.not, label %lor.lhs.false, label %if.then
-
-lor.lhs.false:                                    ; preds = %entry
-  %call.i3 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
-  %sub.i4 = add nsw i32 %call.i3, -2
-  %1 = tail call i32 @llvm.abs.i32(i32 %sub.i4, i1 true)
-  %cmp2.not = icmp eq i32 %1, 1
-  br i1 %cmp2.not, label %if.end, label %if.then
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  tail call void @abort() #4
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #3
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
-attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
+attributes #1 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

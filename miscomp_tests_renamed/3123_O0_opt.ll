@@ -1,81 +1,28 @@
-; 175474511924019009649598118189100323346
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175474511924019009649598118189100323346_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175474511924019009649598118189100323346.c"
+; 15476176401788137116581253500599160842
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/15476176401788137116581253500599160842_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/15476176401788137116581253500599160842.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [7 x i8] c"Done.\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %i) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %call = call i32 (i32, ...) @process(i32 noundef 100)
-  switch i32 %call, label %sw.default [
-    i32 -2, label %sw.bb
-    i32 -1, label %sw.bb2
-    i32 0, label %sw.bb3
-    i32 1, label %sw.bb4
-    i32 2, label %sw.bb5
-    i32 3, label %sw.bb6
-    i32 4, label %sw.bb7
-  ]
-
-sw.bb:                                            ; preds = %entry
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call1, ptr %retval, align 4
-  br label %return
-
-sw.bb2:                                           ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-sw.bb3:                                           ; preds = %entry
-  store i32 7, ptr %retval, align 4
-  br label %return
-
-sw.bb4:                                           ; preds = %entry
-  store i32 4, ptr %retval, align 4
-  br label %return
-
-sw.bb5:                                           ; preds = %entry
-  store i32 3, ptr %retval, align 4
-  br label %return
-
-sw.bb6:                                           ; preds = %entry
-  store i32 15, ptr %retval, align 4
-  br label %return
-
-sw.bb7:                                           ; preds = %entry
-  store i32 9, ptr %retval, align 4
-  br label %return
-
-sw.default:                                       ; preds = %entry
-  call void @abort() #4
-  unreachable
-
-return:                                           ; preds = %sw.bb7, %sw.bb6, %sw.bb5, %sw.bb4, %sw.bb3, %sw.bb2, %sw.bb
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
-}
-
-declare i32 @process(...) #1
-
-declare i32 @printf(ptr noundef, ...) #1
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@x = dso_local global [100 x [100 x double]] zeroinitializer, align 16
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef -1)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %if.end
+  store i32 99, ptr %i, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %0 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %0 to i64
+  %arrayidx = getelementptr inbounds [100 x [100 x double]], ptr @x, i64 0, i64 %idxprom
+  %arrayidx1 = getelementptr inbounds [100 x double], ptr %arrayidx, i64 0, i64 0
+  store double 4.200000e+01, ptr %arrayidx1, align 16
+  %1 = load double, ptr getelementptr inbounds ([100 x [100 x double]], ptr @x, i64 0, i64 99), align 16
+  %cmp = fcmp une double %1, 4.200000e+01
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #4
@@ -85,6 +32,11 @@ if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #5
   unreachable
 }
+
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #3

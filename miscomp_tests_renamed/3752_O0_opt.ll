@@ -1,18 +1,47 @@
-; 193919093869221429770722215000413243585
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/193919093869221429770722215000413243585_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/193919093869221429770722215000413243585.c"
+; 165575211822884241287709542069602721211
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/165575211822884241287709542069602721211_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/165575211822884241287709542069602721211.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [12 x i8] c"Dead code.\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @tar(i64 noundef %i) #0 {
+define dso_local i32 @main() #0 {
 entry:
-  %i.addr = alloca i64, align 8
-  store i64 %i, ptr %i.addr, align 8
+  %retval = alloca i32, align 4
+  %x1 = alloca i32, align 4
+  %x2 = alloca i64, align 8
+  %x3 = alloca i32, align 4
+  %x4 = alloca i32, align 4
+  %x5 = alloca i32, align 4
+  %x6 = alloca i64, align 8
+  %t = alloca i64, align 8
+  store i32 0, ptr %retval, align 4
+  store volatile i32 0, ptr %x1, align 4
+  store volatile i64 0, ptr %x2, align 8
+  store volatile i32 0, ptr %x3, align 4
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %cmp = icmp ne i32 %call, 36863
+  store volatile i32 %call, ptr %x4, align 4
+  store volatile i32 1, ptr %x5, align 4
+  store volatile i64 1, ptr %x6, align 8
+  %0 = load volatile i32, ptr %x1, align 4
+  %conv = sext i32 %0 to i64
+  %1 = load volatile i64, ptr %x2, align 8
+  %2 = load volatile i32, ptr %x3, align 4
+  %sh_prom = zext i32 %2 to i64
+  %shl = shl i64 %1, %sh_prom
+  %mul = mul nsw i64 %conv, %shl
+  %3 = load volatile i32, ptr %x4, align 4
+  %4 = load volatile i32, ptr %x5, align 4
+  %mul1 = mul nsw i32 %3, %4
+  %conv2 = sext i32 %mul1 to i64
+  %div = sdiv i64 %mul, %conv2
+  %5 = load volatile i64, ptr %x6, align 8
+  %add = add nsw i64 %div, %5
+  store i64 %add, ptr %t, align 8
+  %6 = load i64, ptr %t, align 8
+  %cmp = icmp ne i64 %6, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -20,69 +49,13 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret i32 -1
+  ret i32 0
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @bug(i32 noundef %q, i64 noundef %bcount) #0 {
-entry:
-  %q.addr = alloca i32, align 4
-  %bcount.addr = alloca i64, align 8
-  %j = alloca i32, align 4
-  %outgo = alloca i32, align 4
-  store i32 %q, ptr %q.addr, align 4
-  store i64 %bcount, ptr %bcount.addr, align 8
-  store i32 0, ptr %j, align 4
-  store i32 0, ptr %outgo, align 4
-  br label %while.cond
-
-while.cond:                                       ; preds = %if.end, %entry
-  %0 = load i32, ptr %j, align 4
-  %cmp = icmp ne i32 %0, -1
-  br i1 %cmp, label %while.body, label %while.end
-
-while.body:                                       ; preds = %while.cond
-  %1 = load i32, ptr %outgo, align 4
-  %inc = add nsw i32 %1, 1
-  store i32 %inc, ptr %outgo, align 4
-  %2 = load i32, ptr %outgo, align 4
-  %3 = load i32, ptr %q.addr, align 4
-  %sub = sub nsw i32 %3, 1
-  %cmp1 = icmp sgt i32 %2, %sub
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %while.body
-  %4 = load i32, ptr %q.addr, align 4
-  %sub2 = sub nsw i32 %4, 1
-  store i32 %sub2, ptr %outgo, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %while.body
-  %5 = load i32, ptr %outgo, align 4
-  %conv = sext i32 %5 to i64
-  %6 = load i64, ptr %bcount.addr, align 8
-  %mul = mul nsw i64 %conv, %6
-  %call = call i32 @tar(i64 noundef %mul)
-  store i32 %call, ptr %j, align 4
-  br label %while.cond, !llvm.loop !6
-
-while.end:                                        ; preds = %while.cond
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  call void @bug(i32 noundef 5, i64 noundef 36863)
-  ret i32 0
-}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
@@ -98,5 +71,3 @@ attributes #3 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

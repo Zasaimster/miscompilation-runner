@@ -1,61 +1,81 @@
-; 184276042649354579300961300316516765119
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184276042649354579300961300316516765119.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184276042649354579300961300316516765119.c"
+; 182788298965500930504590897566352600134
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182788298965500930504590897566352600134.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182788298965500930504590897566352600134.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [16 x i8] c"Value of a: %d\0A\00", align 1
+@aim_callhandler.i = internal global i32 0, align 4
+@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
+@.str.1 = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local i32 @aim_callhandler(i32 noundef %sess, i32 noundef %conn, i16 noundef zeroext %family, i16 noundef zeroext %type) #0 {
 entry:
   %retval = alloca i32, align 4
-  %var = alloca i32, align 4
-  store i32 7, ptr %var, align 4
-  %0 = load i32, ptr %var, align 4
-  %div = sdiv i32 %0, 7
-  %cmp = icmp eq i32 %div, 1
-  br i1 %cmp, label %if.then, label %if.end
+  %sess.addr = alloca i32, align 4
+  %conn.addr = alloca i32, align 4
+  %family.addr = alloca i16, align 2
+  %type.addr = alloca i16, align 2
+  store i32 %sess, ptr %sess.addr, align 4
+  store i32 %conn, ptr %conn.addr, align 4
+  store i16 %family, ptr %family.addr, align 2
+  store i16 %type, ptr %type.addr, align 2
+  %0 = load i32, ptr %conn.addr, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
-  %1 = load i32, ptr %var, align 4
-  %div1 = sdiv i32 %1, 7
-  store i32 %div1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %2 = load i32, ptr %var, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %2)
   store i32 0, ptr %retval, align 4
   br label %return
 
-return:                                           ; preds = %if.end, %if.then
-  %3 = load i32, ptr %retval, align 4
-  ret i32 %3
+if.end:                                           ; preds = %entry
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %cmp = icmp eq i32 %call, 65535
+  br i1 %cmp, label %if.then1, label %if.end2
+
+if.then1:                                         ; preds = %if.end
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+if.end2:                                          ; preds = %if.end
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
+  %cmp4 = icmp sge i32 %call3, 1
+  br i1 %cmp4, label %if.then5, label %if.end6
+
+if.then5:                                         ; preds = %if.end2
+  call void @abort() #4
+  unreachable
+
+if.end6:                                          ; preds = %if.end2
+  %1 = load i32, ptr @aim_callhandler.i, align 4
+  %inc = add nsw i32 %1, 1
+  store i32 %inc, ptr @aim_callhandler.i, align 4
+  %2 = load i32, ptr %sess.addr, align 4
+  %3 = load i32, ptr %conn.addr, align 4
+  %4 = load i16, ptr %family.addr, align 2
+  %call7 = call i32 @aim_callhandler(i32 noundef %2, i32 noundef %3, i16 noundef zeroext %4, i16 noundef zeroext -1)
+  store i32 %call7, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end6, %if.then1, %if.then
+  %5 = load i32, ptr %retval, align 4
+  ret i32 %5
 }
 
 declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #4
-  unreachable
-
-if.end:                                           ; preds = %entry
+  %call = call i32 @aim_callhandler(i32 noundef 0, i32 noundef 1, i16 noundef zeroext 0, i16 noundef zeroext 0)
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #3

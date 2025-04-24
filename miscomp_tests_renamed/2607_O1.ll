@@ -1,22 +1,29 @@
-; 178064117677104088266948000322122845544
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/178064117677104088266948000322122845544.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/178064117677104088266948000322122845544.c"
+; 145181306146505280652299302203222385598
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145181306146505280652299302203222385598.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145181306146505280652299302203222385598.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+; Function Attrs: cold nofree noreturn nounwind uwtable
+define dso_local noundef i32 @f(i32 noundef %0) local_unnamed_addr #0 {
+entry:
+  tail call void @abort() #2
+  unreachable
+}
+
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+; Function Attrs: cold nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  ret i32 0
+  tail call void @abort() #2
+  unreachable
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @testFunction() local_unnamed_addr #0 {
-entry:
-  ret void
-}
-
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

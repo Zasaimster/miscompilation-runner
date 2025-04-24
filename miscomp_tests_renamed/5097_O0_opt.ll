@@ -1,58 +1,57 @@
-; 117695310831312090525240431726874221790
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/117695310831312090525240431726874221790_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/117695310831312090525240431726874221790.c"
+; 189947816433685222520098815783606558876
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189947816433685222520098815783606558876_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189947816433685222520098815783606558876.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@count = dso_local global i32 0, align 4
+%struct.test = type { i16 }
+
+@p = dso_local global ptr null, align 8
+@__const.f.s = private unnamed_addr constant %struct.test { i16 1 }, align 2
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo1() #0 {
+define dso_local i32 @g(ptr noundef %a) #0 {
 entry:
-  %call = call i32 (...) @doNothing()
-  ret i32 0
+  %retval = alloca i32, align 4
+  %a.addr = alloca ptr, align 8
+  store ptr %a, ptr %a.addr, align 8
+  %0 = load ptr, ptr %a.addr, align 8
+  store ptr %0, ptr @p, align 8
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
 }
-
-declare i32 @doNothing(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo2() #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %0 = load i32, ptr @count, align 4
-  %inc = add nsw i32 %0, 1
-  store i32 %inc, ptr @count, align 4
-  ret i32 0
+  %a = alloca i32, align 4
+  %s = alloca %struct.test, align 2
+  %call = call i32 @g(ptr noundef %a)
+  store i32 10, ptr %a, align 4
+  call void @llvm.memcpy.p0.p0.i64(ptr align 2 %s, ptr align 2 @__const.f.s, i64 2, i1 false)
+  %0 = load ptr, ptr @p, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 2 %0, ptr align 2 %s, i64 2, i1 false)
+  %1 = load i32, ptr %a, align 4
+  ret i32 %1
 }
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo1()
-  %cmp = icmp eq i32 %call, 1
-  %conv = zext i1 %cmp to i32
-  %call1 = call i32 @foo2()
-  %cmp2 = icmp eq i32 %call1, 1
-  %conv3 = zext i1 %cmp2 to i32
-  %and = and i32 %conv, %conv3
-  %tobool = icmp ne i32 %and, 0
-  br i1 %tobool, label %if.then, label %if.end
+  %call = call i32 @f()
+  %cmp = icmp eq i32 %call, 10
+  br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
-  %0 = load i32, ptr @count, align 4
-  %cmp4 = icmp ne i32 %0, 2
-  br i1 %cmp4, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end
-  call void @abort() #3
-  unreachable
-
-if.end7:                                          ; preds = %if.end
   ret i32 0
 }
 
@@ -60,7 +59,7 @@ if.end7:                                          ; preds = %if.end
 declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn nounwind }
 

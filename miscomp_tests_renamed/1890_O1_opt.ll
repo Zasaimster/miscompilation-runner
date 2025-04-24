@@ -1,12 +1,20 @@
-; 129591794868173052301787053959257132485
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129591794868173052301787053959257132485_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129591794868173052301787053959257132485.c"
+; 13340756728747375490905315285938300589
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13340756728747375490905315285938300589_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13340756728747375490905315285938300589.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.S = type { i16, [2 x i8] }
+
+@s = dso_local local_unnamed_addr global %struct.S zeroinitializer, align 4
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
+  %bf.load = load i16, ptr @s, align 4
+  %bf.clear = and i16 %bf.load, -1024
+  %bf.set12 = or disjoint i16 %bf.clear, 68
+  store i16 %bf.set12, ptr @s, align 4
   tail call void @abort() #2
   unreachable
 }

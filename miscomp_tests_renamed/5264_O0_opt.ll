@@ -1,79 +1,54 @@
-; 121905853879265092558984395111593857065
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121905853879265092558984395111593857065_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121905853879265092558984395111593857065.c"
+; 193029876756169075556046368029923844845
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/193029876756169075556046368029923844845_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/193029876756169075556046368029923844845.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @ts(i32 noundef %a) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %cmp = icmp sgt i32 %0, 2000
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.else:                                          ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.else, %if.then
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
-}
+%struct.t1 = type { i32, i32, i32, i32 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @tu(i32 noundef %a) #0 {
+define dso_local i32 @f(ptr noundef %ps) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %cmp = icmp ult i32 %0, 1000
-  br i1 %cmp, label %land.lhs.true, label %if.else
-
-land.lhs.true:                                    ; preds = %entry
-  %1 = load i32, ptr %a.addr, align 4
-  %cmp1 = icmp ugt i32 %1, 2000
-  br i1 %cmp1, label %if.then, label %if.else
-
-if.then:                                          ; preds = %land.lhs.true
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.else:                                          ; preds = %land.lhs.true, %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.else, %if.then
-  %2 = load i32, ptr %retval, align 4
-  ret i32 %2
+  %ps.addr = alloca ptr, align 8
+  store ptr %ps, ptr %ps.addr, align 8
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %s = alloca %struct.t1, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @ts(i32 noundef 0)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %lor.lhs.false
+  %call = call i32 @f(ptr noundef %s)
+  %a = getelementptr inbounds nuw %struct.t1, ptr %s, i32 0, i32 0
+  %0 = load i32, ptr %a, align 4
+  %cmp = icmp ne i32 %0, 10000
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
 lor.lhs.false:                                    ; preds = %entry
-  %call1 = call i32 @tu(i32 noundef 0)
-  %tobool2 = icmp ne i32 %call1, 0
-  br i1 %tobool2, label %if.then, label %if.end
+  %b = getelementptr inbounds nuw %struct.t1, ptr %s, i32 0, i32 1
+  %1 = load i32, ptr %b, align 4
+  %cmp1 = icmp ne i32 %1, 3333
+  br i1 %cmp1, label %if.then, label %lor.lhs.false2
 
-if.then:                                          ; preds = %lor.lhs.false, %entry
+lor.lhs.false2:                                   ; preds = %lor.lhs.false
+  %c = getelementptr inbounds nuw %struct.t1, ptr %s, i32 0, i32 2
+  %2 = load i32, ptr %c, align 4
+  %cmp3 = icmp ne i32 %2, 10000
+  br i1 %cmp3, label %if.then, label %lor.lhs.false4
+
+lor.lhs.false4:                                   ; preds = %lor.lhs.false2
+  %d = getelementptr inbounds nuw %struct.t1, ptr %s, i32 0, i32 3
+  %3 = load i32, ptr %d, align 4
+  %cmp5 = icmp ne i32 %3, 3333
+  br i1 %cmp5, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false4, %lor.lhs.false2, %lor.lhs.false, %entry
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false
+if.end:                                           ; preds = %lor.lhs.false4
   call void @exit(i32 noundef 0) #4
   unreachable
 }

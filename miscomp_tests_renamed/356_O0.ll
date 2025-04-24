@@ -1,31 +1,49 @@
-; 111805061470836216370295226040932145078
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111805061470836216370295226040932145078.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111805061470836216370295226040932145078.c"
+; 105985209797382469516055330422806618949
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105985209797382469516055330422806618949.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105985209797382469516055330422806618949.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [2 x i8] c"X\00", align 1
-@foo = dso_local global [1 x ptr] [ptr @.str], align 8
+@henry.fred = internal global i32 4567, align 4
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@fred = internal global i32 1234, align 4
+@joe = internal global i32 0, align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @henry() #0 {
+entry:
+  %0 = load i32, ptr @henry.fred, align 4
+  %inc = add nsw i32 %0, 1
+  store i32 %inc, ptr @henry.fred, align 4
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (...) @uselessFunction()
-  call void @exit(i32 noundef 0) #3
-  unreachable
+  %0 = load i32, ptr @fred, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  call void @henry()
+  call void @henry()
+  call void @henry()
+  call void @henry()
+  %1 = load i32, ptr @fred, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %1)
+  store i32 8901, ptr @fred, align 4
+  store i32 2345, ptr @joe, align 4
+  %2 = load i32, ptr @fred, align 4
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %2)
+  %3 = load i32, ptr @joe, align 4
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %3)
+  ret i32 0
 }
 
-declare i32 @uselessFunction(...) #1
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

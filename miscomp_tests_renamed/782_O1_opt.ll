@@ -1,8 +1,22 @@
-; 182669051890660070782781598010740519888
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182669051890660070782781598010740519888_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182669051890660070782781598010740519888.c"
+; 113862927076236575301427486203456840079
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/113862927076236575301427486203456840079_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/113862927076236575301427486203456840079.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef range(i32 1, 3) i32 @do_layer3(i32 noundef %single) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp sgt i32 %single, -1
+  %. = select i1 %cmp, i32 1, i32 2
+  ret i32 %.
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @f(i32 noundef %i) local_unnamed_addr #0 {
+entry:
+  ret void
+}
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {

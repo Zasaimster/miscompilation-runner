@@ -1,67 +1,44 @@
-; 133860331479107689767848508237642531895
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133860331479107689767848508237642531895.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133860331479107689767848508237642531895.c"
+; 142109483995321862593553469206708488388
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/142109483995321862593553469206708488388.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/142109483995321862593553469206708488388.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i0 = dso_local global [0 x i32] zeroinitializer, align 4
-@i1 = dso_local global i32 0, align 4
+%struct.Scf10 = type { { double, double }, { double, double } }
+
+@g1s = dso_local global %struct.Scf10 zeroinitializer, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @vararg(i32 noundef %i, ...) #0 {
+define dso_local void @check(ptr noundef byval(%struct.Scf10) align 8 %x, double noundef %y.coerce0, double noundef %y.coerce1) #0 {
 entry:
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
+  %y = alloca { double, double }, align 8
+  %0 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 0
+  store double %y.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 1
+  store double %y.coerce1, ptr %1, align 8
   ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @test1() #0 {
+define dso_local void @init(ptr noundef %p, double noundef %y.coerce0, double noundef %y.coerce1) #0 {
 entry:
-  %a = alloca i32, align 4
-  %0 = call ptr @llvm.returnaddress(i32 0)
-  %1 = ptrtoint ptr %0 to i64
-  %conv = trunc i64 %1 to i32
-  store i32 %conv, ptr %a, align 4
-  %call = call i32 (...) @anotherDummyFunc()
-  ret void
-}
-
-; Function Attrs: nocallback nofree nosync nounwind willreturn memory(none)
-declare ptr @llvm.returnaddress(i32 immarg) #1
-
-declare i32 @anotherDummyFunc(...) #2
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @test2() #0 {
-entry:
-  %0 = call ptr @llvm.returnaddress(i32 0)
-  %1 = ptrtoint ptr %0 to i64
-  %conv = trunc i64 %1 to i32
-  store i32 %conv, ptr @i0, align 4
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @test3() #0 {
-entry:
-  %0 = call ptr @llvm.returnaddress(i32 0)
-  %1 = ptrtoint ptr %0 to i64
-  %conv = trunc i64 %1 to i32
-  store i32 %conv, ptr @i1, align 4
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @test4() #0 {
-entry:
-  %a = alloca i64, align 8
-  %0 = call ptr @llvm.returnaddress(i32 0)
-  %1 = ptrtoint ptr %0 to i64
-  store volatile i64 %1, ptr %a, align 8
-  %2 = load volatile i64, ptr %a, align 8
-  %conv = trunc i64 %2 to i32
-  store i32 %conv, ptr @i0, align 4
+  %y = alloca { double, double }, align 8
+  %p.addr = alloca ptr, align 8
+  %0 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 0
+  store double %y.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 1
+  store double %y.coerce1, ptr %1, align 8
+  store ptr %p, ptr %p.addr, align 8
+  %y.realp = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 0
+  %y.real = load double, ptr %y.realp, align 8
+  %y.imagp = getelementptr inbounds nuw { double, double }, ptr %y, i32 0, i32 1
+  %y.imag = load double, ptr %y.imagp, align 8
+  %2 = load ptr, ptr %p.addr, align 8
+  %a = getelementptr inbounds nuw %struct.Scf10, ptr %2, i32 0, i32 0
+  %a.realp = getelementptr inbounds nuw { double, double }, ptr %a, i32 0, i32 0
+  %a.imagp = getelementptr inbounds nuw { double, double }, ptr %a, i32 0, i32 1
+  store double %y.real, ptr %a.realp, align 8
+  store double %y.imag, ptr %a.imagp, align 8
   ret void
 }
 
@@ -69,13 +46,31 @@ entry:
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %coerce = alloca { double, double }, align 8
+  %coerce1 = alloca { double, double }, align 8
   store i32 0, ptr %retval, align 4
+  %coerce.realp = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 0
+  %coerce.imagp = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 1
+  store double 1.000000e+00, ptr %coerce.realp, align 8
+  store double 0.000000e+00, ptr %coerce.imagp, align 8
+  %0 = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 0
+  %1 = load double, ptr %0, align 8
+  %2 = getelementptr inbounds nuw { double, double }, ptr %coerce, i32 0, i32 1
+  %3 = load double, ptr %2, align 8
+  call void @init(ptr noundef @g1s, double noundef %1, double noundef %3)
+  %coerce1.realp = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 0
+  %coerce1.imagp = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 1
+  store double 1.000000e+00, ptr %coerce1.realp, align 8
+  store double 0.000000e+00, ptr %coerce1.imagp, align 8
+  %4 = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 0
+  %5 = load double, ptr %4, align 8
+  %6 = getelementptr inbounds nuw { double, double }, ptr %coerce1, i32 0, i32 1
+  %7 = load double, ptr %6, align 8
+  call void @check(ptr noundef byval(%struct.Scf10) align 8 @g1s, double noundef %5, double noundef %7)
   ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nosync nounwind willreturn memory(none) }
-attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,21 +1,13 @@
-; 17507032294290328057532477715258923843
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17507032294290328057532477715258923843_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17507032294290328057532477715258923843.c"
+; 137636781419379366198952556582225596692
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137636781419379366198952556582225596692_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137636781419379366198952556582225596692.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@ap_standalone = dso_local local_unnamed_addr global i32 0, align 4
-
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef nonnull ptr @ap_check_cmd_context(ptr noundef readnone captures(none) %a, i32 noundef %b) local_unnamed_addr #0 {
+define dso_local noundef i32 @foo() local_unnamed_addr #0 {
 entry:
-  ret ptr inttoptr (i64 1 to ptr)
-}
-
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef nonnull ptr @server_type(ptr noundef readnone captures(none) %a, ptr noundef readnone captures(none) %b, ptr noundef readnone captures(none) %arg) local_unnamed_addr #0 {
-entry:
-  ret ptr inttoptr (i64 1 to ptr)
+  ret i32 42
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable

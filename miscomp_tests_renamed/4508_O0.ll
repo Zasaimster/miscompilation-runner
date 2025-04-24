@@ -1,72 +1,32 @@
-; 186245379054023311608615493674022619733
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/186245379054023311608615493674022619733.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/186245379054023311608615493674022619733.c"
+; 179380609606572320366222189133567412935
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/179380609606572320366222189133567412935.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/179380609606572320366222189133567412935.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f(ptr noundef %a, double noundef %y) #0 {
+define dso_local i32 @f1() #0 {
 entry:
-  %a.addr = alloca ptr, align 8
-  %y.addr = alloca double, align 8
-  store ptr %a, ptr %a.addr, align 8
-  store double %y, ptr %y.addr, align 8
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local double @g(double noundef %a, double noundef %b, double noundef %c, double noundef %d) #0 {
-entry:
-  %a.addr = alloca double, align 8
-  %b.addr = alloca double, align 8
-  %c.addr = alloca double, align 8
-  %d.addr = alloca double, align 8
-  %x = alloca double, align 8
-  %y = alloca double, align 8
-  %z = alloca double, align 8
-  %p = alloca ptr, align 8
-  store double %a, ptr %a.addr, align 8
-  store double %b, ptr %b.addr, align 8
-  store double %c, ptr %c.addr, align 8
-  store double %d, ptr %d.addr, align 8
-  store double 3.000000e+00, ptr %x, align 8
-  store double 0.000000e+00, ptr %y, align 8
-  %0 = alloca i8, i64 16, align 16
-  store ptr %0, ptr %p, align 8
-  %1 = load ptr, ptr %p, align 8
-  %2 = load double, ptr %y, align 8
-  call void @f(ptr noundef %1, double noundef %2)
-  %3 = load double, ptr %x, align 8
-  %4 = load double, ptr %y, align 8
-  %mul = fmul double %3, %4
-  %5 = load double, ptr %a.addr, align 8
-  %mul1 = fmul double %mul, %5
-  store double %mul1, ptr %z, align 8
-  %6 = load double, ptr %z, align 8
-  %7 = load double, ptr %b.addr, align 8
-  %add = fadd double %6, %7
-  ret double %add
+  %x = alloca i64, align 8
+  %y = alloca i64, align 8
+  store i64 10, ptr %y, align 8
+  %0 = load i64, ptr %y, align 8
+  %mul = mul i64 %0, 8192
+  %sub = sub i64 %mul, 216
+  %rem = urem i64 %sub, 16
+  store i64 %rem, ptr %x, align 8
+  %1 = load i64, ptr %x, align 8
+  %conv = trunc i64 %1 to i32
+  ret i32 %conv
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca double, align 8
-  %b = alloca double, align 8
-  %c = alloca double, align 8
-  %d = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  store double 1.000000e+00, ptr %a, align 8
-  store double 0.000000e+00, ptr %b, align 8
-  store double 1.000000e+01, ptr %c, align 8
-  store double 0.000000e+00, ptr %d, align 8
-  %0 = load double, ptr %a, align 8
-  %1 = load double, ptr %b, align 8
-  %2 = load double, ptr %c, align 8
-  %3 = load double, ptr %d, align 8
-  %call = call double @g(double noundef %0, double noundef %1, double noundef %2, double noundef %3)
-  %cmp = fcmp une double %call, 0.000000e+00
+  %call = call i32 @f1()
+  %cmp = icmp ne i32 %call, 8
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -74,30 +34,6 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %4 = load double, ptr %a, align 8
-  %cmp1 = fcmp une double %4, 1.000000e+00
-  br i1 %cmp1, label %if.then7, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %if.end
-  %5 = load double, ptr %b, align 8
-  %cmp2 = fcmp une double %5, 0.000000e+00
-  br i1 %cmp2, label %if.then7, label %lor.lhs.false3
-
-lor.lhs.false3:                                   ; preds = %lor.lhs.false
-  %6 = load double, ptr %c, align 8
-  %cmp4 = fcmp une double %6, 1.000000e+01
-  br i1 %cmp4, label %if.then7, label %lor.lhs.false5
-
-lor.lhs.false5:                                   ; preds = %lor.lhs.false3
-  %7 = load double, ptr %d, align 8
-  %cmp6 = fcmp une double %7, 0.000000e+00
-  br i1 %cmp6, label %if.then7, label %if.end8
-
-if.then7:                                         ; preds = %lor.lhs.false5, %lor.lhs.false3, %lor.lhs.false, %if.end
-  call void @abort() #3
-  unreachable
-
-if.end8:                                          ; preds = %lor.lhs.false5
   call void @exit(i32 noundef 0) #4
   unreachable
 }

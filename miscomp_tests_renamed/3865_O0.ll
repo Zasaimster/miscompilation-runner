@@ -1,55 +1,45 @@
-; 189526322439986194590909749670309363006
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189526322439986194590909749670309363006.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189526322439986194590909749670309363006.c"
+; 167596161502295520027119155548725878563
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/167596161502295520027119155548725878563.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/167596161502295520027119155548725878563.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  ret i32 1
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @g(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %mul = mul i32 %0, 65536
-  ret i32 %mul
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @h(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %div = udiv i32 %0, 8
-  ret i32 %div
-}
+@.str = private unnamed_addr constant [3 x i8] c"ee\00", align 1
+@.str.1 = private unnamed_addr constant [3 x i8] c"*e\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 65536)
-  %call1 = call i32 @g(i32 noundef 65536)
-  %call2 = call i32 @h(i32 noundef %call1)
-  %cmp = icmp ne i32 %call, %call2
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 @special_format(ptr noundef @.str)
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @special_format(ptr noundef @.str.1)
+  %tobool2 = icmp ne i32 %call1, 0
+  br i1 %tobool2, label %if.end4, label %if.then3
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #3
+  unreachable
+
+if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #4
   unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @special_format(ptr noundef %fmt) #0 {
+entry:
+  %fmt.addr = alloca ptr, align 8
+  store ptr %fmt, ptr %fmt.addr, align 8
+  ret i32 1
 }
 
 ; Function Attrs: noreturn nounwind

@@ -1,62 +1,30 @@
-; 187964607735483534159977556723486173917
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187964607735483534159977556723486173917_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187964607735483534159977556723486173917.c"
+; 103240917038699422570117732914879635402
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103240917038699422570117732914879635402_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103240917038699422570117732914879635402.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i8, i64 }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local { i8, i64 } @foo(i8 %x.coerce0, i64 %x.coerce1, i8 %y.coerce0, i64 %y.coerce1) #0 {
+define dso_local i32 @foo(i32 noundef %a, i32 noundef %b) #0 {
 entry:
-  %retval = alloca %struct.S, align 8
-  %x = alloca %struct.S, align 8
-  %y = alloca %struct.S, align 8
-  %0 = getelementptr inbounds nuw { i8, i64 }, ptr %x, i32 0, i32 0
-  store i8 %x.coerce0, ptr %0, align 8
-  %1 = getelementptr inbounds nuw { i8, i64 }, ptr %x, i32 0, i32 1
-  store i64 %x.coerce1, ptr %1, align 8
-  %2 = getelementptr inbounds nuw { i8, i64 }, ptr %y, i32 0, i32 0
-  store i8 %y.coerce0, ptr %2, align 8
-  %3 = getelementptr inbounds nuw { i8, i64 }, ptr %y, i32 0, i32 1
-  store i64 %y.coerce1, ptr %3, align 8
-  %b = getelementptr inbounds nuw %struct.S, ptr %retval, i32 0, i32 1
-  store i64 0, ptr %b, align 8
-  %4 = load { i8, i64 }, ptr %retval, align 8
-  ret { i8, i64 } %4
+  %a.addr = alloca i32, align 4
+  %b.addr = alloca i32, align 4
+  store i32 %a, ptr %a.addr, align 4
+  store i32 %b, ptr %b.addr, align 4
+  %call = call i32 @foo(i32 noundef 6, i32 noundef 198)
+  %0 = load i32, ptr %b.addr, align 4
+  %or = or i32 %0, 1
+  %and = and i32 %call, %or
+  ret i32 %and
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca %struct.S, align 8
-  %b = alloca %struct.S, align 8
-  %coerce = alloca %struct.S, align 8
-  %coerce7 = alloca %struct.S, align 8
   store i32 0, ptr %retval, align 4
-  %b1 = getelementptr inbounds nuw %struct.S, ptr %a, i32 0, i32 1
-  store i64 32, ptr %b1, align 8
-  %b2 = getelementptr inbounds nuw %struct.S, ptr %b, i32 0, i32 1
-  store i64 4, ptr %b2, align 8
-  %0 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 0
-  %1 = load i8, ptr %0, align 8
-  %2 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 1
-  %3 = load i64, ptr %2, align 8
-  %4 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 0
-  %5 = load i8, ptr %4, align 8
-  %6 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 1
-  %7 = load i64, ptr %6, align 8
-  %call = call { i8, i64 } @foo(i8 %1, i64 %3, i8 %5, i64 %7)
-  %8 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce, i32 0, i32 0
-  %9 = extractvalue { i8, i64 } %call, 0
-  store i8 %9, ptr %8, align 8
-  %10 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce, i32 0, i32 1
-  %11 = extractvalue { i8, i64 } %call, 1
-  store i64 %11, ptr %10, align 8
-  %b3 = getelementptr inbounds nuw %struct.S, ptr %coerce, i32 0, i32 1
-  %12 = load i64, ptr %b3, align 8
-  %cmp = icmp ne i64 %12, 8
+  %call = call i32 @foo(i32 noundef 6, i32 noundef 198)
+  %cmp = icmp ne i32 %call, 7
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -64,35 +32,33 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %b4 = getelementptr inbounds nuw %struct.S, ptr %a, i32 0, i32 1
-  store i64 -8, ptr %b4, align 8
-  %b5 = getelementptr inbounds nuw %struct.S, ptr %b, i32 0, i32 1
-  store i64 -2, ptr %b5, align 8
-  %13 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 0
-  %14 = load i8, ptr %13, align 8
-  %15 = getelementptr inbounds nuw { i8, i64 }, ptr %a, i32 0, i32 1
-  %16 = load i64, ptr %15, align 8
-  %17 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 0
-  %18 = load i8, ptr %17, align 8
-  %19 = getelementptr inbounds nuw { i8, i64 }, ptr %b, i32 0, i32 1
-  %20 = load i64, ptr %19, align 8
-  %call6 = call { i8, i64 } @foo(i8 %14, i64 %16, i8 %18, i64 %20)
-  %21 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce7, i32 0, i32 0
-  %22 = extractvalue { i8, i64 } %call6, 0
-  store i8 %22, ptr %21, align 8
-  %23 = getelementptr inbounds nuw { i8, i64 }, ptr %coerce7, i32 0, i32 1
-  %24 = extractvalue { i8, i64 } %call6, 1
-  store i64 %24, ptr %23, align 8
-  %b8 = getelementptr inbounds nuw %struct.S, ptr %coerce7, i32 0, i32 1
-  %25 = load i64, ptr %b8, align 8
-  %cmp9 = icmp ne i64 %25, 4
-  br i1 %cmp9, label %if.then10, label %if.end11
+  %call1 = call i32 @foo(i32 noundef 128, i32 noundef 193)
+  %cmp2 = icmp ne i32 %call1, 129
+  br i1 %cmp2, label %if.then3, label %if.end4
 
-if.then10:                                        ; preds = %if.end
+if.then3:                                         ; preds = %if.end
   call void @abort() #2
   unreachable
 
-if.end11:                                         ; preds = %if.end
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @foo(i32 noundef 4, i32 noundef 4)
+  %cmp6 = icmp ne i32 %call5, 5
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #2
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
+  %call9 = call i32 @foo(i32 noundef 5, i32 noundef 4)
+  %cmp10 = icmp ne i32 %call9, 5
+  br i1 %cmp10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  call void @abort() #2
+  unreachable
+
+if.end12:                                         ; preds = %if.end8
   ret i32 0
 }
 

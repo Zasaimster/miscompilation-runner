@@ -1,89 +1,134 @@
-; 195897971535241401684865052051027400636
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195897971535241401684865052051027400636.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195897971535241401684865052051027400636.c"
+; 164085260686380971130041999746025359637
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164085260686380971130041999746025359637.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164085260686380971130041999746025359637.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i = dso_local local_unnamed_addr global i32 0, align 4
-@d = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local local_unnamed_addr global i32 0, align 4
-@f = dso_local local_unnamed_addr global i32 0, align 4
-@e = dso_local local_unnamed_addr global [1 x i8] zeroinitializer, align 1
-@a = dso_local local_unnamed_addr global [0 x i32] zeroinitializer, align 4
-@b = dso_local local_unnamed_addr global i32 0, align 4
+%struct.WorkEntrySType = type { ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr }
+%struct.ShrPcPteSType = type { %struct.ShrPcStatsSType }
+%struct.ShrPcStatsSType = type { i32, i32, %struct.ShrPcCommonStatSType, %union.ShrPcStatUnion }
+%struct.ShrPcCommonStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64 }
+%union.ShrPcStatUnion = type { %struct.ShrPcGemStatSType }
+%struct.ShrPcGemStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, [40 x i64] }
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+@Local1 = dso_local local_unnamed_addr global ptr null, align 8
+@Local2 = dso_local local_unnamed_addr global ptr null, align 8
+@Local3 = dso_local local_unnamed_addr global ptr null, align 8
+@RDbf1 = dso_local local_unnamed_addr global ptr null, align 8
+@RDbf2 = dso_local local_unnamed_addr global ptr null, align 8
+@RDbf3 = dso_local local_unnamed_addr global ptr null, align 8
+@IntVc1 = dso_local local_unnamed_addr global ptr null, align 8
+@IntVc2 = dso_local local_unnamed_addr global ptr null, align 8
+@IntCode3 = dso_local local_unnamed_addr global ptr null, align 8
+@IntCode4 = dso_local local_unnamed_addr global ptr null, align 8
+@IntCode5 = dso_local local_unnamed_addr global ptr null, align 8
+@IntCode6 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom1 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom2 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom3 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom4 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom5 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom6 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom7 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom8 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom9 = dso_local local_unnamed_addr global ptr null, align 8
+@Lom10 = dso_local local_unnamed_addr global ptr null, align 8
+@RDbf11 = dso_local local_unnamed_addr global ptr null, align 8
+@RDbf12 = dso_local local_unnamed_addr global ptr null, align 8
+@Workspace = dso_local local_unnamed_addr global %struct.WorkEntrySType zeroinitializer, align 8
+@MyPte = dso_local global %struct.ShrPcPteSType zeroinitializer, align 8
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
+define dso_local void @InitCache(i32 noundef %sessionId) local_unnamed_addr #0 {
 entry:
-  %i.promoted = load i32, ptr @i, align 4, !tbaa !5
-  %cmp14 = icmp slt i32 %i.promoted, 1
-  br i1 %cmp14, label %for.body.lr.ph, label %for.end
+  store i32 %sessionId, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 4), align 4, !tbaa !5
+  store i64 0, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 8), align 8, !tbaa !12
+  store i64 5, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 16), align 8, !tbaa !13
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 24), ptr @Local1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 32), ptr @Local2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 40), ptr @Local3, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 48), ptr @RDbf1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 56), ptr @RDbf2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), ptr @RDbf3, align 8, !tbaa !14
+  store i64 1, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), align 8, !tbaa !17
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 304), ptr @IntVc1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 312), ptr @IntVc2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 320), ptr @IntCode3, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 328), ptr @IntCode4, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 336), ptr @IntCode5, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 344), ptr @IntCode6, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 352), ptr @Workspace, align 8, !tbaa !18
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 360), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 8), align 8, !tbaa !20
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 368), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 16), align 8, !tbaa !21
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 376), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 24), align 8, !tbaa !22
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 384), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 32), align 8, !tbaa !23
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 392), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 40), align 8, !tbaa !24
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 400), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 48), align 8, !tbaa !25
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 408), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 56), align 8, !tbaa !26
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 416), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 64), align 8, !tbaa !27
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 424), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 72), align 8, !tbaa !28
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 432), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 80), align 8, !tbaa !29
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 208), ptr @Lom1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 216), ptr @Lom2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 224), ptr @Lom3, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 232), ptr @Lom4, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 240), ptr @Lom5, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 248), ptr @Lom6, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 256), ptr @Lom7, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 264), ptr @Lom8, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 272), ptr @Lom9, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 280), ptr @Lom10, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 288), ptr @RDbf11, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 296), ptr @RDbf12, align 8, !tbaa !14
+  ret void
+}
 
-for.body.lr.ph:                                   ; preds = %entry
-  %e.promoted = load i8, ptr @e, align 1
-  %f.promoted = load i32, ptr @f, align 4
-  %0 = load i32, ptr @d, align 4, !tbaa !5
-  %tobool.not = icmp eq i32 %0, 0
-  %1 = load i32, ptr @c, align 4
-  %tobool1.not = icmp eq i32 %1, 0
-  br label %for.body
-
-for.body:                                         ; preds = %for.body.lr.ph, %for.inc
-  %inc1116 = phi i32 [ %i.promoted, %for.body.lr.ph ], [ %inc, %for.inc ]
-  %2 = phi i32 [ %f.promoted, %for.body.lr.ph ], [ %5, %for.inc ]
-  %conv31315 = phi i8 [ %e.promoted, %for.body.lr.ph ], [ %conv312, %for.inc ]
-  br i1 %tobool.not, label %if.then, label %for.inc
-
-if.then:                                          ; preds = %for.body
-  br i1 %tobool1.not, label %if.then2, label %if.end
-
-if.then2:                                         ; preds = %if.then
-  store i32 2, ptr @f, align 4, !tbaa !5
-  br label %if.end
-
-if.end:                                           ; preds = %if.then2, %if.then
-  %3 = phi i32 [ 2, %if.then2 ], [ %2, %if.then ]
-  %4 = trunc i32 %3 to i8
-  %conv3 = and i8 %conv31315, %4
-  store i8 %conv3, ptr @e, align 1, !tbaa !9
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body, %if.end
-  %conv312 = phi i8 [ %conv31315, %for.body ], [ %conv3, %if.end ]
-  %5 = phi i32 [ %2, %for.body ], [ %3, %if.end ]
-  %inc = add i32 %inc1116, 1
-  %exitcond.not = icmp eq i32 %inc1116, 0
-  br i1 %exitcond.not, label %for.cond.for.end_crit_edge, label %for.body, !llvm.loop !10
-
-for.cond.for.end_crit_edge:                       ; preds = %for.inc
-  store i32 1, ptr @i, align 4, !tbaa !5
-  br label %for.end
-
-for.end:                                          ; preds = %for.cond.for.end_crit_edge, %entry
-  %6 = load i8, ptr @e, align 1, !tbaa !9
-  %7 = lshr i8 %6, 1
-  %8 = and i8 %7, 1
-  %idxprom = zext nneg i8 %8 to i64
-  %arrayidx = getelementptr inbounds nuw [0 x i32], ptr @a, i64 0, i64 %idxprom
-  %9 = load i32, ptr %arrayidx, align 4, !tbaa !5
-  store i32 %9, ptr @b, align 4, !tbaa !5
-  %cmp7.not = icmp eq i32 %9, 0
-  br i1 %cmp7.not, label %if.end10, label %if.then9
-
-if.then9:                                         ; preds = %for.end
-  tail call void @abort() #2
-  unreachable
-
-if.end10:                                         ; preds = %for.end
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @main(i32 noundef %argc, ptr noundef readnone captures(none) %argv) local_unnamed_addr #0 {
+entry:
+  store i32 5, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 4), align 4, !tbaa !5
+  store i64 0, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 8), align 8, !tbaa !12
+  store i64 5, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 16), align 8, !tbaa !13
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 24), ptr @Local1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 32), ptr @Local2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 40), ptr @Local3, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 48), ptr @RDbf1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 56), ptr @RDbf2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), ptr @RDbf3, align 8, !tbaa !14
+  store i64 1, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), align 8, !tbaa !17
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 304), ptr @IntVc1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 312), ptr @IntVc2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 320), ptr @IntCode3, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 328), ptr @IntCode4, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 336), ptr @IntCode5, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 344), ptr @IntCode6, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 352), ptr @Workspace, align 8, !tbaa !18
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 360), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 8), align 8, !tbaa !20
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 368), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 16), align 8, !tbaa !21
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 376), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 24), align 8, !tbaa !22
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 384), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 32), align 8, !tbaa !23
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 392), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 40), align 8, !tbaa !24
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 400), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 48), align 8, !tbaa !25
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 408), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 56), align 8, !tbaa !26
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 416), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 64), align 8, !tbaa !27
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 424), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 72), align 8, !tbaa !28
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 432), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 80), align 8, !tbaa !29
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 208), ptr @Lom1, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 216), ptr @Lom2, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 224), ptr @Lom3, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 232), ptr @Lom4, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 240), ptr @Lom5, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 248), ptr @Lom6, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 256), ptr @Lom7, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 264), ptr @Lom8, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 272), ptr @Lom9, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 280), ptr @Lom10, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 288), ptr @RDbf11, align 8, !tbaa !14
+  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 296), ptr @RDbf12, align 8, !tbaa !14
   ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -93,11 +138,28 @@ attributes #2 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!7, !7, i64 0}
-!10 = distinct !{!10, !11, !12}
-!11 = !{!"llvm.loop.mustprogress"}
-!12 = !{!"llvm.loop.unroll.disable"}
+!5 = !{!6, !7, i64 4}
+!6 = !{!"", !7, i64 0, !7, i64 4, !10, i64 8, !8, i64 208}
+!7 = !{!"int", !8, i64 0}
+!8 = !{!"omnipotent char", !9, i64 0}
+!9 = !{!"Simple C/C++ TBAA"}
+!10 = !{!"", !11, i64 0, !11, i64 8, !11, i64 16, !11, i64 24, !11, i64 32, !11, i64 40, !11, i64 48, !11, i64 56, !11, i64 64, !11, i64 72, !11, i64 80, !11, i64 88, !11, i64 96, !11, i64 104, !11, i64 112, !11, i64 120, !11, i64 128, !11, i64 136, !11, i64 144, !11, i64 152, !11, i64 160, !11, i64 168, !11, i64 176, !11, i64 184, !11, i64 192}
+!11 = !{!"long", !8, i64 0}
+!12 = !{!6, !11, i64 8}
+!13 = !{!6, !11, i64 16}
+!14 = !{!15, !15, i64 0}
+!15 = !{!"p1 long", !16, i64 0}
+!16 = !{!"any pointer", !8, i64 0}
+!17 = !{!11, !11, i64 0}
+!18 = !{!19, !15, i64 0}
+!19 = !{!"", !15, i64 0, !15, i64 8, !15, i64 16, !15, i64 24, !15, i64 32, !15, i64 40, !15, i64 48, !15, i64 56, !15, i64 64, !15, i64 72, !15, i64 80}
+!20 = !{!19, !15, i64 8}
+!21 = !{!19, !15, i64 16}
+!22 = !{!19, !15, i64 24}
+!23 = !{!19, !15, i64 32}
+!24 = !{!19, !15, i64 40}
+!25 = !{!19, !15, i64 48}
+!26 = !{!19, !15, i64 56}
+!27 = !{!19, !15, i64 64}
+!28 = !{!19, !15, i64 72}
+!29 = !{!19, !15, i64 80}

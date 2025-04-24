@@ -1,47 +1,45 @@
-; 158500126168090782436702800949888533431
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/158500126168090782436702800949888533431_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/158500126168090782436702800949888533431.c"
+; 172950458443851789907297113704551115730
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172950458443851789907297113704551115730_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172950458443851789907297113704551115730.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@f.values = internal global [1 x i16] [i16 -27904], align 2
+@.str = private unnamed_addr constant [30 x i8] c"This function has dead code.\0A\00", align 1
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @test(i32 noundef %arg) #0 {
+define dso_local i32 @f() #0 {
 entry:
-  %retval = alloca i32, align 4
-  %arg.addr = alloca i32, align 4
-  store i32 %arg, ptr %arg.addr, align 4
-  %0 = load i32, ptr %arg.addr, align 4
-  %cmp = icmp sgt i32 %0, 0
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load i32, ptr %arg.addr, align 4
-  %cmp1 = icmp eq i32 %1, 0
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %lor.lhs.false
-  %call = call i32 (...) @example2()
-  store i32 -1, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end, %if.then
-  %2 = load i32, ptr %retval, align 4
+  %token = alloca i16, align 2
+  %count = alloca i32, align 4
+  %0 = load i16, ptr @f.values, align 2
+  store i16 %0, ptr %token, align 2
+  %1 = load i16, ptr %token, align 2
+  %conv = zext i16 %1 to i32
+  %shr = ashr i32 %conv, 8
+  store i32 %shr, ptr %count, align 4
+  %2 = load i32, ptr %count, align 4
   ret i32 %2
 }
 
-declare i32 @example2(...) #1
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @deadFunction() #0 {
+entry:
+  %z = alloca i32, align 4
+  store i32 20, ptr %z, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  ret void
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @test(i32 noundef 0)
-  %cmp = icmp ne i32 %call, 0
+  %call = call i32 @f()
+  %cmp = icmp ne i32 %call, 147
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -49,15 +47,6 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %call1 = call i32 @test(i32 noundef -1)
-  %cmp2 = icmp ne i32 %call1, -1
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  call void @abort() #4
-  unreachable
-
-if.end4:                                          ; preds = %if.end
   call void @exit(i32 noundef 0) #5
   unreachable
 }

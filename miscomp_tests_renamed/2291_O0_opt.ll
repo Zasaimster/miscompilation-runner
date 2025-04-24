@@ -1,22 +1,25 @@
-; 174220816794500359567852954157657100231
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/174220816794500359567852954157657100231_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/174220816794500359567852954157657100231.c"
+; 139824236871572150754468408158885621547
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139824236871572150754468408158885621547_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139824236871572150754468408158885621547.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"This function is never used.\0A\00", align 1
+%struct.S2 = type { %struct.S1 }
+%struct.S1 = type { i32 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @main() #0 {
+define dso_local i32 @main() #0 {
 entry:
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  ret void
+  %retval = alloca i32, align 4
+  %s2 = alloca %struct.S2, align 4
+  store i32 0, ptr %retval, align 4
+  %s1 = getelementptr inbounds nuw %struct.S2, ptr %s2, i32 0, i32 0
+  %x = getelementptr inbounds nuw %struct.S1, ptr %s1, i32 0, i32 0
+  store i32 80, ptr %x, align 4
+  ret i32 0
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

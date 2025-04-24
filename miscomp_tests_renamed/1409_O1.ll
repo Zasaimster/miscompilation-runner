@@ -1,80 +1,191 @@
-; 110257169800995603329723864720987010592
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/110257169800995603329723864720987010592.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/110257169800995603329723864720987010592.c"
+; 125197642200849988883165109652172069477
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/125197642200849988883165109652172069477.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/125197642200849988883165109652172069477.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str.2 = private unnamed_addr constant [13 x i8] c"timeout=%ld\0A\00", align 1
-@str = private unnamed_addr constant [6 x i8] c"begin\00", align 1
-@str.5 = private unnamed_addr constant [4 x i8] c"end\00", align 1
-@str.6 = private unnamed_addr constant [19 x i8] c"Never reaches here\00", align 1
+@str = private unnamed_addr constant [19 x i8] c"Running program...\00", align 1
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local i32 @helper_neon_rshl_s8(i32 noundef %arg1, i32 noundef %arg2) local_unnamed_addr #0 {
+entry:
+  %vsrc1.sroa.7.0.extract.shift = lshr i32 %arg1, 8
+  %vsrc1.sroa.11.0.extract.shift = lshr i32 %arg1, 16
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %sext = shl i32 %arg2, 24
+  %conv = ashr exact i32 %sext, 24
+  %cmp = icmp sgt i32 %conv, 7
+  br i1 %cmp, label %if.end55, label %if.else
+
+if.else:                                          ; preds = %entry
+  %cmp9 = icmp slt i32 %conv, -8
+  br i1 %cmp9, label %if.then11, label %if.else16
+
+if.then11:                                        ; preds = %if.else
+  %sext300 = shl i32 %arg1, 24
+  %shr = ashr i32 %sext300, 31
+  br label %if.end55
+
+if.else16:                                        ; preds = %if.else
+  %cmp18 = icmp eq i32 %sext, -134217728
+  br i1 %cmp18, label %if.end55, label %if.else32
+
+if.else32:                                        ; preds = %if.else16
+  %cmp34 = icmp slt i32 %conv, 0
+  br i1 %cmp34, label %if.then36, label %if.else46
+
+if.then36:                                        ; preds = %if.else32
+  %sext299 = shl i32 %arg1, 24
+  %conv38 = ashr exact i32 %sext299, 24
+  %sub40 = xor i32 %conv, -1
+  %shl = shl nuw nsw i32 1, %sub40
+  %add = add nsw i32 %shl, %conv38
+  %sub42 = sub nsw i32 0, %conv
+  %shr43 = ashr i32 %add, %sub42
+  br label %if.end55
+
+if.else46:                                        ; preds = %if.else32
+  %shl50 = shl i32 %arg1, %conv
+  br label %if.end55
+
+if.end55:                                         ; preds = %if.else16, %entry, %if.then11, %if.then36, %if.else46
+  %vdest.sroa.0.0 = phi i32 [ %shr, %if.then11 ], [ %shr43, %if.then36 ], [ %shl50, %if.else46 ], [ 0, %entry ], [ 0, %if.else16 ]
+  %0 = shl i32 %arg2, 16
+  %conv60 = ashr i32 %0, 24
+  %cmp61 = icmp sgt i32 %conv60, 7
+  br i1 %cmp61, label %if.end119, label %if.else65
+
+if.else65:                                        ; preds = %if.end55
+  %cmp67 = icmp slt i32 %conv60, -8
+  br i1 %cmp67, label %if.then69, label %if.else75
+
+if.then69:                                        ; preds = %if.else65
+  %sext304 = shl i32 %vsrc1.sroa.7.0.extract.shift, 24
+  %shr72 = ashr i32 %sext304, 31
+  br label %if.end119
+
+if.else75:                                        ; preds = %if.else65
+  %cmp77 = icmp eq i32 %conv60, -8
+  br i1 %cmp77, label %if.end119, label %if.else93
+
+if.else93:                                        ; preds = %if.else75
+  %cmp95 = icmp slt i32 %conv60, 0
+  br i1 %cmp95, label %if.then97, label %if.else109
+
+if.then97:                                        ; preds = %if.else93
+  %sext303 = shl i32 %vsrc1.sroa.7.0.extract.shift, 24
+  %conv99 = ashr exact i32 %sext303, 24
+  %sub101 = xor i32 %conv60, -1
+  %shl102 = shl nuw nsw i32 1, %sub101
+  %add103 = add nsw i32 %shl102, %conv99
+  %sub105 = sub nsw i32 0, %conv60
+  %shr106 = ashr i32 %add103, %sub105
+  br label %if.end119
+
+if.else109:                                       ; preds = %if.else93
+  %shl113 = shl i32 %vsrc1.sroa.7.0.extract.shift, %conv60
+  br label %if.end119
+
+if.end119:                                        ; preds = %if.else75, %if.end55, %if.then69, %if.then97, %if.else109
+  %vdest.sroa.12.0 = phi i32 [ %shr72, %if.then69 ], [ %shr106, %if.then97 ], [ %shl113, %if.else109 ], [ 0, %if.end55 ], [ 0, %if.else75 ]
+  %1 = shl i32 %arg2, 8
+  %conv124 = ashr i32 %1, 24
+  %cmp125 = icmp sgt i32 %conv124, 7
+  br i1 %cmp125, label %if.end183, label %if.else129
+
+if.else129:                                       ; preds = %if.end119
+  %cmp131 = icmp slt i32 %conv124, -8
+  br i1 %cmp131, label %if.then133, label %if.else139
+
+if.then133:                                       ; preds = %if.else129
+  %sext308 = shl i32 %vsrc1.sroa.11.0.extract.shift, 24
+  %shr136 = ashr i32 %sext308, 31
+  br label %if.end183
+
+if.else139:                                       ; preds = %if.else129
+  %cmp141 = icmp eq i32 %conv124, -8
+  br i1 %cmp141, label %if.end183, label %if.else157
+
+if.else157:                                       ; preds = %if.else139
+  %cmp159 = icmp slt i32 %conv124, 0
+  br i1 %cmp159, label %if.then161, label %if.else173
+
+if.then161:                                       ; preds = %if.else157
+  %sext307 = shl i32 %vsrc1.sroa.11.0.extract.shift, 24
+  %conv163 = ashr exact i32 %sext307, 24
+  %sub165 = xor i32 %conv124, -1
+  %shl166 = shl nuw nsw i32 1, %sub165
+  %add167 = add nsw i32 %shl166, %conv163
+  %sub169 = sub nsw i32 0, %conv124
+  %shr170 = ashr i32 %add167, %sub169
+  br label %if.end183
+
+if.else173:                                       ; preds = %if.else157
+  %shl177 = shl i32 %vsrc1.sroa.11.0.extract.shift, %conv124
+  br label %if.end183
+
+if.end183:                                        ; preds = %if.else139, %if.end119, %if.then133, %if.then161, %if.else173
+  %vdest.sroa.21.0 = phi i32 [ %shr136, %if.then133 ], [ %shr170, %if.then161 ], [ %shl177, %if.else173 ], [ 0, %if.end119 ], [ 0, %if.else139 ]
+  %conv188 = ashr i32 %arg2, 24
+  %cmp189 = icmp sgt i32 %conv188, 7
+  br i1 %cmp189, label %if.end247, label %if.else193
+
+if.else193:                                       ; preds = %if.end183
+  %cmp195 = icmp slt i32 %conv188, -8
+  br i1 %cmp195, label %if.then197, label %if.else203
+
+if.then197:                                       ; preds = %if.else193
+  %shr200 = ashr i32 %arg1, 31
+  br label %if.end247
+
+if.else203:                                       ; preds = %if.else193
+  %cmp205 = icmp eq i32 %conv188, -8
+  br i1 %cmp205, label %if.end247, label %if.else221
+
+if.else221:                                       ; preds = %if.else203
+  %cmp223 = icmp slt i32 %conv188, 0
+  br i1 %cmp223, label %if.then225, label %if.else237
+
+if.then225:                                       ; preds = %if.else221
+  %conv227 = ashr i32 %arg1, 24
+  %sub229 = xor i32 %conv188, -1
+  %shl230 = shl nuw nsw i32 1, %sub229
+  %add231 = add nsw i32 %shl230, %conv227
+  %sub233 = sub nsw i32 0, %conv188
+  %shr234 = ashr i32 %add231, %sub233
+  br label %if.end247
+
+if.else237:                                       ; preds = %if.else221
+  %conv239 = lshr i32 %arg1, 24
+  %shl241 = shl i32 %conv239, %conv188
+  br label %if.end247
+
+if.end247:                                        ; preds = %if.else203, %if.end183, %if.then197, %if.then225, %if.else237
+  %vdest.sroa.30.0 = phi i32 [ %shr200, %if.then197 ], [ %shr234, %if.then225 ], [ %shl241, %if.else237 ], [ 0, %if.end183 ], [ 0, %if.else203 ]
+  %vdest.sroa.30.0.insert.ext = shl i32 %vdest.sroa.30.0, 24
+  %vdest.sroa.21.0.insert.ext = shl i32 %vdest.sroa.21.0, 16
+  %vdest.sroa.21.0.insert.shift = and i32 %vdest.sroa.21.0.insert.ext, 16711680
+  %vdest.sroa.21.0.insert.insert = or disjoint i32 %vdest.sroa.30.0.insert.ext, %vdest.sroa.21.0.insert.shift
+  %vdest.sroa.12.0.insert.ext = shl i32 %vdest.sroa.12.0, 8
+  %vdest.sroa.12.0.insert.shift = and i32 %vdest.sroa.12.0.insert.ext, 65280
+  %vdest.sroa.12.0.insert.insert = or disjoint i32 %vdest.sroa.21.0.insert.insert, %vdest.sroa.12.0.insert.shift
+  %vdest.sroa.0.0.insert.ext = and i32 %vdest.sroa.0.0, 255
+  %vdest.sroa.0.0.insert.insert = or disjoint i32 %vdest.sroa.12.0.insert.insert, %vdest.sroa.0.0.insert.ext
+  ret i32 %vdest.sroa.0.0.insert.insert
+}
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  br label %do.body.i
-
-do.body.i:                                        ; preds = %do.body.i, %entry
-  %timeout.0.i = phi i64 [ 2, %entry ], [ %dec.i, %do.body.i ]
-  %call.i = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i)
-  %dec.i = add nsw i64 %timeout.0.i, -1
-  %tobool.not.i = icmp eq i64 %dec.i, 0
-  br i1 %tobool.not.i, label %kb_wait_1.exit, label %do.body.i, !llvm.loop !5
-
-kb_wait_1.exit:                                   ; preds = %do.body.i
-  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.6)
-  br label %do.body.i3
-
-do.body.i3:                                       ; preds = %do.body.i3, %kb_wait_1.exit
-  %timeout.0.i4 = phi i64 [ 2, %kb_wait_1.exit ], [ %dec.i6, %do.body.i3 ]
-  %call.i5 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i4)
-  %dec.i6 = add nsw i64 %timeout.0.i4, -1
-  %tobool.not.i7 = icmp eq i64 %dec.i6, 0
-  br i1 %tobool.not.i7, label %do.body.i8, label %do.body.i3, !llvm.loop !8
-
-do.body.i8:                                       ; preds = %do.body.i3, %do.body.i8
-  %timeout.0.i9 = phi i64 [ %dec.i11, %do.body.i8 ], [ 2, %do.body.i3 ]
-  %call.i10 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i9)
-  %dec.i11 = add nsw i64 %timeout.0.i9, -1
-  %tobool.not.i12 = icmp eq i64 %dec.i11, 0
-  br i1 %tobool.not.i12, label %do.body.i13, label %do.body.i8, !llvm.loop !9
-
-do.body.i13:                                      ; preds = %do.body.i8, %do.body.i13
-  %timeout.0.i14 = phi i64 [ %dec.i16, %do.body.i13 ], [ 2, %do.body.i8 ]
-  %call.i15 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i14)
-  %dec.i16 = add nsw i64 %timeout.0.i14, -1
-  %tobool.not.i17 = icmp eq i64 %dec.i16, 0
-  br i1 %tobool.not.i17, label %do.body.i18, label %do.body.i13, !llvm.loop !10
-
-do.body.i18:                                      ; preds = %do.body.i13, %do.body.i18
-  %timeout.0.i19 = phi i64 [ %dec.i21, %do.body.i18 ], [ 2, %do.body.i13 ]
-  %call.i20 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i19)
-  %dec.i21 = add nsw i64 %timeout.0.i19, -1
-  %tobool.not.i22 = icmp eq i64 %dec.i21, 0
-  br i1 %tobool.not.i22, label %do.body.i23, label %do.body.i18, !llvm.loop !11
-
-do.body.i23:                                      ; preds = %do.body.i18, %do.body.i23
-  %timeout.0.i24 = phi i64 [ %dec.i26, %do.body.i23 ], [ 2, %do.body.i18 ]
-  %call.i25 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.2, i64 noundef %timeout.0.i24)
-  %dec.i26 = add nsw i64 %timeout.0.i24, -1
-  %tobool.not.i27 = icmp eq i64 %dec.i26, 0
-  br i1 %tobool.not.i27, label %kb_wait_4.exit, label %do.body.i23, !llvm.loop !12
-
-kb_wait_4.exit:                                   ; preds = %do.body.i23
-  %puts2 = tail call i32 @puts(ptr nonnull dereferenceable(1) @str.5)
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   ret i32 0
 }
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
+attributes #1 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -84,11 +195,3 @@ attributes #2 = { nofree nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = distinct !{!5, !6, !7}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = !{!"llvm.loop.unroll.disable"}
-!8 = distinct !{!8, !6, !7}
-!9 = distinct !{!9, !6, !7}
-!10 = distinct !{!10, !6, !7}
-!11 = distinct !{!11, !6, !7}
-!12 = distinct !{!12, !6, !7}

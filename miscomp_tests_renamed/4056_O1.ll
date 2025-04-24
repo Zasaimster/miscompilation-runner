@@ -1,30 +1,25 @@
-; 194866677319330589864609231603344869454
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/194866677319330589864609231603344869454.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/194866677319330589864609231603344869454.c"
+; 1708648583615837540896035492384426983
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/1708648583615837540896035492384426983.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/1708648583615837540896035492384426983.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@b = dso_local local_unnamed_addr global i32 0, align 4
-@a = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local local_unnamed_addr global i8 0, align 1
-@d = dso_local local_unnamed_addr global i8 0, align 1
-@e = dso_local local_unnamed_addr global i8 0, align 1
-@f = dso_local local_unnamed_addr global i64 0, align 8
-@g = dso_local local_unnamed_addr global i64 0, align 8
-@h = dso_local local_unnamed_addr global i64 0, align 8
-@i = dso_local local_unnamed_addr global i64 0, align 8
-@j = dso_local local_unnamed_addr global i16 0, align 2
-@k = dso_local local_unnamed_addr global i16 0, align 2
+@x = dso_local local_unnamed_addr global i32 0, align 4
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+; Function Attrs: cold nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @b, align 4, !tbaa !5
-  store i32 %0, ptr @a, align 4, !tbaa !5
-  ret i32 0
+  store i32 0, ptr @x, align 4, !tbaa !5
+  tail call void @abort() #2
+  unreachable
 }
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
+attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

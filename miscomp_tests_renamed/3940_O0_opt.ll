@@ -1,180 +1,101 @@
-; 105730437867325286438634430296531602382
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105730437867325286438634430296531602382_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105730437867325286438634430296531602382.c"
+; 168774026913356887980798911553624016535
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168774026913356887980798911553624016535_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168774026913356887980798911553624016535.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@errflag = dso_local global i32 0, align 4
-@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i64 @f(i64 noundef %x, i64 noundef %y) #0 {
-entry:
-  %retval = alloca i64, align 8
-  %x.addr = alloca i64, align 8
-  %y.addr = alloca i64, align 8
-  %r = alloca i64, align 8
-  store i64 %x, ptr %x.addr, align 8
-  store i64 %y, ptr %y.addr, align 8
-  store i32 0, ptr @errflag, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = sext i32 %call to i64
-  %0 = load i64, ptr %y.addr, align 8
-  %add = add nsw i64 %conv, %0
-  store i64 %add, ptr %r, align 8
-  %1 = load i64, ptr %x.addr, align 8
-  %cmp = icmp sge i64 %1, 0
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  %2 = load i64, ptr %y.addr, align 8
-  %cmp2 = icmp slt i64 %2, 0
-  br i1 %cmp2, label %if.then6, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %if.then
-  %3 = load i64, ptr %r, align 8
-  %cmp4 = icmp sge i64 %3, 0
-  br i1 %cmp4, label %if.then6, label %if.end
-
-if.then6:                                         ; preds = %lor.lhs.false, %if.then
-  %4 = load i64, ptr %r, align 8
-  store i64 %4, ptr %retval, align 8
-  br label %return
-
-if.end:                                           ; preds = %lor.lhs.false
-  br label %if.end14
-
-if.else:                                          ; preds = %entry
-  %5 = load i64, ptr %y.addr, align 8
-  %cmp7 = icmp sgt i64 %5, 0
-  br i1 %cmp7, label %if.then12, label %lor.lhs.false9
-
-lor.lhs.false9:                                   ; preds = %if.else
-  %6 = load i64, ptr %r, align 8
-  %cmp10 = icmp slt i64 %6, 0
-  br i1 %cmp10, label %if.then12, label %if.end13
-
-if.then12:                                        ; preds = %lor.lhs.false9, %if.else
-  %7 = load i64, ptr %r, align 8
-  store i64 %7, ptr %retval, align 8
-  br label %return
-
-if.end13:                                         ; preds = %lor.lhs.false9
-  br label %if.end14
-
-if.end14:                                         ; preds = %if.end13, %if.end
-  store i32 1, ptr @errflag, align 4
-  store i64 0, ptr %retval, align 8
-  br label %return
-
-return:                                           ; preds = %if.end14, %if.then12, %if.then6
-  %8 = load i64, ptr %retval, align 8
-  ret i64 %8
-}
-
-declare i32 @printf(ptr noundef, ...) #1
+@x = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [16 x i8] c"Value of x: %d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i64 @f(i64 noundef 0, i64 noundef 0)
-  %0 = load i32, ptr @errflag, align 4
-  %tobool = icmp ne i32 %0, 0
-  br i1 %tobool, label %if.then, label %if.end
+  %0 = load i32, ptr @x, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  switch i32 %call, label %sw.epilog [
+    i32 0, label %sw.bb
+  ]
 
-if.then:                                          ; preds = %entry
-  call void @abort() #4
-  unreachable
+sw.bb:                                            ; preds = %entry
+  br label %sw.epilog
 
-if.end:                                           ; preds = %entry
-  %call1 = call i64 @f(i64 noundef 1, i64 noundef -1)
-  %1 = load i32, ptr @errflag, align 4
-  %tobool2 = icmp ne i32 %1, 0
-  br i1 %tobool2, label %if.then3, label %if.end4
+sw.epilog:                                        ; preds = %sw.bb, %entry
+  %1 = load i32, ptr @x, align 4
+  switch i32 %1, label %sw.epilog3 [
+    i32 0, label %sw.bb1
+  ]
 
-if.then3:                                         ; preds = %if.end
-  call void @abort() #4
-  unreachable
+sw.bb1:                                           ; preds = %sw.epilog
+  %2 = load i32, ptr @x, align 4
+  switch i32 %2, label %sw.default [
+    i32 0, label %sw.bb2
+  ]
 
-if.end4:                                          ; preds = %if.end
-  %call5 = call i64 @f(i64 noundef -1, i64 noundef 1)
-  %2 = load i32, ptr @errflag, align 4
-  %tobool6 = icmp ne i32 %2, 0
-  br i1 %tobool6, label %if.then7, label %if.end8
+sw.bb2:                                           ; preds = %sw.bb1
+  br label %next
 
-if.then7:                                         ; preds = %if.end4
-  call void @abort() #4
-  unreachable
+sw.default:                                       ; preds = %sw.bb1
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.end8:                                          ; preds = %if.end4
-  %call9 = call i64 @f(i64 noundef -9223372036854775808, i64 noundef -9223372036854775808)
-  %3 = load i32, ptr @errflag, align 4
-  %tobool10 = icmp ne i32 %3, 0
-  br i1 %tobool10, label %if.end12, label %if.then11
+sw.epilog3:                                       ; preds = %sw.epilog
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.then11:                                        ; preds = %if.end8
-  call void @abort() #4
-  unreachable
+next:                                             ; preds = %sw.bb2
+  %3 = load i32, ptr @x, align 4
+  switch i32 %3, label %sw.epilog5 [
+    i32 1, label %sw.bb4
+  ]
 
-if.end12:                                         ; preds = %if.end8
-  %call13 = call i64 @f(i64 noundef -9223372036854775808, i64 noundef -1)
-  %4 = load i32, ptr @errflag, align 4
-  %tobool14 = icmp ne i32 %4, 0
-  br i1 %tobool14, label %if.end16, label %if.then15
+sw.bb4:                                           ; preds = %next
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.then15:                                        ; preds = %if.end12
-  call void @abort() #4
-  unreachable
+sw.epilog5:                                       ; preds = %next
+  %4 = load i32, ptr @x, align 4
+  switch i32 %4, label %sw.epilog7 [
+    i32 1, label %sw.bb6
+  ]
 
-if.end16:                                         ; preds = %if.end12
-  %call17 = call i64 @f(i64 noundef 9223372036854775807, i64 noundef 9223372036854775807)
-  %5 = load i32, ptr @errflag, align 4
-  %tobool18 = icmp ne i32 %5, 0
-  br i1 %tobool18, label %if.end20, label %if.then19
+foo:                                              ; No predecessors!
+  br label %sw.bb6
 
-if.then19:                                        ; preds = %if.end16
-  call void @abort() #4
-  unreachable
+sw.bb6:                                           ; preds = %foo, %sw.epilog5
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.end20:                                         ; preds = %if.end16
-  %call21 = call i64 @f(i64 noundef 9223372036854775807, i64 noundef 1)
-  %6 = load i32, ptr @errflag, align 4
-  %tobool22 = icmp ne i32 %6, 0
-  br i1 %tobool22, label %if.end24, label %if.then23
+sw.epilog7:                                       ; preds = %sw.epilog5
+  %5 = load i32, ptr @x, align 4
+  switch i32 %5, label %sw.default10 [
+    i32 0, label %sw.bb8
+    i32 1, label %sw.bb9
+  ]
 
-if.then23:                                        ; preds = %if.end20
-  call void @abort() #4
-  unreachable
+sw.bb8:                                           ; preds = %sw.epilog7
+  %6 = load i32, ptr @x, align 4
+  store i32 %6, ptr %retval, align 4
+  br label %return
 
-if.end24:                                         ; preds = %if.end20
-  %call25 = call i64 @f(i64 noundef 9223372036854775807, i64 noundef -9223372036854775808)
-  %7 = load i32, ptr @errflag, align 4
-  %tobool26 = icmp ne i32 %7, 0
-  br i1 %tobool26, label %if.then27, label %if.end28
+sw.bb9:                                           ; preds = %sw.epilog7
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.then27:                                        ; preds = %if.end24
-  call void @abort() #4
-  unreachable
+sw.default10:                                     ; preds = %sw.epilog7
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.end28:                                         ; preds = %if.end24
-  call void @exit(i32 noundef 0) #5
-  unreachable
+return:                                           ; preds = %sw.default10, %sw.bb9, %sw.bb8, %sw.bb6, %sw.bb4, %sw.epilog3, %sw.default
+  %7 = load i32, ptr %retval, align 4
+  ret i32 %7
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #3
+declare i32 @printf(ptr noundef, ...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
-attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

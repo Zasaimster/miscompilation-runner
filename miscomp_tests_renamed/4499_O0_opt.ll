@@ -1,22 +1,29 @@
-; 137736519554831117627168074539587306775
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/137736519554831117627168074539587306775_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/137736519554831117627168074539587306775.c"
+; 179158637330043899361983222420914568188
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/179158637330043899361983222420914568188_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/179158637330043899361983222420914568188.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.U = type { i32 }
-
-@u = internal global %union.U { i32 305419896 }, align 4
+@b = dso_local global i32 0, align 4
+@a = dso_local global i32 0, align 4
+@c = dso_local global i8 0, align 1
+@d = dso_local global i8 0, align 1
+@e = dso_local global i8 0, align 1
+@f = dso_local global i64 0, align 8
+@g = dso_local global i64 0, align 8
+@h = dso_local global i64 0, align 8
+@i = dso_local global i64 0, align 8
+@j = dso_local global i16 0, align 2
+@k = dso_local global i16 0, align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %bf.load = load i32, ptr @u, align 4
-  %bf.clear = and i32 %bf.load, 16777215
-  %sub = sub nsw i32 %bf.clear, 3430008
-  ret i32 %sub
+  %0 = load i32, ptr @b, align 4
+  store i32 %0, ptr @a, align 4
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

@@ -1,29 +1,57 @@
-; 152988800767950889300997570988582493789
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152988800767950889300997570988582493789_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152988800767950889300997570988582493789.c"
+; 11155169937503887952414385914914080030
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/11155169937503887952414385914914080030_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/11155169937503887952414385914914080030.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @bar() local_unnamed_addr #0 {
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @foo(i32 noundef %p, i32 noundef %a, i32 noundef %b) local_unnamed_addr #0 {
 entry:
-  ret i32 5
-}
+  %sub = sub i32 %a, %b
+  %cmp.not = icmp eq i32 %sub, 2147483647
+  br i1 %cmp.not, label %if.end, label %if.then
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
-  tail call void @abort() #3
+if.then:                                          ; preds = %entry
+  tail call void @abort() #4
   unreachable
+
+if.end:                                           ; preds = %entry
+  ret void
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
+declare void @abort() local_unnamed_addr #1
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @bar(i32 noundef %p, i32 noundef %a) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp slt i32 %a, -2147483646
+  tail call void @llvm.assume(i1 %cmp)
+  %cmp3.not = icmp eq i32 %a, -2147483648
+  br i1 %cmp3.not, label %if.end5, label %if.then4
+
+if.then4:                                         ; preds = %entry
+  tail call void @abort() #4
+  unreachable
+
+if.end5:                                          ; preds = %entry
+  ret void
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  ret i32 0
+}
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write)
+declare void @llvm.assume(i1 noundef) #3
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nocallback nofree nosync nounwind willreturn memory(inaccessiblemem: write) }
+attributes #4 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

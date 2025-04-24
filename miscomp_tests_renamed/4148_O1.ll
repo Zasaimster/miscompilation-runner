@@ -1,83 +1,175 @@
-; 119079235335116490173256083078067408540
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119079235335116490173256083078067408540.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119079235335116490173256083078067408540.c"
+; 172505680000704188086821409943262512818
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172505680000704188086821409943262512818.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172505680000704188086821409943262512818.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@C = dso_local local_unnamed_addr global x86_fp80 0xK00000000000000000000, align 16
-@U = dso_local local_unnamed_addr global x86_fp80 0xK3FFF8000000000000000, align 16
-@Y2 = dso_local local_unnamed_addr global x86_fp80 0xK4000C000000000000000, align 16
-@Y1 = dso_local local_unnamed_addr global x86_fp80 0xK3FFF8000000000000000, align 16
-@X = dso_local local_unnamed_addr global x86_fp80 0xK00000000000000000000, align 16
-@Y = dso_local local_unnamed_addr global x86_fp80 0xK00000000000000000000, align 16
-@Z = dso_local local_unnamed_addr global x86_fp80 0xK00000000000000000000, align 16
-@T = dso_local local_unnamed_addr global x86_fp80 0xK00000000000000000000, align 16
-@R = dso_local local_unnamed_addr global x86_fp80 0xK00000000000000000000, align 16
-@S = dso_local local_unnamed_addr global x86_fp80 0xK00000000000000000000, align 16
+%struct.A = type { i64, i64, i64, i64 }
 
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+@x = dso_local local_unnamed_addr global %struct.A { i64 13, i64 14, i64 15, i64 16 }, align 8
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @foo(ptr noundef readonly captures(none) %x, i32 noundef %y) local_unnamed_addr #0 {
 entry:
-  %0 = load x86_fp80, ptr @C, align 16, !tbaa !5
-  %1 = load x86_fp80, ptr @U, align 16, !tbaa !5
-  %add = fadd x86_fp80 %0, %1
-  %2 = load x86_fp80, ptr @Y2, align 16, !tbaa !5
-  %mul = fmul x86_fp80 %add, %2
-  store x86_fp80 %mul, ptr @X, align 16, !tbaa !5
-  %sub = fsub x86_fp80 %0, %1
-  %sub1 = fsub x86_fp80 %sub, %1
-  store x86_fp80 %sub1, ptr @Y, align 16, !tbaa !5
-  %add3 = fadd x86_fp80 %1, %add
-  store x86_fp80 %add3, ptr @Z, align 16, !tbaa !5
-  %3 = load x86_fp80, ptr @Y1, align 16, !tbaa !5
-  %mul5 = fmul x86_fp80 %sub, %3
-  store x86_fp80 %mul5, ptr @T, align 16, !tbaa !5
-  %add6 = fadd x86_fp80 %1, %add3
-  %sub7 = fsub x86_fp80 %mul, %add6
-  store x86_fp80 %sub7, ptr @X, align 16, !tbaa !5
-  %mul8 = fmul x86_fp80 %sub1, %3
-  store x86_fp80 %mul8, ptr @R, align 16, !tbaa !5
-  %mul9 = fmul x86_fp80 %2, %add3
-  store x86_fp80 %mul9, ptr @S, align 16, !tbaa !5
-  %sub10 = fsub x86_fp80 %mul5, %sub1
-  store x86_fp80 %sub10, ptr @T, align 16, !tbaa !5
-  %sub11 = fsub x86_fp80 %1, %sub1
-  %add12 = fadd x86_fp80 %sub11, %mul8
-  store x86_fp80 %add12, ptr @Y, align 16, !tbaa !5
-  %add14 = fadd x86_fp80 %1, %add6
-  %sub15 = fsub x86_fp80 %mul9, %add14
-  store x86_fp80 %sub15, ptr @Z, align 16, !tbaa !5
-  %add16 = fadd x86_fp80 %1, %2
-  %mul17 = fmul x86_fp80 %add16, %3
-  store x86_fp80 %mul17, ptr @R, align 16, !tbaa !5
-  %mul18 = fmul x86_fp80 %2, %3
-  store x86_fp80 %mul18, ptr @Y1, align 16, !tbaa !5
-  %sub19 = fsub x86_fp80 %mul17, %2
-  store x86_fp80 %sub19, ptr @R, align 16, !tbaa !5
-  %sub20 = fadd x86_fp80 %mul18, 0xKBFFE8000000000000000
-  store x86_fp80 %sub20, ptr @Y1, align 16, !tbaa !5
-  %cmp = fcmp une x86_fp80 %sub15, 0xK4001C000000000000000
-  br i1 %cmp, label %if.then, label %if.end
+  %cmp.not = icmp eq i32 %y, 12
+  br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry
-  tail call void @abort() #3
+  tail call void @abort() #5
   unreachable
 
 if.end:                                           ; preds = %entry
-  tail call void @exit(i32 noundef 0) #3
+  %0 = load i64, ptr %x, align 8, !tbaa !5
+  %cmp1.not = icmp eq i64 %0, 1
+  br i1 %cmp1.not, label %lor.lhs.false, label %if.then4
+
+lor.lhs.false:                                    ; preds = %if.end
+  %arrayidx2 = getelementptr inbounds nuw i8, ptr %x, i64 8
+  %1 = load i64, ptr %arrayidx2, align 8, !tbaa !5
+  %cmp3.not = icmp eq i64 %1, 11
+  br i1 %cmp3.not, label %if.end5, label %if.then4
+
+if.then4:                                         ; preds = %lor.lhs.false, %if.end
+  tail call void @abort() #5
   unreachable
+
+if.end5:                                          ; preds = %lor.lhs.false
+  %arrayidx6 = getelementptr inbounds nuw i8, ptr %x, i64 16
+  %2 = load i64, ptr %arrayidx6, align 8, !tbaa !5
+  %cmp7.not = icmp eq i64 %2, 2
+  br i1 %cmp7.not, label %lor.lhs.false8, label %if.then11
+
+lor.lhs.false8:                                   ; preds = %if.end5
+  %arrayidx9 = getelementptr inbounds nuw i8, ptr %x, i64 24
+  %3 = load i64, ptr %arrayidx9, align 8, !tbaa !5
+  %cmp10.not = icmp eq i64 %3, 12
+  br i1 %cmp10.not, label %if.end12, label %if.then11
+
+if.then11:                                        ; preds = %lor.lhs.false8, %if.end5
+  tail call void @abort() #5
+  unreachable
+
+if.end12:                                         ; preds = %lor.lhs.false8
+  %arrayidx13 = getelementptr inbounds nuw i8, ptr %x, i64 32
+  %4 = load i64, ptr %arrayidx13, align 8, !tbaa !5
+  %cmp14.not = icmp eq i64 %4, 3
+  br i1 %cmp14.not, label %lor.lhs.false15, label %if.then18
+
+lor.lhs.false15:                                  ; preds = %if.end12
+  %arrayidx16 = getelementptr inbounds nuw i8, ptr %x, i64 40
+  %5 = load i64, ptr %arrayidx16, align 8, !tbaa !5
+  %cmp17.not = icmp eq i64 %5, 13
+  br i1 %cmp17.not, label %if.end19, label %if.then18
+
+if.then18:                                        ; preds = %lor.lhs.false15, %if.end12
+  tail call void @abort() #5
+  unreachable
+
+if.end19:                                         ; preds = %lor.lhs.false15
+  %arrayidx20 = getelementptr inbounds nuw i8, ptr %x, i64 48
+  %6 = load i64, ptr %arrayidx20, align 8, !tbaa !5
+  %cmp21.not = icmp eq i64 %6, 4
+  br i1 %cmp21.not, label %lor.lhs.false22, label %if.then25
+
+lor.lhs.false22:                                  ; preds = %if.end19
+  %arrayidx23 = getelementptr inbounds nuw i8, ptr %x, i64 56
+  %7 = load i64, ptr %arrayidx23, align 8, !tbaa !5
+  %cmp24.not = icmp eq i64 %7, 14
+  br i1 %cmp24.not, label %if.end26, label %if.then25
+
+if.then25:                                        ; preds = %lor.lhs.false22, %if.end19
+  tail call void @abort() #5
+  unreachable
+
+if.end26:                                         ; preds = %lor.lhs.false22
+  %arrayidx27 = getelementptr inbounds nuw i8, ptr %x, i64 64
+  %8 = load i64, ptr %arrayidx27, align 8, !tbaa !5
+  %cmp28.not = icmp eq i64 %8, 5
+  br i1 %cmp28.not, label %lor.lhs.false29, label %if.then32
+
+lor.lhs.false29:                                  ; preds = %if.end26
+  %arrayidx30 = getelementptr inbounds nuw i8, ptr %x, i64 72
+  %9 = load i64, ptr %arrayidx30, align 8, !tbaa !5
+  %cmp31.not = icmp eq i64 %9, 15
+  br i1 %cmp31.not, label %if.end33, label %if.then32
+
+if.then32:                                        ; preds = %lor.lhs.false29, %if.end26
+  tail call void @abort() #5
+  unreachable
+
+if.end33:                                         ; preds = %lor.lhs.false29
+  %arrayidx34 = getelementptr inbounds nuw i8, ptr %x, i64 80
+  %10 = load i64, ptr %arrayidx34, align 8, !tbaa !5
+  %cmp35.not = icmp eq i64 %10, 6
+  br i1 %cmp35.not, label %lor.lhs.false36, label %if.then39
+
+lor.lhs.false36:                                  ; preds = %if.end33
+  %arrayidx37 = getelementptr inbounds nuw i8, ptr %x, i64 88
+  %11 = load i64, ptr %arrayidx37, align 8, !tbaa !5
+  %cmp38.not = icmp eq i64 %11, 16
+  br i1 %cmp38.not, label %if.end40, label %if.then39
+
+if.then39:                                        ; preds = %lor.lhs.false36, %if.end33
+  tail call void @abort() #5
+  unreachable
+
+if.end40:                                         ; preds = %lor.lhs.false36
+  ret void
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
 declare void @abort() local_unnamed_addr #1
 
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #2
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
+entry:
+  %a = alloca [40 x i64], align 16
+  call void @llvm.lifetime.start.p0(i64 320, ptr nonnull %a) #6
+  store i64 1, ptr %a, align 16, !tbaa !5
+  %arrayidx3 = getelementptr inbounds nuw i8, ptr %a, i64 8
+  store i64 11, ptr %arrayidx3, align 8, !tbaa !5
+  %arrayidx6 = getelementptr inbounds nuw i8, ptr %a, i64 16
+  store i64 2, ptr %arrayidx6, align 16, !tbaa !5
+  %arrayidx9 = getelementptr inbounds nuw i8, ptr %a, i64 24
+  store i64 12, ptr %arrayidx9, align 8, !tbaa !5
+  %arrayidx12 = getelementptr inbounds nuw i8, ptr %a, i64 32
+  store i64 3, ptr %arrayidx12, align 16, !tbaa !5
+  %0 = load i64, ptr @x, align 8, !tbaa !9
+  %arrayidx15 = getelementptr inbounds nuw i8, ptr %a, i64 40
+  store i64 %0, ptr %arrayidx15, align 8, !tbaa !5
+  %arrayidx18 = getelementptr inbounds nuw i8, ptr %a, i64 48
+  store i64 4, ptr %arrayidx18, align 16, !tbaa !5
+  %1 = load i64, ptr getelementptr inbounds nuw (i8, ptr @x, i64 8), align 8, !tbaa !11
+  %arrayidx22 = getelementptr inbounds nuw i8, ptr %a, i64 56
+  store i64 %1, ptr %arrayidx22, align 8, !tbaa !5
+  %arrayidx25 = getelementptr inbounds nuw i8, ptr %a, i64 64
+  store i64 5, ptr %arrayidx25, align 16, !tbaa !5
+  %2 = load i64, ptr getelementptr inbounds nuw (i8, ptr @x, i64 16), align 8, !tbaa !12
+  %arrayidx29 = getelementptr inbounds nuw i8, ptr %a, i64 72
+  store i64 %2, ptr %arrayidx29, align 8, !tbaa !5
+  %arrayidx32 = getelementptr inbounds nuw i8, ptr %a, i64 80
+  store i64 6, ptr %arrayidx32, align 16, !tbaa !5
+  %3 = load i64, ptr getelementptr inbounds nuw (i8, ptr @x, i64 24), align 8, !tbaa !13
+  %arrayidx36 = getelementptr inbounds nuw i8, ptr %a, i64 88
+  store i64 %3, ptr %arrayidx36, align 8, !tbaa !5
+  call void @foo(ptr noundef nonnull %a, i32 noundef 12)
+  tail call void @exit(i32 noundef 0) #5
+  unreachable
+}
 
-attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #3
+
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #4
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn nounwind }
+attributes #6 = { nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -88,6 +180,11 @@ attributes #3 = { noreturn nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"long double", !7, i64 0}
+!6 = !{!"long", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
+!9 = !{!10, !6, i64 0}
+!10 = !{!"A", !6, i64 0, !6, i64 8, !6, i64 16, !6, i64 24}
+!11 = !{!10, !6, i64 8}
+!12 = !{!10, !6, i64 16}
+!13 = !{!10, !6, i64 24}

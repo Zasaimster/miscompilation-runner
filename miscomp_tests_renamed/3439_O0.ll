@@ -1,90 +1,227 @@
-; 112869738681587421038305805630334657421
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/112869738681587421038305805630334657421.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/112869738681587421038305805630334657421.c"
+; 160262882968155943004636466137509238812
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/160262882968155943004636466137509238812.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/160262882968155943004636466137509238812.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@i = dso_local global i32 0, align 4
-@d = dso_local global i32 0, align 4
-@c = dso_local global i32 0, align 4
-@f = dso_local global i32 0, align 4
-@e = dso_local global [0 x i8] zeroinitializer, align 1
-@a = dso_local global [30 x i32] zeroinitializer, align 16
-@b = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [7 x i8] c"begin\0A\00", align 1
+@.str.1 = private unnamed_addr constant [5 x i8] c"end\0A\00", align 1
+@.str.2 = private unnamed_addr constant [15 x i8] c"X is negative\0A\00", align 1
+@.str.3 = private unnamed_addr constant [15 x i8] c"X is positive\0A\00", align 1
+@.str.4 = private unnamed_addr constant [13 x i8] c"timeout=%ld\0A\00", align 1
+@.str.5 = private unnamed_addr constant [7 x i8] c"error\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load i32, ptr @i, align 4
-  %cmp = icmp slt i32 %0, 1
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %1 = load i32, ptr @d, align 4
-  %tobool = icmp ne i32 %1, 0
-  br i1 %tobool, label %if.end4, label %if.then
-
-if.then:                                          ; preds = %for.body
-  %2 = load i32, ptr @c, align 4
-  %tobool1 = icmp ne i32 %2, 0
-  br i1 %tobool1, label %if.end, label %if.then2
-
-if.then2:                                         ; preds = %if.then
-  store i32 2, ptr @f, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.then2, %if.then
-  %3 = load i32, ptr @f, align 4
-  %xor = xor i32 %3, 0
-  store i32 %xor, ptr @f, align 4
-  %4 = load i8, ptr @e, align 1
-  %conv = sext i8 %4 to i32
-  %and = and i32 %conv, %xor
-  %conv3 = trunc i32 %and to i8
-  store i8 %conv3, ptr @e, align 1
-  br label %if.end4
-
-if.end4:                                          ; preds = %if.end, %for.body
-  br label %for.inc
-
-for.inc:                                          ; preds = %if.end4
-  %5 = load i32, ptr @i, align 4
-  %inc = add nsw i32 %5, 1
-  store i32 %inc, ptr @i, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %6 = load i8, ptr @e, align 1
-  %conv5 = sext i8 %6 to i32
-  %shr = ashr i32 %conv5, 1
-  %and6 = and i32 %shr, 1
-  %idxprom = sext i32 %and6 to i64
-  %arrayidx = getelementptr inbounds [30 x i32], ptr @a, i64 0, i64 %idxprom
-  %7 = load i32, ptr %arrayidx, align 4
-  store i32 %7, ptr @b, align 4
-  %8 = load i32, ptr @b, align 4
-  %cmp7 = icmp ne i32 %8, 0
-  br i1 %cmp7, label %if.then9, label %if.end10
-
-if.then9:                                         ; preds = %for.end
-  call void @abort() #2
-  unreachable
-
-if.end10:                                         ; preds = %for.end
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  call void @kb_wait_1()
+  call void @kb_wait_2()
+  call void @kb_wait_2_1()
+  call void @kb_wait_2_2()
+  call void @kb_wait_3()
+  call void @kb_wait_4()
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
   ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare i32 @printf(ptr noundef, ...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @kb_wait_1() #0 {
+entry:
+  %timeout = alloca i64, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.2)
+  %conv = sext i32 %call to i64
+  store i64 %conv, ptr %timeout, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.3)
+  %tobool = icmp ne i32 %call1, 0
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %do.body
+  %0 = load i64, ptr %timeout, align 8
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i64 noundef %0)
+  br label %if.end
+
+if.else:                                          ; preds = %do.body
+  br label %while.body
+
+while.body:                                       ; preds = %if.else, %while.body
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.5)
+  br label %while.body
+
+if.end:                                           ; preds = %if.then
+  %1 = load i64, ptr %timeout, align 8
+  %dec = add i64 %1, -1
+  store i64 %dec, ptr %timeout, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %if.end
+  %2 = load i64, ptr %timeout, align 8
+  %tobool4 = icmp ne i64 %2, 0
+  br i1 %tobool4, label %do.body, label %do.end, !llvm.loop !6
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @kb_wait_2() #0 {
+entry:
+  %timeout = alloca i64, align 8
+  store i64 2, ptr %timeout, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  %0 = load i64, ptr %timeout, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i64 noundef %0)
+  %1 = load i64, ptr %timeout, align 8
+  %dec = add i64 %1, -1
+  store i64 %dec, ptr %timeout, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %2 = load i64, ptr %timeout, align 8
+  %tobool = icmp ne i64 %2, 0
+  br i1 %tobool, label %do.body, label %do.end, !llvm.loop !8
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @kb_wait_2_1() #0 {
+entry:
+  %timeout = alloca i64, align 8
+  store i64 2, ptr %timeout, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  %0 = load i64, ptr %timeout, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i64 noundef %0)
+  %1 = load i64, ptr %timeout, align 8
+  %dec = add i64 %1, -1
+  store i64 %dec, ptr %timeout, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %2 = load i64, ptr %timeout, align 8
+  %tobool = icmp ne i64 %2, 0
+  br i1 %tobool, label %do.body, label %do.end, !llvm.loop !9
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @kb_wait_2_2() #0 {
+entry:
+  %timeout = alloca i64, align 8
+  store i64 2, ptr %timeout, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  br i1 true, label %if.then, label %if.else
+
+if.then:                                          ; preds = %do.body
+  %0 = load i64, ptr %timeout, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i64 noundef %0)
+  br label %if.end
+
+if.else:                                          ; preds = %do.body
+  br label %label
+
+label:                                            ; preds = %label, %if.else
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.5)
+  br label %label
+
+if.end:                                           ; preds = %if.then
+  %1 = load i64, ptr %timeout, align 8
+  %dec = add i64 %1, -1
+  store i64 %dec, ptr %timeout, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %if.end
+  %2 = load i64, ptr %timeout, align 8
+  %tobool = icmp ne i64 %2, 0
+  br i1 %tobool, label %do.body, label %do.end, !llvm.loop !10
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @kb_wait_3() #0 {
+entry:
+  %timeout = alloca i64, align 8
+  %i = alloca i32, align 4
+  store i64 2, ptr %timeout, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  br i1 true, label %if.then, label %if.else
+
+if.then:                                          ; preds = %do.body
+  %0 = load i64, ptr %timeout, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i64 noundef %0)
+  br label %if.end
+
+if.else:                                          ; preds = %do.body
+  store i32 1, ptr %i, align 4
+  br label %label
+
+label:                                            ; preds = %if.else
+  %1 = load i32, ptr %i, align 4
+  %add = add nsw i32 %1, 3
+  store i32 %add, ptr %i, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %label, %if.then
+  %2 = load i64, ptr %timeout, align 8
+  %dec = add i64 %2, -1
+  store i64 %dec, ptr %timeout, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %if.end
+  %3 = load i64, ptr %timeout, align 8
+  %tobool = icmp ne i64 %3, 0
+  br i1 %tobool, label %do.body, label %do.end, !llvm.loop !11
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @kb_wait_4() #0 {
+entry:
+  %timeout = alloca i64, align 8
+  store i64 2, ptr %timeout, align 8
+  br label %do.body
+
+do.body:                                          ; preds = %do.cond, %entry
+  %0 = load i64, ptr %timeout, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.4, i64 noundef %0)
+  %1 = load i64, ptr %timeout, align 8
+  %dec = add i64 %1, -1
+  store i64 %dec, ptr %timeout, align 8
+  br label %do.cond
+
+do.cond:                                          ; preds = %do.body
+  %2 = load i64, ptr %timeout, align 8
+  %tobool = icmp ne i64 %2, 0
+  br i1 %tobool, label %do.body, label %do.end, !llvm.loop !12
+
+do.end:                                           ; preds = %do.cond
+  ret void
+}
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}
@@ -97,3 +234,8 @@ attributes #2 = { noreturn nounwind }
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !6 = distinct !{!6, !7}
 !7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}
+!9 = distinct !{!9, !7}
+!10 = distinct !{!10, !7}
+!11 = distinct !{!11, !7}
+!12 = distinct !{!12, !7}

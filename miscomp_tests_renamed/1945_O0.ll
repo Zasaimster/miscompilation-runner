@@ -1,17 +1,25 @@
-; 152452329609714853438742369971137965183
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/152452329609714853438742369971137965183.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/152452329609714853438742369971137965183.c"
+; 134528960502300426281340526240382800481
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/134528960502300426281340526240382800481.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/134528960502300426281340526240382800481.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@glob_dbl = dso_local global double 0.000000e+00, align 8
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f() #0 {
+define dso_local i32 @f(ptr noundef %pdbl, double noundef %value) #0 {
 entry:
-  %j = alloca i32, align 4
-  %i = alloca i64, align 8
-  store i32 1, ptr %j, align 4
-  store i64 1610612736, ptr %i, align 8
-  ret i32 0
+  %retval = alloca i32, align 4
+  %pdbl.addr = alloca ptr, align 8
+  %value.addr = alloca double, align 8
+  store ptr %pdbl, ptr %pdbl.addr, align 8
+  store double %value, ptr %value.addr, align 8
+  store ptr @glob_dbl, ptr %pdbl.addr, align 8
+  %0 = load double, ptr %value.addr, align 8
+  %1 = load ptr, ptr %pdbl.addr, align 8
+  store double %0, ptr %1, align 8
+  %2 = load i32, ptr %retval, align 4
+  ret i32 %2
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -19,8 +27,9 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f()
-  %cmp = icmp ne i32 %call, 2
+  %call = call i32 @f(ptr noundef null, double noundef 5.510000e+01)
+  %0 = load double, ptr @glob_dbl, align 8
+  %cmp = fcmp une double %0, 5.510000e+01
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

@@ -1,117 +1,68 @@
-; 171210187523318518180369379209287275299
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171210187523318518180369379209287275299_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171210187523318518180369379209287275299.c"
+; 121911387002823011319011268118029238576
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121911387002823011319011268118029238576_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121911387002823011319011268118029238576.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.T = type { i8, i8, i8, i16 }
+%struct.three_char_t = type <{ i8, i16 }>
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i48 @g() #0 {
+define dso_local zeroext i8 @my_set_a() #0 {
 entry:
-  %retval = alloca %struct.T, align 2
-  %retval.coerce = alloca i48, align 8
-  %hours = getelementptr inbounds nuw %struct.T, ptr %retval, i32 0, i32 0
-  store i8 1, ptr %hours, align 2
-  br label %while.body
-
-while.body:                                       ; preds = %entry
-  br label %while.end
-
-while.end:                                        ; preds = %while.body
-  %day = getelementptr inbounds nuw %struct.T, ptr %retval, i32 0, i32 1
-  store i8 2, ptr %day, align 1
-  %month = getelementptr inbounds nuw %struct.T, ptr %retval, i32 0, i32 2
-  store i8 3, ptr %month, align 2
-  %year = getelementptr inbounds nuw %struct.T, ptr %retval, i32 0, i32 3
-  store i16 4, ptr %year, align 2
-  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %retval.coerce, ptr align 2 %retval, i64 6, i1 false)
-  %0 = load i48, ptr %retval.coerce, align 8
-  ret i48 %0
+  ret i8 30
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i48 @f() #0 {
+define dso_local zeroext i16 @my_set_b() #0 {
 entry:
-  %retval = alloca %struct.T, align 2
-  %tmp = alloca %struct.T, align 2
-  %retval.coerce = alloca i48, align 8
-  %call = call i48 @g()
-  store i48 %call, ptr %tmp, align 2
-  call void @llvm.memcpy.p0.p0.i64(ptr align 2 %retval, ptr align 2 %tmp, i64 6, i1 false)
-  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %retval.coerce, ptr align 2 %retval, i64 6, i1 false)
-  %0 = load i48, ptr %retval.coerce, align 8
-  ret i48 %0
+  ret i16 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %coerce = alloca %struct.T, align 2
-  %coerce3 = alloca %struct.T, align 2
-  %coerce9 = alloca %struct.T, align 2
-  %coerce15 = alloca %struct.T, align 2
+  %three_char = alloca %struct.three_char_t, align 1
   store i32 0, ptr %retval, align 4
-  %call = call i48 @f()
-  store i48 %call, ptr %coerce, align 2
-  %hours = getelementptr inbounds nuw %struct.T, ptr %coerce, i32 0, i32 0
-  %0 = load i8, ptr %hours, align 2
-  %conv = sext i8 %0 to i32
-  %cmp = icmp ne i32 %conv, 1
+  %call = call zeroext i8 @my_set_a()
+  %a = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 0
+  store i8 %call, ptr %a, align 1
+  %call1 = call zeroext i16 @my_set_b()
+  %b = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 1
+  store i16 %call1, ptr %b, align 1
+  %a2 = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 0
+  %0 = load i8, ptr %a2, align 1
+  %conv = zext i8 %0 to i32
+  %cmp = icmp ne i32 %conv, 171
   br i1 %cmp, label %if.then, label %lor.lhs.false
 
 lor.lhs.false:                                    ; preds = %entry
-  %call2 = call i48 @f()
-  store i48 %call2, ptr %coerce3, align 2
-  %day = getelementptr inbounds nuw %struct.T, ptr %coerce3, i32 0, i32 1
-  %1 = load i8, ptr %day, align 1
-  %conv4 = sext i8 %1 to i32
-  %cmp5 = icmp ne i32 %conv4, 2
-  br i1 %cmp5, label %if.then, label %lor.lhs.false7
+  %b4 = getelementptr inbounds nuw %struct.three_char_t, ptr %three_char, i32 0, i32 1
+  %1 = load i16, ptr %b4, align 1
+  %conv5 = zext i16 %1 to i32
+  %cmp6 = icmp ne i32 %conv5, 4660
+  br i1 %cmp6, label %if.then, label %if.end
 
-lor.lhs.false7:                                   ; preds = %lor.lhs.false
-  %call8 = call i48 @f()
-  store i48 %call8, ptr %coerce9, align 2
-  %month = getelementptr inbounds nuw %struct.T, ptr %coerce9, i32 0, i32 2
-  %2 = load i8, ptr %month, align 2
-  %conv10 = sext i8 %2 to i32
-  %cmp11 = icmp ne i32 %conv10, 3
-  br i1 %cmp11, label %if.then, label %lor.lhs.false13
-
-lor.lhs.false13:                                  ; preds = %lor.lhs.false7
-  %call14 = call i48 @f()
-  store i48 %call14, ptr %coerce15, align 2
-  %year = getelementptr inbounds nuw %struct.T, ptr %coerce15, i32 0, i32 3
-  %3 = load i16, ptr %year, align 2
-  %conv16 = sext i16 %3 to i32
-  %cmp17 = icmp ne i32 %conv16, 4
-  br i1 %cmp17, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false13, %lor.lhs.false7, %lor.lhs.false, %entry
-  call void @abort() #4
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %lor.lhs.false13
-  call void @exit(i32 noundef 0) #5
+if.end:                                           ; preds = %lor.lhs.false
+  call void @exit(i32 noundef 0) #4
   unreachable
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare void @abort() #1
 
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #3
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
-attributes #5 = { noreturn }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,56 +1,62 @@
-; 187586790631354358005834696186989251982
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187586790631354358005834696186989251982_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187586790631354358005834696186989251982.c"
+; 102417011304311267616754948179900919979
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102417011304311267616754948179900919979_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102417011304311267616754948179900919979.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local double @foo() #0 {
+define dso_local i32 @calc_mp(i32 noundef %mod) #0 {
 entry:
-  ret double 0.000000e+00
-}
+  %mod.addr = alloca i32, align 4
+  %a = alloca i32, align 4
+  %b = alloca i32, align 4
+  %c = alloca i32, align 4
+  store i32 %mod, ptr %mod.addr, align 4
+  store i32 0, ptr %c, align 4
+  %0 = load i32, ptr %c, align 4
+  %1 = load i32, ptr %mod.addr, align 4
+  %div = udiv i32 %0, %1
+  store i32 %div, ptr %a, align 4
+  %2 = load i32, ptr %a, align 4
+  %3 = load i32, ptr %mod.addr, align 4
+  %mul = mul i32 %2, %3
+  %sub = sub i32 0, %mul
+  store i32 %sub, ptr %b, align 4
+  %4 = load i32, ptr %b, align 4
+  %5 = load i32, ptr %mod.addr, align 4
+  %cmp = icmp ugt i32 %4, %5
+  br i1 %cmp, label %if.then, label %if.end
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @do_sibcall() #0 {
-entry:
-  %call = call double @foo()
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  %x = alloca double, align 8
-  store i32 0, ptr %retval, align 4
-  store double 0.000000e+00, ptr %x, align 8
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %0 = load double, ptr %x, align 8
-  %cmp = fcmp olt double %0, 2.000000e+01
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  call void @do_sibcall()
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %1 = load double, ptr %x, align 8
-  %inc = fadd double %1, 1.000000e+00
-  store double %inc, ptr %x, align 8
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %2 = load double, ptr %x, align 8
-  %cmp1 = fcmp olt double %2, 0.000000e+00
-  br i1 %cmp1, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.end
-  store double 5.000000e+00, ptr %x, align 8
+if.then:                                          ; preds = %entry
+  %6 = load i32, ptr %a, align 4
+  %add = add i32 %6, 1
+  store i32 %add, ptr %a, align 4
+  %7 = load i32, ptr %mod.addr, align 4
+  %8 = load i32, ptr %b, align 4
+  %sub1 = sub i32 %8, %7
+  store i32 %sub1, ptr %b, align 4
   br label %if.end
 
-if.end:                                           ; preds = %if.then, %for.end
+if.end:                                           ; preds = %if.then, %entry
+  %9 = load i32, ptr %b, align 4
+  ret i32 %9
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %argc.addr = alloca i32, align 4
+  %argv.addr = alloca ptr, align 8
+  %x = alloca i32, align 4
+  %y = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  store i32 %argc, ptr %argc.addr, align 4
+  store ptr %argv, ptr %argv.addr, align 8
+  store i32 1234, ptr %x, align 4
+  %0 = load i32, ptr %x, align 4
+  %call = call i32 @calc_mp(i32 noundef %0)
+  store i32 %call, ptr %y, align 4
   call void @exit(i32 noundef 0) #2
   unreachable
 }
@@ -71,5 +77,3 @@ attributes #2 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!6 = distinct !{!6, !7}
-!7 = !{!"llvm.loop.mustprogress"}

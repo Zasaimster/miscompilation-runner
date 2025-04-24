@@ -1,64 +1,43 @@
-; 114450753272992178194715365077042016952
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/114450753272992178194715365077042016952_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/114450753272992178194715365077042016952.c"
+; 151466579305106331918477962796902776611
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151466579305106331918477962796902776611_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151466579305106331918477962796902776611.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@mem = internal global [3 x i32] zeroinitializer, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca i8, align 1
+  %b = alloca i64, align 8
+  %c = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 0)
-  ret i32 0
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @foo(i32 noundef %x) #0 {
-entry:
-  %retval = alloca i32, align 4
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %cmp = icmp ne i32 %0, 0
+  store volatile i8 1, ptr %a, align 1
+  store i64 2147483648, ptr %b, align 8
+  %0 = load i64, ptr %b, align 8
+  %sub = sub nsw i64 0, %0
+  %conv = trunc i64 %sub to i32
+  %1 = load volatile i8, ptr %a, align 1
+  %conv1 = zext i8 %1 to i32
+  %mul = mul nsw i32 -2147483647, %conv1
+  %sub2 = sub nsw i32 %conv, %mul
+  %sub3 = sub nsw i32 0, %sub2
+  store i32 %sub3, ptr %c, align 4
+  %2 = load i32, ptr %c, align 4
+  %cmp = icmp ne i32 %2, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %1 = load i32, ptr %x.addr, align 4
-  store i32 %1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %call = call i32 @bar()
-  %call1 = call i32 @foo(i32 noundef %call)
-  %2 = load i32, ptr %x.addr, align 4
-  %inc = add nsw i32 %2, 1
-  store i32 %inc, ptr %x.addr, align 4
-  %idxprom = sext i32 %2 to i64
-  %arrayidx = getelementptr inbounds [3 x i32], ptr @mem, i64 0, i64 %idxprom
-  store i32 %call1, ptr %arrayidx, align 4
-  %3 = load i32, ptr %x.addr, align 4
-  %cmp2 = icmp ne i32 %3, 1
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
   call void @abort() #2
   unreachable
 
-if.end4:                                          ; preds = %if.end
-  store i32 0, ptr %retval, align 4
-  br label %return
+if.end:                                           ; preds = %entry
+  br label %while.body
 
-return:                                           ; preds = %if.end4, %if.then
-  %4 = load i32, ptr %retval, align 4
-  ret i32 %4
-}
+while.body:                                       ; preds = %if.end
+  br label %while.end
 
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @bar() #0 {
-entry:
+while.end:                                        ; preds = %while.body
   ret i32 0
 }
 

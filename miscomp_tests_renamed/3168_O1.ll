@@ -1,26 +1,18 @@
-; 164075492809269579247181149343764447301
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/164075492809269579247181149343764447301.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/164075492809269579247181149343764447301.c"
+; 155405484750272746528774454768334086140
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155405484750272746528774454768334086140.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155405484750272746528774454768334086140.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.type = type { ptr, i32 }
-
-@t = dso_local local_unnamed_addr global %struct.type zeroinitializer, align 8
-
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @foo() local_unnamed_addr #0 {
+define dso_local noundef i32 @test(i32 noundef %arg) local_unnamed_addr #0 {
 entry:
-  ret i32 1
+  ret i32 0
 }
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  %bf.load = load i32, ptr getelementptr inbounds nuw (i8, ptr @t, i64 8), align 8
-  %bf.clear = and i32 %bf.load, -33488897
-  %bf.set = or disjoint i32 %bf.clear, 1966080
-  store i32 %bf.set, ptr getelementptr inbounds nuw (i8, ptr @t, i64 8), align 8
   tail call void @abort() #3
   unreachable
 }

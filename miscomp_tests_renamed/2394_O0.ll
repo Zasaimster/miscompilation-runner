@@ -1,56 +1,34 @@
-; 176504186501423411458676064297500377016
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176504186501423411458676064297500377016.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176504186501423411458676064297500377016.c"
+; 141506797933263630635572023002052122408
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141506797933263630635572023002052122408.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141506797933263630635572023002052122408.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [16 x i8] c"Value of a: %d\0A\00", align 1
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %b, i32 noundef %c) #0 {
+define dso_local ptr @foo(ptr noundef %buf, ptr noundef %p) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %b.addr = alloca i32, align 4
-  %c.addr = alloca i32, align 4
-  %x = alloca i32, align 4
-  store i32 %b, ptr %b.addr, align 4
-  store i32 %c, ptr %c.addr, align 4
-  %0 = load i32, ptr %b.addr, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  %call1 = call i32 (i32, i32, ...) @show(i32 noundef 10, i32 noundef 20)
-  %1 = load i32, ptr %c.addr, align 4
-  %and = and i32 %call1, %1
-  store i32 %and, ptr %retval, align 4
-  br label %return
-
-if.else:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.else, %if.then
-  %2 = load i32, ptr %retval, align 4
-  ret i32 %2
+  %buf.addr = alloca ptr, align 8
+  %p.addr = alloca ptr, align 8
+  store ptr %buf, ptr %buf.addr, align 8
+  store ptr %p, ptr %p.addr, align 8
+  ret ptr null
 }
-
-declare i32 @printf(ptr noundef, ...) #1
-
-declare i32 @show(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %buf = alloca [6 x i8], align 1
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef 1, i32 noundef 0)
-  %cmp = icmp ne i32 %call, 0
+  %arraydecay = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 0
+  %arrayidx = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 2
+  %call = call ptr @foo(ptr noundef %arraydecay, ptr noundef %arrayidx)
+  %arrayidx1 = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 3
+  %cmp = icmp ne ptr %call, %arrayidx1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  call void @abort() #3
+  call void @abort() #2
   unreachable
 
 if.end:                                           ; preds = %entry
@@ -58,12 +36,11 @@ if.end:                                           ; preds = %entry
 }
 
 ; Function Attrs: noreturn nounwind
-declare void @abort() #2
+declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

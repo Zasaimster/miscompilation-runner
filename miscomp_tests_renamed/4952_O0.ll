@@ -1,14 +1,24 @@
-; 121090920086860303928060004319496268751
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121090920086860303928060004319496268751.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121090920086860303928060004319496268751.c"
+; 187503452219884454918151583458848073956
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187503452219884454918151583458848073956.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187503452219884454918151583458848073956.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.rtx_def = type { i8, [3 x i8] }
+%struct.tiny = type { i8, i8 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @f2() #0 {
+define dso_local i32 @f(i32 noundef %n, i16 %x.coerce, i16 %y.coerce, i16 %z.coerce, i64 noundef %l) #0 {
 entry:
+  %x = alloca %struct.tiny, align 1
+  %y = alloca %struct.tiny, align 1
+  %z = alloca %struct.tiny, align 1
+  %n.addr = alloca i32, align 4
+  %l.addr = alloca i64, align 8
+  store i16 %x.coerce, ptr %x, align 1
+  store i16 %y.coerce, ptr %y, align 1
+  store i16 %z.coerce, ptr %z, align 1
+  store i32 %n, ptr %n.addr, align 4
+  store i64 %l, ptr %l.addr, align 8
   call void @abort() #3
   unreachable
 }
@@ -20,47 +30,35 @@ declare void @abort() #1
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %foo = alloca %struct.rtx_def, align 4
-  %bar = alloca ptr, align 8
+  %x = alloca [3 x %struct.tiny], align 1
   store i32 0, ptr %retval, align 4
-  %bf.load = load i8, ptr %foo, align 4
-  %bf.clear = and i8 %bf.load, -2
-  %bf.set = or i8 %bf.clear, 1
-  store i8 %bf.set, ptr %foo, align 4
-  %bf.load1 = load i8, ptr %foo, align 4
-  %bf.clear2 = and i8 %bf.load1, -3
-  %bf.set3 = or i8 %bf.clear2, 0
-  store i8 %bf.set3, ptr %foo, align 4
-  %call = call ptr @f(ptr noundef %foo)
-  store ptr %call, ptr %bar, align 8
-  %0 = load ptr, ptr %bar, align 8
-  %cmp = icmp ne ptr %0, %foo
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load ptr, ptr %bar, align 8
-  %bf.load4 = load i8, ptr %1, align 4
-  %bf.shl = shl i8 %bf.load4, 6
-  %bf.ashr = ashr i8 %bf.shl, 7
-  %bf.cast = sext i8 %bf.ashr to i32
-  %cmp5 = icmp ne i32 %bf.cast, 0
-  br i1 %cmp5, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
+  %arrayidx = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %c = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx, i32 0, i32 0
+  store i8 10, ptr %c, align 1
+  %arrayidx1 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %c2 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx1, i32 0, i32 0
+  store i8 11, ptr %c2, align 1
+  %arrayidx3 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %c4 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx3, i32 0, i32 0
+  store i8 12, ptr %c4, align 1
+  %arrayidx5 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %d = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx5, i32 0, i32 1
+  store i8 20, ptr %d, align 1
+  %arrayidx6 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %d7 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx6, i32 0, i32 1
+  store i8 21, ptr %d7, align 1
+  %arrayidx8 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %d9 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx8, i32 0, i32 1
+  store i8 22, ptr %d9, align 1
+  %arrayidx10 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %arrayidx11 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %arrayidx12 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %0 = load i16, ptr %arrayidx10, align 1
+  %1 = load i16, ptr %arrayidx11, align 1
+  %2 = load i16, ptr %arrayidx12, align 1
+  %call = call i32 @f(i32 noundef 3, i16 %0, i16 %1, i16 %2, i64 noundef 123)
   call void @exit(i32 noundef 0) #4
   unreachable
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal ptr @f(ptr noundef %orig) #0 {
-entry:
-  %orig.addr = alloca ptr, align 8
-  store ptr %orig, ptr %orig.addr, align 8
-  ret ptr null
 }
 
 ; Function Attrs: noreturn

@@ -1,18 +1,10 @@
-; 155539601345389200668461657478419206422
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155539601345389200668461657478419206422_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155539601345389200668461657478419206422.c"
+; 170854167334923784658060209280931283541
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/170854167334923784658060209280931283541_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/170854167334923784658060209280931283541.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local noundef i32 @g(i32 noundef %x, i32 noundef %y) local_unnamed_addr #0 {
-entry:
-  tail call void @abort() #2
-  unreachable
-}
-
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+@a = dso_local local_unnamed_addr global i32 1, align 4
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
@@ -20,6 +12,9 @@ entry:
   tail call void @abort() #2
   unreachable
 }
+
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
 
 attributes #0 = { cold nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

@@ -1,6 +1,6 @@
-; 141585673366683282637555969002256601265
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141585673366683282637555969002256601265_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141585673366683282637555969002256601265.c"
+; 157668120786775220087378137183895697884
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157668120786775220087378137183895697884_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157668120786775220087378137183895697884.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,18 +8,17 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %A = alloca [30 x i8], align 16
+  %year = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %arraydecay = getelementptr inbounds [30 x i8], ptr %A, i64 0, i64 0
-  call void @llvm.memset.p0.i64(ptr align 16 %arraydecay, i8 1, i64 30, i1 false)
+  store i32 548, ptr %year, align 4
+  %call = call i32 (...) @example3()
   ret i32 0
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+declare i32 @example3(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

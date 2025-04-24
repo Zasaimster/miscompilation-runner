@@ -1,109 +1,130 @@
-; 135560374911915075435346162498973266548
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135560374911915075435346162498973266548.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135560374911915075435346162498973266548.c"
+; 127427992665562431412403268483931538006
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/127427992665562431412403268483931538006.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/127427992665562431412403268483931538006.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.object = type { ptr, i64 }
+
+@nil = dso_local global i32 0, align 4
+@cons1 = dso_local global [2 x %struct.object] [%struct.object { ptr @nil, i64 0 }, %struct.object { ptr @nil, i64 0 }], align 16
+@cons2 = dso_local global [2 x %struct.object] [%struct.object { ptr @cons1, i64 64 }, %struct.object { ptr @nil, i64 0 }], align 16
+@__const.main.x = private unnamed_addr constant %struct.object { ptr @cons2, i64 64 }, align 8
+@__const.main.y = private unnamed_addr constant %struct.object { ptr @nil, i64 0 }, align 8
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local { ptr, i64 } @bar(ptr %blah.coerce0, i64 %blah.coerce1) #0 {
+entry:
+  %retval = alloca %struct.object, align 8
+  %blah = alloca %struct.object, align 8
+  %0 = getelementptr inbounds nuw { ptr, i64 }, ptr %blah, i32 0, i32 0
+  store ptr %blah.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { ptr, i64 }, ptr %blah, i32 0, i32 1
+  store i64 %blah.coerce1, ptr %1, align 8
+  %call = call i32 (...) @example2()
+  %2 = load { ptr, i64 }, ptr %retval, align 8
+  ret { ptr, i64 } %2
+}
+
+declare i32 @example2(...) #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local { ptr, i64 } @foo(ptr %x.coerce0, i64 %x.coerce1, ptr %y.coerce0, i64 %y.coerce1) #0 {
+entry:
+  %retval = alloca %struct.object, align 8
+  %x = alloca %struct.object, align 8
+  %y = alloca %struct.object, align 8
+  %z = alloca %struct.object, align 8
+  %tmp = alloca %struct.object, align 8
+  %0 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 0
+  store ptr %x.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 1
+  store i64 %x.coerce1, ptr %1, align 8
+  %2 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 0
+  store ptr %y.coerce0, ptr %2, align 8
+  %3 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 1
+  store i64 %y.coerce1, ptr %3, align 8
+  %addr = getelementptr inbounds nuw %struct.object, ptr %x, i32 0, i32 0
+  %4 = load ptr, ptr %addr, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %z, ptr align 8 %4, i64 16, i1 false)
+  %type = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 1
+  %5 = load i64, ptr %type, align 8
+  %and = and i64 %5, 64
+  %tobool = icmp ne i64 %and, 0
+  br i1 %tobool, label %if.then, label %if.end7
+
+if.then:                                          ; preds = %entry
+  %addr1 = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 0
+  %6 = load ptr, ptr %addr1, align 8
+  %add.ptr = getelementptr inbounds nuw i8, ptr %6, i64 16
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %y, ptr align 8 %add.ptr, i64 16, i1 false)
+  %addr2 = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 0
+  %7 = load ptr, ptr %addr2, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %z, ptr align 8 %7, i64 16, i1 false)
+  %type3 = getelementptr inbounds nuw %struct.object, ptr %z, i32 0, i32 1
+  %8 = load i64, ptr %type3, align 8
+  %and4 = and i64 %8, 64
+  %tobool5 = icmp ne i64 %and4, 0
+  br i1 %tobool5, label %if.then6, label %if.end
+
+if.then6:                                         ; preds = %if.then
+  %9 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 0
+  %10 = load ptr, ptr %9, align 8
+  %11 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 1
+  %12 = load i64, ptr %11, align 8
+  %call = call { ptr, i64 } @bar(ptr %10, i64 %12)
+  %13 = getelementptr inbounds nuw { ptr, i64 }, ptr %tmp, i32 0, i32 0
+  %14 = extractvalue { ptr, i64 } %call, 0
+  store ptr %14, ptr %13, align 8
+  %15 = getelementptr inbounds nuw { ptr, i64 }, ptr %tmp, i32 0, i32 1
+  %16 = extractvalue { ptr, i64 } %call, 1
+  store i64 %16, ptr %15, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %y, ptr align 8 %tmp, i64 16, i1 false)
+  br label %if.end
+
+if.end:                                           ; preds = %if.then6, %if.then
+  br label %if.end7
+
+if.end7:                                          ; preds = %if.end, %entry
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %retval, ptr align 8 %y, i64 16, i1 false)
+  %17 = load { ptr, i64 }, ptr %retval, align 8
+  ret { ptr, i64 } %17
+}
+
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s = alloca ptr, align 8
+  %x = alloca %struct.object, align 8
+  %y = alloca %struct.object, align 8
+  %three = alloca %struct.object, align 8
   store i32 0, ptr %retval, align 4
-  store ptr inttoptr (i64 7 to ptr), ptr %s, align 8
-  %0 = load ptr, ptr %s, align 8
-  %arrayidx = getelementptr inbounds i8, ptr %0, i64 0
-  %1 = load i8, ptr %arrayidx, align 1
-  %conv = sext i8 %1 to i32
-  %cmp = icmp ne i32 %conv, 97
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-if.end:                                           ; preds = %entry
-  %2 = load ptr, ptr %s, align 8
-  %arrayidx2 = getelementptr inbounds i8, ptr %2, i64 1
-  %3 = load i8, ptr %arrayidx2, align 1
-  %conv3 = sext i8 %3 to i32
-  %cmp4 = icmp ne i32 %conv3, 98
-  br i1 %cmp4, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end
-  store i32 2, ptr %retval, align 4
-  br label %return
-
-if.end7:                                          ; preds = %if.end
-  %4 = load ptr, ptr %s, align 8
-  %arrayidx8 = getelementptr inbounds i8, ptr %4, i64 2
-  %5 = load i8, ptr %arrayidx8, align 1
-  %conv9 = sext i8 %5 to i32
-  %cmp10 = icmp ne i32 %conv9, 99
-  br i1 %cmp10, label %if.then12, label %if.end13
-
-if.then12:                                        ; preds = %if.end7
-  store i32 3, ptr %retval, align 4
-  br label %return
-
-if.end13:                                         ; preds = %if.end7
-  %6 = load ptr, ptr %s, align 8
-  %arrayidx14 = getelementptr inbounds i8, ptr %6, i64 3
-  %7 = load i8, ptr %arrayidx14, align 1
-  %conv15 = sext i8 %7 to i32
-  %cmp16 = icmp ne i32 %conv15, 100
-  br i1 %cmp16, label %if.then18, label %if.end19
-
-if.then18:                                        ; preds = %if.end13
-  store i32 4, ptr %retval, align 4
-  br label %return
-
-if.end19:                                         ; preds = %if.end13
-  %8 = load ptr, ptr %s, align 8
-  %arrayidx20 = getelementptr inbounds i8, ptr %8, i64 4
-  %9 = load i8, ptr %arrayidx20, align 1
-  %conv21 = sext i8 %9 to i32
-  %cmp22 = icmp ne i32 %conv21, 101
-  br i1 %cmp22, label %if.then24, label %if.end25
-
-if.then24:                                        ; preds = %if.end19
-  store i32 5, ptr %retval, align 4
-  br label %return
-
-if.end25:                                         ; preds = %if.end19
-  %10 = load ptr, ptr %s, align 8
-  %arrayidx26 = getelementptr inbounds i8, ptr %10, i64 5
-  %11 = load i8, ptr %arrayidx26, align 1
-  %conv27 = sext i8 %11 to i32
-  %cmp28 = icmp ne i32 %conv27, 102
-  br i1 %cmp28, label %if.then30, label %if.end31
-
-if.then30:                                        ; preds = %if.end25
-  store i32 6, ptr %retval, align 4
-  br label %return
-
-if.end31:                                         ; preds = %if.end25
-  %12 = load ptr, ptr %s, align 8
-  %arrayidx32 = getelementptr inbounds i8, ptr %12, i64 6
-  %13 = load i8, ptr %arrayidx32, align 1
-  %conv33 = sext i8 %13 to i32
-  %cmp34 = icmp ne i32 %conv33, 0
-  br i1 %cmp34, label %if.then36, label %if.end37
-
-if.then36:                                        ; preds = %if.end31
-  store i32 7, ptr %retval, align 4
-  br label %return
-
-if.end37:                                         ; preds = %if.end31
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.end37, %if.then36, %if.then30, %if.then24, %if.then18, %if.then12, %if.then6, %if.then
-  %14 = load i32, ptr %retval, align 4
-  ret i32 %14
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %x, ptr align 8 @__const.main.x, i64 16, i1 false)
+  call void @llvm.memcpy.p0.p0.i64(ptr align 8 %y, ptr align 8 @__const.main.y, i64 16, i1 false)
+  %0 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 0
+  %1 = load ptr, ptr %0, align 8
+  %2 = getelementptr inbounds nuw { ptr, i64 }, ptr %x, i32 0, i32 1
+  %3 = load i64, ptr %2, align 8
+  %4 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 0
+  %5 = load ptr, ptr %4, align 8
+  %6 = getelementptr inbounds nuw { ptr, i64 }, ptr %y, i32 0, i32 1
+  %7 = load i64, ptr %6, align 8
+  %call = call { ptr, i64 } @foo(ptr %1, i64 %3, ptr %5, i64 %7)
+  %8 = getelementptr inbounds nuw { ptr, i64 }, ptr %three, i32 0, i32 0
+  %9 = extractvalue { ptr, i64 } %call, 0
+  store ptr %9, ptr %8, align 8
+  %10 = getelementptr inbounds nuw { ptr, i64 }, ptr %three, i32 0, i32 1
+  %11 = extractvalue { ptr, i64 } %call, 1
+  store i64 %11, ptr %10, align 8
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

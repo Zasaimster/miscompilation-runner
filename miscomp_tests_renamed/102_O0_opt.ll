@@ -1,46 +1,105 @@
-; 101596310245161430490509532554755883101
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101596310245161430490509532554755883101_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101596310245161430490509532554755883101.c"
+; 101831158098762811622797577806805393738
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101831158098762811622797577806805393738_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101831158098762811622797577806805393738.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f1(ptr noundef %p) #0 {
+define dso_local i32 @foo(i16 noundef zeroext %x) #0 {
 entry:
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %1 = load i8, ptr %0, align 1
-  %conv = sext i8 %1 to i32
-  %add = add nsw i32 %conv, 1
-  ret i32 %add
+  %x.addr = alloca i16, align 2
+  %y = alloca i16, align 2
+  store i16 %x, ptr %x.addr, align 2
+  %0 = load i16, ptr %x.addr, align 2
+  %conv = zext i16 %0 to i32
+  %cmp = icmp sgt i32 %conv, 32767
+  br i1 %cmp, label %cond.true, label %cond.false
+
+cond.true:                                        ; preds = %entry
+  %1 = load i16, ptr %x.addr, align 2
+  %conv2 = zext i16 %1 to i32
+  %sub = sub nsw i32 %conv2, 32768
+  br label %cond.end
+
+cond.false:                                       ; preds = %entry
+  br label %cond.end
+
+cond.end:                                         ; preds = %cond.false, %cond.true
+  %cond = phi i32 [ %sub, %cond.true ], [ 0, %cond.false ]
+  %conv3 = trunc i32 %cond to i16
+  store i16 %conv3, ptr %y, align 2
+  %2 = load i16, ptr %y, align 2
+  %conv4 = zext i16 %2 to i32
+  ret i32 %conv4
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @func(i32 noundef %unusedParam) #0 {
+entry:
+  %unusedParam.addr = alloca i32, align 4
+  store i32 %unusedParam, ptr %unusedParam.addr, align 4
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %s = alloca i8, align 1
   store i32 0, ptr %retval, align 4
-  store i8 1, ptr %s, align 1
-  %call = call i32 @f1(ptr noundef %s)
-  %cmp = icmp ne i32 %call, 2
+  %call = call i32 @foo(i16 noundef zeroext 0)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
+  call void @abort() #2
+  unreachable
 
 if.end:                                           ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
+  %call1 = call i32 @foo(i16 noundef zeroext 32767)
+  %cmp2 = icmp ne i32 %call1, 0
+  br i1 %cmp2, label %if.then3, label %if.end4
 
-return:                                           ; preds = %if.end, %if.then
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
+if.then3:                                         ; preds = %if.end
+  call void @abort() #2
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @foo(i16 noundef zeroext -32768)
+  %cmp6 = icmp ne i32 %call5, 0
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #2
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
+  %call9 = call i32 @foo(i16 noundef zeroext -32767)
+  %cmp10 = icmp ne i32 %call9, 1
+  br i1 %cmp10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  call void @abort() #2
+  unreachable
+
+if.end12:                                         ; preds = %if.end8
+  %call13 = call i32 @foo(i16 noundef zeroext -1)
+  %cmp14 = icmp ne i32 %call13, 32767
+  br i1 %cmp14, label %if.then15, label %if.end16
+
+if.then15:                                        ; preds = %if.end12
+  call void @abort() #2
+  unreachable
+
+if.end16:                                         ; preds = %if.end12
+  ret i32 0
 }
 
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

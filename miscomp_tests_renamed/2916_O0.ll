@@ -1,37 +1,65 @@
-; 160078239109019135650931816233661623064
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/160078239109019135650931816233661623064.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/160078239109019135650931816233661623064.c"
+; 151107905575676355192584923008914096472
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151107905575676355192584923008914096472.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151107905575676355192584923008914096472.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@.str = private unnamed_addr constant [7 x i8] c"hello\0A\00", align 1
-@.str.1 = private unnamed_addr constant [2 x i8] c"a\00", align 1
-@.str.2 = private unnamed_addr constant [1 x i8] zeroinitializer, align 1
-@.str.3 = private unnamed_addr constant [3 x i8] c"%s\00", align 1
-@.str.4 = private unnamed_addr constant [6 x i8] c"hello\00", align 1
-@.str.5 = private unnamed_addr constant [3 x i8] c"%c\00", align 1
-@.str.6 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
-@.str.7 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (i32, ptr, ...) @test(i32 noundef 6, ptr noundef @.str)
-  %call1 = call i32 (i32, ptr, ...) @test(i32 noundef 1, ptr noundef @.str.1)
-  %call2 = call i32 (i32, ptr, ...) @test(i32 noundef 0, ptr noundef @.str.2)
-  %call3 = call i32 (i32, ptr, ptr, ...) @test(i32 noundef 5, ptr noundef @.str.3, ptr noundef @.str.4)
-  %call4 = call i32 (i32, ptr, ptr, ...) @test(i32 noundef 6, ptr noundef @.str.3, ptr noundef @.str)
-  %call5 = call i32 (i32, ptr, ptr, ...) @test(i32 noundef 1, ptr noundef @.str.3, ptr noundef @.str.1)
-  %call6 = call i32 (i32, ptr, ptr, ...) @test(i32 noundef 0, ptr noundef @.str.3, ptr noundef @.str.2)
-  %call7 = call i32 (i32, ptr, i32, ...) @test(i32 noundef 1, ptr noundef @.str.5, i32 noundef 120)
-  %call8 = call i32 (i32, ptr, ptr, ...) @test(i32 noundef 7, ptr noundef @.str.6, ptr noundef @.str)
-  %call9 = call i32 (i32, ptr, i32, ...) @test(i32 noundef 2, ptr noundef @.str.7, i32 noundef 0)
-  ret i32 0
+  store i32 0, ptr %x, align 4
+  %call = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
+  %0 = load i32, ptr %x, align 4
+  %add = add nsw i32 %0, %call
+  store i32 %add, ptr %x, align 4
+  %1 = load i32, ptr %x, align 4
+  %add1 = add nsw i32 %1, 2
+  store i32 %add1, ptr %x, align 4
+  %2 = load i32, ptr %x, align 4
+  %cmp = icmp ne i32 %2, 4
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
+
+if.end:                                           ; preds = %entry
+  %3 = load i32, ptr %x, align 4
+  %sub = sub nsw i32 %3, 1
+  store i32 %sub, ptr %x, align 4
+  %4 = load i32, ptr %x, align 4
+  %cmp2 = icmp ne i32 %4, 3
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  store i32 2, ptr %retval, align 4
+  br label %return
+
+if.end4:                                          ; preds = %if.end
+  %5 = load i32, ptr %x, align 4
+  %mul = mul nsw i32 %5, 2
+  store i32 %mul, ptr %x, align 4
+  %6 = load i32, ptr %x, align 4
+  %cmp5 = icmp ne i32 %6, 6
+  br i1 %cmp5, label %if.then6, label %if.end7
+
+if.then6:                                         ; preds = %if.end4
+  store i32 3, ptr %retval, align 4
+  br label %return
+
+if.end7:                                          ; preds = %if.end4
+  store i32 0, ptr %retval, align 4
+  br label %return
+
+return:                                           ; preds = %if.end7, %if.then6, %if.then3, %if.then
+  %7 = load i32, ptr %retval, align 4
+  ret i32 %7
 }
 
-declare i32 @test(...) #1
+declare i32 @calculateSquare(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

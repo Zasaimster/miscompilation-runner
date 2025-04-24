@@ -1,53 +1,76 @@
-; 10572430178001321001210989583849362728
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10572430178001321001210989583849362728.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10572430178001321001210989583849362728.c"
+; 192655903431578850381672437598063356057
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192655903431578850381672437598063356057.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192655903431578850381672437598063356057.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
-@.str.1 = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@p = dso_local global i32 0, align 4
+@k = dso_local global i32 0, align 4
+@n = dso_local global i32 30, align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @x() #0 {
+entry:
+  %h = alloca i32, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %cmp = icmp sle i32 %call, 30
+  %conv = zext i1 %cmp to i32
+  store i32 %conv, ptr %h, align 4
+  %0 = load i32, ptr %h, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr @p, align 4
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  store i32 0, ptr @p, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %1 = load i32, ptr %h, align 4
+  %tobool1 = icmp ne i32 %1, 0
+  br i1 %tobool1, label %if.then2, label %if.else3
+
+if.then2:                                         ; preds = %if.end
+  store i32 1, ptr @k, align 4
+  br label %if.end4
+
+if.else3:                                         ; preds = %if.end
+  store i32 0, ptr @k, align 4
+  br label %if.end4
+
+if.end4:                                          ; preds = %if.else3, %if.then2
+  ret void
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i64, align 8
-  %ca = alloca i8, align 1
   store i32 0, ptr %retval, align 4
-  store i64 -2147483648, ptr %i, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %conv = trunc i32 %call to i8
-  store i8 %conv, ptr %ca, align 1
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %0 = load i8, ptr %ca, align 1
-  %conv2 = sext i8 %0 to i32
-  %shr = ashr i32 %call1, %conv2
-  %conv3 = sext i32 %shr to i64
-  %cmp = icmp ne i64 %conv3, -1073741824
-  br i1 %cmp, label %if.then, label %if.end
+  call void @x()
+  %0 = load i32, ptr @p, align 4
+  %cmp = icmp ne i32 %0, 1
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load i32, ptr @k, align 4
+  %cmp1 = icmp ne i32 %1, 1
+  br i1 %cmp1, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
   call void @abort() #4
   unreachable
 
-if.end:                                           ; preds = %entry
-  %1 = load i64, ptr %i, align 8
-  %2 = load i64, ptr %i, align 8
-  %div = sdiv i64 %2, -2000000000
-  %shr5 = ashr i64 %1, %div
-  %cmp6 = icmp ne i64 %shr5, -1073741824
-  br i1 %cmp6, label %if.then8, label %if.end9
-
-if.then8:                                         ; preds = %if.end
-  call void @abort() #4
-  unreachable
-
-if.end9:                                          ; preds = %if.end
+if.end:                                           ; preds = %lor.lhs.false
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

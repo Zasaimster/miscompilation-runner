@@ -1,101 +1,144 @@
-; 108901460167943433378788809215833999294
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108901460167943433378788809215833999294_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108901460167943433378788809215833999294.c"
+; 177974834334468704829927062879794176551
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/177974834334468704829927062879794176551_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/177974834334468704829927062879794176551.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@__const.main.ar = private unnamed_addr constant [5 x i32] [i32 10, i32 11, i32 12, i32 13, i32 14], align 16
+%struct._RenderInfo = type { i32, float, i32 }
+
 @.str = private unnamed_addr constant [19 x i8] c"This won't print.\0A\00", align 1
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @g(ptr noundef %v, i32 noundef %n, ptr noundef %a, i32 noundef %b) #0 {
-entry:
-  %v.addr = alloca ptr, align 8
-  %n.addr = alloca i32, align 4
-  %a.addr = alloca ptr, align 8
-  %b.addr = alloca i32, align 4
-  %cnt = alloca i32, align 4
-  store ptr %v, ptr %v.addr, align 8
-  store i32 %n, ptr %n.addr, align 4
-  store ptr %a, ptr %a.addr, align 8
-  store i32 %b, ptr %b.addr, align 4
-  %0 = load ptr, ptr %v.addr, align 8
-  store i64 0, ptr %0, align 8
-  store i32 0, ptr %cnt, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %entry
-  %1 = load i32, ptr %cnt, align 4
-  %2 = load i32, ptr %n.addr, align 4
-  %cmp = icmp slt i32 %1, %2
-  br i1 %cmp, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %3 = load ptr, ptr %v.addr, align 8
-  %4 = load i64, ptr %3, align 8
-  %5 = load i32, ptr %b.addr, align 4
-  %conv = sext i32 %5 to i64
-  %mul = mul i64 %4, %conv
-  %6 = load ptr, ptr %a.addr, align 8
-  %7 = load i32, ptr %cnt, align 4
-  %idxprom = sext i32 %7 to i64
-  %arrayidx = getelementptr inbounds i32, ptr %6, i64 %idxprom
-  %8 = load i32, ptr %arrayidx, align 4
-  %conv1 = zext i32 %8 to i64
-  %add = add i64 %mul, %conv1
-  %9 = load ptr, ptr %v.addr, align 8
-  store i64 %add, ptr %9, align 8
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %10 = load i32, ptr %cnt, align 4
-  %inc = add nsw i32 %10, 1
-  store i32 %inc, ptr %cnt, align 4
-  br label %for.cond, !llvm.loop !6
-
-for.end:                                          ; preds = %for.cond
-  %11 = load i32, ptr %n.addr, align 4
-  ret i32 %11
-}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %res = alloca i32, align 4
-  %ar = alloca [5 x i32], align 16
-  %v = alloca i64, align 8
+  %info = alloca %struct._RenderInfo, align 4
   store i32 0, ptr %retval, align 4
-  call void @llvm.memcpy.p0.p0.i64(ptr align 16 %ar, ptr align 16 @__const.main.ar, i64 20, i1 false)
-  %arraydecay = getelementptr inbounds [5 x i32], ptr %ar, i64 0, i64 0
-  %call = call i32 @g(ptr noundef %v, i32 noundef 5, ptr noundef %arraydecay, i32 noundef 16)
-  store i32 %call, ptr %res, align 4
-  %0 = load i64, ptr %v, align 8
-  %cmp = icmp ne i64 %0, 703710
+  %y = getelementptr inbounds nuw %struct._RenderInfo, ptr %info, i32 0, i32 0
+  store i32 0, ptr %y, align 4
+  %src_y = getelementptr inbounds nuw %struct._RenderInfo, ptr %info, i32 0, i32 2
+  store i32 0, ptr %src_y, align 4
+  %scaley = getelementptr inbounds nuw %struct._RenderInfo, ptr %info, i32 0, i32 1
+  store float 1.000000e+00, ptr %scaley, align 4
+  %call = call i32 @render_image_rgb_a(ptr noundef %info)
+  %cmp = icmp ne i32 %call, 256
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %if.end
+  call void @abort() #4
+  unreachable
 
-if.end:                                           ; preds = %if.then, %entry
-  call void @exit(i32 noundef 0) #4
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #5
   unreachable
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
+; Function Attrs: noinline nounwind uwtable
+define internal i32 @render_image_rgb_a(ptr noundef %info) #0 {
+entry:
+  %info.addr = alloca ptr, align 8
+  %y = alloca i32, align 4
+  %ye = alloca i32, align 4
+  %error = alloca float, align 4
+  %step = alloca float, align 4
+  store ptr %info, ptr %info.addr, align 8
+  %0 = load ptr, ptr %info.addr, align 8
+  %y1 = getelementptr inbounds nuw %struct._RenderInfo, ptr %0, i32 0, i32 0
+  %1 = load i32, ptr %y1, align 4
+  store i32 %1, ptr %y, align 4
+  store i32 256, ptr %ye, align 4
+  %2 = load ptr, ptr %info.addr, align 8
+  %scaley = getelementptr inbounds nuw %struct._RenderInfo, ptr %2, i32 0, i32 1
+  %3 = load float, ptr %scaley, align 4
+  %conv = fpext float %3 to double
+  %div = fdiv double 1.000000e+00, %conv
+  %conv2 = fptrunc double %div to float
+  store float %conv2, ptr %step, align 4
+  %4 = load i32, ptr %y, align 4
+  %conv3 = sitofp i32 %4 to float
+  %5 = load float, ptr %step, align 4
+  %mul = fmul float %conv3, %5
+  store float %mul, ptr %error, align 4
+  %6 = load float, ptr %error, align 4
+  %conv4 = fptosi float %6 to i32
+  %conv5 = sitofp i32 %conv4 to float
+  %7 = load float, ptr %step, align 4
+  %sub = fsub float %conv5, %7
+  %8 = load float, ptr %error, align 4
+  %sub6 = fsub float %8, %sub
+  store float %sub6, ptr %error, align 4
+  br label %for.cond
 
-declare i32 @printf(ptr noundef, ...) #2
+for.cond:                                         ; preds = %for.inc, %entry
+  %9 = load i32, ptr %y, align 4
+  %10 = load i32, ptr %ye, align 4
+  %cmp = icmp slt i32 %9, %10
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %11 = load float, ptr %error, align 4
+  %conv8 = fpext float %11 to double
+  %cmp9 = fcmp oge double %conv8, 1.000000e+00
+  br i1 %cmp9, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.body
+  %12 = load float, ptr %error, align 4
+  %conv11 = fptosi float %12 to i32
+  %13 = load ptr, ptr %info.addr, align 8
+  %src_y = getelementptr inbounds nuw %struct._RenderInfo, ptr %13, i32 0, i32 2
+  %14 = load i32, ptr %src_y, align 4
+  %add = add nsw i32 %14, %conv11
+  store i32 %add, ptr %src_y, align 4
+  %15 = load float, ptr %error, align 4
+  %conv12 = fptosi float %15 to i32
+  %conv13 = sitofp i32 %conv12 to float
+  %16 = load float, ptr %error, align 4
+  %sub14 = fsub float %16, %conv13
+  store float %sub14, ptr %error, align 4
+  call void @bar()
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %for.body
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %17 = load float, ptr %step, align 4
+  %18 = load float, ptr %error, align 4
+  %add15 = fadd float %18, %17
+  store float %add15, ptr %error, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %19 = load i32, ptr %y, align 4
+  %inc = add nsw i32 %19, 1
+  store i32 %inc, ptr %y, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  %20 = load ptr, ptr %info.addr, align 8
+  %src_y16 = getelementptr inbounds nuw %struct._RenderInfo, ptr %20, i32 0, i32 2
+  %21 = load i32, ptr %src_y16, align 4
+  ret i32 %21
+}
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #3
+declare void @exit(i32 noundef) #2
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @bar() #0 {
+entry:
+  ret void
+}
+
+declare i32 @printf(ptr noundef, ...) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

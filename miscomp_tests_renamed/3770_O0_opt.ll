@@ -1,79 +1,26 @@
-; 155140876404844211407356887723818754535
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155140876404844211407356887723818754535_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155140876404844211407356887723818754535.c"
+; 165855831957582479594790059446255458745
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/165855831957582479594790059446255458745_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/165855831957582479594790059446255458745.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %a) #0 {
-entry:
-  %a.addr = alloca ptr, align 8
-  %i = alloca i32, align 4
-  %j = alloca i32, align 4
-  %x = alloca i32, align 4
-  %y = alloca i32, align 4
-  store ptr %a, ptr %a.addr, align 8
-  %0 = load ptr, ptr %a.addr, align 8
-  %arrayidx = getelementptr inbounds i8, ptr %0, i64 1
-  %1 = load i8, ptr %arrayidx, align 1
-  %conv = zext i8 %1 to i32
-  store i32 %conv, ptr %j, align 4
-  %2 = load ptr, ptr %a.addr, align 8
-  %arrayidx1 = getelementptr inbounds i8, ptr %2, i64 0
-  %3 = load i8, ptr %arrayidx1, align 1
-  %conv2 = zext i8 %3 to i32
-  %4 = load i32, ptr %j, align 4
-  %sub = sub nsw i32 %conv2, %4
-  store i32 %sub, ptr %i, align 4
-  %5 = load i32, ptr %i, align 4
-  %cmp = icmp slt i32 %5, 0
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  store i32 1, ptr %x, align 4
-  %6 = load i32, ptr %i, align 4
-  %sub4 = sub nsw i32 0, %6
-  store i32 %sub4, ptr %y, align 4
-  br label %if.end
-
-if.else:                                          ; preds = %entry
-  store i32 0, ptr %x, align 4
-  %7 = load i32, ptr %i, align 4
-  store i32 %7, ptr %y, align 4
-  br label %if.end
-
-if.end:                                           ; preds = %if.else, %if.then
-  %8 = load i32, ptr %x, align 4
-  %9 = load i32, ptr %y, align 4
-  %add = add nsw i32 %8, %9
-  ret i32 %add
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @calculateSquare(i32 noundef %x) #0 {
-entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %1 = load i32, ptr %x.addr, align 4
-  %mul = mul nsw i32 %0, %1
-  ret i32 %mul
-}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca [2 x i8], align 1
+  %x = alloca double, align 8
+  %y = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  %arrayidx = getelementptr inbounds [2 x i8], ptr %a, i64 0, i64 0
-  store i8 8, ptr %arrayidx, align 1
-  %arrayidx1 = getelementptr inbounds [2 x i8], ptr %a, i64 0, i64 1
-  store i8 9, ptr %arrayidx1, align 1
-  %arraydecay = getelementptr inbounds [2 x i8], ptr %a, i64 0, i64 0
-  %call = call i32 @f(ptr noundef %arraydecay)
-  %cmp = icmp ne i32 %call, 2
-  br i1 %cmp, label %if.then, label %if.end
+  store double 4.200000e+01, ptr %x, align 8
+  store double 2.000000e+00, ptr %y, align 8
+  %0 = load double, ptr %y, align 8
+  %1 = load double, ptr %x, align 8
+  %dec = fadd double %1, -1.000000e+00
+  store double %dec, ptr %x, align 8
+  %cmp = fcmp ogt double %0, %1
+  %conv = zext i1 %cmp to i32
+  %cmp1 = icmp ne i32 %conv, 1
+  br i1 %cmp1, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

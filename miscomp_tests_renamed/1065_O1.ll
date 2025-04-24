@@ -1,130 +1,112 @@
-; 119847773254968176518391457879332164160
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119847773254968176518391457879332164160.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119847773254968176518391457879332164160.c"
+; 119123147939957383528946708323715776317
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119123147939957383528946708323715776317.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119123147939957383528946708323715776317.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [19 x i8] c"This is dead code.\00", align 1
+@foo.t16 = internal unnamed_addr constant [16 x float] [float 1.000000e+00, float 2.000000e+00, float 3.000000e+00, float 4.000000e+00, float 5.000000e+00, float 6.000000e+00, float 7.000000e+00, float 8.000000e+00, float 9.000000e+00, float 1.000000e+01, float 1.100000e+01, float 1.200000e+01, float 1.300000e+01, float 1.400000e+01, float 1.500000e+01, float 1.600000e+01], align 16
+@foo.tmp = internal unnamed_addr global [4 x float] zeroinitializer, align 16
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @f(i32 noundef %n, i24 %x.coerce, i24 %y.coerce, i24 %z.coerce, i64 noundef %l) local_unnamed_addr #0 {
+; Function Attrs: nofree norecurse nosync nounwind memory(write, argmem: none, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = and i24 %x.coerce, 255
-  %cmp.not = icmp eq i24 %0, 10
-  br i1 %cmp.not, label %if.end, label %if.then
+  br label %for.body.i
 
-if.then:                                          ; preds = %entry
-  tail call void @abort() #5
-  unreachable
+for.body.i:                                       ; preds = %for.inc11.i, %entry
+  %indvars.iv31.i = phi i64 [ 0, %entry ], [ %indvars.iv.next32.i, %for.inc11.i ]
+  %indvars.iv.i = phi i32 [ 4, %entry ], [ %indvars.iv.next.i, %for.inc11.i ]
+  %cmp228.not.i = icmp eq i64 %indvars.iv31.i, 0
+  br i1 %cmp228.not.i, label %for.inc11.i, label %for.cond1.for.inc11_crit_edge.i
 
-if.end:                                           ; preds = %entry
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %1 = and i24 %x.coerce, 65280
-  %cmp3.not = icmp eq i24 %1, 5120
-  br i1 %cmp3.not, label %if.end6, label %if.then5
+for.cond1.for.inc11_crit_edge.i:                  ; preds = %for.body.i
+  %0 = sub nuw nsw i64 3, %indvars.iv31.i
+  %1 = mul nuw nsw i64 %0, 5
+  %arrayidx.i = getelementptr inbounds nuw [16 x float], ptr @foo.t16, i64 0, i64 %1
+  %2 = load float, ptr %arrayidx.i, align 4, !tbaa !5
+  %umax.i = tail call i32 @llvm.umax.i32(i32 %indvars.iv.i, i32 3)
+  %arrayidx10.i = getelementptr inbounds nuw [4 x float], ptr @foo.tmp, i64 0, i64 %0
+  %mul4.i = shl nuw nsw i32 %umax.i, 2
+  %3 = trunc nuw nsw i64 %0 to i32
+  %add5.i = or disjoint i32 %mul4.i, %3
+  %idxprom6.i = zext nneg i32 %add5.i to i64
+  %arrayidx7.i = getelementptr inbounds nuw [16 x float], ptr @foo.t16, i64 0, i64 %idxprom6.i
+  %4 = load float, ptr %arrayidx7.i, align 4, !tbaa !5
+  %mul8.i = fmul float %2, %4
+  store float %mul8.i, ptr %arrayidx10.i, align 4, !tbaa !5
+  br label %for.inc11.i
 
-if.then5:                                         ; preds = %if.end
-  tail call void @abort() #5
-  unreachable
+for.inc11.i:                                      ; preds = %for.cond1.for.inc11_crit_edge.i, %for.body.i
+  %indvars.iv.next32.i = add nuw nsw i64 %indvars.iv31.i, 1
+  %indvars.iv.next.i = add nsw i32 %indvars.iv.i, -1
+  %exitcond.not.i = icmp eq i64 %indvars.iv.next32.i, 4
+  br i1 %exitcond.not.i, label %foo.exit, label %for.body.i, !llvm.loop !9
 
-if.end6:                                          ; preds = %if.end
-  %x.sroa.3.0.extract.shift.mask = and i24 %x.coerce, -65536
-  %cmp8.not = icmp eq i24 %x.sroa.3.0.extract.shift.mask, 1966080
-  br i1 %cmp8.not, label %if.end11, label %if.then10
-
-if.then10:                                        ; preds = %if.end6
-  tail call void @abort() #5
-  unreachable
-
-if.end11:                                         ; preds = %if.end6
-  %2 = and i24 %y.coerce, 255
-  %cmp14.not = icmp eq i24 %2, 11
-  br i1 %cmp14.not, label %if.end17, label %if.then16
-
-if.then16:                                        ; preds = %if.end11
-  tail call void @abort() #5
-  unreachable
-
-if.end17:                                         ; preds = %if.end11
-  %3 = and i24 %y.coerce, 65280
-  %cmp20.not = icmp eq i24 %3, 5376
-  br i1 %cmp20.not, label %if.end23, label %if.then22
-
-if.then22:                                        ; preds = %if.end17
-  tail call void @abort() #5
-  unreachable
-
-if.end23:                                         ; preds = %if.end17
-  %y.sroa.3.0.extract.shift.mask = and i24 %y.coerce, -65536
-  %cmp26.not = icmp eq i24 %y.sroa.3.0.extract.shift.mask, 2031616
-  br i1 %cmp26.not, label %if.end29, label %if.then28
-
-if.then28:                                        ; preds = %if.end23
-  tail call void @abort() #5
-  unreachable
-
-if.end29:                                         ; preds = %if.end23
-  %4 = and i24 %z.coerce, 255
-  %cmp32.not = icmp eq i24 %4, 12
-  br i1 %cmp32.not, label %if.end35, label %if.then34
-
-if.then34:                                        ; preds = %if.end29
-  tail call void @abort() #5
-  unreachable
-
-if.end35:                                         ; preds = %if.end29
-  %5 = and i24 %z.coerce, 65280
-  %cmp38.not = icmp eq i24 %5, 5632
-  br i1 %cmp38.not, label %if.end41, label %if.then40
-
-if.then40:                                        ; preds = %if.end35
-  tail call void @abort() #5
-  unreachable
-
-if.end41:                                         ; preds = %if.end35
-  %z.sroa.3.0.extract.shift.mask = and i24 %z.coerce, -65536
-  %cmp44.not = icmp eq i24 %z.sroa.3.0.extract.shift.mask, 2097152
-  br i1 %cmp44.not, label %if.end47, label %if.then46
-
-if.then46:                                        ; preds = %if.end41
-  tail call void @abort() #5
-  unreachable
-
-if.end47:                                         ; preds = %if.end41
-  %cmp48.not = icmp eq i64 %l, 123
-  br i1 %cmp48.not, label %if.end51, label %if.then50
-
-if.then50:                                        ; preds = %if.end47
-  tail call void @abort() #5
-  unreachable
-
-if.end51:                                         ; preds = %if.end47
-  ret i32 undef
+foo.exit:                                         ; preds = %for.inc11.i
+  ret i32 0
 }
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #2 {
+; Function Attrs: nofree norecurse nosync nounwind memory(readwrite, argmem: write, inaccessiblemem: none) uwtable
+define dso_local void @foo(ptr noundef writeonly captures(none) %x) local_unnamed_addr #1 {
 entry:
-  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  tail call void @exit(i32 noundef 0) #5
-  unreachable
+  br label %for.body
+
+for.body:                                         ; preds = %entry, %for.inc11
+  %indvars.iv31 = phi i64 [ 0, %entry ], [ %indvars.iv.next32, %for.inc11 ]
+  %indvars.iv = phi i32 [ 4, %entry ], [ %indvars.iv.next, %for.inc11 ]
+  %cmp228.not = icmp eq i64 %indvars.iv31, 0
+  br i1 %cmp228.not, label %for.inc11, label %for.cond1.for.inc11_crit_edge
+
+for.cond1.for.inc11_crit_edge:                    ; preds = %for.body
+  %0 = sub nuw nsw i64 3, %indvars.iv31
+  %1 = mul nuw nsw i64 %0, 5
+  %arrayidx = getelementptr inbounds nuw [16 x float], ptr @foo.t16, i64 0, i64 %1
+  %2 = load float, ptr %arrayidx, align 4, !tbaa !5
+  %umax = tail call i32 @llvm.umax.i32(i32 %indvars.iv, i32 3)
+  %arrayidx10 = getelementptr inbounds nuw [4 x float], ptr @foo.tmp, i64 0, i64 %0
+  %mul4 = shl nuw nsw i32 %umax, 2
+  %3 = trunc nuw nsw i64 %0 to i32
+  %add5 = or disjoint i32 %mul4, %3
+  %idxprom6 = zext nneg i32 %add5 to i64
+  %arrayidx7 = getelementptr inbounds nuw [16 x float], ptr @foo.t16, i64 0, i64 %idxprom6
+  %4 = load float, ptr %arrayidx7, align 4, !tbaa !5
+  %mul8 = fmul float %2, %4
+  store float %mul8, ptr %arrayidx10, align 4, !tbaa !5
+  br label %for.inc11
+
+for.inc11:                                        ; preds = %for.cond1.for.inc11_crit_edge, %for.body
+  %indvars.iv.next32 = add nuw nsw i64 %indvars.iv31, 1
+  %indvars.iv.next = add nsw i32 %indvars.iv, -1
+  %exitcond.not = icmp eq i64 %indvars.iv.next32, 4
+  br i1 %exitcond.not, label %for.end13, label %for.body, !llvm.loop !9
+
+for.end13:                                        ; preds = %for.inc11
+  %5 = load float, ptr @foo.tmp, align 16, !tbaa !5
+  store float %5, ptr %x, align 4, !tbaa !5
+  %6 = load float, ptr getelementptr inbounds nuw (i8, ptr @foo.tmp, i64 4), align 4, !tbaa !5
+  %arrayidx15 = getelementptr inbounds nuw i8, ptr %x, i64 4
+  store float %6, ptr %arrayidx15, align 4, !tbaa !5
+  %7 = load float, ptr getelementptr inbounds nuw (i8, ptr @foo.tmp, i64 8), align 8, !tbaa !5
+  %arrayidx16 = getelementptr inbounds nuw i8, ptr %x, i64 8
+  store float %7, ptr %arrayidx16, align 4, !tbaa !5
+  %8 = load float, ptr getelementptr inbounds nuw (i8, ptr @foo.tmp, i64 12), align 4, !tbaa !5
+  %arrayidx17 = getelementptr inbounds nuw i8, ptr %x, i64 12
+  store float %8, ptr %arrayidx17, align 4, !tbaa !5
+  ret void
 }
 
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #3
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @printHello() local_unnamed_addr #2 {
+entry:
+  ret void
+}
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #4
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.umax.i32(i32, i32) #3
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { nofree nounwind }
-attributes #5 = { noreturn nounwind }
+attributes #0 = { nofree norecurse nosync nounwind memory(write, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree norecurse nosync nounwind memory(readwrite, argmem: write, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -134,3 +116,10 @@ attributes #5 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"float", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C/C++ TBAA"}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}

@@ -1,37 +1,58 @@
-; 157518432222692058024903727298668488419
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157518432222692058024903727298668488419_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157518432222692058024903727298668488419.c"
+; 184077191436332854085018138101823165498
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/184077191436332854085018138101823165498_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/184077191436332854085018138101823165498.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@bar = dso_local global i32 0, align 4
 @.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f(ptr noundef %p) #0 {
+entry:
+  %retval = alloca i32, align 4
+  %p.addr = alloca ptr, align 8
+  %foo = alloca i32, align 4
+  store ptr %p, ptr %p.addr, align 8
+  store i32 2, ptr %foo, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i64, align 8
+  %tab = alloca [2 x i32], align 4
   store i32 0, ptr %retval, align 4
-  store i64 1, ptr %i, align 8
-  %0 = load i64, ptr %i, align 8
-  %mul = mul nsw i64 %0, 2
-  %add = add nsw i64 %mul, 1
-  store i64 %add, ptr %i, align 8
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %1 = load i64, ptr %i, align 8
-  %cmp = icmp ne i64 %1, 3
-  br i1 %cmp, label %if.then, label %if.end
+  %arrayidx = getelementptr inbounds [2 x i32], ptr %tab, i64 0, i64 1
+  store i32 0, ptr %arrayidx, align 4
+  %arrayidx1 = getelementptr inbounds [2 x i32], ptr %tab, i64 0, i64 0
+  store i32 0, ptr %arrayidx1, align 4
+  %arraydecay = getelementptr inbounds [2 x i32], ptr %tab, i64 0, i64 0
+  %call = call i32 @f(ptr noundef %arraydecay)
+  %arrayidx2 = getelementptr inbounds [2 x i32], ptr %tab, i64 0, i64 0
+  %0 = load i32, ptr %arrayidx2, align 4
+  %cmp = icmp ne i32 %0, 2
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
+lor.lhs.false:                                    ; preds = %entry
+  %arrayidx3 = getelementptr inbounds [2 x i32], ptr %tab, i64 0, i64 1
+  %1 = load i32, ptr %arrayidx3, align 4
+  %cmp4 = icmp ne i32 %1, 1
+  br i1 %cmp4, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
   call void @abort() #4
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %lor.lhs.false
   call void @exit(i32 noundef 0) #5
   unreachable
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

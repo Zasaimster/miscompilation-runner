@@ -1,40 +1,57 @@
-; 183493761837530895674221813966027207247
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/183493761837530895674221813966027207247_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/183493761837530895674221813966027207247.c"
+; 173201561420252743443884802352751685199
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173201561420252743443884802352751685199_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173201561420252743443884802352751685199.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@d = dso_local global i32 1, align 4
-@a = dso_local global i32 0, align 4
-@b = dso_local global i32 0, align 4
-@c = dso_local global i32 0, align 4
-@e = dso_local global i32 0, align 4
+@f.values = internal global [1 x i16] [i16 -27904], align 2
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @f() #0 {
+entry:
+  %token = alloca i16, align 2
+  %count = alloca i32, align 4
+  %call = call i32 (...) @example3()
+  %0 = load i16, ptr %token, align 2
+  %conv = zext i16 %0 to i32
+  %shr = ashr i32 %conv, 8
+  store i32 %shr, ptr %count, align 4
+  %1 = load i32, ptr %count, align 4
+  ret i32 %1
+}
+
+declare i32 @example3(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call signext i8 @foo()
-  call void @exit(i32 noundef 0) #2
+  %call = call i32 @f()
+  %cmp = icmp ne i32 %call, 147
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #4
+  unreachable
+
+if.end:                                           ; preds = %entry
+  call void @exit(i32 noundef 0) #5
   unreachable
 }
 
-; Function Attrs: noreturn
-declare void @exit(i32 noundef) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
-; Function Attrs: noinline nounwind uwtable
-define internal signext i8 @foo() #0 {
-entry:
-  %g = alloca i32, align 4
-  %0 = load i32, ptr @a, align 4
-  store i32 %0, ptr %g, align 4
-  ret i8 0
-}
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #3
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn nounwind }
+attributes #5 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

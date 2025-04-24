@@ -1,36 +1,30 @@
-; 131716469403642516812992450353212671165
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/131716469403642516812992450353212671165.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/131716469403642516812992450353212671165.c"
+; 174216893529292832920161952680660157325
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/174216893529292832920161952680660157325.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/174216893529292832920161952680660157325.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
+@.str = private unnamed_addr constant [16 x i8] c"Value of a: %d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
-  %u = alloca i32, align 4
+  %a = alloca i32, align 4
+  %f = alloca float, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  store i32 %call, ptr %i, align 4
-  store i32 -1, ptr %i, align 4
-  store i32 -1, ptr %i, align 4
-  store i32 -1, ptr %i, align 4
-  store i32 -1, ptr %i, align 4
-  store i32 3, ptr %i, align 4
-  store i32 0, ptr %i, align 4
-  store i32 0, ptr %i, align 4
-  store i32 1, ptr %u, align 4
-  store i32 -1, ptr %u, align 4
-  store i32 -1, ptr %u, align 4
-  store i32 -1, ptr %u, align 4
-  store i32 -1, ptr %u, align 4
-  store i32 0, ptr %u, align 4
-  store i32 3, ptr %u, align 4
-  store i32 0, ptr %u, align 4
-  ret i32 0
+  store i32 2, ptr %a, align 4
+  %0 = load i32, ptr %a, align 4
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %0)
+  %add = add nsw i32 %call, 1
+  %conv = sitofp i32 %add to float
+  store float %conv, ptr %f, align 4
+  %1 = load float, ptr %f, align 4
+  %2 = load i32, ptr %a, align 4
+  %conv1 = sitofp i32 %2 to float
+  %cmp = fcmp oeq float %1, %conv1
+  %conv2 = zext i1 %cmp to i32
+  ret i32 %conv2
 }
 
 declare i32 @printf(ptr noundef, ...) #1

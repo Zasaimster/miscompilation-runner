@@ -1,17 +1,24 @@
-; 154731872122081660255632641237632266512
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/154731872122081660255632641237632266512.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/154731872122081660255632641237632266512.c"
+; 115096923474077893701104041044384957785
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/115096923474077893701104041044384957785.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/115096923474077893701104041044384957785.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.type = type { ptr, i32 }
-
-@t = dso_local global %struct.type zeroinitializer, align 8
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo() #0 {
+define dso_local i32 @test(float noundef %c) #0 {
 entry:
-  ret i32 10
+  %c.addr = alloca float, align 4
+  store float %c, ptr %c.addr, align 4
+  %0 = load float, ptr %c.addr, align 4
+  %tobool = fcmp une float %0, 0.000000e+00
+  %lnot = xor i1 %tobool, true
+  %lnot1 = xor i1 %lnot, true
+  %lnot.ext = zext i1 %lnot1 to i32
+  %conv = sext i32 %lnot.ext to i64
+  %mul = mul nsw i64 %conv, 7
+  %cmp = icmp eq i64 %mul, 0
+  %conv2 = zext i1 %cmp to i32
+  ret i32 %conv2
 }
 
 ; Function Attrs: noinline nounwind uwtable
@@ -19,14 +26,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %bf.load = load i32, ptr getelementptr inbounds nuw (%struct.type, ptr @t, i32 0, i32 1), align 8
-  %bf.clear = and i32 %bf.load, -33488897
-  %bf.set = or i32 %bf.clear, 1310720
-  store i32 %bf.set, ptr getelementptr inbounds nuw (%struct.type, ptr @t, i32 0, i32 1), align 8
-  %0 = load ptr, ptr @t, align 8
-  %1 = load i64, ptr getelementptr inbounds nuw ({ ptr, i64 }, ptr @t, i32 0, i32 1), align 8
-  %call = call i32 (ptr, i64, ...) @foo(ptr %0, i64 %1)
-  %cmp = icmp ne i32 %call, 8
+  %call = call i32 @test(float noundef 1.000000e+00)
+  %cmp = icmp ne i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

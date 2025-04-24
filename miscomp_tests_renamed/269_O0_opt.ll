@@ -1,70 +1,59 @@
-; 191713472377524283340395405612533219191
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191713472377524283340395405612533219191_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191713472377524283340395405612533219191.c"
+; 10465846553181442450291611015871239850
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10465846553181442450291611015871239850_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10465846553181442450291611015871239850.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.block = type { i64, i64, ptr, ptr, i8, i32, [1 x %struct.symbol] }
-%struct.symbol = type { i32, ptr }
-%struct.blockvector = type { i32, [2 x ptr] }
-%struct.symtab = type { ptr }
-
 ; Function Attrs: noinline nounwind uwtable
-define dso_local ptr @blockvector_for_pc_sect(i64 noundef %pc, ptr noundef %symtab) #0 {
+define dso_local double @test(double noundef %le, double noundef %ri) #0 {
 entry:
-  %pc.addr = alloca i64, align 8
-  %symtab.addr = alloca ptr, align 8
-  store i64 %pc, ptr %pc.addr, align 8
-  store ptr %symtab, ptr %symtab.addr, align 8
-  ret ptr null
+  %le.addr = alloca double, align 8
+  %ri.addr = alloca double, align 8
+  %val = alloca double, align 8
+  store double %le, ptr %le.addr, align 8
+  store double %ri, ptr %ri.addr, align 8
+  store double 1.000000e+01, ptr %val, align 8
+  %0 = load double, ptr %val, align 8
+  ret double %0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca %struct.block, align 8
-  %b = alloca %struct.block, align 8
-  %bv = alloca %struct.blockvector, align 8
-  %s = alloca %struct.symtab, align 8
-  %ret = alloca ptr, align 8
+  %retval1 = alloca double, align 8
   store i32 0, ptr %retval, align 4
-  call void @llvm.memset.p0.i64(ptr align 8 %a, i8 0, i64 56, i1 false)
-  %0 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 1
-  store i64 65536, ptr %0, align 8
-  %1 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 4
-  store i8 1, ptr %1, align 8
-  %2 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %a, i32 0, i32 6
-  store i32 20, ptr %2, align 4
-  call void @llvm.memset.p0.i64(ptr align 8 %b, i8 0, i64 56, i1 false)
-  %3 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 0
-  store i64 65536, ptr %3, align 8
-  %4 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 1
-  store i64 131072, ptr %4, align 8
-  %5 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 4
-  store i8 1, ptr %5, align 8
-  %6 = getelementptr inbounds { i64, i64, ptr, ptr, i8, [3 x i8], i32, [1 x %struct.symbol] }, ptr %b, i32 0, i32 6
-  store i32 20, ptr %6, align 4
-  %nblocks = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 0
-  store i32 2, ptr %nblocks, align 8
-  %7 = getelementptr i8, ptr %bv, i64 4
-  call void @llvm.memset.p0.i64(ptr align 4 %7, i8 0, i64 4, i1 false)
-  %block = getelementptr inbounds nuw %struct.blockvector, ptr %bv, i32 0, i32 1
-  store ptr %a, ptr %block, align 8
-  %arrayinit.element = getelementptr inbounds ptr, ptr %block, i64 1
-  store ptr %b, ptr %arrayinit.element, align 8
-  %blockvector = getelementptr inbounds nuw %struct.symtab, ptr %s, i32 0, i32 0
-  store ptr %bv, ptr %blockvector, align 8
-  %call = call ptr @blockvector_for_pc_sect(i64 noundef 1280, ptr noundef %s)
-  store ptr %call, ptr %ret, align 8
-  ret i32 0
+  %call = call double @test(double noundef 1.000000e+00, double noundef 2.000000e+00)
+  store double %call, ptr %retval1, align 8
+  %0 = load double, ptr %retval1, align 8
+  %cmp = fcmp olt double %0, 2.400000e-01
+  br i1 %cmp, label %if.then, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %entry
+  %1 = load double, ptr %retval1, align 8
+  %cmp2 = fcmp ogt double %1, 2.600000e-01
+  br i1 %cmp2, label %if.then, label %if.end
+
+if.then:                                          ; preds = %lor.lhs.false, %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %lor.lhs.false
+  call void @exit(i32 noundef 0) #4
+  unreachable
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
+
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

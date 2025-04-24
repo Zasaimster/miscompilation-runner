@@ -1,31 +1,29 @@
-; 139748070378058449481337352519293609279
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139748070378058449481337352519293609279_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139748070378058449481337352519293609279.c"
+; 17429952889442838931349501646970559221
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17429952889442838931349501646970559221_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17429952889442838931349501646970559221.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local signext i16 @foo(i64 noundef %x) #0 {
+define dso_local i32 @foo(i32 noundef %i, i32 noundef %j) #0 {
 entry:
-  %x.addr = alloca i64, align 8
-  store i64 %x, ptr %x.addr, align 8
-  %0 = load i64, ptr %x.addr, align 8
-  %conv = trunc i64 %0 to i16
-  ret i16 %conv
+  %i.addr = alloca i32, align 4
+  %j.addr = alloca i32, align 4
+  %k = alloca i32, align 4
+  store i32 %i, ptr %i.addr, align 4
+  store i32 %j, ptr %j.addr, align 4
+  store i32 100, ptr %k, align 4
+  %0 = load i32, ptr %k, align 4
+  ret i32 %0
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  store i64 272170, ptr %a, align 8
-  %0 = load i64, ptr %a, align 8
-  %call = call signext i16 @foo(i64 noundef %0)
-  %conv = sext i16 %call to i64
-  %1 = load i64, ptr %a, align 8
-  %cmp = icmp eq i64 %conv, %1
+  %call = call i32 @foo(i32 noundef -2, i32 noundef 0)
+  %cmp = icmp ne i32 %call, -1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -33,6 +31,69 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
+  %call1 = call i32 @foo(i32 noundef -1, i32 noundef 0)
+  %cmp2 = icmp ne i32 %call1, 0
+  br i1 %cmp2, label %if.then3, label %if.end4
+
+if.then3:                                         ; preds = %if.end
+  call void @abort() #2
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  %call5 = call i32 @foo(i32 noundef 0, i32 noundef 0)
+  %cmp6 = icmp ne i32 %call5, 1
+  br i1 %cmp6, label %if.then7, label %if.end8
+
+if.then7:                                         ; preds = %if.end4
+  call void @abort() #2
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
+  %call9 = call i32 @foo(i32 noundef 1, i32 noundef 0)
+  %cmp10 = icmp ne i32 %call9, 2
+  br i1 %cmp10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  call void @abort() #2
+  unreachable
+
+if.end12:                                         ; preds = %if.end8
+  %call13 = call i32 @foo(i32 noundef -2, i32 noundef 1)
+  %cmp14 = icmp ne i32 %call13, -2
+  br i1 %cmp14, label %if.then15, label %if.end16
+
+if.then15:                                        ; preds = %if.end12
+  call void @abort() #2
+  unreachable
+
+if.end16:                                         ; preds = %if.end12
+  %call17 = call i32 @foo(i32 noundef -1, i32 noundef 1)
+  %cmp18 = icmp ne i32 %call17, 0
+  br i1 %cmp18, label %if.then19, label %if.end20
+
+if.then19:                                        ; preds = %if.end16
+  call void @abort() #2
+  unreachable
+
+if.end20:                                         ; preds = %if.end16
+  %call21 = call i32 @foo(i32 noundef 0, i32 noundef 1)
+  %cmp22 = icmp ne i32 %call21, 2
+  br i1 %cmp22, label %if.then23, label %if.end24
+
+if.then23:                                        ; preds = %if.end20
+  call void @abort() #2
+  unreachable
+
+if.end24:                                         ; preds = %if.end20
+  %call25 = call i32 @foo(i32 noundef 1, i32 noundef 1)
+  %cmp26 = icmp ne i32 %call25, 3
+  br i1 %cmp26, label %if.then27, label %if.end28
+
+if.then27:                                        ; preds = %if.end24
+  call void @abort() #2
+  unreachable
+
+if.end28:                                         ; preds = %if.end24
   ret i32 0
 }
 

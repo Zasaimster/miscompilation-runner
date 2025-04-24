@@ -1,61 +1,73 @@
-; 176083254842415923398040063949932543510
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176083254842415923398040063949932543510_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176083254842415923398040063949932543510.c"
+; 172323189158432883460338106239622403665
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172323189158432883460338106239622403665_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172323189158432883460338106239622403665.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [25 x i8] c"%d %d %d %d %d %d %d %d\0A\00", align 1
-@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
-@.str.2 = private unnamed_addr constant [17 x i8] c"enum to int: %u\0A\00", align 1
+@.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
+@j = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @should_compile(ptr noundef %s) #0 {
+define dso_local void @bla(ptr noundef %r) #0 {
 entry:
-  %s.addr = alloca ptr, align 8
-  store ptr %s, ptr %s.addr, align 8
+  %r.addr = alloca ptr, align 8
+  %p = alloca ptr, align 8
+  %q = alloca ptr, align 8
+  store ptr %r, ptr %r.addr, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %conv = sext i32 %call to i64
+  %0 = inttoptr i64 %conv to ptr
+  store ptr %0, ptr %q, align 8
+  store ptr %0, ptr %p, align 8
+  %1 = load ptr, ptr %p, align 8
+  %tobool = icmp ne ptr %1, null
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  store ptr @j, ptr %p, align 8
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %2 = load ptr, ptr %p, align 8
+  %3 = load ptr, ptr %q, align 8
+  %cmp = icmp ne ptr %2, %3
+  br i1 %cmp, label %if.then2, label %if.end3
+
+if.then2:                                         ; preds = %if.end
+  store i32 1, ptr @j, align 4
+  br label %if.end3
+
+if.end3:                                          ; preds = %if.then2, %if.end
   ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @it_real_fn() #0 {
-entry:
-  ret i32 1
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  %frod = alloca i32, align 4
-  %epos = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  store i32 1, ptr %epos, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef 0, i32 noundef 1, i32 noundef 2, i32 noundef 3, i32 noundef 54, i32 noundef 73, i32 noundef 74, i32 noundef 75)
-  store i32 12, ptr %frod, align 4
-  %0 = load i32, ptr %frod, align 4
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %0)
-  store i32 54, ptr %frod, align 4
-  %1 = load i32, ptr %frod, align 4
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %1)
-  %call3 = call i32 @deref_uintptr(ptr noundef %epos)
-  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i32 noundef %call3)
-  ret i32 0
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define internal i32 @deref_uintptr(ptr noundef %p) #0 {
+define dso_local i32 @main() #0 {
 entry:
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  %0 = load ptr, ptr %p.addr, align 8
-  %1 = load i32, ptr %0, align 4
-  ret i32 %1
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  call void @bla(ptr noundef null)
+  %0 = load i32, ptr @j, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret i32 0
 }
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

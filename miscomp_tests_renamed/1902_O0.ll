@@ -1,37 +1,40 @@
-; 141641195784936599393090371966308002002
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141641195784936599393090371966308002002.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141641195784936599393090371966308002002.c"
+; 133590294974630516966680993848052215610
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133590294974630516966680993848052215610.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133590294974630516966680993848052215610.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 @.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-@.str.1 = private unnamed_addr constant [32 x i8] c"This function is never called.\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %Count = alloca i32, align 4
+  %x = alloca i16, align 2
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %Count, align 4
-  br label %for.cond
-
-for.cond:                                         ; preds = %if.end, %entry
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  %0 = load i32, ptr %Count, align 4
-  %cmp = icmp sge i32 %0, 10
+  store i16 0, ptr %x, align 2
+  %call = call i32 (...) @compute()
+  %add = add nsw i32 %call, 1
+  %conv = trunc i32 %add to i16
+  store i16 %conv, ptr %x, align 2
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %cmp = icmp ne i32 %call1, 1
   br i1 %cmp, label %if.then, label %if.end
 
-if.then:                                          ; preds = %for.cond
-  br label %for.end
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %retval, align 4
+  br label %return
 
-if.end:                                           ; preds = %for.cond
-  br label %for.cond
+if.end:                                           ; preds = %entry
+  store i32 0, ptr %retval, align 4
+  br label %return
 
-for.end:                                          ; preds = %if.then
-  ret i32 0
+return:                                           ; preds = %if.end, %if.then
+  %0 = load i32, ptr %retval, align 4
+  ret i32 %0
 }
+
+declare i32 @compute(...) #1
 
 declare i32 @printf(ptr noundef, ...) #1
 

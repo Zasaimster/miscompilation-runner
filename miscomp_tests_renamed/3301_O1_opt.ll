@@ -1,15 +1,13 @@
-; 15355447049886612271305285780763029742
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/15355447049886612271305285780763029742_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/15355447049886612271305285780763029742.c"
+; 15768788011913441135145945747065158831
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/15768788011913441135145945747065158831_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/15768788011913441135145945747065158831.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local local_unnamed_addr global i32 0, align 4
-
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef range(i32 -128, 128) i32 @main() local_unnamed_addr #0 {
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  ret i32 0
+  ret i32 42
 }
 
 attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

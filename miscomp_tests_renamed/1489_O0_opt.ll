@@ -1,61 +1,58 @@
-; 135205554756128656067087049072535984368
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135205554756128656067087049072535984368_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135205554756128656067087049072535984368.c"
+; 126547337701975943667373342297227222246
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126547337701975943667373342297227222246_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126547337701975943667373342297227222246.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@v = dso_local global i32 1, align 4
-@.str = private unnamed_addr constant [23 x i8] c"This won't be called.\0A\00", align 1
-@w = dso_local global i32 0, align 4
+@.str = private unnamed_addr constant [11 x i8] c"Loop done\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local zeroext i16 @foo(i16 noundef zeroext %x, i16 noundef zeroext %y) #0 {
+define dso_local void @test(ptr noundef %ptr) #0 {
 entry:
-  %x.addr = alloca i16, align 2
-  %y.addr = alloca i16, align 2
-  store i16 %x, ptr %x.addr, align 2
-  store i16 %y, ptr %y.addr, align 2
-  %0 = load i16, ptr %x.addr, align 2
-  %conv = zext i16 %0 to i32
-  %1 = load i16, ptr %y.addr, align 2
-  %conv1 = zext i16 %1 to i32
-  %add = add nsw i32 %conv, %conv1
-  %conv2 = trunc i32 %add to i16
-  ret i16 %conv2
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @deadFunction() #0 {
-entry:
+  %ptr.addr = alloca ptr, align 8
+  %i = alloca i32, align 4
+  store ptr %ptr, ptr %ptr.addr, align 8
   %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  store i32 %call, ptr %i, align 4
+  br label %useless
+
+0:                                                ; No predecessors!
+  br i1 false, label %if.then, label %if.else
+
+if.then:                                          ; preds = %0
+  br label %useless
+
+useless:                                          ; preds = %if.then, %entry
+  store i32 0, ptr %i, align 4
+  br label %if.end
+
+if.else:                                          ; preds = %0
+  %call1 = call i32 (...) @example8()
+  store i32 %call1, ptr %i, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %useless
+  %1 = load i32, ptr %i, align 4
+  %2 = load ptr, ptr %ptr.addr, align 8
+  store i32 %1, ptr %2, align 4
   ret void
 }
 
 declare i32 @printf(ptr noundef, ...) #1
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @bar() #0 {
-entry:
-  %0 = load i32, ptr @w, align 4
-  %not = xor i32 %0, -1
-  %conv = trunc i32 %not to i16
-  %1 = load i32, ptr @w, align 4
-  %conv1 = trunc i32 %1 to i16
-  %call = call zeroext i16 @foo(i16 noundef zeroext %conv, i16 noundef zeroext %conv1)
-  %conv2 = zext i16 %call to i32
-  store i32 %conv2, ptr @v, align 4
-  ret void
-}
+declare i32 @example8(...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @bar()
-  %0 = load i32, ptr @v, align 4
-  %cmp = icmp ne i32 %0, 65535
-  br i1 %cmp, label %if.then, label %if.end
+  store i32 1, ptr %i, align 4
+  call void @test(ptr noundef %i)
+  %0 = load i32, ptr %i, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
   call void @abort() #3

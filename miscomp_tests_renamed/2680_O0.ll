@@ -1,26 +1,21 @@
-; 159654185615785213182618765515380548457
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159654185615785213182618765515380548457.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159654185615785213182618765515380548457.c"
+; 146542552860459797029501002810385167297
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/146542552860459797029501002810385167297.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/146542552860459797029501002810385167297.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%union.U = type { i32 }
-
-@u = internal global %union.U { i32 305419896 }, align 4
+@.str = private unnamed_addr constant [6 x i8] c"hello\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (...) @pointlessFunction()
-  %bf.load = load i32, ptr @u, align 4
-  %bf.clear = and i32 %bf.load, 1048575
-  %sub = sub nsw i32 %bf.clear, 74565
-  ret i32 %sub
+  %call = call i32 (i32, ptr, ...) @test(i32 noundef 5, ptr noundef @.str)
+  ret i32 0
 }
 
-declare i32 @pointlessFunction(...) #1
+declare i32 @test(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

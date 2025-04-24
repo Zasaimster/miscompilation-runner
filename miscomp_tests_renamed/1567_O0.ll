@@ -1,38 +1,38 @@
-; 176423341541327215962533850022489749991
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176423341541327215962533850022489749991.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176423341541327215962533850022489749991.c"
+; 128033292387321963036783117708661039427
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128033292387321963036783117708661039427.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128033292387321963036783117708661039427.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@v = dso_local global i32 0, align 4
+@x = dso_local global [1 x i32] [i32 2], align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo(i32 noundef %var) #0 {
+define dso_local i32 @foo() #0 {
 entry:
-  %var.addr = alloca i32, align 4
-  store i32 %var, ptr %var.addr, align 4
-  call void @link_failure()
-  ret void
+  %0 = load i32, ptr @x, align 4
+  %or = or i32 %0, 128
+  store i32 %or, ptr @x, align 4
+  ret i32 0
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @link_failure() #0 {
-entry:
-  call void @abort() #2
-  unreachable
-}
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main(i32 noundef %argc, ptr noundef %argv) #0 {
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %argc.addr = alloca i32, align 4
-  %argv.addr = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store i32 %argc, ptr %argc.addr, align 4
-  store ptr %argv, ptr %argv.addr, align 8
-  %0 = load volatile i32, ptr @v, align 4
-  call void @foo(i32 noundef %0)
+  %call = call i32 @foo()
+  %0 = load i32, ptr @x, align 4
+  %or = or i32 %0, %call
+  store i32 %or, ptr @x, align 4
+  %1 = load i32, ptr @x, align 4
+  %cmp = icmp ne i32 %1, 131
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #2
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 

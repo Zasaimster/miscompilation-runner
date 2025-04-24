@@ -1,48 +1,40 @@
-; 10544163629324513650911737926288195626
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10544163629324513650911737926288195626_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10544163629324513650911737926288195626.c"
+; 133006028745666626117630302157634792659
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133006028745666626117630302157634792659_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133006028745666626117630302157634792659.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [15 x i8] c"X is negative\0A\00", align 1
+%struct.gs_imager_state_s = type { %struct.anon }
+%struct.anon = type { i32, i32, float }
+
+@gstate_initial = internal constant %struct.gs_imager_state_s { %struct.anon { i32 1, i32 0, float 0.000000e+00 } }, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @find(ptr noundef %alistp) #0 {
+define dso_local void @gstate_path_memory(ptr noundef %pgs) #0 {
 entry:
-  %alistp.addr = alloca ptr, align 8
-  %blist = alloca ptr, align 8
-  store ptr %alistp, ptr %alistp.addr, align 8
-  %0 = load ptr, ptr %alistp.addr, align 8
-  %cmp = icmp ugt ptr %0, null
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  br label %if.end
-
-if.else:                                          ; preds = %entry
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %if.end
-
-if.end:                                           ; preds = %if.else, %if.then
-  %1 = load ptr, ptr %blist, align 8
-  call void @aglChoosePixelFormat(ptr noundef %1)
+  %pgs.addr = alloca ptr, align 8
+  store ptr %pgs, ptr %pgs.addr, align 8
+  %0 = load ptr, ptr %pgs.addr, align 8
+  call void @llvm.memcpy.p0.p0.i64(ptr align 4 %0, ptr align 4 @gstate_initial, i64 12, i1 false)
   ret void
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.memcpy.p0.p0.i64(ptr noalias writeonly captures(none), ptr noalias readonly captures(none), i64, i1 immarg) #1
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @aglChoosePixelFormat(ptr noundef %a) #0 {
+define dso_local i32 @gs_state_update_overprint() #0 {
 entry:
-  %a.addr = alloca ptr, align 8
-  %b = alloca ptr, align 8
-  store ptr %a, ptr %a.addr, align 8
-  %0 = load ptr, ptr %a.addr, align 8
-  store ptr %0, ptr %b, align 8
-  %1 = load ptr, ptr %b, align 8
-  %arrayidx = getelementptr inbounds i32, ptr %1, i64 3
-  %2 = load i32, ptr %arrayidx, align 4
-  %cmp = icmp ne i32 %2, 42
+  ret i32 1
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  %call = call i32 @gs_state_update_overprint()
+  %cmp = icmp ne i32 %call, 1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -50,23 +42,14 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  ret void
+  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  call void @find(ptr noundef null)
-  ret i32 0
-}
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: readwrite) }
 attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn nounwind }
 

@@ -1,48 +1,41 @@
-; 190331783434694780920557269487408655680
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190331783434694780920557269487408655680.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190331783434694780920557269487408655680.c"
+; 103530312648123899826864617707576977822
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103530312648123899826864617707576977822.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103530312648123899826864617707576977822.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @foo(i32 noundef %x) #0 {
+define dso_local i64 @f(i64 noundef %x, i64 noundef %y) #0 {
 entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %sub = sub nsw i32 0, %0
-  %sub1 = sub nsw i32 %sub, 100
-  %cmp = icmp eq i32 %sub1, -2
-  br i1 %cmp, label %if.then, label %lor.lhs.false
-
-lor.lhs.false:                                    ; preds = %entry
-  %1 = load i32, ptr %x.addr, align 4
-  %sub2 = sub nsw i32 0, %1
-  %sub3 = sub nsw i32 %sub2, 100
-  %cmp4 = icmp sge i32 %sub3, 0
-  br i1 %cmp4, label %if.then, label %if.end
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %lor.lhs.false
-  ret i32 0
+  %x.addr = alloca i64, align 8
+  %y.addr = alloca i64, align 8
+  store i64 %x, ptr %x.addr, align 8
+  store i64 %y, ptr %y.addr, align 8
+  %0 = load i64, ptr %y.addr, align 8
+  %and = and i64 %0, 1
+  ret i64 %and
 }
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @foo(i32 noundef -3)
-  %call1 = call i32 @foo(i32 noundef -99)
+  %call = call i64 @f(i64 noundef 2, i64 noundef 14600926)
+  %cmp = icmp ne i64 %call, 14600926
+  br i1 %cmp, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

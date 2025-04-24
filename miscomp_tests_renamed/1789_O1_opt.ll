@@ -1,19 +1,31 @@
-; 10350850627619658345813169928137152772
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/10350850627619658345813169928137152772_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/10350850627619658345813169928137152772.c"
+; 131802321706485944415404233320030140753
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/131802321706485944415404233320030140753_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/131802321706485944415404233320030140753.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree norecurse noreturn nosync nounwind memory(none) uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  br label %do.body
+@str = private unnamed_addr constant [28 x i8] c"This will never be printed.\00", align 1
 
-do.body:                                          ; preds = %do.body, %entry
-  br label %do.body
+; Function Attrs: nofree nounwind uwtable
+define dso_local i32 @f(i32 %i) local_unnamed_addr #0 {
+entry:
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret i32 undef
 }
 
-attributes #0 = { nofree norecurse noreturn nosync nounwind memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nofree noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  %call = tail call i32 @f(i32 poison)
+  unreachable
+}
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+
+attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

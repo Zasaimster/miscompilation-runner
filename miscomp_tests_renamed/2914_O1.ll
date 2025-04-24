@@ -1,165 +1,118 @@
-; 129233528091905231754516940935969669246
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/129233528091905231754516940935969669246.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/129233528091905231754516940935969669246.c"
+; 151072521954409552538328876069294391703
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151072521954409552538328876069294391703.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151072521954409552538328876069294391703.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.DummyStruct = type { ptr, i32 }
+@a = dso_local local_unnamed_addr global i32 0, align 4
+@b = dso_local local_unnamed_addr global i32 0, align 4
+@m = dso_local local_unnamed_addr global i32 0, align 4
+@n = dso_local local_unnamed_addr global i32 0, align 4
+@o = dso_local local_unnamed_addr global i32 0, align 4
+@p = dso_local local_unnamed_addr global i32 0, align 4
+@s = dso_local local_unnamed_addr global i32 0, align 4
+@u = dso_local local_unnamed_addr global i32 0, align 4
+@i = dso_local local_unnamed_addr global i32 0, align 4
+@c = dso_local local_unnamed_addr global i8 0, align 1
+@q = dso_local local_unnamed_addr global i8 0, align 1
+@y = dso_local local_unnamed_addr global i8 0, align 1
+@d = dso_local local_unnamed_addr global i16 0, align 2
+@e = dso_local local_unnamed_addr global i8 0, align 1
+@t = dso_local local_unnamed_addr global i32 0, align 4
 
-@.str = private unnamed_addr constant [28 x i8] c"&S1 = %p\09&S2 = %p\09&S3 = %p\0A\00", align 1
-@testAllocaOrder.count = internal unnamed_addr global i32 0, align 4
-@.str.1 = private unnamed_addr constant [10 x i8] c"sum = %d\0A\00", align 1
-@.str.2 = private unnamed_addr constant [3 x i8] c"-d\00", align 1
-
-; Function Attrs: nounwind uwtable
-define dso_local i32 @AddCounts(ptr noundef %S1, ptr noundef %S2, ptr noundef %S3, i32 noundef %noPrint) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @func3() local_unnamed_addr #0 {
 entry:
-  %tobool.not = icmp eq i32 %noPrint, 0
-  br i1 %tobool.not, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, ptr noundef %S1, ptr noundef %S2, ptr noundef %S3)
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %call1 = tail call i32 (...) @deadFunction() #5
-  %seqnum = getelementptr inbounds nuw i8, ptr %S1, i64 8
-  %0 = load i32, ptr %seqnum, align 8, !tbaa !5
-  %seqnum2 = getelementptr inbounds nuw i8, ptr %S2, i64 8
-  %1 = load i32, ptr %seqnum2, align 8, !tbaa !5
-  %add = add nsw i32 %1, %0
-  %seqnum3 = getelementptr inbounds nuw i8, ptr %S3, i64 8
-  %2 = load i32, ptr %seqnum3, align 8, !tbaa !5
-  %add4 = add nsw i32 %add, %2
-  ret i32 %add4
-}
-
-; Function Attrs: nofree nounwind
-declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
-
-declare i32 @deadFunction(...) local_unnamed_addr #2
-
-; Function Attrs: nounwind uwtable
-define dso_local void @testAllocaOrder(i32 noundef %noPrint) local_unnamed_addr #0 {
-entry:
-  %S1 = alloca %struct.DummyStruct, align 8
-  %S2 = alloca %struct.DummyStruct, align 8
-  %S3 = alloca %struct.DummyStruct, align 8
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %S1) #5
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %S2) #5
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %S3) #5
-  %0 = load i32, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  %inc = add nsw i32 %0, 1
-  store i32 %inc, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  %seqnum = getelementptr inbounds nuw i8, ptr %S1, i64 8
-  store i32 %inc, ptr %seqnum, align 8, !tbaa !5
-  %inc1 = add nsw i32 %0, 2
-  store i32 %inc1, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  %seqnum2 = getelementptr inbounds nuw i8, ptr %S2, i64 8
-  store i32 %inc1, ptr %seqnum2, align 8, !tbaa !5
-  %inc3 = add nsw i32 %0, 3
-  store i32 %inc3, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  %seqnum4 = getelementptr inbounds nuw i8, ptr %S3, i64 8
-  store i32 %inc3, ptr %seqnum4, align 8, !tbaa !5
-  %tobool.not.i = icmp eq i32 %noPrint, 0
-  br i1 %tobool.not.i, label %if.then.i, label %AddCounts.exit
-
-if.then.i:                                        ; preds = %entry
-  %call.i = call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, ptr noundef nonnull %S1, ptr noundef nonnull %S2, ptr noundef nonnull %S3)
-  br label %AddCounts.exit
-
-AddCounts.exit:                                   ; preds = %entry, %if.then.i
-  %call1.i = call i32 (...) @deadFunction() #5
-  %1 = load i32, ptr %seqnum, align 8, !tbaa !5
-  %2 = load i32, ptr %seqnum2, align 8, !tbaa !5
-  %add.i = add nsw i32 %2, %1
-  %3 = load i32, ptr %seqnum4, align 8, !tbaa !5
-  %add4.i = add nsw i32 %add.i, %3
-  %call5 = call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %add4.i)
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %S3) #5
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %S2) #5
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %S1) #5
   ret void
 }
 
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #3
-
-; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
-declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #3
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local zeroext i8 @fn2(i8 noundef zeroext %p1, i32 noundef %p2) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp sgt i32 %p2, 1
+  %conv = zext i8 %p1 to i32
+  %shr = select i1 %cmp, i32 0, i32 %p2
+  %cond = lshr i32 %conv, %shr
+  %conv2 = trunc nuw i32 %cond to i8
+  ret i8 %conv2
+}
 
 ; Function Attrs: nounwind uwtable
-define dso_local noundef i32 @main(i32 noundef %argc, ptr noundef readonly captures(none) %argv) local_unnamed_addr #0 {
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
 entry:
-  %S1.i = alloca %struct.DummyStruct, align 8
-  %S2.i = alloca %struct.DummyStruct, align 8
-  %S3.i = alloca %struct.DummyStruct, align 8
-  %cmp = icmp sgt i32 %argc, 1
-  br i1 %cmp, label %land.lhs.true, label %if.end
+  %0 = load i32, ptr @p, align 4, !tbaa !5
+  %cmp59.i = icmp slt i32 %0, 31
+  br i1 %cmp59.i, label %for.body.i, label %fn3.exit
 
-land.lhs.true:                                    ; preds = %entry
-  %arrayidx = getelementptr inbounds nuw i8, ptr %argv, i64 8
-  %0 = load ptr, ptr %arrayidx, align 8, !tbaa !13
-  %call = tail call i32 @strcmp(ptr noundef nonnull dereferenceable(1) %0, ptr noundef nonnull dereferenceable(3) @.str.2) #5
-  %tobool.not.not = icmp eq i32 %call, 0
-  br label %if.end
+for.body.i:                                       ; preds = %entry, %for.inc53.i
+  %x.060.i = phi i32 [ %conv42.i, %for.inc53.i ], [ 0, %entry ]
+  %1 = load i8, ptr @c, align 1, !tbaa !9
+  %conv.i = sext i8 %1 to i32
+  %tobool.i = icmp ne i8 %1, 0
+  %land.ext.i = zext i1 %tobool.i to i32
+  %cmp3.i = icmp eq i32 %land.ext.i, %conv.i
+  %conv4.i = zext i1 %cmp3.i to i32
+  %or.i = or i32 %conv4.i, %conv.i
+  %call.i = tail call i32 (i32, ...) @fn1(i32 noundef %or.i) #4
+  store i32 %call.i, ptr @s, align 4, !tbaa !5
+  %cmp.i.i = icmp samesign ugt i32 %x.060.i, 1
+  %conv.i.i = and i32 %call.i, 255
+  %shr.i.i = select i1 %cmp.i.i, i32 0, i32 %x.060.i
+  %cond.i.i = lshr i32 %conv.i.i, %shr.i.i
+  %conv2.i.i = trunc nuw nsw i32 %cond.i.i to i16
+  store i32 %cond.i.i, ptr @t, align 4, !tbaa !5
+  store i16 %conv2.i.i, ptr @d, align 2, !tbaa !10
+  store i32 %cond.i.i, ptr @m, align 4, !tbaa !5
+  %2 = load i32, ptr @p, align 4, !tbaa !5
+  %cmp11.i = icmp eq i32 %2, %cond.i.i
+  %conv12.i = zext i1 %cmp11.i to i32
+  store i32 %conv12.i, ptr @o, align 4, !tbaa !5
+  store i8 0, ptr @c, align 1, !tbaa !9
+  store i8 0, ptr @e, align 1, !tbaa !9
+  store i8 0, ptr @y, align 1, !tbaa !9
+  store i16 0, ptr @d, align 2, !tbaa !10
+  %tobool36.not.i = icmp eq i32 %cond.i.i, 0
+  %3 = load i32, ptr @i, align 4
+  %4 = trunc i32 %3 to i8
+  %conv41.i = or i8 %4, 7
+  br i1 %tobool36.not.i, label %if.then.i, label %for.end.split.i
 
-if.end:                                           ; preds = %land.lhs.true, %entry
-  %noPrint.0 = phi i1 [ false, %entry ], [ %tobool.not.not, %land.lhs.true ]
-  %seqnum.i = getelementptr inbounds nuw i8, ptr %S1.i, i64 8
-  %seqnum2.i = getelementptr inbounds nuw i8, ptr %S2.i, i64 8
-  %seqnum4.i = getelementptr inbounds nuw i8, ptr %S3.i, i64 8
-  br label %for.body
+for.end.split.i:                                  ; preds = %for.body.i
+  %5 = load i32, ptr @b, align 4
+  %cmp46.i = icmp eq i32 %5, 0
+  store i8 %conv41.i, ptr @e, align 1, !tbaa !9
+  store i8 0, ptr @q, align 1, !tbaa !9
+  br i1 %cmp46.i, label %for.inc53.i, label %for.cond35.i, !llvm.loop !12
 
-for.body:                                         ; preds = %if.end, %testAllocaOrder.exit
-  %i.03 = phi i32 [ 0, %if.end ], [ %inc, %testAllocaOrder.exit ]
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %S1.i) #5
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %S2.i) #5
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %S3.i) #5
-  %1 = load i32, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  %inc.i = add nsw i32 %1, 1
-  store i32 %inc.i, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  store i32 %inc.i, ptr %seqnum.i, align 8, !tbaa !5
-  %inc1.i = add nsw i32 %1, 2
-  store i32 %inc1.i, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  store i32 %inc1.i, ptr %seqnum2.i, align 8, !tbaa !5
-  %inc3.i = add nsw i32 %1, 3
-  store i32 %inc3.i, ptr @testAllocaOrder.count, align 4, !tbaa !12
-  store i32 %inc3.i, ptr %seqnum4.i, align 8, !tbaa !5
-  br i1 %noPrint.0, label %if.then.i.i, label %testAllocaOrder.exit
+for.cond35.i:                                     ; preds = %for.end.split.i, %for.cond35.i
+  br label %for.cond35.i
 
-if.then.i.i:                                      ; preds = %for.body
-  %call.i.i = call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, ptr noundef nonnull %S1.i, ptr noundef nonnull %S2.i, ptr noundef nonnull %S3.i)
-  br label %testAllocaOrder.exit
+if.then.i:                                        ; preds = %for.body.i
+  tail call void @abort() #5
+  unreachable
 
-testAllocaOrder.exit:                             ; preds = %for.body, %if.then.i.i
-  %call1.i.i = call i32 (...) @deadFunction() #5
-  %2 = load i32, ptr %seqnum.i, align 8, !tbaa !5
-  %3 = load i32, ptr %seqnum2.i, align 8, !tbaa !5
-  %add.i.i = add nsw i32 %3, %2
-  %4 = load i32, ptr %seqnum4.i, align 8, !tbaa !5
-  %add4.i.i = add nsw i32 %add.i.i, %4
-  %call5.i = call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %add4.i.i)
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %S3.i) #5
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %S2.i) #5
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %S1.i) #5
-  %inc = add nuw nsw i32 %i.03, 1
-  %exitcond.not = icmp eq i32 %inc, 10
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !15
+for.inc53.i:                                      ; preds = %for.end.split.i
+  %conv42.i = zext i8 %conv41.i to i32
+  %inc54.i = add nsw i32 %2, 1
+  store i32 %inc54.i, ptr @p, align 4, !tbaa !5
+  %cmp.i = icmp slt i32 %2, 30
+  br i1 %cmp.i, label %for.body.i, label %fn3.exit, !llvm.loop !14
 
-for.end:                                          ; preds = %testAllocaOrder.exit
+fn3.exit:                                         ; preds = %for.inc53.i, %entry
   ret i32 0
 }
 
-; Function Attrs: mustprogress nofree nounwind willreturn memory(argmem: read)
-declare i32 @strcmp(ptr noundef captures(none), ptr noundef captures(none)) local_unnamed_addr #4
+declare i32 @fn1(...) local_unnamed_addr #2
 
-attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #3
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #4 = { mustprogress nofree nounwind willreturn memory(argmem: read) "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { nounwind }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nounwind }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -169,16 +122,14 @@ attributes #5 = { nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !11, i64 8}
-!6 = !{!"DummyStruct", !7, i64 0, !11, i64 8}
-!7 = !{!"p1 _ZTS11DummyStruct", !8, i64 0}
-!8 = !{!"any pointer", !9, i64 0}
-!9 = !{!"omnipotent char", !10, i64 0}
-!10 = !{!"Simple C/C++ TBAA"}
-!11 = !{!"int", !9, i64 0}
-!12 = !{!11, !11, i64 0}
-!13 = !{!14, !14, i64 0}
-!14 = !{!"p1 omnipotent char", !8, i64 0}
-!15 = distinct !{!15, !16, !17}
-!16 = !{!"llvm.loop.mustprogress"}
-!17 = !{!"llvm.loop.unroll.disable"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"int", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C/C++ TBAA"}
+!9 = !{!7, !7, i64 0}
+!10 = !{!11, !11, i64 0}
+!11 = !{!"short", !7, i64 0}
+!12 = distinct !{!12, !13}
+!13 = !{!"llvm.loop.unroll.disable"}
+!14 = distinct !{!14, !15, !13}
+!15 = !{!"llvm.loop.mustprogress"}

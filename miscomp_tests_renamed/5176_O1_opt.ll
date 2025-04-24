@@ -1,47 +1,43 @@
-; 138490689205468767236647867774940617771
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/138490689205468767236647867774940617771_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/138490689205468767236647867774940617771.c"
+; 191406355606645141343895941324769075814
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191406355606645141343895941324769075814_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191406355606645141343895941324769075814.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@glob = dso_local local_unnamed_addr global i32 0, align 4
+@x = dso_local local_unnamed_addr global [7 x i32] [i32 2, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0], align 16
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
-define dso_local noundef i32 @g(i32 noundef %x) local_unnamed_addr #0 {
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+define dso_local noundef i32 @foo() local_unnamed_addr #0 {
 entry:
-  store i32 %x, ptr @glob, align 4, !tbaa !5
+  %0 = load i32, ptr @x, align 16, !tbaa !5
+  %or = or i32 %0, 128
+  store i32 %or, ptr @x, align 16, !tbaa !5
+  ret i32 1
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #1 {
+entry:
+  %0 = load i32, ptr @x, align 16, !tbaa !5
+  %or = or i32 %0, 129
+  store i32 %or, ptr @x, align 16, !tbaa !5
+  %cmp.not = icmp eq i32 %or, 131
+  br i1 %cmp.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  tail call void @abort() #3
+  unreachable
+
+if.end:                                           ; preds = %entry
   ret i32 0
 }
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable
-define dso_local i32 @f(i32 noundef %x) local_unnamed_addr #0 {
-entry:
-  %tobool.not2 = icmp eq i32 %x, -1
-  br i1 %tobool.not2, label %while.end, label %while.cond.while.end_crit_edge
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #2
 
-while.cond.while.end_crit_edge:                   ; preds = %entry
-  %not = xor i32 %x, -1
-  store i32 %not, ptr @glob, align 4, !tbaa !5
-  br label %while.end
-
-while.end:                                        ; preds = %while.cond.while.end_crit_edge, %entry
-  ret i32 undef
-}
-
-; Function Attrs: nofree noreturn nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #1 {
-entry:
-  store i32 -4, ptr @glob, align 4, !tbaa !5
-  tail call void @exit(i32 noundef 0) #3
-  unreachable
-}
-
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #2
-
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(write, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}

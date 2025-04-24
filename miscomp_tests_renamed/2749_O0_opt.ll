@@ -1,20 +1,36 @@
-; 159863556295646356652157250374505436979
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159863556295646356652157250374505436979_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159863556295646356652157250374505436979.c"
+; 148022875820613093261187423961947375916
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/148022875820613093261187423961947375916_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/148022875820613093261187423961947375916.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"abc\00", align 1
+@a = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local i32 @main(i32 noundef %b) #0 {
 entry:
   %retval = alloca i32, align 4
+  %b.addr = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  ret i32 0
+  store i32 %b, ptr %b.addr, align 4
+  %0 = load i32, ptr %b.addr, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr @a, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %call = call i32 (ptr, ...) @printf(ptr noundef null)
+  %1 = load i32, ptr %retval, align 4
+  ret i32 %1
 }
 
+declare i32 @printf(ptr noundef, ...) #1
+
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

@@ -1,56 +1,91 @@
-; 173465011339963216900239151528821097153
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173465011339963216900239151528821097153_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173465011339963216900239151528821097153.c"
+; 175635746154864520025806344635091959504
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/175635746154864520025806344635091959504_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/175635746154864520025806344635091959504.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %mul = mul i32 %0, 65536
-  %div = udiv i32 %mul, 8
-  ret i32 %div
-}
+%struct.s = type { [42 x i32] }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @g(i32 noundef %a) #0 {
+define dso_local x86_fp80 @f(i32 noundef %pa, ptr noundef byval(%struct.s) align 8 %pb, x86_fp80 noundef %pc) #0 {
 entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %mul = mul i32 %0, 65536
-  ret i32 %mul
-}
+  %pa.addr = alloca i32, align 4
+  %pc.addr = alloca x86_fp80, align 16
+  %i = alloca i32, align 4
+  store i32 %pa, ptr %pa.addr, align 4
+  store x86_fp80 %pc, ptr %pc.addr, align 16
+  store i32 0, ptr %i, align 4
+  br label %for.cond
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @h(i32 noundef %a) #0 {
-entry:
-  %a.addr = alloca i32, align 4
-  store i32 %a, ptr %a.addr, align 4
-  %0 = load i32, ptr %a.addr, align 4
-  %div = udiv i32 %0, 8
-  ret i32 %div
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr %i, align 4
+  %cmp = icmp slt i32 %0, 16
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %val = getelementptr inbounds nuw %struct.s, ptr %pb, i32 0, i32 0
+  %1 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %1 to i64
+  %arrayidx = getelementptr inbounds [42 x i32], ptr %val, i64 0, i64 %idxprom
+  %2 = load i32, ptr %arrayidx, align 4
+  %conv = sitofp i32 %2 to x86_fp80
+  %3 = load x86_fp80, ptr %pc.addr, align 16
+  %add = fadd x86_fp80 %3, %conv
+  store x86_fp80 %add, ptr %pc.addr, align 16
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %4 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %4, 1
+  store i32 %inc, ptr %i, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
+  %5 = load x86_fp80, ptr %pc.addr, align 16
+  ret x86_fp80 %5
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca %struct.s, align 8
+  %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 65536)
-  %call1 = call i32 @g(i32 noundef 65536)
-  %call2 = call i32 @h(i32 noundef %call1)
-  %cmp = icmp ne i32 %call, %call2
-  br i1 %cmp, label %if.then, label %if.end
+  store i32 0, ptr %i, align 4
+  br label %for.cond
 
-if.then:                                          ; preds = %entry
+for.cond:                                         ; preds = %for.inc, %entry
+  %0 = load i32, ptr %i, align 4
+  %cmp = icmp slt i32 %0, 16
+  br i1 %cmp, label %for.body, label %for.end
+
+for.body:                                         ; preds = %for.cond
+  %1 = load i32, ptr %i, align 4
+  %add = add nsw i32 %1, 1
+  %val = getelementptr inbounds nuw %struct.s, ptr %x, i32 0, i32 0
+  %2 = load i32, ptr %i, align 4
+  %idxprom = sext i32 %2 to i64
+  %arrayidx = getelementptr inbounds [42 x i32], ptr %val, i64 0, i64 %idxprom
+  store i32 %add, ptr %arrayidx, align 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body
+  %3 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %3, 1
+  store i32 %inc, ptr %i, align 4
+  br label %for.cond, !llvm.loop !8
+
+for.end:                                          ; preds = %for.cond
+  %call = call x86_fp80 @f(i32 noundef 1, ptr noundef byval(%struct.s) align 8 %x, x86_fp80 noundef 0xK400C9C40000000000000)
+  %cmp1 = fcmp une x86_fp80 %call, 0xK400C9E60000000000000
+  br i1 %cmp1, label %if.then, label %if.end
+
+if.then:                                          ; preds = %for.end
   call void @abort() #3
   unreachable
 
-if.end:                                           ; preds = %entry
+if.end:                                           ; preds = %for.end
   call void @exit(i32 noundef 0) #4
   unreachable
 }
@@ -76,3 +111,6 @@ attributes #4 = { noreturn }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{i32 7, !"frame-pointer", i32 2}
 !5 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!6 = distinct !{!6, !7}
+!7 = !{!"llvm.loop.mustprogress"}
+!8 = distinct !{!8, !7}

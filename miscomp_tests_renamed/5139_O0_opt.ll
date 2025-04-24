@@ -1,14 +1,29 @@
-; 135186516238357191170655969762082045869
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/135186516238357191170655969762082045869_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/135186516238357191170655969762082045869.c"
+; 190734313659832621700783866346624757687
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/190734313659832621700783866346624757687_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/190734313659832621700783866346624757687.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.S = type { i8, [3 x i8] }
+
+@b = dso_local global %struct.S zeroinitializer, align 4
+@a = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
+  %bf.load = load i8, ptr @b, align 4
+  %bf.clear = and i8 %bf.load, 1
+  %bf.cast = zext i8 %bf.clear to i32
+  %cmp = icmp slt i32 0, %bf.cast
+  %conv = zext i1 %cmp to i32
+  %bf.load1 = load i8, ptr @b, align 4
+  %bf.clear2 = and i8 %bf.load1, 1
+  %bf.cast3 = zext i8 %bf.clear2 to i32
+  %or = or i32 %conv, %bf.cast3
+  store i32 %or, ptr @a, align 4
   ret i32 0
 }
 

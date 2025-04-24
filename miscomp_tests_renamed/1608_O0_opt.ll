@@ -1,6 +1,6 @@
-; 126189857619378079887396362614754371693
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126189857619378079887396362614754371693_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126189857619378079887396362614754371693.c"
+; 128683473636863493257851897928625870441
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/128683473636863493257851897928625870441_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/128683473636863493257851897928625870441.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,15 +8,19 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca i32, align 4
+  %p = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 (...) @example8()
-  ret i32 0
+  store i32 7, ptr %x, align 4
+  store ptr null, ptr %p, align 8
+  %0 = load ptr, ptr %p, align 8
+  %arrayidx = getelementptr inbounds i32, ptr %0, i64 0
+  store i32 0, ptr %arrayidx, align 4
+  %1 = load i32, ptr %x, align 4
+  ret i32 %1
 }
 
-declare i32 @example8(...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

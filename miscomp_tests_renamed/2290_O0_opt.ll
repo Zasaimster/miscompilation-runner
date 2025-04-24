@@ -1,22 +1,32 @@
-; 146538265633210449509531843074982917404
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/146538265633210449509531843074982917404_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/146538265633210449509531843074982917404.c"
+; 139815543892907094648407580591273137086
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139815543892907094648407580591273137086_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139815543892907094648407580591273137086.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @test(float noundef %c) #0 {
+define dso_local i32 @foo(i32 noundef %x, i32 noundef %y, i32 noundef %i, i32 noundef %j) #0 {
 entry:
-  %c.addr = alloca float, align 4
-  store float %c, ptr %c.addr, align 4
-  %0 = load float, ptr %c.addr, align 4
-  %tobool = fcmp une float %0, 0.000000e+00
-  %lnot = xor i1 %tobool, true
-  %lnot1 = xor i1 %lnot, true
-  %lnot.ext = zext i1 %lnot1 to i32
-  %conv = sext i32 %lnot.ext to i64
-  %mul = mul nsw i64 %conv, 7
-  %cmp = icmp eq i64 %mul, 0
+  %x.addr = alloca i32, align 4
+  %y.addr = alloca i32, align 4
+  %i.addr = alloca i32, align 4
+  %j.addr = alloca i32, align 4
+  %tmp1 = alloca double, align 8
+  %tmp2 = alloca double, align 8
+  store i32 %x, ptr %x.addr, align 4
+  store i32 %y, ptr %y.addr, align 4
+  store i32 %i, ptr %i.addr, align 4
+  store i32 %j, ptr %j.addr, align 4
+  store double 1.000000e+00, ptr %tmp1, align 8
+  %0 = load i32, ptr %i.addr, align 4
+  %conv = sitofp i32 %0 to double
+  %1 = load i32, ptr %j.addr, align 4
+  %conv1 = sitofp i32 %1 to double
+  %div = fdiv double %conv, %conv1
+  store double %div, ptr %tmp2, align 8
+  %2 = load double, ptr %tmp1, align 8
+  %3 = load double, ptr %tmp2, align 8
+  %cmp = fcmp olt double %2, %3
   %conv2 = zext i1 %cmp to i32
   ret i32 %conv2
 }
@@ -26,8 +36,8 @@ define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 @test(float noundef 1.000000e+00)
-  %cmp = icmp ne i32 %call, 0
+  %call = call i32 @foo(i32 noundef 2, i32 noundef 24, i32 noundef 3, i32 noundef 4)
+  %cmp = icmp eq i32 %call, 0
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry

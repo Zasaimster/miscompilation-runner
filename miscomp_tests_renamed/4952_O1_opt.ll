@@ -1,11 +1,11 @@
-; 121090920086860303928060004319496268751
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121090920086860303928060004319496268751_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121090920086860303928060004319496268751.c"
+; 187503452219884454918151583458848073956
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187503452219884454918151583458848073956_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187503452219884454918151583458848073956.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable
-define dso_local void @f2() local_unnamed_addr #0 {
+define dso_local noundef i32 @f(i32 noundef %n, i16 %x.coerce, i16 %y.coerce, i16 %z.coerce, i64 noundef %l) local_unnamed_addr #0 {
 entry:
   tail call void @abort() #2
   unreachable

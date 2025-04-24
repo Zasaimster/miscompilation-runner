@@ -1,46 +1,57 @@
-; 105595935649581367160172318633017527121
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/105595935649581367160172318633017527121.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/105595935649581367160172318633017527121.c"
+; 121496520699383528391408577700095393741
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/121496520699383528391408577700095393741.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/121496520699383528391408577700095393741.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@.str = private unnamed_addr constant [6 x i8] c"Done\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca i32, align 4
-  %p = alloca i32, align 4
-  %t = alloca i32, align 4
+  %Count = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i32, ptr %t, align 4
-  %1 = load i32, ptr %p, align 4
-  %add = add nsw i32 %0, %1
-  store i32 %add, ptr %a, align 4
-  store i32 0, ptr %p, align 4
-  store i32 0, ptr %t, align 4
-  br label %while.cond
+  store i32 0, ptr %Count, align 4
+  br label %for.cond
 
-while.cond:                                       ; preds = %while.body, %entry
-  %2 = load i32, ptr %a, align 4
-  %cmp = icmp slt i32 %2, 100
-  br i1 %cmp, label %while.body, label %while.end
+for.cond:                                         ; preds = %for.inc, %entry
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %cmp = icmp slt i32 %call, 4
+  br i1 %cmp, label %for.body, label %for.end
 
-while.body:                                       ; preds = %while.cond
-  %3 = load i32, ptr %a, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %3)
-  %4 = load i32, ptr %a, align 4
-  store i32 %4, ptr %t, align 4
-  %5 = load i32, ptr %t, align 4
-  %6 = load i32, ptr %p, align 4
-  %add1 = add nsw i32 %5, %6
-  store i32 %add1, ptr %a, align 4
-  %7 = load i32, ptr %t, align 4
-  store i32 %7, ptr %p, align 4
-  br label %while.cond, !llvm.loop !6
+for.body:                                         ; preds = %for.cond
+  %0 = load i32, ptr %Count, align 4
+  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %0)
+  %1 = load i32, ptr %Count, align 4
+  switch i32 %1, label %sw.default [
+    i32 1, label %sw.bb
+    i32 2, label %sw.bb3
+  ]
 
-while.end:                                        ; preds = %while.cond
+sw.bb:                                            ; preds = %for.body
+  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef 1)
+  br label %sw.epilog
+
+sw.bb3:                                           ; preds = %for.body
+  %call4 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef 2)
+  br label %sw.epilog
+
+sw.default:                                       ; preds = %for.body
+  %call5 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef 0)
+  br label %sw.epilog
+
+sw.epilog:                                        ; preds = %sw.default, %sw.bb3, %sw.bb
+  br label %for.inc
+
+for.inc:                                          ; preds = %sw.epilog
+  %2 = load i32, ptr %Count, align 4
+  %inc = add nsw i32 %2, 1
+  store i32 %inc, ptr %Count, align 4
+  br label %for.cond, !llvm.loop !6
+
+for.end:                                          ; preds = %for.cond
   ret i32 0
 }
 

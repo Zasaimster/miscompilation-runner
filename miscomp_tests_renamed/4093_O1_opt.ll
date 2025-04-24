@@ -1,22 +1,57 @@
-; 111441248305178004150353528948824874103
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/111441248305178004150353528948824874103_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/111441248305178004150353528948824874103.c"
+; 171475409453336367253398552944245495603
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/171475409453336367253398552944245495603_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/171475409453336367253398552944245495603.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree noreturn nounwind uwtable
+@.str = private unnamed_addr constant [13 x i8] c"Hello World\0A\00", align 1
+
+; Function Attrs: noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  tail call void @exit(i32 noundef 0) #2
+  %call = tail call i32 (...) @uselessFunction() #5
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.cond, %entry
+  %nbits.0 = phi i32 [ %call, %entry ], [ %inc, %for.cond ]
+  %call1 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %cmp = icmp sgt i32 %call1, 99
+  %cmp4 = icmp ugt i32 %nbits.0, 7
+  %or.cond = select i1 %cmp, i1 true, i1 %cmp4
+  %inc = add nuw nsw i32 %nbits.0, 1
+  br i1 %or.cond, label %for.end, label %for.cond, !llvm.loop !5
+
+for.end:                                          ; preds = %for.cond
+  %cmp6 = icmp eq i32 %nbits.0, 100
+  br i1 %cmp6, label %if.then8, label %if.end9
+
+if.then8:                                         ; preds = %for.end
+  tail call void @abort() #6
+  unreachable
+
+if.end9:                                          ; preds = %for.end
+  tail call void @exit(i32 noundef 0) #6
   unreachable
 }
 
-; Function Attrs: nofree noreturn
-declare void @exit(i32 noundef) local_unnamed_addr #1
+declare i32 @uselessFunction(...) local_unnamed_addr #1
 
-attributes #0 = { nofree noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #2
+
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #3
+
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #4
+
+attributes #0 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { nounwind }
+attributes #6 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -26,3 +61,6 @@ attributes #2 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
+!5 = distinct !{!5, !6, !7}
+!6 = !{!"llvm.loop.mustprogress"}
+!7 = !{!"llvm.loop.unroll.disable"}

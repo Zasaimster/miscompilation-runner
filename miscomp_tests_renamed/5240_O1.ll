@@ -1,12 +1,14 @@
-; 143045137065706998549082387375488334323
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/143045137065706998549082387375488334323.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/143045137065706998549082387375488334323.c"
+; 192509392950408641359959754420095628369
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192509392950408641359959754420095628369.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192509392950408641359959754420095628369.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@c = dso_local local_unnamed_addr global i32 1, align 4
-@a = dso_local local_unnamed_addr global i32 0, align 4
-@b = dso_local local_unnamed_addr global i32 0, align 4
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local void @msum_i4(ptr noundef readnone captures(none) %retarray, ptr noundef readnone captures(none) %array, ptr noundef readnone captures(none) %pdim) local_unnamed_addr #0 {
+entry:
+  ret void
+}
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {

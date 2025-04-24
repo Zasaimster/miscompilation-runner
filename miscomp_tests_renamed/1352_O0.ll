@@ -1,195 +1,92 @@
-; 13888459588128517580620855313167743097
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/13888459588128517580620855313167743097.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/13888459588128517580620855313167743097.c"
+; 124164001781128752517190407005665424865
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/124164001781128752517190407005665424865.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/124164001781128752517190407005665424865.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@count = dso_local global i32 0, align 4
-@.str = private unnamed_addr constant [19 x i8] c"This won't print.\0A\00", align 1
-@.str.1 = private unnamed_addr constant [7 x i8] c"Done.\0A\00", align 1
+%struct.tiny = type { i8, i8, i8, i8 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @a1() #0 {
+define dso_local i32 @f(i32 noundef %n, i32 %x.coerce, i32 %y.coerce, i32 %z.coerce, i64 noundef %l) #0 {
 entry:
-  %0 = load i32, ptr @count, align 4
-  %inc = add nsw i32 %0, 1
-  store i32 %inc, ptr @count, align 4
-  ret void
+  %x = alloca %struct.tiny, align 1
+  %y = alloca %struct.tiny, align 1
+  %z = alloca %struct.tiny, align 1
+  %n.addr = alloca i32, align 4
+  %l.addr = alloca i64, align 8
+  store i32 %x.coerce, ptr %x, align 1
+  store i32 %y.coerce, ptr %y, align 1
+  store i32 %z.coerce, ptr %z, align 1
+  store i32 %n, ptr %n.addr, align 4
+  store i64 %l, ptr %l.addr, align 8
+  call void @abort() #3
+  unreachable
 }
 
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @b(i16 noundef zeroext %data) #0 {
-entry:
-  %data.addr = alloca i16, align 2
-  store i16 %data, ptr %data.addr, align 2
-  %0 = load i16, ptr %data.addr, align 2
-  %conv = zext i16 %0 to i32
-  %and = and i32 %conv, 32768
-  %tobool = icmp ne i32 %and, 0
-  br i1 %tobool, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @a1()
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %1 = load i16, ptr %data.addr, align 2
-  %conv1 = zext i16 %1 to i32
-  %cmp = icmp sgt i32 %conv1, 10
-  br i1 %cmp, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %if.end
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  br label %if.end4
-
-if.end4:                                          ; preds = %if.then3, %if.end
-  %2 = load i16, ptr %data.addr, align 2
-  %conv5 = zext i16 %2 to i32
-  %shl = shl i32 %conv5, 1
-  %conv6 = trunc i32 %shl to i16
-  store i16 %conv6, ptr %data.addr, align 2
-  %3 = load i16, ptr %data.addr, align 2
-  %conv7 = zext i16 %3 to i32
-  %and8 = and i32 %conv7, 32768
-  %tobool9 = icmp ne i32 %and8, 0
-  br i1 %tobool9, label %if.then10, label %if.end11
-
-if.then10:                                        ; preds = %if.end4
-  call void @a1()
-  br label %if.end11
-
-if.end11:                                         ; preds = %if.then10, %if.end4
-  %4 = load i16, ptr %data.addr, align 2
-  %conv12 = zext i16 %4 to i32
-  %shl13 = shl i32 %conv12, 1
-  %conv14 = trunc i32 %shl13 to i16
-  store i16 %conv14, ptr %data.addr, align 2
-  %5 = load i16, ptr %data.addr, align 2
-  %conv15 = zext i16 %5 to i32
-  %and16 = and i32 %conv15, 32768
-  %tobool17 = icmp ne i32 %and16, 0
-  br i1 %tobool17, label %if.then18, label %if.end19
-
-if.then18:                                        ; preds = %if.end11
-  call void @a1()
-  br label %if.end19
-
-if.end19:                                         ; preds = %if.then18, %if.end11
-  ret void
-}
-
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca [3 x %struct.tiny], align 1
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext 0)
-  %0 = load i32, ptr @count, align 4
-  %cmp = icmp ne i32 %0, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #4
-  unreachable
-
-if.end:                                           ; preds = %entry
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext -32768)
-  %1 = load i32, ptr @count, align 4
-  %cmp1 = icmp ne i32 %1, 1
-  br i1 %cmp1, label %if.then2, label %if.end3
-
-if.then2:                                         ; preds = %if.end
-  call void @abort() #4
-  unreachable
-
-if.end3:                                          ; preds = %if.end
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext 16384)
-  %2 = load i32, ptr @count, align 4
-  %cmp4 = icmp ne i32 %2, 1
-  br i1 %cmp4, label %if.then5, label %if.end6
-
-if.then5:                                         ; preds = %if.end3
-  call void @abort() #4
-  unreachable
-
-if.end6:                                          ; preds = %if.end3
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext 8192)
-  %3 = load i32, ptr @count, align 4
-  %cmp7 = icmp ne i32 %3, 1
-  br i1 %cmp7, label %if.then8, label %if.end9
-
-if.then8:                                         ; preds = %if.end6
-  call void @abort() #4
-  unreachable
-
-if.end9:                                          ; preds = %if.end6
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext -16384)
-  %4 = load i32, ptr @count, align 4
-  %cmp10 = icmp ne i32 %4, 2
-  br i1 %cmp10, label %if.then11, label %if.end12
-
-if.then11:                                        ; preds = %if.end9
-  call void @abort() #4
-  unreachable
-
-if.end12:                                         ; preds = %if.end9
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext -24576)
-  %5 = load i32, ptr @count, align 4
-  %cmp13 = icmp ne i32 %5, 2
-  br i1 %cmp13, label %if.then14, label %if.end15
-
-if.then14:                                        ; preds = %if.end12
-  call void @abort() #4
-  unreachable
-
-if.end15:                                         ; preds = %if.end12
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext 24576)
-  %6 = load i32, ptr @count, align 4
-  %cmp16 = icmp ne i32 %6, 2
-  br i1 %cmp16, label %if.then17, label %if.end18
-
-if.then17:                                        ; preds = %if.end15
-  call void @abort() #4
-  unreachable
-
-if.end18:                                         ; preds = %if.end15
-  store i32 0, ptr @count, align 4
-  call void @b(i16 noundef zeroext -8192)
-  %7 = load i32, ptr @count, align 4
-  %cmp19 = icmp ne i32 %7, 3
-  br i1 %cmp19, label %if.then20, label %if.end21
-
-if.then20:                                        ; preds = %if.end18
-  call void @abort() #4
-  unreachable
-
-if.end21:                                         ; preds = %if.end18
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str.1)
-  call void @exit(i32 noundef 0) #5
+  %arrayidx = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %c = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx, i32 0, i32 0
+  store i8 10, ptr %c, align 1
+  %arrayidx1 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %c2 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx1, i32 0, i32 0
+  store i8 11, ptr %c2, align 1
+  %arrayidx3 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %c4 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx3, i32 0, i32 0
+  store i8 12, ptr %c4, align 1
+  %arrayidx5 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %d = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx5, i32 0, i32 1
+  store i8 20, ptr %d, align 1
+  %arrayidx6 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %d7 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx6, i32 0, i32 1
+  store i8 21, ptr %d7, align 1
+  %arrayidx8 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %d9 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx8, i32 0, i32 1
+  store i8 22, ptr %d9, align 1
+  %arrayidx10 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %e = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx10, i32 0, i32 2
+  store i8 30, ptr %e, align 1
+  %arrayidx11 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %e12 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx11, i32 0, i32 2
+  store i8 31, ptr %e12, align 1
+  %arrayidx13 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %e14 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx13, i32 0, i32 2
+  store i8 32, ptr %e14, align 1
+  %arrayidx15 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %f = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx15, i32 0, i32 3
+  store i8 40, ptr %f, align 1
+  %arrayidx16 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %f17 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx16, i32 0, i32 3
+  store i8 41, ptr %f17, align 1
+  %arrayidx18 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %f19 = getelementptr inbounds nuw %struct.tiny, ptr %arrayidx18, i32 0, i32 3
+  store i8 42, ptr %f19, align 1
+  %arrayidx20 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 0
+  %arrayidx21 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 1
+  %arrayidx22 = getelementptr inbounds [3 x %struct.tiny], ptr %x, i64 0, i64 2
+  %0 = load i32, ptr %arrayidx20, align 1
+  %1 = load i32, ptr %arrayidx21, align 1
+  %2 = load i32, ptr %arrayidx22, align 1
+  %call = call i32 @f(i32 noundef 3, i32 %0, i32 %1, i32 %2, i64 noundef 123)
+  call void @exit(i32 noundef 0) #4
   unreachable
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #3
+declare void @exit(i32 noundef) #2
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #4 = { noreturn nounwind }
-attributes #5 = { noreturn }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind }
+attributes #4 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

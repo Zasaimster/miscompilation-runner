@@ -1,100 +1,22 @@
-; 119079235335116490173256083078067408540
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/119079235335116490173256083078067408540.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/119079235335116490173256083078067408540.c"
+; 172505680000704188086821409943262512818
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/172505680000704188086821409943262512818.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/172505680000704188086821409943262512818.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@C = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@U = dso_local global x86_fp80 0xK3FFF8000000000000000, align 16
-@Y2 = dso_local global x86_fp80 0xK4000C000000000000000, align 16
-@Y1 = dso_local global x86_fp80 0xK3FFF8000000000000000, align 16
-@X = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@Y = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@Z = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@T = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@R = dso_local global x86_fp80 0xK00000000000000000000, align 16
-@S = dso_local global x86_fp80 0xK00000000000000000000, align 16
+%struct.A = type { i64, i64, i64, i64 }
+
+@x = dso_local global %struct.A { i64 13, i64 14, i64 15, i64 16 }, align 8
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @foo(ptr noundef %x, i32 noundef %y) #0 {
 entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %0 = load x86_fp80, ptr @C, align 16
-  %1 = load x86_fp80, ptr @U, align 16
-  %add = fadd x86_fp80 %0, %1
-  %2 = load x86_fp80, ptr @Y2, align 16
-  %mul = fmul x86_fp80 %add, %2
-  store x86_fp80 %mul, ptr @X, align 16
-  %3 = load x86_fp80, ptr @C, align 16
-  %4 = load x86_fp80, ptr @U, align 16
-  %sub = fsub x86_fp80 %3, %4
-  %5 = load x86_fp80, ptr @U, align 16
-  %sub1 = fsub x86_fp80 %sub, %5
-  store x86_fp80 %sub1, ptr @Y, align 16
-  %6 = load x86_fp80, ptr @C, align 16
-  %7 = load x86_fp80, ptr @U, align 16
-  %add2 = fadd x86_fp80 %6, %7
-  %8 = load x86_fp80, ptr @U, align 16
-  %add3 = fadd x86_fp80 %add2, %8
-  store x86_fp80 %add3, ptr @Z, align 16
-  %9 = load x86_fp80, ptr @C, align 16
-  %10 = load x86_fp80, ptr @U, align 16
-  %sub4 = fsub x86_fp80 %9, %10
-  %11 = load x86_fp80, ptr @Y1, align 16
-  %mul5 = fmul x86_fp80 %sub4, %11
-  store x86_fp80 %mul5, ptr @T, align 16
-  %12 = load x86_fp80, ptr @X, align 16
-  %13 = load x86_fp80, ptr @Z, align 16
-  %14 = load x86_fp80, ptr @U, align 16
-  %add6 = fadd x86_fp80 %13, %14
-  %sub7 = fsub x86_fp80 %12, %add6
-  store x86_fp80 %sub7, ptr @X, align 16
-  %15 = load x86_fp80, ptr @Y, align 16
-  %16 = load x86_fp80, ptr @Y1, align 16
-  %mul8 = fmul x86_fp80 %15, %16
-  store x86_fp80 %mul8, ptr @R, align 16
-  %17 = load x86_fp80, ptr @Z, align 16
-  %18 = load x86_fp80, ptr @Y2, align 16
-  %mul9 = fmul x86_fp80 %17, %18
-  store x86_fp80 %mul9, ptr @S, align 16
-  %19 = load x86_fp80, ptr @T, align 16
-  %20 = load x86_fp80, ptr @Y, align 16
-  %sub10 = fsub x86_fp80 %19, %20
-  store x86_fp80 %sub10, ptr @T, align 16
-  %21 = load x86_fp80, ptr @U, align 16
-  %22 = load x86_fp80, ptr @Y, align 16
-  %sub11 = fsub x86_fp80 %21, %22
-  %23 = load x86_fp80, ptr @R, align 16
-  %add12 = fadd x86_fp80 %sub11, %23
-  store x86_fp80 %add12, ptr @Y, align 16
-  %24 = load x86_fp80, ptr @S, align 16
-  %25 = load x86_fp80, ptr @Z, align 16
-  %26 = load x86_fp80, ptr @U, align 16
-  %add13 = fadd x86_fp80 %25, %26
-  %27 = load x86_fp80, ptr @U, align 16
-  %add14 = fadd x86_fp80 %add13, %27
-  %sub15 = fsub x86_fp80 %24, %add14
-  store x86_fp80 %sub15, ptr @Z, align 16
-  %28 = load x86_fp80, ptr @Y2, align 16
-  %29 = load x86_fp80, ptr @U, align 16
-  %add16 = fadd x86_fp80 %28, %29
-  %30 = load x86_fp80, ptr @Y1, align 16
-  %mul17 = fmul x86_fp80 %add16, %30
-  store x86_fp80 %mul17, ptr @R, align 16
-  %31 = load x86_fp80, ptr @Y2, align 16
-  %32 = load x86_fp80, ptr @Y1, align 16
-  %mul18 = fmul x86_fp80 %31, %32
-  store x86_fp80 %mul18, ptr @Y1, align 16
-  %33 = load x86_fp80, ptr @R, align 16
-  %34 = load x86_fp80, ptr @Y2, align 16
-  %sub19 = fsub x86_fp80 %33, %34
-  store x86_fp80 %sub19, ptr @R, align 16
-  %35 = load x86_fp80, ptr @Y1, align 16
-  %sub20 = fsub x86_fp80 %35, 0xK3FFE8000000000000000
-  store x86_fp80 %sub20, ptr @Y1, align 16
-  %36 = load x86_fp80, ptr @Z, align 16
-  %cmp = fcmp une x86_fp80 %36, 0xK4001C000000000000000
+  %x.addr = alloca ptr, align 8
+  %y.addr = alloca i32, align 4
+  store ptr %x, ptr %x.addr, align 8
+  store i32 %y, ptr %y.addr, align 4
+  %0 = load i32, ptr %y.addr, align 4
+  %cmp = icmp ne i32 %0, 12
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -102,12 +24,227 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  call void @exit(i32 noundef 0) #4
+  %1 = load ptr, ptr %x.addr, align 8
+  %arrayidx = getelementptr inbounds i64, ptr %1, i64 0
+  %2 = load i64, ptr %arrayidx, align 8
+  %cmp1 = icmp ne i64 %2, 1
+  br i1 %cmp1, label %if.then4, label %lor.lhs.false
+
+lor.lhs.false:                                    ; preds = %if.end
+  %3 = load ptr, ptr %x.addr, align 8
+  %arrayidx2 = getelementptr inbounds i64, ptr %3, i64 1
+  %4 = load i64, ptr %arrayidx2, align 8
+  %cmp3 = icmp ne i64 %4, 11
+  br i1 %cmp3, label %if.then4, label %if.end5
+
+if.then4:                                         ; preds = %lor.lhs.false, %if.end
+  call void @abort() #3
   unreachable
+
+if.end5:                                          ; preds = %lor.lhs.false
+  %5 = load ptr, ptr %x.addr, align 8
+  %arrayidx6 = getelementptr inbounds i64, ptr %5, i64 2
+  %6 = load i64, ptr %arrayidx6, align 8
+  %cmp7 = icmp ne i64 %6, 2
+  br i1 %cmp7, label %if.then11, label %lor.lhs.false8
+
+lor.lhs.false8:                                   ; preds = %if.end5
+  %7 = load ptr, ptr %x.addr, align 8
+  %arrayidx9 = getelementptr inbounds i64, ptr %7, i64 3
+  %8 = load i64, ptr %arrayidx9, align 8
+  %cmp10 = icmp ne i64 %8, 12
+  br i1 %cmp10, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %lor.lhs.false8, %if.end5
+  call void @abort() #3
+  unreachable
+
+if.end12:                                         ; preds = %lor.lhs.false8
+  %9 = load ptr, ptr %x.addr, align 8
+  %arrayidx13 = getelementptr inbounds i64, ptr %9, i64 4
+  %10 = load i64, ptr %arrayidx13, align 8
+  %cmp14 = icmp ne i64 %10, 3
+  br i1 %cmp14, label %if.then18, label %lor.lhs.false15
+
+lor.lhs.false15:                                  ; preds = %if.end12
+  %11 = load ptr, ptr %x.addr, align 8
+  %arrayidx16 = getelementptr inbounds i64, ptr %11, i64 5
+  %12 = load i64, ptr %arrayidx16, align 8
+  %cmp17 = icmp ne i64 %12, 13
+  br i1 %cmp17, label %if.then18, label %if.end19
+
+if.then18:                                        ; preds = %lor.lhs.false15, %if.end12
+  call void @abort() #3
+  unreachable
+
+if.end19:                                         ; preds = %lor.lhs.false15
+  %13 = load ptr, ptr %x.addr, align 8
+  %arrayidx20 = getelementptr inbounds i64, ptr %13, i64 6
+  %14 = load i64, ptr %arrayidx20, align 8
+  %cmp21 = icmp ne i64 %14, 4
+  br i1 %cmp21, label %if.then25, label %lor.lhs.false22
+
+lor.lhs.false22:                                  ; preds = %if.end19
+  %15 = load ptr, ptr %x.addr, align 8
+  %arrayidx23 = getelementptr inbounds i64, ptr %15, i64 7
+  %16 = load i64, ptr %arrayidx23, align 8
+  %cmp24 = icmp ne i64 %16, 14
+  br i1 %cmp24, label %if.then25, label %if.end26
+
+if.then25:                                        ; preds = %lor.lhs.false22, %if.end19
+  call void @abort() #3
+  unreachable
+
+if.end26:                                         ; preds = %lor.lhs.false22
+  %17 = load ptr, ptr %x.addr, align 8
+  %arrayidx27 = getelementptr inbounds i64, ptr %17, i64 8
+  %18 = load i64, ptr %arrayidx27, align 8
+  %cmp28 = icmp ne i64 %18, 5
+  br i1 %cmp28, label %if.then32, label %lor.lhs.false29
+
+lor.lhs.false29:                                  ; preds = %if.end26
+  %19 = load ptr, ptr %x.addr, align 8
+  %arrayidx30 = getelementptr inbounds i64, ptr %19, i64 9
+  %20 = load i64, ptr %arrayidx30, align 8
+  %cmp31 = icmp ne i64 %20, 15
+  br i1 %cmp31, label %if.then32, label %if.end33
+
+if.then32:                                        ; preds = %lor.lhs.false29, %if.end26
+  call void @abort() #3
+  unreachable
+
+if.end33:                                         ; preds = %lor.lhs.false29
+  %21 = load ptr, ptr %x.addr, align 8
+  %arrayidx34 = getelementptr inbounds i64, ptr %21, i64 10
+  %22 = load i64, ptr %arrayidx34, align 8
+  %cmp35 = icmp ne i64 %22, 6
+  br i1 %cmp35, label %if.then39, label %lor.lhs.false36
+
+lor.lhs.false36:                                  ; preds = %if.end33
+  %23 = load ptr, ptr %x.addr, align 8
+  %arrayidx37 = getelementptr inbounds i64, ptr %23, i64 11
+  %24 = load i64, ptr %arrayidx37, align 8
+  %cmp38 = icmp ne i64 %24, 16
+  br i1 %cmp38, label %if.then39, label %if.end40
+
+if.then39:                                        ; preds = %lor.lhs.false36, %if.end33
+  call void @abort() #3
+  unreachable
+
+if.end40:                                         ; preds = %lor.lhs.false36
+  ret void
 }
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #1
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
+entry:
+  %retval = alloca i32, align 4
+  %a = alloca [40 x i64], align 16
+  %b = alloca i32, align 4
+  store i32 0, ptr %retval, align 4
+  store i32 0, ptr %b, align 4
+  %0 = load i32, ptr %b, align 4
+  %inc = add nsw i32 %0, 1
+  store i32 %inc, ptr %b, align 4
+  %idxprom = sext i32 %0 to i64
+  %arrayidx = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom
+  store i64 1, ptr %arrayidx, align 8
+  %1 = load i32, ptr %b, align 4
+  %inc1 = add nsw i32 %1, 1
+  store i32 %inc1, ptr %b, align 4
+  %idxprom2 = sext i32 %1 to i64
+  %arrayidx3 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom2
+  store i64 11, ptr %arrayidx3, align 8
+  %2 = load i32, ptr %b, align 4
+  %inc4 = add nsw i32 %2, 1
+  store i32 %inc4, ptr %b, align 4
+  %idxprom5 = sext i32 %2 to i64
+  %arrayidx6 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom5
+  store i64 2, ptr %arrayidx6, align 8
+  %3 = load i32, ptr %b, align 4
+  %inc7 = add nsw i32 %3, 1
+  store i32 %inc7, ptr %b, align 4
+  %idxprom8 = sext i32 %3 to i64
+  %arrayidx9 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom8
+  store i64 12, ptr %arrayidx9, align 8
+  %4 = load i32, ptr %b, align 4
+  %inc10 = add nsw i32 %4, 1
+  store i32 %inc10, ptr %b, align 4
+  %idxprom11 = sext i32 %4 to i64
+  %arrayidx12 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom11
+  store i64 3, ptr %arrayidx12, align 8
+  %call = call ptr @bar()
+  %p = getelementptr inbounds nuw %struct.A, ptr %call, i32 0, i32 0
+  %5 = load i64, ptr %p, align 8
+  %6 = load i32, ptr %b, align 4
+  %inc13 = add nsw i32 %6, 1
+  store i32 %inc13, ptr %b, align 4
+  %idxprom14 = sext i32 %6 to i64
+  %arrayidx15 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom14
+  store i64 %5, ptr %arrayidx15, align 8
+  %7 = load i32, ptr %b, align 4
+  %inc16 = add nsw i32 %7, 1
+  store i32 %inc16, ptr %b, align 4
+  %idxprom17 = sext i32 %7 to i64
+  %arrayidx18 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom17
+  store i64 4, ptr %arrayidx18, align 8
+  %call19 = call ptr @bar()
+  %q = getelementptr inbounds nuw %struct.A, ptr %call19, i32 0, i32 1
+  %8 = load i64, ptr %q, align 8
+  %9 = load i32, ptr %b, align 4
+  %inc20 = add nsw i32 %9, 1
+  store i32 %inc20, ptr %b, align 4
+  %idxprom21 = sext i32 %9 to i64
+  %arrayidx22 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom21
+  store i64 %8, ptr %arrayidx22, align 8
+  %10 = load i32, ptr %b, align 4
+  %inc23 = add nsw i32 %10, 1
+  store i32 %inc23, ptr %b, align 4
+  %idxprom24 = sext i32 %10 to i64
+  %arrayidx25 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom24
+  store i64 5, ptr %arrayidx25, align 8
+  %call26 = call ptr @bar()
+  %r = getelementptr inbounds nuw %struct.A, ptr %call26, i32 0, i32 2
+  %11 = load i64, ptr %r, align 8
+  %12 = load i32, ptr %b, align 4
+  %inc27 = add nsw i32 %12, 1
+  store i32 %inc27, ptr %b, align 4
+  %idxprom28 = sext i32 %12 to i64
+  %arrayidx29 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom28
+  store i64 %11, ptr %arrayidx29, align 8
+  %13 = load i32, ptr %b, align 4
+  %inc30 = add nsw i32 %13, 1
+  store i32 %inc30, ptr %b, align 4
+  %idxprom31 = sext i32 %13 to i64
+  %arrayidx32 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom31
+  store i64 6, ptr %arrayidx32, align 8
+  %call33 = call ptr @bar()
+  %s = getelementptr inbounds nuw %struct.A, ptr %call33, i32 0, i32 3
+  %14 = load i64, ptr %s, align 8
+  %15 = load i32, ptr %b, align 4
+  %inc34 = add nsw i32 %15, 1
+  store i32 %inc34, ptr %b, align 4
+  %idxprom35 = sext i32 %15 to i64
+  %arrayidx36 = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 %idxprom35
+  store i64 %14, ptr %arrayidx36, align 8
+  %arraydecay = getelementptr inbounds [40 x i64], ptr %a, i64 0, i64 0
+  %16 = load i32, ptr %b, align 4
+  call void @foo(ptr noundef %arraydecay, i32 noundef %16)
+  call void @exit(i32 noundef 0) #4
+  unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal ptr @bar() #0 {
+entry:
+  %r = alloca ptr, align 8
+  store ptr @x, ptr %r, align 8
+  %0 = load ptr, ptr %r, align 8
+  ret ptr %0
+}
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #2

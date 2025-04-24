@@ -1,33 +1,45 @@
-; 159812515311405342152020581477877121687
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/159812515311405342152020581477877121687_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/159812515311405342152020581477877121687.c"
+; 14503196108647189477959016363988140539
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/14503196108647189477959016363988140539_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/14503196108647189477959016363988140539.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@tmp = dso_local global ptr null, align 8
-@c = dso_local global ptr @tmp, align 8
-@a = dso_local global i32 0, align 4
-@d = dso_local global i32 0, align 4
-@f = dso_local global i32 0, align 4
+%struct.F = type { i32 }
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @f1(ptr noundef %x, ptr noundef %y) #0 {
+entry:
+  %x.addr = alloca ptr, align 8
+  %y.addr = alloca ptr, align 8
+  %timeout = alloca i32, align 4
+  store ptr %x, ptr %x.addr, align 8
+  store ptr %y, ptr %y.addr, align 8
+  store i32 0, ptr %timeout, align 4
+  ret void
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %x = alloca %struct.F, align 4
+  %y = alloca %struct.F, align 4
   store i32 0, ptr %retval, align 4
-  call void @fn1(ptr noundef @a)
-  ret i32 0
+  %i = getelementptr inbounds nuw %struct.F, ptr %x, i32 0, i32 0
+  store i32 0, ptr %i, align 4
+  %i1 = getelementptr inbounds nuw %struct.F, ptr %y, i32 0, i32 0
+  store i32 1, ptr %i1, align 4
+  call void @f1(ptr noundef %x, ptr noundef %y)
+  call void @exit(i32 noundef 0) #2
+  unreachable
 }
 
-; Function Attrs: noinline nounwind uwtable
-define internal void @fn1(ptr noundef %p) #0 {
-entry:
-  %p.addr = alloca ptr, align 8
-  store ptr %p, ptr %p.addr, align 8
-  ret void
-}
+; Function Attrs: noreturn
+declare void @exit(i32 noundef) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

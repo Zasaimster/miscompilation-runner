@@ -1,319 +1,154 @@
-; 168958034664375524424845541585501666294
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/168958034664375524424845541585501666294_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/168958034664375524424845541585501666294.c"
+; 139419908904968607347167029417569664275
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/139419908904968607347167029417569664275_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/139419908904968607347167029417569664275.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.a_short = type { i8, i16 }
-%struct.a_int = type { i8, i32 }
-%struct.b_int = type { i16, i32 }
-%struct.a_float = type { i8, float }
-%struct.b_float = type { i16, float }
-%struct.a_double = type { i8, double }
-%struct.b_double = type { i16, double }
-%struct.c_double = type { i32, double }
-%struct.d_double = type { float, double }
-%struct.a_ldouble = type { i8, x86_fp80 }
-%struct.b_ldouble = type { i16, x86_fp80 }
-%struct.c_ldouble = type { i32, x86_fp80 }
-%struct.d_ldouble = type { float, x86_fp80 }
-%struct.e_ldouble = type { double, x86_fp80 }
+@.str = private unnamed_addr constant [5 x i8] c"joe\0A\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
 
-@s_c_s = dso_local global { i8, i8, i16 } { i8 10, i8 0, i16 13 }, align 2
-@s_c_i = dso_local global { i8, [3 x i8], i32 } { i8 98, [3 x i8] zeroinitializer, i32 14 }, align 4
-@s_s_i = dso_local global { i16, [2 x i8], i32 } { i16 15, [2 x i8] zeroinitializer, i32 16 }, align 4
-@s_c_f = dso_local global { i8, [3 x i8], float } { i8 99, [3 x i8] zeroinitializer, float 1.700000e+01 }, align 4
-@s_s_f = dso_local global { i16, [2 x i8], float } { i16 18, [2 x i8] zeroinitializer, float 1.900000e+01 }, align 4
-@s_c_d = dso_local global { i8, [7 x i8], double } { i8 100, [7 x i8] zeroinitializer, double 2.000000e+01 }, align 8
-@s_s_d = dso_local global { i16, [6 x i8], double } { i16 21, [6 x i8] zeroinitializer, double 2.200000e+01 }, align 8
-@s_i_d = dso_local global { i32, [4 x i8], double } { i32 23, [4 x i8] zeroinitializer, double 2.400000e+01 }, align 8
-@s_f_d = dso_local global { float, [4 x i8], double } { float 2.500000e+01, [4 x i8] zeroinitializer, double 2.600000e+01 }, align 8
-@s_c_ld = dso_local global { i8, [15 x i8], x86_fp80 } { i8 101, [15 x i8] zeroinitializer, x86_fp80 0xK4003D800000000000000 }, align 16
-@s_s_ld = dso_local global { i16, [14 x i8], x86_fp80 } { i16 28, [14 x i8] zeroinitializer, x86_fp80 0xK4003E800000000000000 }, align 16
-@s_i_ld = dso_local global { i32, [12 x i8], x86_fp80 } { i32 30, [12 x i8] zeroinitializer, x86_fp80 0xK4003F800000000000000 }, align 16
-@s_f_ld = dso_local global { float, [12 x i8], x86_fp80 } { float 3.200000e+01, [12 x i8] zeroinitializer, x86_fp80 0xK40048400000000000000 }, align 16
-@s_d_ld = dso_local global { double, [8 x i8], x86_fp80 } { double 3.400000e+01, [8 x i8] zeroinitializer, x86_fp80 0xK40048C00000000000000 }, align 16
+; Function Attrs: noinline nounwind uwtable
+define dso_local void @func6() #0 {
+entry:
+  %ch = alloca i8, align 1
+  store i8 65, ptr %ch, align 1
+  %0 = load i8, ptr %ch, align 1
+  %conv = sext i8 %0 to i32
+  %add = add nsw i32 %conv, 1
+  %conv1 = trunc i32 %add to i8
+  store i8 %conv1, ptr %ch, align 1
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @joe() #0 {
+entry:
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  ret i32 1
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %0 = load i8, ptr @s_c_s, align 2
-  %conv = sext i8 %0 to i32
-  %cmp = icmp ne i32 %conv, 97
-  br i1 %cmp, label %if.then, label %if.end
+  %call = call i32 (...) @fred()
+  %tobool = icmp ne i32 %call, 0
+  br i1 %tobool, label %land.rhs, label %land.end
 
-if.then:                                          ; preds = %entry
-  call void @abort() #2
-  unreachable
+land.rhs:                                         ; preds = %entry
+  %call1 = call i32 @joe()
+  %tobool2 = icmp ne i32 %call1, 0
+  br label %land.end
 
-if.end:                                           ; preds = %entry
-  %1 = load i16, ptr getelementptr inbounds nuw (%struct.a_short, ptr @s_c_s, i32 0, i32 1), align 2
-  %conv2 = sext i16 %1 to i32
-  %cmp3 = icmp ne i32 %conv2, 13
-  br i1 %cmp3, label %if.then5, label %if.end6
+land.end:                                         ; preds = %land.rhs, %entry
+  %0 = phi i1 [ false, %entry ], [ %tobool2, %land.rhs ]
+  %land.ext = zext i1 %0 to i32
+  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %land.ext)
+  %call4 = call i32 (...) @fred()
+  %tobool5 = icmp ne i32 %call4, 0
+  br i1 %tobool5, label %lor.end, label %lor.rhs
 
-if.then5:                                         ; preds = %if.end
-  call void @abort() #2
-  unreachable
+lor.rhs:                                          ; preds = %land.end
+  %call6 = call i32 @joe()
+  %tobool7 = icmp ne i32 %call6, 0
+  br label %lor.end
 
-if.end6:                                          ; preds = %if.end
-  %2 = load i8, ptr @s_c_i, align 4
-  %conv7 = sext i8 %2 to i32
-  %cmp8 = icmp ne i32 %conv7, 98
-  br i1 %cmp8, label %if.then10, label %if.end11
+lor.end:                                          ; preds = %lor.rhs, %land.end
+  %1 = phi i1 [ true, %land.end ], [ %tobool7, %lor.rhs ]
+  %lor.ext = zext i1 %1 to i32
+  %call8 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext)
+  %call9 = call i32 @joe()
+  %tobool10 = icmp ne i32 %call9, 0
+  br i1 %tobool10, label %land.rhs11, label %land.end14
 
-if.then10:                                        ; preds = %if.end6
-  call void @abort() #2
-  unreachable
+land.rhs11:                                       ; preds = %lor.end
+  %call12 = call i32 (...) @fred()
+  %tobool13 = icmp ne i32 %call12, 0
+  br label %land.end14
 
-if.end11:                                         ; preds = %if.end6
-  %3 = load i32, ptr getelementptr inbounds nuw (%struct.a_int, ptr @s_c_i, i32 0, i32 1), align 4
-  %cmp12 = icmp ne i32 %3, 14
-  br i1 %cmp12, label %if.then14, label %if.end15
+land.end14:                                       ; preds = %land.rhs11, %lor.end
+  %2 = phi i1 [ false, %lor.end ], [ %tobool13, %land.rhs11 ]
+  %land.ext15 = zext i1 %2 to i32
+  %call16 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %land.ext15)
+  %call17 = call i32 @joe()
+  %tobool18 = icmp ne i32 %call17, 0
+  br i1 %tobool18, label %lor.end22, label %lor.rhs19
 
-if.then14:                                        ; preds = %if.end11
-  call void @abort() #2
-  unreachable
+lor.rhs19:                                        ; preds = %land.end14
+  %call20 = call i32 (...) @fred()
+  %tobool21 = icmp ne i32 %call20, 0
+  br label %lor.end22
 
-if.end15:                                         ; preds = %if.end11
-  %4 = load i16, ptr @s_s_i, align 4
-  %conv16 = sext i16 %4 to i32
-  %cmp17 = icmp ne i32 %conv16, 15
-  br i1 %cmp17, label %if.then19, label %if.end20
+lor.end22:                                        ; preds = %lor.rhs19, %land.end14
+  %3 = phi i1 [ true, %land.end14 ], [ %tobool21, %lor.rhs19 ]
+  %lor.ext23 = zext i1 %3 to i32
+  %call24 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext23)
+  %call25 = call i32 (...) @fred()
+  %tobool26 = icmp ne i32 %call25, 0
+  br i1 %tobool26, label %land.rhs27, label %land.end30
 
-if.then19:                                        ; preds = %if.end15
-  call void @abort() #2
-  unreachable
+land.rhs27:                                       ; preds = %lor.end22
+  %call28 = call i32 @joe()
+  %add = add nsw i32 1, %call28
+  %tobool29 = icmp ne i32 %add, 0
+  br label %land.end30
 
-if.end20:                                         ; preds = %if.end15
-  %5 = load i32, ptr getelementptr inbounds nuw (%struct.b_int, ptr @s_s_i, i32 0, i32 1), align 4
-  %cmp21 = icmp ne i32 %5, 16
-  br i1 %cmp21, label %if.then23, label %if.end24
+land.end30:                                       ; preds = %land.rhs27, %lor.end22
+  %4 = phi i1 [ false, %lor.end22 ], [ %tobool29, %land.rhs27 ]
+  %land.ext31 = zext i1 %4 to i32
+  %call32 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %land.ext31)
+  %call33 = call i32 (...) @fred()
+  %tobool34 = icmp ne i32 %call33, 0
+  br i1 %tobool34, label %lor.end39, label %lor.rhs35
 
-if.then23:                                        ; preds = %if.end20
-  call void @abort() #2
-  unreachable
+lor.rhs35:                                        ; preds = %land.end30
+  %call36 = call i32 @joe()
+  %add37 = add nsw i32 0, %call36
+  %tobool38 = icmp ne i32 %add37, 0
+  br label %lor.end39
 
-if.end24:                                         ; preds = %if.end20
-  %6 = load i8, ptr @s_c_f, align 4
-  %conv25 = sext i8 %6 to i32
-  %cmp26 = icmp ne i32 %conv25, 99
-  br i1 %cmp26, label %if.then28, label %if.end29
+lor.end39:                                        ; preds = %lor.rhs35, %land.end30
+  %5 = phi i1 [ true, %land.end30 ], [ %tobool38, %lor.rhs35 ]
+  %lor.ext40 = zext i1 %5 to i32
+  %call41 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext40)
+  %call42 = call i32 @joe()
+  %tobool43 = icmp ne i32 %call42, 0
+  br i1 %tobool43, label %land.rhs44, label %land.end48
 
-if.then28:                                        ; preds = %if.end24
-  call void @abort() #2
-  unreachable
+land.rhs44:                                       ; preds = %lor.end39
+  %call45 = call i32 (...) @fred()
+  %add46 = add nsw i32 0, %call45
+  %tobool47 = icmp ne i32 %add46, 0
+  br label %land.end48
 
-if.end29:                                         ; preds = %if.end24
-  %7 = load float, ptr getelementptr inbounds nuw (%struct.a_float, ptr @s_c_f, i32 0, i32 1), align 4
-  %conv30 = fpext float %7 to double
-  %cmp31 = fcmp une double %conv30, 1.700000e+01
-  br i1 %cmp31, label %if.then33, label %if.end34
+land.end48:                                       ; preds = %land.rhs44, %lor.end39
+  %6 = phi i1 [ false, %lor.end39 ], [ %tobool47, %land.rhs44 ]
+  %land.ext49 = zext i1 %6 to i32
+  %call50 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %land.ext49)
+  %call51 = call i32 @joe()
+  %tobool52 = icmp ne i32 %call51, 0
+  br i1 %tobool52, label %lor.end57, label %lor.rhs53
 
-if.then33:                                        ; preds = %if.end29
-  call void @abort() #2
-  unreachable
+lor.rhs53:                                        ; preds = %land.end48
+  %call54 = call i32 (...) @fred()
+  %add55 = add nsw i32 1, %call54
+  %tobool56 = icmp ne i32 %add55, 0
+  br label %lor.end57
 
-if.end34:                                         ; preds = %if.end29
-  %8 = load i16, ptr @s_s_f, align 4
-  %conv35 = sext i16 %8 to i32
-  %cmp36 = icmp ne i32 %conv35, 18
-  br i1 %cmp36, label %if.then38, label %if.end39
-
-if.then38:                                        ; preds = %if.end34
-  call void @abort() #2
-  unreachable
-
-if.end39:                                         ; preds = %if.end34
-  %9 = load float, ptr getelementptr inbounds nuw (%struct.b_float, ptr @s_s_f, i32 0, i32 1), align 4
-  %conv40 = fpext float %9 to double
-  %cmp41 = fcmp une double %conv40, 1.900000e+01
-  br i1 %cmp41, label %if.then43, label %if.end44
-
-if.then43:                                        ; preds = %if.end39
-  call void @abort() #2
-  unreachable
-
-if.end44:                                         ; preds = %if.end39
-  %10 = load i8, ptr @s_c_d, align 8
-  %conv45 = sext i8 %10 to i32
-  %cmp46 = icmp ne i32 %conv45, 100
-  br i1 %cmp46, label %if.then48, label %if.end49
-
-if.then48:                                        ; preds = %if.end44
-  call void @abort() #2
-  unreachable
-
-if.end49:                                         ; preds = %if.end44
-  %11 = load double, ptr getelementptr inbounds nuw (%struct.a_double, ptr @s_c_d, i32 0, i32 1), align 8
-  %cmp50 = fcmp une double %11, 2.000000e+01
-  br i1 %cmp50, label %if.then52, label %if.end53
-
-if.then52:                                        ; preds = %if.end49
-  call void @abort() #2
-  unreachable
-
-if.end53:                                         ; preds = %if.end49
-  %12 = load i16, ptr @s_s_d, align 8
-  %conv54 = sext i16 %12 to i32
-  %cmp55 = icmp ne i32 %conv54, 21
-  br i1 %cmp55, label %if.then57, label %if.end58
-
-if.then57:                                        ; preds = %if.end53
-  call void @abort() #2
-  unreachable
-
-if.end58:                                         ; preds = %if.end53
-  %13 = load double, ptr getelementptr inbounds nuw (%struct.b_double, ptr @s_s_d, i32 0, i32 1), align 8
-  %cmp59 = fcmp une double %13, 2.200000e+01
-  br i1 %cmp59, label %if.then61, label %if.end62
-
-if.then61:                                        ; preds = %if.end58
-  call void @abort() #2
-  unreachable
-
-if.end62:                                         ; preds = %if.end58
-  %14 = load i32, ptr @s_i_d, align 8
-  %cmp63 = icmp ne i32 %14, 23
-  br i1 %cmp63, label %if.then65, label %if.end66
-
-if.then65:                                        ; preds = %if.end62
-  call void @abort() #2
-  unreachable
-
-if.end66:                                         ; preds = %if.end62
-  %15 = load double, ptr getelementptr inbounds nuw (%struct.c_double, ptr @s_i_d, i32 0, i32 1), align 8
-  %cmp67 = fcmp une double %15, 2.400000e+01
-  br i1 %cmp67, label %if.then69, label %if.end70
-
-if.then69:                                        ; preds = %if.end66
-  call void @abort() #2
-  unreachable
-
-if.end70:                                         ; preds = %if.end66
-  %16 = load float, ptr @s_f_d, align 8
-  %conv71 = fpext float %16 to double
-  %cmp72 = fcmp une double %conv71, 2.500000e+01
-  br i1 %cmp72, label %if.then74, label %if.end75
-
-if.then74:                                        ; preds = %if.end70
-  call void @abort() #2
-  unreachable
-
-if.end75:                                         ; preds = %if.end70
-  %17 = load double, ptr getelementptr inbounds nuw (%struct.d_double, ptr @s_f_d, i32 0, i32 1), align 8
-  %cmp76 = fcmp une double %17, 2.600000e+01
-  br i1 %cmp76, label %if.then78, label %if.end79
-
-if.then78:                                        ; preds = %if.end75
-  call void @abort() #2
-  unreachable
-
-if.end79:                                         ; preds = %if.end75
-  %18 = load i8, ptr @s_c_ld, align 16
-  %conv80 = sext i8 %18 to i32
-  %cmp81 = icmp ne i32 %conv80, 101
-  br i1 %cmp81, label %if.then83, label %if.end84
-
-if.then83:                                        ; preds = %if.end79
-  call void @abort() #2
-  unreachable
-
-if.end84:                                         ; preds = %if.end79
-  %19 = load x86_fp80, ptr getelementptr inbounds nuw (%struct.a_ldouble, ptr @s_c_ld, i32 0, i32 1), align 16
-  %cmp85 = fcmp une x86_fp80 %19, 0xK4003D800000000000000
-  br i1 %cmp85, label %if.then87, label %if.end88
-
-if.then87:                                        ; preds = %if.end84
-  call void @abort() #2
-  unreachable
-
-if.end88:                                         ; preds = %if.end84
-  %20 = load i16, ptr @s_s_ld, align 16
-  %conv89 = sext i16 %20 to i32
-  %cmp90 = icmp ne i32 %conv89, 28
-  br i1 %cmp90, label %if.then92, label %if.end93
-
-if.then92:                                        ; preds = %if.end88
-  call void @abort() #2
-  unreachable
-
-if.end93:                                         ; preds = %if.end88
-  %21 = load x86_fp80, ptr getelementptr inbounds nuw (%struct.b_ldouble, ptr @s_s_ld, i32 0, i32 1), align 16
-  %cmp94 = fcmp une x86_fp80 %21, 0xK4003E800000000000000
-  br i1 %cmp94, label %if.then96, label %if.end97
-
-if.then96:                                        ; preds = %if.end93
-  call void @abort() #2
-  unreachable
-
-if.end97:                                         ; preds = %if.end93
-  %22 = load i32, ptr @s_i_ld, align 16
-  %cmp98 = icmp ne i32 %22, 30
-  br i1 %cmp98, label %if.then100, label %if.end101
-
-if.then100:                                       ; preds = %if.end97
-  call void @abort() #2
-  unreachable
-
-if.end101:                                        ; preds = %if.end97
-  %23 = load x86_fp80, ptr getelementptr inbounds nuw (%struct.c_ldouble, ptr @s_i_ld, i32 0, i32 1), align 16
-  %cmp102 = fcmp une x86_fp80 %23, 0xK4003F800000000000000
-  br i1 %cmp102, label %if.then104, label %if.end105
-
-if.then104:                                       ; preds = %if.end101
-  call void @abort() #2
-  unreachable
-
-if.end105:                                        ; preds = %if.end101
-  %24 = load float, ptr @s_f_ld, align 16
-  %conv106 = fpext float %24 to double
-  %cmp107 = fcmp une double %conv106, 3.200000e+01
-  br i1 %cmp107, label %if.then109, label %if.end110
-
-if.then109:                                       ; preds = %if.end105
-  call void @abort() #2
-  unreachable
-
-if.end110:                                        ; preds = %if.end105
-  %25 = load x86_fp80, ptr getelementptr inbounds nuw (%struct.d_ldouble, ptr @s_f_ld, i32 0, i32 1), align 16
-  %cmp111 = fcmp une x86_fp80 %25, 0xK40048400000000000000
-  br i1 %cmp111, label %if.then113, label %if.end114
-
-if.then113:                                       ; preds = %if.end110
-  call void @abort() #2
-  unreachable
-
-if.end114:                                        ; preds = %if.end110
-  %26 = load double, ptr @s_d_ld, align 16
-  %cmp115 = fcmp une double %26, 3.400000e+01
-  br i1 %cmp115, label %if.then117, label %if.end118
-
-if.then117:                                       ; preds = %if.end114
-  call void @abort() #2
-  unreachable
-
-if.end118:                                        ; preds = %if.end114
-  %27 = load x86_fp80, ptr getelementptr inbounds nuw (%struct.e_ldouble, ptr @s_d_ld, i32 0, i32 1), align 16
-  %cmp119 = fcmp une x86_fp80 %27, 0xK40048C00000000000000
-  br i1 %cmp119, label %if.then121, label %if.end122
-
-if.then121:                                       ; preds = %if.end118
-  call void @abort() #2
-  unreachable
-
-if.end122:                                        ; preds = %if.end118
+lor.end57:                                        ; preds = %lor.rhs53, %land.end48
+  %7 = phi i1 [ true, %land.end48 ], [ %tobool56, %lor.rhs53 ]
+  %lor.ext58 = zext i1 %7 to i32
+  %call59 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %lor.ext58)
   ret i32 0
 }
 
-; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare i32 @fred(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn nounwind }
+attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

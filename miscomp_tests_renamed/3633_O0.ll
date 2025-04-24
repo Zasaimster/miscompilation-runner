@@ -1,69 +1,37 @@
-; 157369394088923352572880544812047450016
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/157369394088923352572880544812047450016.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/157369394088923352572880544812047450016.c"
+; 163534350033537607615604870929533450300
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/163534350033537607615604870929533450300.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/163534350033537607615604870929533450300.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @compare(i32 noundef %x, i32 noundef %y) #0 {
+define dso_local i32 @f(i64 noundef %x) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %x.addr = alloca i32, align 4
-  %y.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  store i32 %y, ptr %y.addr, align 4
-  %0 = load i32, ptr %y.addr, align 4
-  %cmp = icmp eq i32 0, %0
-  br i1 %cmp, label %if.then, label %if.else
-
-if.then:                                          ; preds = %entry
-  store i32 0, ptr %retval, align 4
-  br label %return
-
-if.else:                                          ; preds = %entry
-  store i32 1, ptr %retval, align 4
-  br label %return
-
-return:                                           ; preds = %if.else, %if.then
-  %1 = load i32, ptr %retval, align 4
-  ret i32 %1
+  %x.addr = alloca i64, align 8
+  store i64 %x, ptr %x.addr, align 8
+  %0 = load i64, ptr %x.addr, align 8
+  %shr = ashr i64 %0, 8
+  store i64 %shr, ptr %x.addr, align 8
+  %1 = load i64, ptr %x.addr, align 8
+  %and = and i64 %1, 255
+  %conv = trunc i64 %and to i32
+  ret i32 %conv
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i = alloca i32, align 4
-  %j = alloca i32, align 4
-  %k = alloca i32, align 4
-  %l = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 5, ptr %i, align 4
-  store i32 2, ptr %j, align 4
-  store i32 0, ptr %k, align 4
-  store i32 2, ptr %l, align 4
-  %0 = load i32, ptr %i, align 4
-  %1 = load i32, ptr %j, align 4
-  %not = xor i32 %1, -1
-  %rem = urem i32 %0, %not
-  %call = call i32 @compare(i32 noundef 5, i32 noundef %rem)
-  %tobool = icmp ne i32 %call, 0
-  br i1 %tobool, label %if.then, label %lor.lhs.false
+  %call = call i32 @f(i64 noundef 81985529216486895)
+  %cmp = icmp ne i32 %call, 205
+  br i1 %cmp, label %if.then, label %if.end
 
-lor.lhs.false:                                    ; preds = %entry
-  %2 = load i32, ptr %k, align 4
-  %3 = load i32, ptr %l, align 4
-  %not1 = xor i32 %3, -1
-  %rem2 = urem i32 %2, %not1
-  %call3 = call i32 @compare(i32 noundef 0, i32 noundef %rem2)
-  %tobool4 = icmp ne i32 %call3, 0
-  br i1 %tobool4, label %if.then, label %if.else
-
-if.then:                                          ; preds = %lor.lhs.false, %entry
+if.then:                                          ; preds = %entry
   call void @abort() #3
   unreachable
 
-if.else:                                          ; preds = %lor.lhs.false
+if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
 }

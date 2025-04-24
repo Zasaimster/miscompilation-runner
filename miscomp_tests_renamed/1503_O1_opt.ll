@@ -1,75 +1,67 @@
-; 136472277180029911502746400058134750246
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136472277180029911502746400058134750246_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136472277180029911502746400058134750246.c"
+; 126861598024424409708043678023116791279
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/126861598024424409708043678023116791279_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/126861598024424409708043678023116791279.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@a = dso_local local_unnamed_addr global i8 6, align 1
 @b = dso_local local_unnamed_addr global i32 0, align 4
-@a = dso_local local_unnamed_addr global i32 0, align 4
-@c = dso_local local_unnamed_addr global i8 0, align 1
-@d = dso_local local_unnamed_addr global i8 0, align 1
-@e = dso_local local_unnamed_addr global i8 0, align 1
-@f = dso_local local_unnamed_addr global i64 0, align 8
-@g = dso_local local_unnamed_addr global i64 0, align 8
-@h = dso_local local_unnamed_addr global i64 0, align 8
-@i = dso_local local_unnamed_addr global i64 0, align 8
-@j = dso_local local_unnamed_addr global i16 0, align 2
-@k = dso_local local_unnamed_addr global i16 0, align 2
-@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
+@c = dso_local local_unnamed_addr global i32 0, align 4
+@str = private unnamed_addr constant [18 x i8] c"Hello, optimizer!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %0 = load i32, ptr @b, align 4, !tbaa !5
-  store i32 %0, ptr @a, align 4, !tbaa !5
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %1 = load i8, ptr @c, align 1, !tbaa !9
-  %conv = sext i8 %1 to i32
-  store i32 %conv, ptr @a, align 4, !tbaa !5
-  %2 = load i8, ptr @d, align 1, !tbaa !9
-  %conv1 = sext i8 %2 to i32
-  store i32 %conv1, ptr @a, align 4, !tbaa !5
-  %3 = load i8, ptr @e, align 1, !tbaa !9
-  %conv2 = zext i8 %3 to i32
-  store i32 %conv2, ptr @a, align 4, !tbaa !5
-  %4 = load i64, ptr @f, align 8, !tbaa !10
-  %conv3 = trunc i64 %4 to i32
-  store i32 %conv3, ptr @a, align 4, !tbaa !5
-  %5 = load i64, ptr @g, align 8, !tbaa !10
-  %conv4 = trunc i64 %5 to i32
-  store i32 %conv4, ptr @a, align 4, !tbaa !5
-  %6 = load i64, ptr @h, align 8, !tbaa !12
-  %conv5 = trunc i64 %6 to i32
-  store i32 %conv5, ptr @a, align 4, !tbaa !5
-  %7 = load i64, ptr @i, align 8, !tbaa !12
-  %conv6 = trunc i64 %7 to i32
-  store i32 %conv6, ptr @a, align 4, !tbaa !5
-  %8 = load i16, ptr @j, align 2, !tbaa !14
-  %conv7 = sext i16 %8 to i32
-  store i32 %conv7, ptr @a, align 4, !tbaa !5
-  %9 = load i16, ptr @k, align 2, !tbaa !14
-  %conv8 = zext i16 %9 to i32
-  store i32 %conv8, ptr @a, align 4, !tbaa !5
-  store i32 %conv8, ptr @b, align 4, !tbaa !5
-  %conv19 = trunc i16 %9 to i8
-  store i8 %conv19, ptr @c, align 1, !tbaa !9
-  store i8 %conv19, ptr @d, align 1, !tbaa !9
-  store i8 %conv19, ptr @e, align 1, !tbaa !9
-  %conv48 = zext i16 %9 to i64
-  store i64 %conv48, ptr @f, align 8, !tbaa !10
-  store i64 %conv48, ptr @g, align 8, !tbaa !10
-  store i64 %conv48, ptr @h, align 8, !tbaa !12
-  store i64 %conv48, ptr @i, align 8, !tbaa !12
-  store i16 %9, ptr @j, align 2, !tbaa !14
-  store i16 %9, ptr @k, align 2, !tbaa !14
+  %0 = load i8, ptr @a, align 1, !tbaa !5
+  %tobool.not.i = icmp ne i8 %0, 0
+  br i1 %tobool.not.i, label %land.rhs.i, label %land.end.i
+
+land.rhs.i:                                       ; preds = %entry
+  %conv.i = zext i8 %0 to i32
+  store i32 %conv.i, ptr @b, align 4, !tbaa !8
+  br label %land.end.i
+
+land.end.i:                                       ; preds = %land.rhs.i, %entry
+  %land.ext.i = zext i1 %tobool.not.i to i32
+  store i32 %land.ext.i, ptr @c, align 4, !tbaa !8
+  %not.i = xor i32 %land.ext.i, -1
+  %1 = load i32, ptr @b, align 4, !tbaa !8
+  %tobool7.i = icmp ne i32 %1, 0
+  %2 = or i1 %tobool.not.i, %tobool7.i
+  %not11.i = xor i8 %0, -1
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  %conv13.i = zext i8 %not11.i to i32
+  %tobool14.i = icmp ne i8 %0, -1
+  %or.cond.i = select i1 %tobool14.i, i1 %2, i1 false
+  %3 = load i8, ptr @a, align 1
+  %conv16.i = zext i8 %3 to i32
+  %d.0.i = select i1 %or.cond.i, i32 %conv16.i, i32 0
+  %mul.i = mul nsw i32 %not.i, %conv13.i
+  %mul18.i = mul nsw i32 %mul.i, %d.0.i
+  %not19.neg.i = add nsw i32 %mul18.i, 1
+  %4 = load i32, ptr @c, align 4, !tbaa !8
+  %add.i = sub i32 0, %4
+  %tobool20.not.not.i = icmp eq i32 %not19.neg.i, %add.i
+  br i1 %tobool20.not.not.i, label %if.then32.i, label %fn1.exit
+
+if.then32.i:                                      ; preds = %land.end.i
+  tail call void @abort() #3
+  unreachable
+
+fn1.exit:                                         ; preds = %land.end.i
   ret i32 0
 }
 
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #1
+
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
+declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind }
+attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind }
+attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -80,13 +72,7 @@ attributes #1 = { nofree nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"int", !7, i64 0}
-!7 = !{!"omnipotent char", !8, i64 0}
-!8 = !{!"Simple C/C++ TBAA"}
-!9 = !{!7, !7, i64 0}
-!10 = !{!11, !11, i64 0}
-!11 = !{!"long", !7, i64 0}
-!12 = !{!13, !13, i64 0}
-!13 = !{!"long long", !7, i64 0}
-!14 = !{!15, !15, i64 0}
-!15 = !{!"short", !7, i64 0}
+!6 = !{!"omnipotent char", !7, i64 0}
+!7 = !{!"Simple C/C++ TBAA"}
+!8 = !{!9, !9, i64 0}
+!9 = !{!"int", !6, i64 0}

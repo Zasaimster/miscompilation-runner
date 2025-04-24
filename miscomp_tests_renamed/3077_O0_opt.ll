@@ -1,79 +1,84 @@
-; 102828964199983480411224369230312554968
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/102828964199983480411224369230312554968_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/102828964199983480411224369230312554968.c"
+; 153933334140999154001842273740478130895
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153933334140999154001842273740478130895_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153933334140999154001842273740478130895.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+%struct.t = type { ptr, i32, i32 }
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(ptr noundef %ty) #0 {
+define dso_local void @func5() #0 {
 entry:
-  %ty.addr = alloca ptr, align 8
-  store ptr %ty, ptr %ty.addr, align 8
-  ret i32 0
+  %p = alloca i32, align 4
+  %q = alloca i32, align 4
+  store i32 7, ptr %p, align 4
+  %0 = load i32, ptr %p, align 4
+  store i32 %0, ptr %q, align 4
+  ret void
 }
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %tx = alloca double, align 8
-  %ty = alloca double, align 8
-  %d = alloca double, align 8
+  %foo = alloca %struct.t, align 8
+  %bar = alloca ptr, align 8
   store i32 0, ptr %retval, align 4
-  store double 0.000000e+00, ptr %tx, align 8
-  %call = call i32 @f(ptr noundef %ty)
-  %0 = load double, ptr %ty, align 8
-  %cmp = fcmp olt double %0, 0.000000e+00
-  br i1 %cmp, label %if.then, label %if.end
+  call void @llvm.memset.p0.i64(ptr align 8 %foo, i8 37, i64 16, i1 false)
+  %size = getelementptr inbounds nuw %struct.t, ptr %foo, i32 0, i32 2
+  store i32 16, ptr %size, align 4
+  %call = call i32 (ptr, i64, ...) @f(ptr noundef %foo, i64 noundef 16)
+  %conv = sext i32 %call to i64
+  %0 = inttoptr i64 %conv to ptr
+  store ptr %0, ptr %bar, align 8
+  %1 = load ptr, ptr %bar, align 8
+  %super = getelementptr inbounds nuw %struct.t, ptr %1, i32 0, i32 0
+  %2 = load ptr, ptr %super, align 8
+  %cmp = icmp ne ptr %2, %foo
+  br i1 %cmp, label %if.then, label %lor.lhs.false
 
-if.then:                                          ; preds = %entry
-  %1 = load double, ptr %ty, align 8
-  %fneg = fneg double %1
-  store double %fneg, ptr %ty, align 8
-  br label %if.end
+lor.lhs.false:                                    ; preds = %entry
+  %3 = load ptr, ptr %bar, align 8
+  %name = getelementptr inbounds nuw %struct.t, ptr %3, i32 0, i32 1
+  %4 = load i32, ptr %name, align 8
+  %cmp2 = icmp ne i32 %4, 0
+  br i1 %cmp2, label %if.then, label %lor.lhs.false4
 
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load double, ptr %tx, align 8
-  %3 = load double, ptr %ty, align 8
-  %cmp1 = fcmp ogt double %2, %3
-  br i1 %cmp1, label %cond.true, label %cond.false
+lor.lhs.false4:                                   ; preds = %lor.lhs.false
+  %5 = load ptr, ptr %bar, align 8
+  %size5 = getelementptr inbounds nuw %struct.t, ptr %5, i32 0, i32 2
+  %6 = load i32, ptr %size5, align 4
+  %conv6 = sext i32 %6 to i64
+  %cmp7 = icmp ne i64 %conv6, 16
+  br i1 %cmp7, label %if.then, label %if.end
 
-cond.true:                                        ; preds = %if.end
-  %4 = load double, ptr %tx, align 8
-  br label %cond.end
-
-cond.false:                                       ; preds = %if.end
-  %5 = load double, ptr %ty, align 8
-  br label %cond.end
-
-cond.end:                                         ; preds = %cond.false, %cond.true
-  %cond = phi double [ %4, %cond.true ], [ %5, %cond.false ]
-  store double %cond, ptr %d, align 8
-  %6 = load double, ptr %ty, align 8
-  %7 = load double, ptr %d, align 8
-  %cmp2 = fcmp une double %6, %7
-  br i1 %cmp2, label %if.then3, label %if.end4
-
-if.then3:                                         ; preds = %cond.end
-  call void @abort() #3
+if.then:                                          ; preds = %lor.lhs.false4, %lor.lhs.false, %entry
+  call void @abort() #5
   unreachable
 
-if.end4:                                          ; preds = %cond.end
-  call void @exit(i32 noundef 0) #4
+if.end:                                           ; preds = %lor.lhs.false4
+  call void @exit(i32 noundef 0) #6
   unreachable
 }
 
+; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
+declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
+
+declare i32 @f(...) #2
+
 ; Function Attrs: noreturn nounwind
-declare void @abort() #1
+declare void @abort() #3
 
 ; Function Attrs: noreturn
-declare void @exit(i32 noundef) #2
+declare void @exit(i32 noundef) #4
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
-attributes #4 = { noreturn }
+attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
+attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { noreturn "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { noreturn nounwind }
+attributes #6 = { noreturn }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

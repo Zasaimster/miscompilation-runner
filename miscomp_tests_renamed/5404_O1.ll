@@ -1,23 +1,24 @@
-; 127113631911157343932105920482158943553
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/127113631911157343932105920482158943553.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/127113631911157343932105920482158943553.c"
+; 195656586326845498386092600857575336369
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/195656586326845498386092600857575336369.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/195656586326845498386092600857575336369.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@str = private unnamed_addr constant [29 x i8] c"This function is never used.\00", align 1
+@.str = private unnamed_addr constant [21 x i8] c"Count is completed.\0A\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local void @main() local_unnamed_addr #0 {
+define dso_local range(i32 -2147483648, 2147483645) i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  ret void
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str)
+  %sub = add nsw i32 %call, -1
+  ret i32 %sub
 }
 
 ; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #1
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #1
 
 attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nofree nounwind }
+attributes #1 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

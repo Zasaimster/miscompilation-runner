@@ -1,27 +1,21 @@
-; 127705831995453775297444078114793220472
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/127705831995453775297444078114793220472_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/127705831995453775297444078114793220472.c"
+; 182702345575929667302448486414480826099
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/182702345575929667302448486414480826099_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/182702345575929667302448486414480826099.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@.str = private unnamed_addr constant [11 x i8] c"Finished!\0A\00", align 1
-@.str.1 = private unnamed_addr constant [26 x i8] c"Size of float: %zu bytes\0A\00", align 1
-@.str.2 = private unnamed_addr constant [27 x i8] c"Size of double: %zu bytes\0A\00", align 1
-@.str.3 = private unnamed_addr constant [24 x i8] c"Size of char: %zu byte\0A\00", align 1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %v = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i64 noundef 4)
-  %call2 = call i32 (ptr, ...) @printf(ptr noundef @.str.2, i64 noundef 8)
-  %call3 = call i32 (ptr, ...) @printf(ptr noundef @.str.3, i64 noundef 1)
-  ret i32 0
+  store i32 100, ptr %v, align 4
+  %call = call i32 (...) @anotherDummyFunc()
+  ret i32 %call
 }
 
-declare i32 @printf(ptr noundef, ...) #1
+declare i32 @anotherDummyFunc(...) #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

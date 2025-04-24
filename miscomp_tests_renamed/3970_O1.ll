@@ -1,24 +1,35 @@
-; 173664367762202042584650210562815870844
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/173664367762202042584650210562815870844.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/173664367762202042584650210562815870844.c"
+; 169361409301310989061797110844148106112
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/169361409301310989061797110844148106112.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/169361409301310989061797110844148106112.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.S = type { i8 }
+%struct.s = type { %struct.s1 }
+%struct.s1 = type { i32, %struct.s2 }
+%struct.s2 = type { i32 }
 
-@s = dso_local local_unnamed_addr global %struct.S zeroinitializer, align 1
+@.str = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+@s2 = dso_local local_unnamed_addr global %struct.s zeroinitializer, align 4
 
-; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %bf.load = load i8, ptr @s, align 1
-  %bf.clear = and i8 %bf.load, -8
-  %bf.set = or disjoint i8 %bf.clear, 4
-  store i8 %bf.set, ptr @s, align 1
   ret i32 0
 }
 
-attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(readwrite, argmem: none, inaccessiblemem: none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @example7() local_unnamed_addr #1 {
+entry:
+  %call = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str, i32 noundef 5)
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #2
+
+attributes #0 = { mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}

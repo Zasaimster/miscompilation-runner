@@ -1,31 +1,58 @@
-; 155895682534465893262249685780107794109
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/155895682534465893262249685780107794109.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/155895682534465893262249685780107794109.c"
+; 142830761537851843903092625348613033843
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/142830761537851843903092625348613033843.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/142830761537851843903092625348613033843.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@a = dso_local global i16 -1, align 2
-@c = dso_local global i8 0, align 1
+%struct.B = type { ptr, float }
+%struct.A = type { i32, i32 }
+
 @.str = private unnamed_addr constant [15 x i8] c"Hello, World!\0A\00", align 1
-@b = dso_local global i32 0, align 4
+@X = dso_local global float 0.000000e+00, align 4
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @foo(ptr %b.coerce0, float %b.coerce1, ptr noundef %q, ptr noundef %h) #0 {
+entry:
+  %b = alloca %struct.B, align 8
+  %q.addr = alloca ptr, align 8
+  %h.addr = alloca ptr, align 8
+  %0 = getelementptr inbounds nuw { ptr, float }, ptr %b, i32 0, i32 0
+  store ptr %b.coerce0, ptr %0, align 8
+  %1 = getelementptr inbounds nuw { ptr, float }, ptr %b, i32 0, i32 1
+  store float %b.coerce1, ptr %1, align 8
+  store ptr %q, ptr %q.addr, align 8
+  store ptr %h, ptr %h.addr, align 8
+  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
+  %p = getelementptr inbounds nuw %struct.B, ptr %b, i32 0, i32 0
+  %2 = load ptr, ptr %p, align 8
+  store i32 3, ptr %2, align 4
+  %3 = load ptr, ptr %q.addr, align 8
+  %t = getelementptr inbounds nuw %struct.A, ptr %3, i32 0, i32 0
+  store i32 2, ptr %t, align 4
+  %p1 = getelementptr inbounds nuw %struct.B, ptr %b, i32 0, i32 0
+  %4 = load ptr, ptr %p1, align 8
+  %5 = load i32, ptr %4, align 4
+  ret i32 %5
+}
+
+declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %a = alloca %struct.A, align 4
+  %b = alloca %struct.B, align 8
   store i32 0, ptr %retval, align 4
-  %0 = load i16, ptr @a, align 2
-  %conv = trunc i16 %0 to i8
-  store i8 %conv, ptr @c, align 1
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %1 = load i16, ptr @a, align 2
-  %conv1 = sext i16 %1 to i32
-  %2 = load i8, ptr @c, align 1
-  %conv2 = sext i8 %2 to i32
-  %or = or i32 %conv1, %conv2
-  store i32 %or, ptr @b, align 4
-  %3 = load i32, ptr @b, align 4
-  %cmp = icmp ne i32 %3, -1
+  %t = getelementptr inbounds nuw %struct.A, ptr %a, i32 0, i32 0
+  %p = getelementptr inbounds nuw %struct.B, ptr %b, i32 0, i32 0
+  store ptr %t, ptr %p, align 8
+  %0 = getelementptr inbounds nuw { ptr, float }, ptr %b, i32 0, i32 0
+  %1 = load ptr, ptr %0, align 8
+  %2 = getelementptr inbounds nuw { ptr, float }, ptr %b, i32 0, i32 1
+  %3 = load float, ptr %2, align 8
+  %call = call i32 @foo(ptr %1, float %3, ptr noundef %a, ptr noundef @X)
+  %cmp = icmp eq i32 %call, 3
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -35,8 +62,6 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %entry
   ret i32 0
 }
-
-declare i32 @printf(ptr noundef, ...) #1
 
 ; Function Attrs: noreturn nounwind
 declare void @abort() #2

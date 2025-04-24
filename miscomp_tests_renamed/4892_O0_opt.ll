@@ -1,28 +1,25 @@
-; 165667237009639197812996690350021076662
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/165667237009639197812996690350021076662_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/165667237009639197812996690350021076662.c"
+; 186553891955812497917733321811672874339
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/186553891955812497917733321811672874339_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/186553891955812497917733321811672874339.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@x = internal global i16 0, align 2
-@y = internal global i16 0, align 2
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local void @foo() #0 {
-entry:
-  store i16 837, ptr @x, align 2
-  store i16 1383, ptr @y, align 2
-  ret void
-}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @foo()
+  call void @compare(i64 noundef 8589934591)
   call void @exit(i32 noundef 0) #2
   unreachable
+}
+
+; Function Attrs: noinline nounwind uwtable
+define internal void @compare(i64 noundef %foo) #0 {
+entry:
+  %foo.addr = alloca i64, align 8
+  store i64 %foo, ptr %foo.addr, align 8
+  ret void
 }
 
 ; Function Attrs: noreturn

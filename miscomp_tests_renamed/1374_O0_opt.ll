@@ -1,22 +1,25 @@
-; 136185360348515941215759301833994430004
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/136185360348515941215759301833994430004_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/136185360348515941215759301833994430004.c"
+; 124609022174055823239581121565588833656
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/124609022174055823239581121565588833656_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/124609022174055823239581121565588833656.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
+
+%struct.A = type { i32, i32 }
+%struct.B = type { ptr, ptr }
+%struct.C = type { ptr, ptr }
+
+@.compoundliteral = internal global %struct.A { i32 1, i32 2 }, align 4
+@.compoundliteral.1 = internal global %struct.A { i32 3, i32 4 }, align 4
+@.compoundliteral.2 = internal global %struct.B { ptr @.compoundliteral, ptr @.compoundliteral.1 }, align 8
+@.compoundliteral.3 = internal global %struct.A { i32 5, i32 6 }, align 4
+@e = dso_local global %struct.C { ptr @.compoundliteral.2, ptr @.compoundliteral.3 }, align 8
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %x = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  store i32 0, ptr %x, align 4
-  %0 = load i32, ptr %x, align 4
-  %or = or i32 %0, 4
-  store i32 %or, ptr %x, align 4
-  %1 = load i32, ptr %x, align 4
-  %sub = sub nsw i32 %1, 5
-  ret i32 %sub
+  ret i32 0
 }
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

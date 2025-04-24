@@ -1,6 +1,6 @@
-; 17895241911004022714947222047861842757
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/17895241911004022714947222047861842757_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/17895241911004022714947222047861842757.c"
+; 189630731183203757502211772388786903965
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/189630731183203757502211772388786903965_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/189630731183203757502211772388786903965.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
@@ -8,9 +8,15 @@ target triple = "x86_64-unknown-linux-gnu"
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
+  %i = alloca i64, align 8
   store i32 0, ptr %retval, align 4
-  %call = call i32 @test(i32 noundef 5)
-  %cmp = icmp ne i32 %call, 2
+  store i64 1, ptr %i, align 8
+  %0 = load i64, ptr %i, align 8
+  %mul = mul nsw i64 %0, 2
+  %add = add nsw i64 %mul, 1
+  store i64 %add, ptr %i, align 8
+  %1 = load i64, ptr %i, align 8
+  %cmp = icmp ne i64 %1, 3
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -20,14 +26,6 @@ if.then:                                          ; preds = %entry
 if.end:                                           ; preds = %entry
   call void @exit(i32 noundef 0) #4
   unreachable
-}
-
-; Function Attrs: noinline nounwind uwtable
-define internal i32 @test(i32 noundef %x) #0 {
-entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  ret i32 0
 }
 
 ; Function Attrs: noreturn nounwind

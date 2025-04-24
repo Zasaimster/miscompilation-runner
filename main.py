@@ -15,6 +15,7 @@ from string import Template
 
 CRC_HELPER_OBJ_FILE = "crc/csmith_crc_minimal.o"
 CSV_FILENAME = "results/results.csv"
+hyphens = "-" * 15
 
 
 compute_globals_crc_template = Template(
@@ -60,65 +61,85 @@ exit:
 }
 """
 )
+new_main_function_code = """
+\ndefine i32 @main() {
+entry:
+    ; Allocate space on the stack to store the return value from the old main
+    %retval_storage = alloca i32, align 4
+
+    ; Call the original main logic (now renamed @_crc_main_old)
+    ; Adjust the call signature if @crc_main_old takes arguments.
+    %orig_ret = call i32 @crc_main_old()
+
+    ; Store the return value from the original main into the allocated stack space
+    store i32 %orig_ret, i32* %retval_storage, align 4
+
+    ; --- Hash the return value ---
+    ; Get pointer to the name marker for the return value
+    %ret_name_marker_ptr = getelementptr inbounds [18 x i8], [18 x i8]* @_crc_main_ret_name, i32 0, i32 0
+    ; Cast the address of the stored return value (i32*) to i8*
+    %retval_ptr_i8 = bitcast i32* %retval_storage to i8*
+    ; Call CRC function: pass return value address, size of i32 (4), name marker, and true flag
+    call void @transparent_crc_bytes(i8* %retval_ptr_i8, i32 4, i8* %ret_name_marker_ptr, i1 true)
+
+    ; --- Hash the global variables ---
+    call void @_compute_globals_crc()
+
+    ret i32 0
+}\n
+"""
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Parse two filenames from command line.")
     parser.add_argument("p", help="Path to the first file")
     parser.add_argument("p_prime", help="Path to the second file")
-    # TODO: this should be updated to correctly reflect the system architectures
-    parser.add_argument(
-        "--system",
-        choices=["mac", "linux"],
-        help="Optional system type (mac or linux)",
-        required=False,
-    )
-    parser.add_argument(
-        "--num_runs",
-        type=int,
-        default=1,
-        help="Number of times the IR files should be compiled and executed for differential testing (int, defaults to 1)",
-        required=False,
-    )
     return parser.parse_args()
 
 
-# TODO: make the architecture configurable
-def get_commands_for_normal_exec(file, it):
+# TODO: make the architecture configurable (if needed. also in next function)
+def get_commands_for_normal_exec(file):
     filename = file.split("/")[-1][:-3]
     path = "/".join(file.split("/")[:-1])
     out_path = f"{path}/runtime/{filename}"
 
     # Commands
-    llc = f"llc {file} -o {out_path}_{it}.s"
-    # llc = f"llc {file} -o {out_path}_{it}.s"
-    obj_file = f"clang -c {out_path}_{it}.s -o {out_path}_{it}.o"
-    exec = f"clang {out_path}_{it}.o -o {out_path}_{it}"
-    # execute_cmd = [f"./{out_path}_{it}"]
+    # llc = f"llc {file} -o {out_path}.s"
+    # obj_file = f"clang -c {file} -fsanitize=memory -o {out_path}.o"
+    obj_file = f"clang -c {file} -o {out_path}.o"
+    # exec = f"clang {out_path}.o -o {out_path} -no-pie"
+    # exec = f"clang {out_path}.o -fsanitize=memory -o {out_path}"
+    exec = f"clang {out_path}.o -o {out_path}"
+    execute_cmd = [f"./{out_path}"]
     if out_path.startswith("./"):
-        execute_cmd = [f"{out_path}_{it}"]
+        execute_cmd = [f"{out_path}"]
     else:
-        execute_cmd = [f"./{out_path}_{it}"]
+        execute_cmd = [f"./{out_path}"]
 
-    return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
+    # return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
+    return [obj_file.split(), exec.split(), execute_cmd]
 
 
-# TODO: make the architecture configurable
 def get_commands_for_crc_exec(file):
     filename = file.split("/")[-1][:-3]
     path = "/".join(file.split("/")[:-1])
     out_path = f"{path}/runtime/{filename}"
 
     # Commands
-    llc = f"llc {file} -o {out_path}.s"
-    obj_file = f"clang -c {out_path}.s -o {out_path}.o"
+    # llc = f"llc {file} -o {out_path}.s"
+    # obj_file = f"clang -c {out_path}.s -o {out_path}.o"
+    # obj_file = f"clang -c {file} -fsanitize=memory -o {out_path}.o"
+    obj_file = f"clang -c {file} -o {out_path}.o"
+    # exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -o {out_path} -no-pie"
+    # exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -fsanitize=memory -o {out_path}"
     exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -o {out_path}"
     if out_path.startswith("./"):
         execute_cmd = [f"{out_path}"]
     else:
         execute_cmd = [f"./{out_path}"]
 
-    return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
+    # return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
+    return [obj_file.split(), exec.split(), execute_cmd]
 
 
 def run_cmds(cmds):
@@ -139,25 +160,18 @@ def run_cmds(cmds):
     return res
 
 
-# TODO: extend logic to account for multiple runs. first implementation is for only 1 run
-def execute_original_programs(p, p_prime, num_runs=1):
+def execute_original_programs(p, p_prime):
     """
     Compile each .ll file and run the executable multiple times for differential testing.
     The results are returned as
     """
-    num_runs = 1  # TODO: remove this when logic is added
-    print(f"\n----------------Executing {p}, {p_prime}----------------")
-    p_out = []
-    p_prime_out = []
-    for i in range(num_runs):
-        p_cmds = get_commands_for_normal_exec(p, i)
-        p_prime_cmds = get_commands_for_normal_exec(p_prime, i)
+    print(f"\n{hyphens}Executing {p}, {p_prime}{hyphens}")
+    p_cmds = get_commands_for_normal_exec(p)
+    p_prime_cmds = get_commands_for_normal_exec(p_prime)
 
-        # TODO: update when num_runs logic implemented
-        p_out = run_cmds(p_cmds)
-        p_prime_out = run_cmds(p_prime_cmds)
-
-    print(f"----------------Finished executing {p}, {p_prime}----------------\n")
+    p_out = run_cmds(p_cmds)
+    p_prime_out = run_cmds(p_prime_cmds)
+    print(f"{hyphens}Finished executing {p}, {p_prime}{hyphens}\n")
     return {"p": p_out, "p_prime": p_prime_out}
 
 
@@ -165,16 +179,52 @@ def execute_crc_programs(p, p_prime):
     """
     Compile each .ll file with injected CRC code and run the executables for differential testing and to validate hashed CRCs.
     """
-    # TODO: need to link to crc code
 
-    print(f"\n----------------Executing {p}, {p_prime}----------------")
+    print(f"\n{hyphens}Executing {p}, {p_prime}{hyphens}")
     p_cmds = get_commands_for_crc_exec(p)
     p_prime_cmds = get_commands_for_crc_exec(p_prime)
     p_out = run_cmds(p_cmds)
     p_prime_out = run_cmds(p_prime_cmds)
-    print(f"----------------Finished executing {p}, {p_prime}----------------\n")
+    print(f"{hyphens}Finished executing {p}, {p_prime}{hyphens}\n")
 
     return {"p": p_out, "p_prime": p_prime_out}
+
+
+def rerun_og_cmds_for_undeterminism(p, p_prime):
+    """
+    Re-runs original cmds for p and p_prime 3x.
+    Returns true if the output is consistently different (undeterminable if there is a miscompilation).
+    Returns false if the output is the exact same each time.
+    """
+    print(f"\n{hyphens}Re-Executing {p}, {p_prime} 3 times each{hyphens}")
+    p_exec = get_commands_for_normal_exec(p)[-1]
+    p_prime_exec = get_commands_for_normal_exec(p_prime)[-1]
+    p_outs = []
+    p_prime_outs = []
+    for _ in range(3):
+        p_outs.append(subprocess.run(p_exec, capture_output=True, text=True))
+        p_prime_outs.append(subprocess.run(p_prime_exec, capture_output=True, text=True))
+
+        print(f"p return code: {p_outs[-1].returncode} | p_prime return code: {p_prime_outs[-1].returncode}")
+        print(f"p stdout: {p_outs[-1].stdout} | p_prime stdout: {p_prime_outs[-1].stdout}")
+        print(f"p stderr: {p_outs[-1].stderr} | p_prime stderr: {p_prime_outs[-1].stderr}")
+    print(f"{hyphens}Finished re-executing {p}, {p_prime}{hyphens}\n")
+
+    # Analyze similarity of the output of executing each compiled program individually for p
+    def executions_have_same_outputs(outs):
+        for i in range(1, 3):
+            last_exec_output = outs[i - 1]
+            curr_output = outs[i]
+            if (
+                last_exec_output.returncode != curr_output.returncode
+                or last_exec_output.stdout != curr_output.stdout
+                or last_exec_output.stderr != curr_output.stderr
+            ):
+                return True
+        return False
+
+    # False if p and p' have any differences in executions, True if everything is the same
+    return executions_have_same_outputs(p_outs) and executions_have_same_outputs(p_prime_outs)
 
 
 def get_code(filename):
@@ -188,15 +238,15 @@ def get_parsed_code(filename):
     ir_code = get_code(filename)
     code_lines = ir_code.strip().split("\n")
     parsed_code = []
-    for l in code_lines:
+    for line in code_lines:
         # Remove comment
-        if ";" in l:
-            l = l.split(";")[0]
+        if ";" in line:
+            line = line.split(";")[0]
         # Remove metadata definitions and attachments
-        if "!" in l:
-            l = l.split("!")[0]
-        if l.strip() != "":
-            parsed_code.append(l.strip())
+        if "!" in line:
+            line = line.split("!")[0]
+        if line.strip() != "":
+            parsed_code.append(line.strip())
 
     return "\n".join(parsed_code)
 
@@ -205,7 +255,6 @@ def naive_check_randomness(p, p_prime):
     p_code = get_parsed_code(p)
     p_prime_code = get_parsed_code(p_prime)
 
-    # TODO: you could have a program that uses srand and time without doing srand(time(NULL)) and it would still be deterministic.
     p_random, p_prime_randomn = False, False
     if "@srand" in p_code and "@time" in p_code:  # @rand is pseudo-random
         p_random = True
@@ -282,34 +331,7 @@ def get_type_size(var_type):
         return 8
 
 
-def add_crc_to_ir(p):
-    code = get_code(p)
-    code_arr = code.splitlines()
-    # mod = llvm.parse_assembly(code)
-    # print(mod)
-
-    # for g in mod.global_variables:
-    #     global_vars.append(g)
-    # print(f"Found global variables: {global_vars}")
-
-    # Get all global variables, find last global variable index, find main function index
-    global_vars = []
-    last_global_var_index = -1
-    for i, line in enumerate(code_arr):
-        # Find global variables and mark latest index
-        if re.match(r"^@([a-zA-Z_.][a-zA-Z0-9_.]*)\s*=", line):
-            global_vars.append(line)
-            last_global_var_index = i
-
-    # this should never be the case, but just to be safe
-    if last_global_var_index == len(code_arr) - 1:
-        last_global_var_index -= 1
-
-    # TODO: handle no global vars
-    if len(global_vars) == 0:
-        print("No global variables found. Exiting.")
-        return False
-
+def get_globals_info(global_vars, code_arr):
     # For array types [N x type]
     # TODO: this doesn't support matrices b/c recursion is needed.
     array_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+(\[\d+\s+x\s+i\d+\])"
@@ -367,7 +389,6 @@ def add_crc_to_ir(p):
             var_type = global_var_info[var_name]["var_type"]
             var_name_length = len(var_name) + 1
             # Create global variables that store a string representation of each variable
-            # TODO: make sure \00 gets added correctly to updated IR program
             global_var_info[var_name]["varname_code"] = varname_template.substitute(name=var_name, size=var_name_length)
 
             # Create entry in globals_table
@@ -378,6 +399,66 @@ def add_crc_to_ir(p):
                 num_bytes=get_type_size(var_type),
                 name_len=var_name_length,
             )
+
+    return global_var_info
+
+
+def find_main_end_index(crc_code):
+    # Find main function index after all changes have been made since line numbers will change as new lines are added
+    main_function_index = -1
+    for i, line in enumerate(crc_code):
+        match = re.search(r"^\s*define\s+.*?@main\s*\(", line)
+        if match:
+            main_function_index = i
+            break
+
+    # Find the first termination and end of main function
+    main_function_end = main_function_index
+    for i in range(main_function_index, len(crc_code)):
+        line = crc_code[i].strip()
+        # NOTE this assumes that } is a keyword and cannot appear randomly
+        if "}" in crc_code[i]:
+            main_function_end = i
+            break
+
+    return main_function_end
+
+
+def add_crc_to_ir(p):
+    # Define static code injections here
+    crc_declaration = "\n; External function declaration for crc calculation\ndeclare void @transparent_crc_bytes(i8*, i32, i8*, i1)\n"
+    global_info = "\n; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }\n%global_info = type { i8*, i32, i8*}\n"
+    # call_compute_globals_crc = "\n  ; Call function to compute and print CRC for globals\n  call void @_compute_globals_crc()\n\n"
+
+    code = get_code(p)
+    code_arr = code.splitlines()
+
+    # Cannot process function without @main. If there are no exit() or abort() statements, we can still get the CRC of the exit code
+    if "@main(" not in code:
+        print("No main function found. Exiting.")
+        return False
+
+    # mod = llvm.parse_assembly(code)
+    # print(mod)
+
+    # for g in mod.global_variables:
+    #     global_vars.append(g)
+    # print(f"Found global variables: {global_vars}")
+
+    # Get all global variables, find last global variable index, find main function index
+    global_vars = []
+    last_global_var_index = -1
+    for i, line in enumerate(code_arr):
+        # Find global variables and mark latest index
+        if re.match(r"^@([a-zA-Z_.][a-zA-Z0-9_.]*)\s*=", line):
+            global_vars.append(line)
+            last_global_var_index = i
+
+    # this should never be the case, but just to be safe
+    if last_global_var_index == len(code_arr) - 1:
+        last_global_var_index -= 1
+
+    global_var_info = get_globals_info(global_vars, code_arr)
 
     # Create name global vars for each variable
     global_varnames_code = "\n; Create name global variables for each variable\n"
@@ -397,12 +478,6 @@ def add_crc_to_ir(p):
             globals_table += f"\t{dict['global_info_entry']},\n"
     globals_table += "]\n"
 
-    crc_declaration = "\n; External function declaration for crc calculation\ndeclare void @transparent_crc_bytes(i8*, i32, i8*, i1)\n"
-    global_info = "\n; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }\n%global_info = type { i8*, i32, i8*}\n"
-    call_compute_globals_crc = (
-        "\n  ; Call function to compute and print CRC for globals\n  call void @_compute_globals_crc()\n\n"
-    )
-
     loop_and_call_crc_code = compute_globals_crc_template.substitute(num_table_entries=num_vars)
 
     crc_code = (
@@ -418,61 +493,51 @@ def add_crc_to_ir(p):
     # todo: FILL IN: CHANGE ALL @ABORT/@EXIT functions
     # todo: change all @abort/@exit ONLY with `tail call void...` since that is guaranted to be the last thing that calls
     # todo: need to remove unreachable before as well
-
-    # Find main function index after all changes have been made since line numbers will change as new lines are added
-    main_function_index = -1
-    for i, line in enumerate(crc_code):
-        # Find main function
-        if "@main(" in line:
-            main_function_index = i
-
-    # if main_function_index == -1:
-    #     # TODO: Create main function if it's not present
-    #     print("Main function 'main' not found in LLVM module. Exiting")
-    #     return False
-
-    # Find the first termination and end of main function
-    main_function_end = main_function_index
-    first_termination = main_function_index
-    is_first_termination_found = False
-    for i in range(main_function_index, len(crc_code)):
-        line = crc_code[i].strip()
-        if not is_first_termination_found and (
-            "ret " in line or "call void @exit" in line or "call void @abort" in line
-        ):
-            first_termination = i
-            is_first_termination_found = True
-        # NOTE this assumes that } is a keyword and cannot appear randomly
-        if "}" in crc_code[i]:
-            main_function_end = i
-            break
-
-    # Work backwards and find the last return call
-    last_termination = first_termination
-    for i in range(main_function_end - 1, first_termination, -1):
-        if crc_code[i].strip().startswith("ret "):
-            last_termination = i
-            break
+    # first_termination, last_termination = find_main_end_index(crc_code)
 
     # Append @compute_globabls_crc before program termination
-    if first_termination == last_termination:
-        # When there is only one termination statement in main()
-        print("Only one termination statement found in main()")
-        print(f"first_termination: {first_termination}, last_termination: {last_termination}")
-        crc_code = crc_code[:first_termination] + call_compute_globals_crc.splitlines() + crc_code[first_termination:]
-    else:
-        print("Multiple termination statements found in main()")
-        crc_code = (
-            crc_code[:first_termination]
-            + call_compute_globals_crc.splitlines()
-            + crc_code[first_termination:last_termination]
-            + call_compute_globals_crc.splitlines()
-            + crc_code[last_termination:]
-        )
+    # if first_termination == last_termination:
+    #     # When there is only one termination statement in main()
+    #     print("Only one termination statement found in main()")
+    #     print(f"first_termination: {first_termination}, last_termination: {last_termination}")
+    #     crc_code = crc_code[:first_termination] + call_compute_globals_crc.splitlines() + crc_code[first_termination:]
+    # else:
+    #     print("Multiple termination statements found in main()")
+    #     crc_code = (
+    #         crc_code[:first_termination]
+    #         + call_compute_globals_crc.splitlines()
+    #         + crc_code[first_termination:last_termination]
+    #         + call_compute_globals_crc.splitlines()
+    #         + crc_code[last_termination:]
+    #     )
 
-    # print("\n\n\n")
-    # print("\n".join(crc_code))
+    # Find index where main function ends
+    main_func_end = find_main_end_index(crc_code)
 
+    # Rename main function to @_crc_main_old()
+    for i, line in enumerate(crc_code):
+        # Use regex to find 'define' followed by optional attributes, return type,
+        # and exactly '@main(' to avoid replacing it in comments or other contexts.
+        # This regex looks for:
+        # ^           - Start of the line
+        # \s* - Optional leading whitespace
+        # define      - The keyword 'define'
+        # .*?         - Any characters (non-greedily) - covers attributes and return type
+        # \s+         - One or more whitespace characters
+        # @main       - The literal '@main'
+        # \s* - Optional whitespace
+        # \(          - The literal opening parenthesis '('
+        match = re.search(r"^\s*define\s+.*?@main\s*\(", line)
+        if match:
+            # Replace only the first occurrence of '@main(' on the matched line
+            crc_code[i] = line.replace("@main(", "@_crc_main_old(", 1)
+            break
+
+    # Insert template code for the new main function
+    crc_code = crc_code[: main_func_end + 1] + new_main_function_code.splitlines() + crc_code[main_func_end + 1 :]
+
+    print("\n\n\n")
+    print("\n".join(crc_code))
     # Write new file
     new_file = p.split(".")[0] + "_modified_crc.ll"
     with open(new_file, "w") as f:
@@ -543,6 +608,48 @@ def alive2_tv_check(p, p_prime):
     return res
 
 
+# exec_type = "normal" or "crc"
+def check_for_compilation_exception(outs, is_crc=False):
+    if is_crc:
+        exception_str = "MISCOMPILATION STATUS: COMPILE CRC EXCEPTION FOR P"
+    else:
+        exception_str = "MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P"
+    cmds_error = False
+    for out in outs:
+        if isinstance(out, tuple) or out.returncode == 1:
+            cmds_error = True
+            if isinstance(out, tuple):
+                print(f"Error running command: {out[0]}")
+                print(f"Error: {out[1]}")
+
+            print(exception_str)
+
+    return cmds_error
+
+
+def process_reg_cmd_outs(reg_cmds_outs, p, p_prime):
+    p_last_out = reg_cmds_outs["p"][-1]
+    p_prime_last_out = reg_cmds_outs["p_prime"][-1]
+
+    print("MISCOMPILATION STATUS: REGULAR EXECUTED")
+    print(f"p return code: {p_last_out.returncode} | p_prime return code: {p_prime_last_out.returncode}")
+    print(f"p stdout: {p_last_out.stdout} | p_prime stdout: {p_prime_last_out.stdout}")
+    print(f"p stderr: {p_last_out.stderr} | p_prime stderr: {p_prime_last_out.stderr}")
+
+    if (
+        p_last_out.returncode == p_prime_last_out.returncode
+        and p_last_out.stdout == p_prime_last_out.stdout
+        and p_last_out.stderr == p_prime_last_out.stderr
+    ):
+        print("MISCOMPILATION STATUS: REGULAR OUTPUT MATCH.")
+    else:
+        is_different_output = rerun_og_cmds_for_undeterminism(p, p_prime)
+        if is_different_output:
+            print("MISCOMPILATION STATUS: REGULAR OUTPUT VARYING (UNDETERMINABLE)")
+        else:
+            print("MISCOMPILATION STATUS: REGULAR OUTPUT DIFFERENT.")
+
+
 def main():
     args = parse_args()
     p_file, p_prime_file = args.p, args.p_prime
@@ -583,145 +690,151 @@ def main():
     # print("---------------Finished Running Alive2---------------\n")
 
     # Run original files
-    og_cmds_outs = execute_original_programs(p_file, p_prime_file, num_runs=1)
-    og_cmds_error = False
+    # reg_cmds_outs = execute_original_programs(p_file, p_prime_file)
+    # reg_cmds_compilation_error = check_for_compilation_exception(reg_cmds_outs["p"]) or check_for_compilation_exception(
+    #     reg_cmds_outs["p_prime"]
+    # )
 
     # Check if P had a compilation issue
-    for cmd_out in og_cmds_outs["p"]:
-        print(cmd_out.returncode)
-        if isinstance(cmd_out, tuple) or cmd_out.returncode == 1:
-            og_cmds_error = True
-            if isinstance(cmd_out, tuple):
-                print(f"Error running command: {cmd_out[0]}")
-                print(f"Error: {cmd_out[1]}")
+    # for cmd_out in og_cmds_outs["p"]:
+    #     if isinstance(cmd_out, tuple) or cmd_out.returncode == 1:
+    #         og_cmds_error = True
+    #         if isinstance(cmd_out, tuple):
+    #             print(f"Error running command: {cmd_out[0]}")
+    #             print(f"Error: {cmd_out[1]}")
 
-            print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P")
+    #         print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P")
 
     # Check if P_prime had a compilation issue
-    for cmd_out in og_cmds_outs["p_prime"]:
-        print(cmd_out.returncode)
-        if isinstance(cmd_out, tuple) or cmd_out.returncode == 1:
-            og_cmds_error = True
-            if isinstance(cmd_out, tuple):
-                print(f"Error running command: {cmd_out[0]}")
-                print(f"Error: {cmd_out[1]}")
-            print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P'")
+    # for cmd_out in og_cmds_outs["p_prime"]:
+    #     if isinstance(cmd_out, tuple) or cmd_out.returncode == 1:
+    #         og_cmds_error = True
+    #         if isinstance(cmd_out, tuple):
+    #             print(f"Error running command: {cmd_out[0]}")
+    #             print(f"Error: {cmd_out[1]}")
+    #         print("MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P'")
 
-    p_last_out = og_cmds_outs["p"][-1]
-    p_prime_last_out = og_cmds_outs["p_prime"][-1]
+    # p_last_out = reg_cmds_outs["p"][-1]
+    # p_prime_last_out = reg_cmds_outs["p_prime"][-1]
 
     # Handle no crash
-    if not og_cmds_error:
-        print("MISCOMPILATION STATUS: REGULAR EXECUTED")
-        print(f"p return code: {p_last_out.returncode} | p_prime return code: {p_prime_last_out.returncode}")
-        print(f"p stdout: {p_last_out.stdout} | p_prime stdout: {p_prime_last_out.stdout}")
-        print(f"p stderr: {p_last_out.stderr} | p_prime stderr: {p_prime_last_out.stderr}")
+    # if not reg_cmds_compilation_error:
+    #     process_reg_cmd_outs(reg_cmds_outs, p_file, p_prime_file)
+    # print("MISCOMPILATION STATUS: REGULAR EXECUTED")
+    # print(f"p return code: {p_last_out.returncode} | p_prime return code: {p_prime_last_out.returncode}")
+    # print(f"p stdout: {p_last_out.stdout} | p_prime stdout: {p_prime_last_out.stdout}")
+    # print(f"p stderr: {p_last_out.stderr} | p_prime stderr: {p_prime_last_out.stderr}")
 
-        if (
-            p_last_out.returncode == p_prime_last_out.returncode
-            and p_last_out.stdout == p_prime_last_out.stdout
-            and p_last_out.stderr == p_prime_last_out.stderr
-        ):
-            print("MISCOMPILATION STATUS: REGULAR OUTPUT MATCH.")
-        else:
-            print("MISCOMPILATION STATUS: REGULAR OUTPUT DIFFERENT.")
+    # if (
+    #     p_last_out.returncode == p_prime_last_out.returncode
+    #     and p_last_out.stdout == p_prime_last_out.stdout
+    #     and p_last_out.stderr == p_prime_last_out.stderr
+    # ):
+    #     print("MISCOMPILATION STATUS: REGULAR OUTPUT MATCH.")
+    # else:
+    #     is_different_output = rerun_og_cmds_for_undeterminism(p_file, p_prime_file)
+    #     if is_different_output:
+    #         print("MISCOMPILATION STATUS: REGULAR OUTPUT VARYING (UNDETERMINABLE)")
+    #     else:
+    #         print("MISCOMPILATION STATUS: REGULAR OUTPUT DIFFERENT.")
 
     # Run modified code with injected CRC
     print("\nInjecting CRC to P...")
     crc_p = add_crc_to_ir(p_file)
-    print("\nInjecting CRC to P prime...")
-    crc_p_prime = add_crc_to_ir(p_prime_file)
+    # print("\nInjecting CRC to P prime...")
+    # crc_p_prime = add_crc_to_ir(p_prime_file)
 
-    # Run the code with injected CRC calculation.
-    crc_cmds_error = False
-    crc_cmd_outs = None
-    if crc_p is False or crc_p_prime is False:
-        crc_cmds_error = True
-        print("MISCOMPILATION STATUS: CRC FAILED. unable to inject crc")
-    else:
-        crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
+    # # Run the code with injected CRC calculation.
+    # crc_cmds_error = False
+    # crc_cmd_outs = None
+    # if crc_p is False or crc_p_prime is False:
+    #     crc_cmds_error = True
+    #     print("MISCOMPILATION STATUS: CRC FAILED. unable to inject crc")
+    # else:
+    #     crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
 
-    # TODO: update this to use same logic as regular program execution
-    if crc_cmd_outs is not None:
-        # Check CRC P's output
-        for cmd_out in crc_cmd_outs["p"]:
-            if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
-                crc_cmds_error = True
-                print("MISCOMPILATION STATUS: CRC CRASHED FOR P")
-                if isinstance(cmd_out, tuple):
-                    print(f"Error running command: {cmd_out[0]}")
-                    print(f"Error: {cmd_out[1]}")
-                    continue
+    # if crc_cmd_outs is not None:
+    #     crc_cmds_error = check_for_compilation_exception(crc_cmd_outs["p"], True) or check_for_compilation_exception(
+    #         crc_cmd_outs["p_prime"], True
+    #     )
+    # Check CRC P's output
+    # for cmd_out in crc_cmd_outs["p"]:
+    #     if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+    #         crc_cmds_error = True
+    #         print("MISCOMPILATION STATUS: CRC CRASHED FOR P")
+    #         if isinstance(cmd_out, tuple):
+    #             print(f"Error running command: {cmd_out[0]}")
+    #             print(f"Error: {cmd_out[1]}")
+    #             continue
 
-                print(f"Error running command: {cmd_out.args}")
-                print(f"stdout: {cmd_out.stdout}")
-                print(f"stderr: {cmd_out.stderr}")
+    #         print(f"Error running command: {cmd_out.args}")
+    #         print(f"stdout: {cmd_out.stdout}")
+    #         print(f"stderr: {cmd_out.stderr}")
 
-        # Check CRC P_prime's output
-        for cmd_out in crc_cmd_outs["p_prime"]:
-            if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
-                crc_cmds_error = True
-                print("MISCOMPILATION STATUS: CRC CRASHED FOR P'")
-                if isinstance(cmd_out, tuple):
-                    print(f"Error running command: {cmd_out[0]}")
-                    print(f"Error: {cmd_out[1]}")
-                    continue
-                print(f"Error running command: {cmd_out.args}")
-                print(f"stdout: {cmd_out.stdout}")
-                print(f"stderr: {cmd_out.stderr}")
+    # # Check CRC P_prime's output
+    # for cmd_out in crc_cmd_outs["p_prime"]:
+    #     if isinstance(cmd_out, tuple) or cmd_out.returncode != 0:
+    #         crc_cmds_error = True
+    #         print("MISCOMPILATION STATUS: CRC CRASHED FOR P'")
+    #         if isinstance(cmd_out, tuple):
+    #             print(f"Error running command: {cmd_out[0]}")
+    #             print(f"Error: {cmd_out[1]}")
+    #             continue
+    #         print(f"Error running command: {cmd_out.args}")
+    #         print(f"stdout: {cmd_out.stdout}")
+    #         print(f"stderr: {cmd_out.stderr}")
 
-    if not crc_cmds_error:
-        print("MISCOMPILATION STATUS: CRC EXECUTED")
+    # if not crc_cmds_error:
+    #     print("MISCOMPILATION STATUS: CRC EXECUTED")
 
-    # TODO If there was an error in running the CRC commands, skip this section
-    if not crc_cmds_error:
-        p_stdout = crc_cmd_outs["p"][-1].stdout.strip().split("\n")
-        p_prime_stdout = crc_cmd_outs["p_prime"][-1].stdout.strip().split("\n")
+    # if not crc_cmds_error:
+    #     p_stdout = crc_cmd_outs["p"][-1].stdout.strip().split("\n")
+    #     p_prime_stdout = crc_cmd_outs["p_prime"][-1].stdout.strip().split("\n")
 
-        # Find first instance of checksum
-        p_hash_i, p_prime_hash_i = -1, -1
-        for i, l in enumerate(p_stdout):
-            if "...checksum after hashing" in l:
-                p_hash_i = i
-                break
-        for i, l in enumerate(p_prime_stdout):
-            if "...checksum after hashing" in l:
-                p_prime_hash_i = i
-                break
+    #     # Find first instance of checksum
+    #     p_hash_i, p_prime_hash_i = -1, -1
+    #     for i, line in enumerate(p_stdout):
+    #         if "...checksum after hashing" in line:
+    #             p_hash_i = i
+    #             break
+    #     for i, line in enumerate(p_prime_stdout):
+    #         if "...checksum after hashing" in line:
+    #             p_prime_hash_i = i
+    #             break
 
-        # Handle no hash found separately
-        if p_hash_i == -1 and p_prime_hash_i == -1:
-            print("MISCOMPILATION STATUS: CRC NO HASH FOUND.")
-        # Different # of hashes implies varying output. Therefore, this is a miscompilation
-        elif p_hash_i == -1 or p_prime_hash_i == -1:
-            print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
-        # Else, both P, P' produced > 0 hashes
-        else:
-            # Separate normal output and the CRC output
-            p_out = p_stdout[:p_hash_i]
-            p_hash = p_stdout[p_hash_i:]
-            p_prime_out = p_prime_stdout[:p_prime_hash_i]
-            p_prime_hash = p_prime_stdout[p_prime_hash_i:]
+    #     # Handle no hash found separately
+    #     if p_hash_i == -1 and p_prime_hash_i == -1:
+    #         print("MISCOMPILATION STATUS: CRC NO HASH FOUND.")
+    #     # Different # of hashes implies varying output. Therefore, this is a miscompilation
+    #     elif p_hash_i == -1 or p_prime_hash_i == -1:
+    #         print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
+    #     # Else, both P, P' produced > 0 hashes
+    #     else:
+    #         # Separate normal output and the CRC output
+    #         p_out = p_stdout[:p_hash_i]
+    #         p_hash = p_stdout[p_hash_i:]
+    #         p_prime_out = p_prime_stdout[:p_prime_hash_i]
+    #         p_prime_hash = p_prime_stdout[p_prime_hash_i:]
 
-            print(p_out)
-            print(p_hash)
-            print(p_prime_out)
-            print(p_prime_hash)
+    #         print(p_out)
+    #         print(p_hash)
+    #         print(p_prime_out)
+    #         print(p_prime_hash)
 
-            if len(p_hash) != len(p_prime_hash):
-                print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
-            elif p_hash[-1].split(" ")[-1] != p_prime_hash[-1].split(" ")[-1]:
-                print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different hashes")
-            else:
-                print("MISCOMPILATION STATUS: CRC SUCCEEDED. Same hashes")
+    #         if len(p_hash) != len(p_prime_hash):
+    #             print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
+    #         elif p_hash[-1].split(" ")[-1] != p_prime_hash[-1].split(" ")[-1]:
+    #             print("MISCOMPILATION STATUS: CRC LOGIC FAILED. Different hashes")
+    #         else:
+    #             print("MISCOMPILATION STATUS: CRC SUCCEEDED. Same hashes")
 
     return
     # Evaluate results
-    print("---------------Evaluating program outputs and randomness---------------")
+    print(f"{hyphens}Evaluating program outputs and randomness{hyphens}")
     same_outputs = True
-    for i in range(len(og_cmds_outs["p"])):
-        p_out = og_cmds_outs["p"][i]
-        p_prime_out = og_cmds_outs["p_prime"][i]
+    for i in range(len(reg_cmds_outs["p"])):
+        p_out = reg_cmds_outs["p"][i]
+        p_prime_out = reg_cmds_outs["p_prime"][i]
 
         if p_out.returncode != p_prime_out.returncode:
             same_outputs = False
@@ -759,9 +872,8 @@ def main():
 
         csv_output["has_randomness"] = False
     print(randomness_string)
-    print("---------------Finished evaluating program outputs and randomness---------------\n")
+    print(f"{hyphens}Finished evaluating program outputs and randomness{hyphens}\n")
 
-    # todo: update final prediction
     csv_output["final_is_miscompilation"] = not csv_output["alive2_incorrect"] == 0
     write_to_csv(csv_output)
 

@@ -1,42 +1,30 @@
-; 192280125777000973898358847998083163539
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/192280125777000973898358847998083163539_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/192280125777000973898358847998083163539.c"
+; 141013397741192256478552833783634595863
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141013397741192256478552833783634595863_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141013397741192256478552833783634595863.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.anon = type { i32, %union.pthread_mutex_t }
-%union.pthread_mutex_t = type { i32 }
+@a = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
+@c = dso_local global i8 0, align 1
+@d = dso_local global i8 0, align 1
+@e = dso_local global i8 0, align 1
+@f = dso_local global i64 0, align 8
+@g = dso_local global i64 0, align 8
+@h = dso_local global i64 0, align 8
+@i = dso_local global i64 0, align 8
+@j = dso_local global i16 0, align 2
+@k = dso_local global i16 0, align 2
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %r = alloca %struct.anon, align 4
   store i32 0, ptr %retval, align 4
-  call void @llvm.memset.p0.i64(ptr align 4 %r, i8 0, i64 8, i1 false)
-  %c = getelementptr inbounds nuw %struct.anon, ptr %r, i32 0, i32 0
-  %0 = load i32, ptr %c, align 4
-  %cmp = icmp ne i32 %0, 0
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @abort() #3
-  unreachable
-
-if.end:                                           ; preds = %entry
   ret i32 0
 }
 
-; Function Attrs: nocallback nofree nounwind willreturn memory(argmem: write)
-declare void @llvm.memset.p0.i64(ptr writeonly captures(none), i8, i64, i1 immarg) #1
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { nocallback nofree nounwind willreturn memory(argmem: write) }
-attributes #2 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

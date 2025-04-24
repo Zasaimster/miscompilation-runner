@@ -1,131 +1,36 @@
-; 160289164730470268157805489809225919046
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/160289164730470268157805489809225919046_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/160289164730470268157805489809225919046.c"
+; 188394082875599495939777475406149526363
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188394082875599495939777475406149526363_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188394082875599495939777475406149526363.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.WorkEntrySType = type { ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr, ptr }
-%struct.ShrPcPteSType = type { %struct.ShrPcStatsSType }
-%struct.ShrPcStatsSType = type { i32, i32, %struct.ShrPcCommonStatSType, %union.ShrPcStatUnion }
-%struct.ShrPcCommonStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64 }
-%union.ShrPcStatUnion = type { %struct.ShrPcGemStatSType }
-%struct.ShrPcGemStatSType = type { i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, i64, [40 x i64] }
-
-@Local1 = dso_local local_unnamed_addr global ptr null, align 8
-@Local2 = dso_local local_unnamed_addr global ptr null, align 8
-@Local3 = dso_local local_unnamed_addr global ptr null, align 8
-@RDbf1 = dso_local local_unnamed_addr global ptr null, align 8
-@RDbf2 = dso_local local_unnamed_addr global ptr null, align 8
-@RDbf3 = dso_local local_unnamed_addr global ptr null, align 8
-@IntVc1 = dso_local local_unnamed_addr global ptr null, align 8
-@IntVc2 = dso_local local_unnamed_addr global ptr null, align 8
-@IntCode3 = dso_local local_unnamed_addr global ptr null, align 8
-@IntCode4 = dso_local local_unnamed_addr global ptr null, align 8
-@IntCode5 = dso_local local_unnamed_addr global ptr null, align 8
-@IntCode6 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom1 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom2 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom3 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom4 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom5 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom6 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom7 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom8 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom9 = dso_local local_unnamed_addr global ptr null, align 8
-@Lom10 = dso_local local_unnamed_addr global ptr null, align 8
-@RDbf11 = dso_local local_unnamed_addr global ptr null, align 8
-@RDbf12 = dso_local local_unnamed_addr global ptr null, align 8
-@Workspace = dso_local local_unnamed_addr global %struct.WorkEntrySType zeroinitializer, align 8
-@MyPte = dso_local global %struct.ShrPcPteSType zeroinitializer, align 8
-@str = private unnamed_addr constant [6 x i8] c"Hello\00", align 1
+@str = private unnamed_addr constant [14 x i8] c"Hello, World!\00", align 1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local void @InitCache(i32 noundef %sessionId) local_unnamed_addr #0 {
+define dso_local i32 @bar() local_unnamed_addr #0 {
 entry:
-  %puts.i.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  store i64 0, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 8), align 8, !tbaa !5
-  store i64 5, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 16), align 8, !tbaa !12
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 24), ptr @Local1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 32), ptr @Local2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 40), ptr @Local3, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 48), ptr @RDbf1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 56), ptr @RDbf2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), ptr @RDbf3, align 8, !tbaa !13
-  store i64 1, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), align 8, !tbaa !16
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 304), ptr @IntVc1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 312), ptr @IntVc2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 320), ptr @IntCode3, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 328), ptr @IntCode4, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 336), ptr @IntCode5, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 344), ptr @IntCode6, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 352), ptr @Workspace, align 8, !tbaa !17
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 360), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 8), align 8, !tbaa !19
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 368), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 16), align 8, !tbaa !20
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 376), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 24), align 8, !tbaa !21
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 384), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 32), align 8, !tbaa !22
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 392), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 40), align 8, !tbaa !23
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 400), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 48), align 8, !tbaa !24
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 408), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 56), align 8, !tbaa !25
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 416), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 64), align 8, !tbaa !26
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 424), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 72), align 8, !tbaa !27
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 432), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 80), align 8, !tbaa !28
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 208), ptr @Lom1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 216), ptr @Lom2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 224), ptr @Lom3, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 232), ptr @Lom4, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 240), ptr @Lom5, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 248), ptr @Lom6, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 256), ptr @Lom7, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 264), ptr @Lom8, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 272), ptr @Lom9, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 280), ptr @Lom10, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 288), ptr @RDbf11, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 296), ptr @RDbf12, align 8, !tbaa !13
+  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  ret i32 undef
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @foo(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp eq i32 %x, 0
+  br i1 %cmp, label %if.end5, label %lor.rhs
+
+lor.rhs:                                          ; preds = %entry
+  %puts.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
+  br label %if.end5
+
+if.end5:                                          ; preds = %lor.rhs, %entry
   ret void
 }
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main(i32 noundef %argc, ptr noundef readnone captures(none) %argv) local_unnamed_addr #0 {
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
 entry:
-  %puts.i.i.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  store i64 0, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 8), align 8, !tbaa !5
-  store i64 5, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 16), align 8, !tbaa !12
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 24), ptr @Local1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 32), ptr @Local2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 40), ptr @Local3, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 48), ptr @RDbf1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 56), ptr @RDbf2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), ptr @RDbf3, align 8, !tbaa !13
-  store i64 1, ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 64), align 8, !tbaa !16
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 304), ptr @IntVc1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 312), ptr @IntVc2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 320), ptr @IntCode3, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 328), ptr @IntCode4, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 336), ptr @IntCode5, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 344), ptr @IntCode6, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 352), ptr @Workspace, align 8, !tbaa !17
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 360), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 8), align 8, !tbaa !19
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 368), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 16), align 8, !tbaa !20
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 376), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 24), align 8, !tbaa !21
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 384), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 32), align 8, !tbaa !22
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 392), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 40), align 8, !tbaa !23
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 400), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 48), align 8, !tbaa !24
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 408), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 56), align 8, !tbaa !25
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 416), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 64), align 8, !tbaa !26
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 424), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 72), align 8, !tbaa !27
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 432), ptr getelementptr inbounds nuw (i8, ptr @Workspace, i64 80), align 8, !tbaa !28
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 208), ptr @Lom1, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 216), ptr @Lom2, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 224), ptr @Lom3, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 232), ptr @Lom4, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 240), ptr @Lom5, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 248), ptr @Lom6, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 256), ptr @Lom7, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 264), ptr @Lom8, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 272), ptr @Lom9, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 280), ptr @Lom10, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 288), ptr @RDbf11, align 8, !tbaa !13
-  store ptr getelementptr inbounds nuw (i8, ptr @MyPte, i64 296), ptr @RDbf12, align 8, !tbaa !13
+  %puts.i.i = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
   ret i32 0
 }
 
@@ -143,27 +48,3 @@ attributes #1 = { nofree nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = !{!6, !11, i64 8}
-!6 = !{!"", !7, i64 0, !7, i64 4, !10, i64 8, !8, i64 208}
-!7 = !{!"int", !8, i64 0}
-!8 = !{!"omnipotent char", !9, i64 0}
-!9 = !{!"Simple C/C++ TBAA"}
-!10 = !{!"", !11, i64 0, !11, i64 8, !11, i64 16, !11, i64 24, !11, i64 32, !11, i64 40, !11, i64 48, !11, i64 56, !11, i64 64, !11, i64 72, !11, i64 80, !11, i64 88, !11, i64 96, !11, i64 104, !11, i64 112, !11, i64 120, !11, i64 128, !11, i64 136, !11, i64 144, !11, i64 152, !11, i64 160, !11, i64 168, !11, i64 176, !11, i64 184, !11, i64 192}
-!11 = !{!"long", !8, i64 0}
-!12 = !{!6, !11, i64 16}
-!13 = !{!14, !14, i64 0}
-!14 = !{!"p1 long", !15, i64 0}
-!15 = !{!"any pointer", !8, i64 0}
-!16 = !{!11, !11, i64 0}
-!17 = !{!18, !14, i64 0}
-!18 = !{!"", !14, i64 0, !14, i64 8, !14, i64 16, !14, i64 24, !14, i64 32, !14, i64 40, !14, i64 48, !14, i64 56, !14, i64 64, !14, i64 72, !14, i64 80}
-!19 = !{!18, !14, i64 8}
-!20 = !{!18, !14, i64 16}
-!21 = !{!18, !14, i64 24}
-!22 = !{!18, !14, i64 32}
-!23 = !{!18, !14, i64 40}
-!24 = !{!18, !14, i64 48}
-!25 = !{!18, !14, i64 56}
-!26 = !{!18, !14, i64 64}
-!27 = !{!18, !14, i64 72}
-!28 = !{!18, !14, i64 80}

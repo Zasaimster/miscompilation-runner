@@ -1,31 +1,36 @@
-; 18848474202659619154808980148463920218
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/18848474202659619154808980148463920218_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/18848474202659619154808980148463920218.c"
+; 131682063513514935082825321296449228818
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/131682063513514935082825321296449228818_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/131682063513514935082825321296449228818.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-%struct.T = type { i32 }
-
-@.str = private unnamed_addr constant [43 x i8] c"This will always print the same value: %d\0A\00", align 1
+@a = dso_local global i32 0, align 4
+@b = dso_local global i32 0, align 4
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
+define dso_local void @example6(i32 noundef %flag) #0 {
 entry:
-  %retval = alloca i32, align 4
-  %s = alloca %struct.T, align 4
-  store i32 0, ptr %retval, align 4
-  %x = getelementptr inbounds nuw %struct.T, ptr %s, i32 0, i32 0
-  store i32 3, ptr %x, align 4
-  %coerce.dive = getelementptr inbounds nuw %struct.T, ptr %s, i32 0, i32 0
-  %0 = load i32, ptr %coerce.dive, align 4
-  %call = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 %0)
-  ret i32 %call
+  %flag.addr = alloca i32, align 4
+  %val = alloca i32, align 4
+  %dead = alloca i32, align 4
+  store i32 %flag, ptr %flag.addr, align 4
+  store i32 0, ptr %val, align 4
+  %0 = load i32, ptr %flag.addr, align 4
+  %tobool = icmp ne i32 %0, 0
+  br i1 %tobool, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  store i32 1, ptr %val, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.then, %entry
+  %1 = load i32, ptr %val, align 4
+  %add = add nsw i32 %1, 2
+  store i32 %add, ptr %dead, align 4
+  ret void
 }
 
-declare i32 @printf(ptr noundef, ...) #1
-
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

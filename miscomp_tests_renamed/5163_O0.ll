@@ -1,17 +1,29 @@
-; 151996861691515500193530261789153846271
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/151996861691515500193530261789153846271.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/151996861691515500193530261789153846271.c"
+; 191168151666051667782169903688881002806
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/191168151666051667782169903688881002806.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/191168151666051667782169903688881002806.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
+@blah = dso_local global i32 0, align 4
+
 ; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @f(i32 noundef %i) #0 {
+define dso_local void @func5() #0 {
+entry:
+  %p = alloca i32, align 4
+  %q = alloca i32, align 4
+  store i32 7, ptr %p, align 4
+  %0 = load i32, ptr %p, align 4
+  store i32 %0, ptr %q, align 4
+  ret void
+}
+
+; Function Attrs: noinline nounwind uwtable
+define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %i.addr = alloca i32, align 4
-  store i32 %i, ptr %i.addr, align 4
-  %call = call i32 (i32, ...) @square(i32 noundef 5)
-  %cmp = icmp eq i32 %call, 0
+  store i32 0, ptr %retval, align 4
+  %call = call i32 (...) @foo()
+  %cmp = icmp ne i32 %call, 4044
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -19,24 +31,14 @@ if.then:                                          ; preds = %entry
   unreachable
 
 if.end:                                           ; preds = %entry
-  %0 = load i32, ptr %retval, align 4
-  ret i32 %0
-}
-
-declare i32 @square(...) #1
-
-; Function Attrs: noreturn nounwind
-declare void @abort() #2
-
-; Function Attrs: noinline nounwind uwtable
-define dso_local i32 @main() #0 {
-entry:
-  %retval = alloca i32, align 4
-  store i32 0, ptr %retval, align 4
-  %call = call i32 @f(i32 noundef 0)
   call void @exit(i32 noundef 0) #5
   unreachable
 }
+
+declare i32 @foo(...) #1
+
+; Function Attrs: noreturn nounwind
+declare void @abort() #2
 
 ; Function Attrs: noreturn
 declare void @exit(i32 noundef) #3

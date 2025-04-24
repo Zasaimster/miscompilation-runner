@@ -1,49 +1,47 @@
-; 12628388913126649052408390153902957203
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/12628388913126649052408390153902957203.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/12628388913126649052408390153902957203.c"
+; 133288722433431017398006865160642193023
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/133288722433431017398006865160642193023.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/133288722433431017398006865160642193023.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@.str = private unnamed_addr constant [30 x i8] c"Square calculation complete.\0A\00", align 1
+; Function Attrs: noinline nounwind uwtable
+define dso_local ptr @foo(ptr noundef %buf, ptr noundef %p) #0 {
+entry:
+  %buf.addr = alloca ptr, align 8
+  %p.addr = alloca ptr, align 8
+  store ptr %buf, ptr %buf.addr, align 8
+  store ptr %p, ptr %p.addr, align 8
+  %0 = load ptr, ptr %p.addr, align 8
+  ret ptr %0
+}
 
 ; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
-  %xx = alloca i64, align 8
-  %x = alloca ptr, align 8
+  %buf = alloca [6 x i8], align 1
   store i32 0, ptr %retval, align 4
-  store ptr %xx, ptr %x, align 8
-  %0 = load ptr, ptr %x, align 8
-  store i64 -3, ptr %0, align 8
-  %1 = load ptr, ptr %x, align 8
-  %2 = load i64, ptr %1, align 8
-  %3 = load ptr, ptr %x, align 8
-  %4 = load i64, ptr %3, align 8
-  %mul = mul i64 %2, %4
-  %5 = load ptr, ptr %x, align 8
-  store i64 %mul, ptr %5, align 8
-  %6 = load ptr, ptr %x, align 8
-  %7 = load i64, ptr %6, align 8
-  %cmp = icmp ne i64 %7, 9
+  %arraydecay = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 0
+  %arrayidx = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 2
+  %call = call ptr @foo(ptr noundef %arraydecay, ptr noundef %arrayidx)
+  %arrayidx1 = getelementptr inbounds [6 x i8], ptr %buf, i64 0, i64 3
+  %cmp = icmp ne ptr %call, %arrayidx1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
-  %call = call i32 (i32, ...) @calculateSquare(i32 noundef 4)
-  br label %if.end
+  call void @abort() #2
+  unreachable
 
-if.end:                                           ; preds = %if.then, %entry
-  %call1 = call i32 (ptr, ...) @printf(ptr noundef @.str)
-  %8 = load i32, ptr %retval, align 4
-  ret i32 %8
+if.end:                                           ; preds = %entry
+  ret i32 0
 }
 
-declare i32 @calculateSquare(...) #1
-
-declare i32 @printf(ptr noundef, ...) #1
+; Function Attrs: noreturn nounwind
+declare void @abort() #1
 
 attributes #0 = { noinline nounwind uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { noreturn nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

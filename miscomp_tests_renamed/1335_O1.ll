@@ -1,11 +1,8 @@
-; 103514001750488794841845160450933056834
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/103514001750488794841845160450933056834.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/103514001750488794841845160450933056834.c"
+; 123742054044337384740447979343623045806
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/123742054044337384740447979343623045806.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/123742054044337384740447979343623045806.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
-
-@v = dso_local local_unnamed_addr constant i64 3735928559, align 8
-@a = dso_local local_unnamed_addr global [0 x i32] zeroinitializer, align 4
 
 ; Function Attrs: nofree noreturn nounwind uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {
@@ -18,9 +15,9 @@ entry:
 declare void @exit(i32 noundef) local_unnamed_addr #1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local i32 @f(i64 noundef %a) local_unnamed_addr #2 {
+define dso_local i32 @foo(i32 noundef %z) local_unnamed_addr #2 {
 entry:
-  %cmp.not = icmp eq i64 %a, 3735928559
+  %cmp.not = icmp eq i32 %z, 3
   br i1 %cmp.not, label %if.end, label %if.then
 
 if.then:                                          ; preds = %entry

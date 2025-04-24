@@ -1,14 +1,30 @@
-; 145320256918682393031263626232702104703
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145320256918682393031263626232702104703_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145320256918682393031263626232702104703.c"
+; 176600873929177062071631388249629955480
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/176600873929177062071631388249629955480_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/176600873929177062071631388249629955480.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@cx = dso_local local_unnamed_addr global i8 7, align 1
-@sx = dso_local local_unnamed_addr global i16 14, align 2
-@ix = dso_local local_unnamed_addr global i32 21, align 4
-@lx = dso_local local_unnamed_addr global i64 28, align 8
-@Lx = dso_local local_unnamed_addr global i64 35, align 8
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 0, 2) i32 @foo(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %cmp = icmp sgt i32 %x, 5
+  %conv = zext i1 %cmp to i32
+  ret i32 %conv
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local range(i32 -2147483647, -2147483648) i32 @bar(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %add1 = add i32 %x, 2
+  ret i32 %add1
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local noundef i32 @baz(i32 noundef %x) local_unnamed_addr #0 {
+entry:
+  %add = add i32 %x, 1
+  ret i32 %add
+}
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
 define dso_local noundef i32 @main() local_unnamed_addr #0 {

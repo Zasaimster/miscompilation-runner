@@ -1,13 +1,20 @@
-; 18880912186023629151471362214918888765
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/18880912186023629151471362214918888765.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/18880912186023629151471362214918888765.c"
+; 141183333292091555758615294246302898912
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/141183333292091555758615294246302898912.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/141183333292091555758615294246302898912.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @f() local_unnamed_addr #0 {
+define dso_local noundef x86_fp80 @ll_to_ld(i64 noundef %n) local_unnamed_addr #0 {
 entry:
-  ret i32 -14
+  ret x86_fp80 0xK00000000000000000000
+}
+
+; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
+define dso_local i64 @ld_to_ll(x86_fp80 noundef %n) local_unnamed_addr #0 {
+entry:
+  %conv = fptosi x86_fp80 %n to i64
+  ret i64 %conv
 }
 
 ; Function Attrs: cold nofree noreturn nounwind uwtable

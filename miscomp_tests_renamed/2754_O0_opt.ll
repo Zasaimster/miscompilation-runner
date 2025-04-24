@@ -1,18 +1,20 @@
-; 108364613747433729275516544294566293913
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/108364613747433729275516544294566293913_O0.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/108364613747433729275516544294566293913.c"
+; 148216948268939783027574489966300460885
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/148216948268939783027574489966300460885_O0.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/148216948268939783027574489966300460885.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @utest(i32 noundef %x) #0 {
+define dso_local void @foo(double noundef %x) #0 {
 entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %shr = lshr i32 %0, 0
-  %1 = load i32, ptr %x.addr, align 4
-  %cmp = icmp ne i32 %shr, %1
+  %x.addr = alloca double, align 8
+  %p = alloca double, align 8
+  %q = alloca double, align 8
+  store double %x, ptr %x.addr, align 8
+  store double 0.000000e+00, ptr %q, align 8
+  %0 = load double, ptr %p, align 8
+  %1 = load double, ptr %q, align 8
+  %cmp = fcmp olt double %0, %1
   br i1 %cmp, label %if.then, label %if.end
 
 if.then:                                          ; preds = %entry
@@ -31,64 +33,11 @@ entry:
 }
 
 ; Function Attrs: noinline nounwind uwtable
-define dso_local void @stest(i32 noundef %x) #0 {
-entry:
-  %x.addr = alloca i32, align 4
-  store i32 %x, ptr %x.addr, align 4
-  %0 = load i32, ptr %x.addr, align 4
-  %shr = ashr i32 %0, 0
-  %1 = load i32, ptr %x.addr, align 4
-  %cmp = icmp ne i32 %shr, %1
-  br i1 %cmp, label %if.then, label %if.end
-
-if.then:                                          ; preds = %entry
-  call void @link_error()
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %entry
-  %2 = load i32, ptr %x.addr, align 4
-  %shl = shl i32 %2, 0
-  %3 = load i32, ptr %x.addr, align 4
-  %cmp1 = icmp ne i32 %shl, %3
-  br i1 %cmp1, label %if.then2, label %if.end3
-
-if.then2:                                         ; preds = %if.end
-  call void @link_error()
-  br label %if.end3
-
-if.end3:                                          ; preds = %if.then2, %if.end
-  %4 = load i32, ptr %x.addr, align 4
-  %shl4 = shl i32 0, %4
-  %cmp5 = icmp ne i32 %shl4, 0
-  br i1 %cmp5, label %if.then6, label %if.end7
-
-if.then6:                                         ; preds = %if.end3
-  call void @link_error()
-  br label %if.end7
-
-if.end7:                                          ; preds = %if.then6, %if.end3
-  %5 = load i32, ptr %x.addr, align 4
-  %shr8 = ashr i32 0, %5
-  %cmp9 = icmp ne i32 %shr8, 0
-  br i1 %cmp9, label %if.then10, label %if.end11
-
-if.then10:                                        ; preds = %if.end7
-  call void @link_error()
-  br label %if.end11
-
-if.end11:                                         ; preds = %if.then10, %if.end7
-  ret void
-}
-
-; Function Attrs: noinline nounwind uwtable
 define dso_local i32 @main() #0 {
 entry:
   %retval = alloca i32, align 4
   store i32 0, ptr %retval, align 4
-  call void @utest(i32 noundef 9)
-  call void @utest(i32 noundef 0)
-  call void @stest(i32 noundef 9)
-  call void @stest(i32 noundef 0)
+  call void @foo(double noundef 1.000000e+00)
   ret i32 0
 }
 

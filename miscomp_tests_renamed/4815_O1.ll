@@ -1,96 +1,82 @@
-; 101584167880079766166514378973421079072
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/101584167880079766166514378973421079072.c'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/101584167880079766166514378973421079072.c"
+; 185157198866871177433888602868976321361
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/185157198866871177433888602868976321361.c'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/185157198866871177433888602868976321361.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @add(ptr noundef readonly captures(none) %key, ptr noundef readonly captures(none) %table) local_unnamed_addr #0 {
+; Function Attrs: nofree norecurse nosync nounwind memory(none) uwtable
+define dso_local i32 @foo() local_unnamed_addr #0 {
 entry:
-  %0 = load double, ptr %key, align 8, !tbaa !5
-  br label %while.cond
+  %mat = alloca [2 x [1 x i32]], align 4
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %mat) #4
+  store i32 1, ptr %mat, align 4, !tbaa !5
+  %arrayidx2 = getelementptr inbounds nuw i8, ptr %mat, i64 4
+  store i32 2, ptr %arrayidx2, align 4, !tbaa !5
+  br label %for.body
 
-while.cond:                                       ; preds = %cleanup, %entry
-  %i.0 = phi i32 [ 0, %entry ], [ %i.1, %cleanup ]
-  %idx.ext = zext i32 %i.0 to i64
-  %add.ptr = getelementptr inbounds nuw double, ptr %table, i64 %idx.ext
-  %1 = load double, ptr %add.ptr, align 8, !tbaa !5
-  %cmp = fcmp une double %1, %0
-  br i1 %cmp, label %if.end, label %cleanup
+for.body:                                         ; preds = %entry, %for.body
+  %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %for.body ]
+  %det.09 = phi i32 [ 0, %entry ], [ %add, %for.body ]
+  %arrayidx4 = getelementptr inbounds nuw [1 x i32], ptr %mat, i64 %indvars.iv
+  %0 = load i32, ptr %arrayidx4, align 4, !tbaa !5
+  %add = add nsw i32 %0, %det.09
+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
+  %cmp = icmp eq i64 %indvars.iv, 0
+  br i1 %cmp, label %for.body, label %for.end, !llvm.loop !9
 
-if.end:                                           ; preds = %while.cond
-  %cmp2 = fcmp une double %1, 0x7FF0000000000000
-  br i1 %cmp2, label %if.then3, label %if.end6
-
-if.then3:                                         ; preds = %if.end
-  tail call void @abort() #3
-  unreachable
-
-if.end6:                                          ; preds = %if.end
-  %inc = add i32 %i.0, 1
-  br label %cleanup
-
-cleanup:                                          ; preds = %while.cond, %if.end6
-  %i.1 = phi i32 [ %inc, %if.end6 ], [ %i.0, %while.cond ]
-  br i1 %cmp, label %while.cond, label %if.end9
-
-if.end9:                                          ; preds = %cleanup
-  ret i32 0
+for.end:                                          ; preds = %for.body
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %mat) #4
+  ret i32 %add
 }
 
 ; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
 
-; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #2
-
 ; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
 declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
 
 ; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
-  %table = alloca [2 x double], align 16
-  call void @llvm.lifetime.start.p0(i64 16, ptr nonnull %table) #4
-  store double 0x7FF0000000000000, ptr %table, align 16, !tbaa !5
-  %arrayinit.element = getelementptr inbounds nuw i8, ptr %table, i64 8
-  store double 2.300000e+01, ptr %arrayinit.element, align 8, !tbaa !5
-  br label %while.cond.i
+  %mat.i = alloca [2 x [1 x i32]], align 4
+  call void @llvm.lifetime.start.p0(i64 8, ptr nonnull %mat.i) #4
+  store i32 1, ptr %mat.i, align 4, !tbaa !5
+  %arrayidx2.i = getelementptr inbounds nuw i8, ptr %mat.i, i64 4
+  store i32 2, ptr %arrayidx2.i, align 4, !tbaa !5
+  br label %for.body.i
 
-while.cond.i:                                     ; preds = %cleanup.i, %entry
-  %i.0.i = phi i32 [ 0, %entry ], [ %i.1.i, %cleanup.i ]
-  %idx.ext.i = zext i32 %i.0.i to i64
-  %add.ptr.i = getelementptr inbounds nuw double, ptr %table, i64 %idx.ext.i
-  %0 = load double, ptr %add.ptr.i, align 8, !tbaa !5
-  %cmp.i = fcmp une double %0, 2.300000e+01
-  br i1 %cmp.i, label %if.end.i, label %cleanup.i
+for.body.i:                                       ; preds = %for.body.i, %entry
+  %indvars.iv.i = phi i64 [ 0, %entry ], [ %indvars.iv.next.i, %for.body.i ]
+  %det.09.i = phi i32 [ 0, %entry ], [ %add.i, %for.body.i ]
+  %arrayidx4.i = getelementptr inbounds nuw [1 x i32], ptr %mat.i, i64 %indvars.iv.i
+  %0 = load i32, ptr %arrayidx4.i, align 4, !tbaa !5
+  %add.i = add nsw i32 %0, %det.09.i
+  %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
+  %cmp.i = icmp eq i64 %indvars.iv.i, 0
+  br i1 %cmp.i, label %for.body.i, label %foo.exit, !llvm.loop !9
 
-if.end.i:                                         ; preds = %while.cond.i
-  %cmp2.i = fcmp une double %0, 0x7FF0000000000000
-  br i1 %cmp2.i, label %if.then3.i, label %if.end6.i
+foo.exit:                                         ; preds = %for.body.i
+  call void @llvm.lifetime.end.p0(i64 8, ptr nonnull %mat.i) #4
+  %cmp.not = icmp eq i32 %add.i, 3
+  br i1 %cmp.not, label %if.end, label %if.then
 
-if.then3.i:                                       ; preds = %if.end.i
-  tail call void @abort() #3
+if.then:                                          ; preds = %foo.exit
+  tail call void @abort() #5
   unreachable
 
-if.end6.i:                                        ; preds = %if.end.i
-  %inc.i = add i32 %i.0.i, 1
-  br label %cleanup.i
-
-cleanup.i:                                        ; preds = %if.end6.i, %while.cond.i
-  %i.1.i = phi i32 [ %inc.i, %if.end6.i ], [ %i.0.i, %while.cond.i ]
-  br i1 %cmp.i, label %while.cond.i, label %add.exit
-
-add.exit:                                         ; preds = %cleanup.i
-  call void @llvm.lifetime.end.p0(i64 16, ptr nonnull %table) #4
+if.end:                                           ; preds = %foo.exit
   ret i32 0
 }
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+; Function Attrs: cold nofree noreturn nounwind
+declare void @abort() local_unnamed_addr #3
+
+attributes #0 = { nofree norecurse nosync nounwind memory(none) uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
-attributes #2 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #3 = { noreturn nounwind }
+attributes #2 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #4 = { nounwind }
+attributes #5 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -101,6 +87,9 @@ attributes #4 = { nounwind }
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
 !5 = !{!6, !6, i64 0}
-!6 = !{!"double", !7, i64 0}
+!6 = !{!"int", !7, i64 0}
 !7 = !{!"omnipotent char", !8, i64 0}
 !8 = !{!"Simple C/C++ TBAA"}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}

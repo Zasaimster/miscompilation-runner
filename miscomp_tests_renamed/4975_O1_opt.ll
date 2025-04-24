@@ -1,19 +1,22 @@
-; 145233718329666630657932274651275217962
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/145233718329666630657932274651275217962_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/145233718329666630657932274651275217962.c"
+; 187893803538432121148704767934671700532
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/187893803538432121148704767934671700532_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/187893803538432121148704767934671700532.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local noundef i32 @tar(i32 noundef %i) local_unnamed_addr #0 {
+define dso_local i32 @f2(i32 noundef %c, i32 noundef %b) #0 {
 entry:
-  ret i32 -1
+  %sub = sub nsw i32 %c, %b
+  ret i32 %sub
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable
-define dso_local void @bug(i32 noundef %q, i32 noundef %bcount) local_unnamed_addr #0 {
+define dso_local noundef ptr @f1(i32 noundef %a, i32 noundef %b) local_unnamed_addr #0 {
 entry:
-  ret void
+  %cmp.not = icmp eq i32 %a, %b
+  %.f2 = select i1 %cmp.not, ptr null, ptr @f2
+  ret ptr %.f2
 }
 
 ; Function Attrs: mustprogress nofree norecurse nosync nounwind willreturn memory(none) uwtable

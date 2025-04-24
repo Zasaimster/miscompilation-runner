@@ -1,99 +1,178 @@
-; 153572332882301161954024900217562938307
-; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/153572332882301161954024900217562938307_O1.ll'
-source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/153572332882301161954024900217562938307.c"
+; 188704817206483081507607465725456054813
+; ModuleID = '/mnt/ramtmp/optims/DCE.cpp/target/188704817206483081507607465725456054813_O1.ll'
+source_filename = "/mnt/ramtmp/optims/DCE.cpp/target/188704817206483081507607465725456054813.c"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
 
-@buf = dso_local global [1024 x i64] zeroinitializer, align 16
-@str = private unnamed_addr constant [18 x i8] c"This won't print.\00", align 1
+@errflag = dso_local local_unnamed_addr global i32 0, align 4
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local ptr @foo(i64 noundef %n) local_unnamed_addr #0 {
+; Function Attrs: nounwind uwtable
+define dso_local i64 @f(i64 noundef %x, i64 noundef %y) local_unnamed_addr #0 {
 entry:
-  %cmp = icmp eq i64 %n, 0
-  br i1 %cmp, label %common.ret, label %if.end
+  %add = add nsw i64 %y, %x
+  %conv = trunc i64 %add to i32
+  store i32 %conv, ptr @errflag, align 4, !tbaa !5
+  %call = tail call i32 (...) @testFunction() #5
+  %conv1 = sext i32 %call to i64
+  %add2 = add nsw i64 %y, %conv1
+  %cmp = icmp sgt i64 %x, -1
+  br i1 %cmp, label %if.then, label %if.else
 
-common.ret:                                       ; preds = %if.end, %entry
-  %common.ret.op = phi ptr [ %1, %if.end ], [ @buf, %entry ]
-  ret ptr %common.ret.op
+if.then:                                          ; preds = %entry
+  %cmp4 = icmp slt i64 %y, 0
+  %cmp6 = icmp sgt i64 %add2, -1
+  %or.cond = select i1 %cmp4, i1 true, i1 %cmp6
+  br i1 %or.cond, label %cleanup, label %if.end16
 
-if.end:                                           ; preds = %entry
-  %puts = tail call i32 @puts(ptr nonnull dereferenceable(1) @str)
-  %sub = add nsw i64 %n, -1
-  %call1 = tail call ptr @foo(i64 noundef %sub)
-  %0 = ptrtoint ptr %call1 to i64
-  %add = add i64 %0, 8
-  %1 = inttoptr i64 %add to ptr
-  br label %common.ret
+if.else:                                          ; preds = %entry
+  %cmp9 = icmp sgt i64 %y, 0
+  %cmp12 = icmp slt i64 %add2, 0
+  %or.cond17 = select i1 %cmp9, i1 true, i1 %cmp12
+  br i1 %or.cond17, label %cleanup, label %if.end16
+
+if.end16:                                         ; preds = %if.else, %if.then
+  store i32 1, ptr @errflag, align 4, !tbaa !5
+  br label %cleanup
+
+cleanup:                                          ; preds = %if.end16, %if.else, %if.then
+  %retval.0 = phi i64 [ 0, %if.end16 ], [ %add2, %if.then ], [ %add2, %if.else ]
+  ret i64 %retval.0
 }
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local nonnull ptr @bar(i64 noundef %n) local_unnamed_addr #0 {
+declare i32 @testFunction(...) local_unnamed_addr #1
+
+; Function Attrs: noreturn nounwind uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #2 {
 entry:
-  %cmp = icmp eq i64 %n, 0
-  br i1 %cmp, label %return, label %if.end
+  store i32 0, ptr @errflag, align 4, !tbaa !5
+  %call.i = tail call i32 (...) @testFunction() #5
+  %cmp6.i = icmp sgt i32 %call.i, -1
+  br i1 %cmp6.i, label %f.exit, label %if.end16.i
 
-if.end:                                           ; preds = %entry
-  %sub = add nsw i64 %n, -1
-  %call = tail call ptr @foo(i64 noundef %sub)
-  %add.ptr = getelementptr inbounds nuw i8, ptr %call, i64 8
-  br label %return
+if.end16.i:                                       ; preds = %entry
+  store i32 1, ptr @errflag, align 4, !tbaa !5
+  br label %f.exit
 
-return:                                           ; preds = %if.end, %entry
-  %retval.0 = phi ptr [ %add.ptr, %if.end ], [ @buf, %entry ]
-  ret ptr %retval.0
-}
+f.exit:                                           ; preds = %if.end16.i, %entry
+  %0 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool.not = icmp eq i32 %0, 0
+  br i1 %tobool.not, label %if.end, label %if.then
 
-; Function Attrs: nofree nounwind uwtable
-define dso_local noundef i32 @main() local_unnamed_addr #0 {
-entry:
-  br label %for.body
-
-for.cond:                                         ; preds = %bar.exit
-  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
-  %exitcond.not = icmp eq i64 %indvars.iv.next, 27
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !5
-
-for.body:                                         ; preds = %for.cond, %entry
-  %indvars.iv = phi i64 [ 0, %entry ], [ %indvars.iv.next, %for.cond ]
-  %call = tail call ptr @foo(i64 noundef %indvars.iv)
-  %add.ptr = getelementptr inbounds nuw i64, ptr @buf, i64 %indvars.iv
-  %cmp1.not = icmp eq ptr %call, %add.ptr
-  br i1 %cmp1.not, label %lor.lhs.false, label %if.then
-
-lor.lhs.false:                                    ; preds = %for.body
-  %cmp.i = icmp eq i64 %indvars.iv, 0
-  br i1 %cmp.i, label %bar.exit, label %if.end.i
-
-if.end.i:                                         ; preds = %lor.lhs.false
-  %sub.i = add nsw i64 %indvars.iv, -1
-  %call.i = tail call ptr @foo(i64 noundef %sub.i)
-  %add.ptr.i = getelementptr inbounds nuw i8, ptr %call.i, i64 8
-  br label %bar.exit
-
-bar.exit:                                         ; preds = %if.end.i, %lor.lhs.false
-  %retval.0.i = phi ptr [ %add.ptr.i, %if.end.i ], [ @buf, %lor.lhs.false ]
-  %cmp7.not = icmp eq ptr %retval.0.i, %add.ptr
-  br i1 %cmp7.not, label %for.cond, label %if.then
-
-if.then:                                          ; preds = %bar.exit, %for.body
-  tail call void @abort() #3
+if.then:                                          ; preds = %f.exit
+  tail call void @abort() #6
   unreachable
 
-for.end:                                          ; preds = %for.cond
-  ret i32 0
+if.end:                                           ; preds = %f.exit
+  store i32 0, ptr @errflag, align 4, !tbaa !5
+  %call.i29 = tail call i32 (...) @testFunction() #5
+  %1 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool2.not = icmp eq i32 %1, 0
+  br i1 %tobool2.not, label %if.end4, label %if.then3
+
+if.then3:                                         ; preds = %if.end
+  tail call void @abort() #6
+  unreachable
+
+if.end4:                                          ; preds = %if.end
+  store i32 0, ptr @errflag, align 4, !tbaa !5
+  %call.i34 = tail call i32 (...) @testFunction() #5
+  %2 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool6.not = icmp eq i32 %2, 0
+  br i1 %tobool6.not, label %if.end8, label %if.then7
+
+if.then7:                                         ; preds = %if.end4
+  tail call void @abort() #6
+  unreachable
+
+if.end8:                                          ; preds = %if.end4
+  store i32 0, ptr @errflag, align 4, !tbaa !5
+  %call.i39 = tail call i32 (...) @testFunction() #5
+  %3 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool10.not = icmp eq i32 %3, 0
+  br i1 %tobool10.not, label %if.then11, label %if.end12
+
+if.then11:                                        ; preds = %if.end8
+  tail call void @abort() #6
+  unreachable
+
+if.end12:                                         ; preds = %if.end8
+  store i32 -1, ptr @errflag, align 4, !tbaa !5
+  %call.i45 = tail call i32 (...) @testFunction() #5
+  %cmp12.i48 = icmp slt i32 %call.i45, 1
+  br i1 %cmp12.i48, label %f.exit51, label %if.end16.i49
+
+if.end16.i49:                                     ; preds = %if.end12
+  store i32 1, ptr @errflag, align 4, !tbaa !5
+  br label %f.exit51
+
+f.exit51:                                         ; preds = %if.end16.i49, %if.end12
+  %4 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool14.not = icmp eq i32 %4, 0
+  br i1 %tobool14.not, label %if.then15, label %if.end16
+
+if.then15:                                        ; preds = %f.exit51
+  tail call void @abort() #6
+  unreachable
+
+if.end16:                                         ; preds = %f.exit51
+  store i32 -2, ptr @errflag, align 4, !tbaa !5
+  %call.i52 = tail call i32 (...) @testFunction() #5
+  %5 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool18.not = icmp eq i32 %5, 0
+  br i1 %tobool18.not, label %if.then19, label %if.end20
+
+if.then19:                                        ; preds = %if.end16
+  tail call void @abort() #6
+  unreachable
+
+if.end20:                                         ; preds = %if.end16
+  store i32 0, ptr @errflag, align 4, !tbaa !5
+  %call.i59 = tail call i32 (...) @testFunction() #5
+  %cmp6.i62 = icmp sgt i32 %call.i59, -2
+  br i1 %cmp6.i62, label %f.exit65, label %if.end16.i63
+
+if.end16.i63:                                     ; preds = %if.end20
+  store i32 1, ptr @errflag, align 4, !tbaa !5
+  br label %f.exit65
+
+f.exit65:                                         ; preds = %if.end16.i63, %if.end20
+  %6 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool22.not = icmp eq i32 %6, 0
+  br i1 %tobool22.not, label %if.then23, label %if.end24
+
+if.then23:                                        ; preds = %f.exit65
+  tail call void @abort() #6
+  unreachable
+
+if.end24:                                         ; preds = %f.exit65
+  store i32 -1, ptr @errflag, align 4, !tbaa !5
+  %call.i66 = tail call i32 (...) @testFunction() #5
+  %7 = load i32, ptr @errflag, align 4, !tbaa !5
+  %tobool26.not = icmp eq i32 %7, 0
+  br i1 %tobool26.not, label %if.end28, label %if.then27
+
+if.then27:                                        ; preds = %if.end24
+  tail call void @abort() #6
+  unreachable
+
+if.end28:                                         ; preds = %if.end24
+  tail call void @exit(i32 noundef 0) #6
+  unreachable
 }
 
 ; Function Attrs: cold nofree noreturn nounwind
-declare void @abort() local_unnamed_addr #1
+declare void @abort() local_unnamed_addr #3
 
-; Function Attrs: nofree nounwind
-declare noundef i32 @puts(ptr noundef readonly captures(none)) local_unnamed_addr #2
+; Function Attrs: nofree noreturn
+declare void @exit(i32 noundef) local_unnamed_addr #4
 
-attributes #0 = { nofree nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #1 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #2 = { nofree nounwind }
-attributes #3 = { noreturn nounwind }
+attributes #0 = { nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #2 = { noreturn nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { cold nofree noreturn nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { nounwind }
+attributes #6 = { noreturn nounwind }
 
 !llvm.module.flags = !{!0, !1, !2, !3}
 !llvm.ident = !{!4}
@@ -103,6 +182,7 @@ attributes #3 = { noreturn nounwind }
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 2}
 !4 = !{!"clang version 21.0.0git (https://github.com/llvm/llvm-project.git 6eb32a2fa0d16bea03f22dd2078f53da6d9352cd)"}
-!5 = distinct !{!5, !6, !7}
-!6 = !{!"llvm.loop.mustprogress"}
-!7 = !{!"llvm.loop.unroll.disable"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"int", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C/C++ TBAA"}
