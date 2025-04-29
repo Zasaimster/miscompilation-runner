@@ -1,4 +1,5 @@
 import argparse
+import glob
 import os
 import subprocess
 import re
@@ -23,7 +24,7 @@ stats = {
     "regular_undeterminable_output": 0,
     "crc_executed": 0,
     "crc_compile_crash": 0,
-    "crc_no_globals_found": 0,
+    "crc_injection_failure": 0,
     "crc_no_hash_found": 0,
     "crc_logic_failed": 0,
     "crc_succeeded": 0,
@@ -39,7 +40,7 @@ regular_undeterminable_log = f"{log_path}/regular_undeterminable_output.txt"
 
 crc_executed_log = f"{log_path}/crc_executed.txt"
 crc_compile_crash_log = f"{log_path}/crc_compile_crash.txt"
-crc_no_globals_found = f"{log_path}/crc_no_globals_found.txt"
+crc_injection_failure = f"{log_path}/crc_injection_failure.txt"
 crc_no_hash_found = f"{log_path}/crc_no_hash_found.txt"
 crc_logic_failed_log = f"{log_path}/crc_logic_failed.txt"
 crc_succeeded_log = f"{log_path}/crc_succeeded.txt"
@@ -55,7 +56,7 @@ all_log_files = [
     regular_undeterminable_log,
     crc_executed_log,
     crc_compile_crash_log,
-    crc_no_globals_found,
+    crc_injection_failure,
     crc_no_hash_found,
     crc_logic_failed_log,
     crc_succeeded_log,
@@ -65,6 +66,15 @@ all_log_files = [
 def clear_log_files():
     for log_file in all_log_files:
         open(log_file, "w").close()
+
+
+def clear_folder(dir):
+    if os.path.exists(dir):
+        for file_path in glob.glob(os.path.join(dir, "*")):
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+    else:
+        print(f"The directory '{dir}' does not exist.")
 
 
 def add_id_to_log(log_file, id):
@@ -128,8 +138,8 @@ def run_main(id, f1, f2, opt):
         add_id_to_log(crc_executed_log, f"{id}_{opt}")
 
     if "CRC FAILED. unable to inject crc" in res.stdout:
-        stats["crc_no_globals_found"] += 1
-        add_id_to_log(crc_no_globals_found, f"{id}_{opt}")
+        stats["crc_injection_failure"] += 1
+        add_id_to_log(crc_injection_failure, f"{id}_{opt}")
 
     if "CRC NO HASH FOUND" in res.stdout:
         stats["crc_no_hash_found"] += 1
@@ -178,7 +188,6 @@ def run_tests_from_file(input_filename, directory_path):
                 processed_count += 1
 
     print(f"\nFinished processing {processed_count}/{len(test_cases)} test cases specified in {input_filename}.")
-    # Final stats writing is handled outside this function now
 
 
 def run_script_on_files(directory_path):
@@ -239,18 +248,25 @@ if __name__ == "__main__":
         help=f"Directory containing the .ll files (default: {ll_file_directory})",
     )
     args = parser.parse_args()
-    # Use the directory from args, allowing override
     ll_file_directory_to_use = args.directory
 
     print("Clearing previous log files...")
-    # clear_log_files()
+    clear_log_files()
+    print(f"Clearing runtime folder: {ll_file_directory_to_use}runtime")
+    clear_folder(f"{ll_file_directory_to_use}runtime")
+    print(f"Clearing old test_outs folder: {ll_file_directory_to_use}runtime")
+    clear_folder(f"{log_path}test_outs")
 
     # Create the output directory for .out files
-    os.makedirs(f"{log_path}/test_outs", exist_ok=True)
+    os.makedirs(f"{log_path}test_outs", exist_ok=True)
 
     if args.input_file:
         run_tests_from_file(args.input_file, ll_file_directory_to_use)
     else:
-        run_script_on_files(args.input_file, ll_file_directory_to_use)
+        run_script_on_files(ll_file_directory_to_use)
 
     write_final_stats()
+
+    # Cleanup
+    print(f"Clearing runtime folder: {ll_file_directory_to_use}runtime")
+    clear_folder(f"{ll_file_directory_to_use}runtime")
