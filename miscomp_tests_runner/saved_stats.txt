@@ -1,0 +1,32 @@
+total_programs: 11251
+timed_out: 161
+regular_executed: 9479
+regular_compile_crash: 1611
+regular_same_output: 9437
+regular_different_output: 42
+crc_executed: 2922
+crc_crashed: 3739
+crc_no_globals_found: 4242
+crc_no_hash_found: 547
+crc_logic_failed: 0
+crc_succeeded: 2375
+
+
+{'alive2_correct': 2400,
+ 'alive2_error': 525,
+ 'alive2_incorrect': 0,
+ 'alive2_no_prove': 6,
+ 'crc_compile_crash': 333,
+ 'crc_executed': 2488,
+ 'crc_injection_failure': 44,
+ 'crc_logic_failed': 0,
+ 'crc_logic_undeterminable': 45,
+ 'crc_no_hash_found': 156,
+ 'crc_succeeded': 2287,
+ 'regular_compile_crash': 421,
+ 'regular_different_output': 2,
+ 'regular_executed': 2510,
+ 'regular_same_output': 2498,
+ 'regular_undeterminable_output': 10,
+ 'timed_out': 46,
+ 'total_programs': 2977}

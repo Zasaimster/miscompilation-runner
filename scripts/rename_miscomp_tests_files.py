@@ -1,3 +1,4 @@
+import argparse
 import difflib
 import os
 
@@ -6,8 +7,6 @@ import os
 def rename_and_add_comment(directory_path, new_directory):
     identifiers = {}
     files_to_process = []
-
-    # First pass: Identify all unique identifiers and collect files to process
     unique_ids = set()
     for filename in os.listdir(directory_path):
         if filename.endswith(("_O0_opt.ll", "_O0.ll", "_O1_opt.ll", "_O1.ll")):
@@ -21,23 +20,17 @@ def rename_and_add_comment(directory_path, new_directory):
                 print(
                     f"Warning: Filename '{filename}' does not contain an underscore as expected. Skipping identifier extraction for dictionary population."
                 )
-
-    # Sort the unique identifiers alphabetically
     sorted_ids = sorted(list(unique_ids))
-
-    # Populate the identifiers dictionary with sorted IDs
     file_counter = 1
     for id in sorted_ids:
         identifiers[id] = file_counter
         file_counter += 1
 
-    # Second pass: Process files in deterministic order based on sorted identifiers
     for filename, filepath in files_to_process:
         parts = filename.split("_", 1)
         id = parts[0]
         rest_of_filename = parts[1]
 
-        # Extract opt_level and opt_type from the rest of the filename
         if rest_of_filename.startswith("O0_opt.ll"):
             opt_level = "O0"
             opt = True
@@ -52,36 +45,29 @@ def rename_and_add_comment(directory_path, new_directory):
             opt = False
         else:
             print(f"Warning: Filename '{filename}' does not match expected pattern after identifier. Skipping.")
-            continue  # Skip if the rest of the filename doesn't match expected patterns
+            continue
 
         new_id = identifiers[id]
-
         new_filename = f"{new_id}_{opt_level}"
         if opt:
             new_filename += "_opt"
         new_filename += ".ll"
         new_filepath = os.path.join(new_directory, new_filename)
 
-        try:
-            with open(filepath, "r") as f:
-                content = f.read()
+        with open(filepath, "r") as f:
+            content = f.read()
 
-            comment_line = f"; {id}\n"
-            new_content = comment_line + content
+        comment_line = f"; {id}\n"
+        new_content = comment_line + content
 
-            with open(new_filepath, "w") as f:
-                f.write(new_content)
+        with open(new_filepath, "w") as f:
+            f.write(new_content)
 
-            print(f"Renamed '{filename}' to '{new_filename}' and added comment.")
-
-        except Exception as e:
-            print(f"Error processing '{filename}': {e}")
-            print(e)
+        print(f"Renamed '{filename}' to '{new_filename}' and added comment.")
 
     print("Renaming and comment insertion process completed.")
 
 
-# Split line into code and comment parts from the first ';'.
 def get_code_comment_parts(line):
     comment_index = line.find(";")
     if comment_index != -1:
@@ -123,9 +109,7 @@ def is_diff_significant(matched_lines):
         # If code is different, save. Code AND comments cannot be same (otherwise, it wouldn't be stored here), so save it for further evaluation
         if code_removed == code_added and comment_removed != comment_added:
             continue
-
         return True
-
     return False
 
 
@@ -134,7 +118,6 @@ def match_lines(f1, f2):
     Matches line diffs between f1 and f2
     """
     diff = difflib.ndiff(f1, f2)
-
     removed = []
     added = []
 
@@ -147,7 +130,6 @@ def match_lines(f1, f2):
     return removed, added
 
 
-# todo: handle midline comments and attributes
 def filter_identical_pairs(dir, new_dir):
     """
     Identifies pairs of files based on the naming convention x_O*.ll and x_O*_opt.ll
@@ -200,10 +182,17 @@ def filter_identical_pairs(dir, new_dir):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Process and optionally filter miscomp test files.")
+    parser.add_argument("--filter", action="store_true", help="If set, filter identical pairs after renaming.")
+    args = parser.parse_args()
+
     directory_to_process = "../miscomp_tests/"
     new_directory = "./miscomp_tests_renamed/"
     filtered_dir = "./miscomp_tests_renamed_filtered/"
+
     os.makedirs(f"{new_directory}/runtime/", exist_ok=True)
     os.makedirs(filtered_dir, exist_ok=True)
+
     rename_and_add_comment(directory_to_process, new_directory)
-    filter_identical_pairs(new_directory, filtered_dir)
+    if args.filter:
+        filter_identical_pairs(new_directory, filtered_dir)
