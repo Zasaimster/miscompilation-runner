@@ -1,5 +1,4 @@
 import argparse
-import csv
 import os
 import shutil
 import sys
@@ -8,12 +7,6 @@ import sys
 import re
 import subprocess
 from string import Template
-
-# import llvmlite
-
-# # this cannot be set any later in the code or it won't work
-# llvmlite.opaque_pointers_enabled = True
-# import llvmlite.binding as llvm
 
 CRC_HELPER_OBJ_FILE = "crc/csmith_crc_minimal.o"
 CSV_FILENAME = "results/results.csv"
@@ -151,17 +144,14 @@ def parse_args():
     return parser.parse_args()
 
 
-# TODO: make the architecture configurable (if needed. also in next function)
 def get_commands_for_normal_exec(file):
     filename = file.split("/")[-1][:-3]
     path = "/".join(file.split("/")[:-1])
     out_path = f"{path}/runtime/{filename}"
 
     # Commands
-    # llc = f"llc {file} -o {out_path}.s"
     # obj_file = f"clang -c {file} -fsanitize=memory -o {out_path}.o"
     obj_file = f"clang -c {file} -o {out_path}.o"
-    # exec = f"clang {out_path}.o -o {out_path} -no-pie"
     # exec = f"clang {out_path}.o -fsanitize=memory -o {out_path}"
     exec = f"clang {out_path}.o -o {out_path}"
     execute_cmd = [f"./{out_path}"]
@@ -180,11 +170,8 @@ def get_commands_for_crc_exec(file):
     out_path = f"{path}/runtime/{filename}"
 
     # Commands
-    # llc = f"llc {file} -o {out_path}.s"
-    # obj_file = f"clang -c {out_path}.s -o {out_path}.o"
     # obj_file = f"clang -c {file} -fsanitize=memory -o {out_path}.o"
     obj_file = f"clang -c {file} -o {out_path}.o"
-    # exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -o {out_path} -no-pie"
     # exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -fsanitize=memory -o {out_path}"
     exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -o {out_path}"
     if out_path.startswith("./"):
@@ -304,44 +291,6 @@ def get_parsed_code(filename):
             parsed_code.append(line.strip())
 
     return "\n".join(parsed_code)
-
-
-def naive_check_randomness(p, p_prime):
-    p_code = get_parsed_code(p)
-    p_prime_code = get_parsed_code(p_prime)
-
-    p_random, p_prime_randomn = False, False
-    if "@srand" in p_code and "@time" in p_code:  # @rand is pseudo-random
-        p_random = True
-
-    if "@srand" in p_prime_code and "@time" in p_prime_code:
-        p_prime_randomn = True
-
-    return True if p_random or p_prime_randomn else False
-
-
-# def init_llvmlite():
-#     llvm.initialize()
-#     llvm.initialize_native_target()
-#     llvm.initialize_native_asmprinter()
-
-#     target = llvm.Target.from_default_triple()
-#     # target = llvm.Target.from_triple("arm64-apple-darwin")
-#     target_machine = target.create_target_machine()
-#     backing_mod = llvm.parse_assembly("")
-#     engine = llvm.create_mcjit_compiler(backing_mod, target_machine)
-#     return engine
-
-
-# def compile_ir(engine, filename):
-#     ir = get_code(filename)
-#     mod: llvm.ModuleRef = llvm.parse_assembly(ir)  # not ir.Module
-#     mod.verify()  # make sure code is good. This is LLVM's verifier https://github.com/llvm/llvm-project/blob/main/llvm/lib/IR/Verifier.cpp
-
-#     engine.add_module(mod)
-#     engine.finalize_object()
-#     engine.run_static_constructors()
-#     return mod
 
 
 def build_globals_pass():
@@ -471,84 +420,6 @@ def get_globals_info(file):
     return global_var_info
 
 
-# def get_old_globals_info(global_vars, code_arr):
-#     # For array types [N x type]
-#     # TODO: this doesn't support matrices b/c recursion is needed.
-#     array_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+(\[\d+\s+x\s+i\d+\])"
-#     # For vector types <N x type>
-#     vector_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+((<\d+\s+x\s+[^>]+?>))"
-#     # For structure types (both named and literal)
-#     # TODO: this doesn't handle nested structs. Seems like a lot of effort to figure out, and it may not be worth the benefit
-#     struct_pattern = r"(?:global|private unnamed_addr constant)\s+((?:%[\w.]+|{[^}]*}|<{[^}]*}>))(?:\s+[^,]+)?"
-#     # For pointer types specifically
-#     pointer_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+([\w.]+\*+)(?:\s+[^,]+)?"
-#     # For basic types (integers, floats)
-#     basic_pattern = r"(?:global|private\s+unnamed_addr\s+constant)\s+([\w.]+)(?:\s+[^,]+)?"
-
-#     varname_template = Template(
-#         '@_crc_varname_$name = private unnamed_addr constant [$size x i8] c"$name\\00", align 1'
-#     )
-#     global_info_entry_template = Template(
-#         "%global_info { i8* bitcast ($type @$name to i8*), i32 $num_bytes, i8* getelementptr inbounds ([$name_len x i8], [$name_len x i8]* @_crc_varname_$name, i32 0, i32 0 ) }"
-#     )
-
-#     global_var_info = {}
-#     # Extract global types
-#     for g in global_vars:
-#         var_str = str(g)
-#         parts = var_str.split("=", 1)
-#         # var_name = g.name
-#         var_name = parts[0].strip()[1:]
-#         var_value = parts[1].strip()
-
-#         # Extract variable types
-#         is_ptr = False
-#         for pattern in [
-#             ("arr", array_pattern),
-#             ("vector", vector_pattern),
-#             ("struct", struct_pattern),
-#             ("ptr", pointer_pattern),
-#             ("basic", basic_pattern),
-#         ]:
-#             pattern_type, regex = pattern
-#             # For some reason, llvmlite converts all pointer types to an abstracted class. It will only print out "ptr", and I'm not sure how to get that information.
-#             # The workaround is to manually look for the global variable and re-run the pattern on it
-#             if pattern_type == "ptr":
-#                 for line in code_arr:
-#                     if line.startswith(f"@{var_name} = "):
-#                         var_value = line.split("=")[1].strip()
-#                         break
-
-#             match = re.search(regex, var_value, flags=re.VERBOSE)
-#             if match:
-#                 print(f"\t{match.group(1).strip()} -> {var_value}")
-#                 var_type = match.group(1).strip()
-#                 if "var_type" == "ptr":
-#                     is_ptr = True
-#                     break
-#                 global_var_info[var_name] = {"var_type": var_type}
-#                 break
-#         # Skip adding pointers, this will disrupt the hash since the memory address will be different across calls
-#         if is_ptr:
-#             break
-#         if var_name in global_var_info:
-#             var_type = global_var_info[var_name]["var_type"]
-#             var_name_length = len(var_name) + 1
-#             # Create global variables that store a string representation of each variable
-#             global_var_info[var_name]["varname_code"] = varname_template.substitute(name=var_name, size=var_name_length)
-
-#             # Create entry in globals_table
-#             # @_crc_varname_$name
-#             global_var_info[var_name]["global_info_entry"] = global_info_entry_template.substitute(
-#                 type=f"{var_type}*" if var_type != "ptr" else f"{var_type}",
-#                 name=var_name,
-#                 num_bytes=get_type_size(var_type),
-#                 name_len=var_name_length,
-#             )
-
-#     return global_var_info
-
-
 def find_main_end_index(crc_code):
     # Find main function index after all changes have been made since line numbers will change as new lines are added
     main_function_index = -1
@@ -661,13 +532,8 @@ def replace_abort_exit_calls(crc_code):
         # --- Reset return type if we leave a function ---
         if line.strip() == "}":
             current_function_return_type = None
-            # indentation = ""  # Reset indentation
 
         processed = False
-        # Get indentation from the original line
-        # indent_match = re.match(r"^(\s*)", original_line)
-        # if indent_match:
-        #     indentation = indent_match.group(1)
 
         # --- Check for exit call (including tail call) ---
         # Regex breakdown:
@@ -746,7 +612,7 @@ def replace_abort_exit_calls(crc_code):
 
 
 def add_crc_to_ir(p):
-    # Define static code injections here
+    # Define some static code injections here
     crc_declaration = "\n; External function declaration for crc calculation\ndeclare void @transparent_crc_bytes(i8*, i32, i8*, i1)\n"
     global_info = "\n; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }\n%global_info = type { i8*, i32, i8*}\n"
 
@@ -758,20 +624,11 @@ def add_crc_to_ir(p):
         print("No main function found. Exiting.")
         return False
 
-    # mod = llvm.parse_assembly(code)
-    # print(mod)
-
-    # for g in mod.global_variables:
-    #     global_vars.append(g)
-    # print(f"Found global variables: {global_vars}")
-
-    # Get all global variables, find last global variable index, find main function index
-    global_vars = []
+    # Find last global variable index, find main function index
     last_global_var_index = -1
     for i, line in enumerate(code_arr):
         # Find global variables and mark latest index
         if re.match(r"^@([a-zA-Z_.][a-zA-Z0-9_.]*)\s*=", line):
-            global_vars.append(line)
             last_global_var_index = i
     last_global_var_index = max(last_global_var_index, 4)  # Inject code after top-level info
 
@@ -779,7 +636,6 @@ def add_crc_to_ir(p):
     if last_global_var_index == len(code_arr) - 1:
         last_global_var_index -= 1
 
-    # global_var_info = get_old_globals_info(global_vars, code_arr)
     global_var_info = get_globals_info(p)
 
     # Create name global vars for each variable
@@ -823,41 +679,6 @@ def add_crc_to_ir(p):
         f.write("\n".join(crc_code))
 
     return new_file
-
-
-def write_to_csv(csv_output):
-    """
-    Output format:
-    Path for P, Path
-    """
-    header = list(csv_output.keys())
-
-    file_exists = False
-    existing_header = None
-
-    # Search for existing file and extract header for comparison
-    try:
-        with open(CSV_FILENAME, "r", newline="") as csvfile_check:
-            csv_reader = csv.reader(csvfile_check, delimiter=",")
-            try:
-                existing_header = next(csv_reader)
-            except StopIteration:
-                existing_header = None
-    except FileNotFoundError:
-        file_exists = False
-
-    try:
-        with open(CSV_FILENAME, "a", newline="") as csvfile:
-            csv_writer = csv.writer(csvfile, delimiter=",")
-
-            if not file_exists or not existing_header:
-                csv_writer.writerow(header)  # Write header only if file is new/empty
-
-            csv_writer.writerow(list(csv_output.values()))
-
-        print(f"Data writing to CSV file '{CSV_FILENAME}' successfully.")
-    except Exception as e:
-        print(f"Error writing to CSV file: {e}")
 
 
 def alive2_tv_check(p, p_prime):
@@ -984,23 +805,10 @@ def process_crc_outs(cmd_outs):
             print("\tMISCOMPILATION STATUS: CRC SUCCEEDED. Same hashes")
 
 
+# todo: add same output types as runner.py to give more succinct output
 def main():
     args = parse_args()
     p_file, p_prime_file = args.p, args.p_prime
-    csv_output = {
-        "P": p_file,
-        "P_prime": p_prime_file,
-        "returncode_match": None,
-        "stdout_match": None,
-        "stderr_match": None,
-        "has_randomness": None,
-        "alive2_correct": None,
-        "alive2_incorrect": None,
-        "alive2_no_prove": None,
-        "alive2_error": None,
-        "naive_is_miscompilation": None,
-        "final_is_miscompilation": None,
-    }
 
     p_path = "/".join(p_file.split("/")[:-1])
     p_prime_path = "/".join(p_prime_file.split("/")[:-1])
@@ -1012,16 +820,24 @@ def main():
             except OSError as e:
                 print(f"Error creating directory {p}/runtime: {e}")
 
-    # print("\n---------------Running Alive2 Translation Validation---------------")
-    # # Run Alive2 soundness check
-    # alive2_res = alive2_tv_check(p_file, p_prime_file)
-    # if alive2_res is not None:
-    #     print(f"Alive2 output: {alive2_res}")
-    #     csv_output["alive2_correct"] = alive2_res["correct_transformations"]
-    #     csv_output["alive2_incorrect"] = alive2_res["incorrect_transformations"]
-    #     csv_output["alive2_no_prove"] = alive2_res["no_prove_transformations"]
-    #     csv_output["alive2_error"] = alive2_res["errors"]
-    # print("---------------Finished Running Alive2---------------\n")
+    print("\n---------------Running Alive2 Translation Validation---------------")
+    # Run Alive2 soundness check
+    alive2_res = alive2_tv_check(p_file, p_prime_file)
+    if alive2_res is None:
+        print("\tALIVE2 EXECUTION ERROR")
+    else:
+        print(f"\tAlive2 output: {alive2_res}")
+        if alive2_res["errors"] != 0:
+            print("\tALIVE2 EXECUTION ERROR")
+        elif alive2_res["incorrect_transformations"] != 0:
+            print("\tALIVE2 INCORRECT TRANSFORMATION")
+        elif alive2_res["no_prove_transformations"] != 0:
+            print("\tALIVE2 UNDETERMINISTIC TRANSFORMATION")
+        elif alive2_res["correct_transformations"] != 0:
+            print("\tALIVE2 CORRECT TRANSFORMATION")
+        else:
+            print("\tALIVE2 NO OUTPUT (ERROR)")
+    print("---------------Finished Running Alive2---------------\n")
 
     # Run original files
     reg_cmds_outs = execute_original_programs(p_file, p_prime_file)
@@ -1054,55 +870,6 @@ def main():
             print("\tMISCOMPILATION STATUS: CRC EXECUTED")
             process_crc_outs(crc_cmd_outs)
         print(f"{hyphens}Finished evaluating CRC executions...{hyphens}")
-
-    return
-    # Evaluate results
-    print(f"{hyphens}Evaluating program outputs and randomness{hyphens}")
-    same_outputs = True
-    for i in range(len(reg_cmds_outs["p"])):
-        p_out = reg_cmds_outs["p"][i]
-        p_prime_out = reg_cmds_outs["p_prime"][i]
-
-        if p_out.returncode != p_prime_out.returncode:
-            same_outputs = False
-            print(
-                f"Iteration #{i + 1}: Invalid return codes.\n\tP: {p_out.returncode}\n\tP_prime: {p_prime_out.returncode}"
-            )
-            csv_output["returncode_match"] = False
-        else:
-            csv_output["returncode_match"] = True
-
-        if p_out.stdout != p_prime_out.stdout:
-            same_outputs = False
-            print(f"Iteration #{i + 1}: Invalid stdout.\n\tP: {p_out.stdout}\n\tP_prime: {p_prime_out.stdout}")
-            csv_output["stdout_match"] = False
-        else:
-            csv_output["stdout_match"] = True
-        if p_out.stderr != p_prime_out.stderr:
-            same_outputs = False
-            print(f"Iteration #{i + 1}: Invalid stderr.\n\tP: {p_out.stderr}\n\tP_prime: {p_prime_out.stderr}")
-            csv_output["stderr_match"] = False
-        else:
-            csv_output["stderr_match"] = True
-        csv_output["naive_is_miscompilation"] = not same_outputs
-
-    # Look at code to see if there is randomness involved
-    randomness_string = ""
-    if naive_check_randomness(p_file, p_prime_file):
-        randomness_string = "Program has randomness. Results can differ."
-        randomness_string += " Tentatively NOT a miscompilation" if not same_outputs else ""
-
-        csv_output["has_randomness"] = True
-    else:
-        randomness_string = "Program has no randomness."
-        randomness_string += " This IS a miscompilation" if not same_outputs else ""
-
-        csv_output["has_randomness"] = False
-    print(randomness_string)
-    print(f"{hyphens}Finished evaluating program outputs and randomness{hyphens}\n")
-
-    csv_output["final_is_miscompilation"] = not csv_output["alive2_incorrect"] == 0
-    write_to_csv(csv_output)
 
 
 if __name__ == "__main__":

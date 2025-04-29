@@ -1,6 +1,7 @@
 import argparse
 import glob
 import os
+import pprint
 import subprocess
 import re
 
@@ -28,6 +29,11 @@ stats = {
     "crc_no_hash_found": 0,
     "crc_logic_failed": 0,
     "crc_succeeded": 0,
+    "alive2_error": 0,
+    "alive2_incorrect": 0,
+    "alive2_no_prove": 0,
+    "alive2_correct": 0,
+    "alive2_empty_output": 0,
 }
 stats_log = f"{log_path}/stats.txt"
 
@@ -45,6 +51,12 @@ crc_no_hash_found = f"{log_path}/crc_no_hash_found.txt"
 crc_logic_failed_log = f"{log_path}/crc_logic_failed.txt"
 crc_succeeded_log = f"{log_path}/crc_succeeded.txt"
 
+alive2_error_log = f"{log_path}/alive2_error.txt"
+alive2_incorrect_log = f"{log_path}/alive2_incorrect.txt"
+alive2_no_prove_log = f"{log_path}/alive2_no_prove.txt"
+alive2_correct_log = f"{log_path}/alive2_correct.txt"
+alive2_empty_log = f"{log_path}/alive2_empty.txt"
+
 # List of all log files for easy clearing
 all_log_files = [
     stats_log,
@@ -60,6 +72,11 @@ all_log_files = [
     crc_no_hash_found,
     crc_logic_failed_log,
     crc_succeeded_log,
+    alive2_error_log,
+    alive2_incorrect_log,
+    alive2_no_prove_log,
+    alive2_correct_log,
+    alive2_empty_log,
 ]
 
 
@@ -113,6 +130,22 @@ def run_main(id, f1, f2, opt):
         stats["timed_out"] += 1
         add_id_to_log(timed_out_log, f"{id}_{opt}")
 
+    if "ALIVE2 EXECUTION ERROR " in res.stdout:
+        stats["alive2_error"] += 1
+        add_id_to_log(alive2_error_log, f"{id}_{opt}")
+    elif "ALIVE2 INCORRECT TRANSFORMATION" in res.stdout:
+        stats["alive2_incorrect"] += 1
+        add_id_to_log(alive2_incorrect_log, f"{id}_{opt}")
+    elif "ALIVE2 UNDETERMINISTIC TRANSFORMATION" in res.stdout:
+        stats["alive2_no_prove"] += 1
+        add_id_to_log(alive2_no_prove_log, f"{id}_{opt}")
+    elif "ALIVE2 CORRECT TRANSFORMATION" in res.stdout:
+        stats["alive2_correct"] += 1
+        add_id_to_log(alive2_correct_log, f"{id}_{opt}")
+    elif "ALIVE2 NO OUTPUT" in res.stdout:
+        stats["alive2_empty_output"] += 1
+        add_id_to_log(alive2_empty_log, f"{id}_{opt}")
+
     if "COMPILE EXCEPTION" in res.stdout:
         stats["regular_compile_crash"] += 1
         add_id_to_log(regular_compile_crash, f"{id}_{opt}")
@@ -151,7 +184,7 @@ def run_main(id, f1, f2, opt):
         stats["crc_succeeded"] += 1
         add_id_to_log(crc_succeeded_log, f"{id}_{opt}")
 
-    print(stats)
+    pprint.pprint(stats)
 
 
 def run_tests_from_file(input_filename, directory_path):
