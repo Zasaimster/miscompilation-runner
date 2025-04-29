@@ -10,3 +10,4 @@ miscomp_tests_runner/test_outs/*
 csmith_crc_minimal.o
 miscomp_tests_renamed
 miscomp_tests_renamed_filtered
+llvm_c/build

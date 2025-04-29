@@ -2,7 +2,7 @@
 @.str = private unnamed_addr constant [15 x i8] c"Hello, world!\0A\00", align 1
 @.str1 = private unnamed_addr constant [16 x i8] c"Hello, world1!\0A\00", align 1
 
-declare i32 @printf(i8* nocapture readonly, ...) #0
+declare i32 @printf(i8* nocapture readonly, ...)
 
 define i32 @main() #1 {
 entry:

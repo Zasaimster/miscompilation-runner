@@ -1,10 +1,7 @@
-; get globals
-; add the CRC output format function
-; add the global_info and write out the globals_table with the specific values
-; update values in the function
-; insert the function above main
+; Format string for "Hello, world!" (15 characters: includes newline and null terminator)
+@.str = private unnamed_addr constant [15 x i8] c"Hello, world!\0A\00", align 1
 
-; { pointer to variable, }
+; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }
 %global_info = type { i8*, i32, i8*}
 
 ; Global Variable
@@ -14,13 +11,14 @@
 
 ; Counter for replaced exit calls. going to add exit code to hash
 ; @_crc_exit_count = global i32 0, align 4
- ; Counter for replaced abort calls
+; Counter for replaced abort calls
 @_crc_abort_count = global i32 0, align 4
 ; Name to hash out when adding hash for exit()
 @_crc_exit_name = private unnamed_addr constant [10 x i8] c"exit call\00", align 1
 ; Name to hash out when adding hash for abort()
 @_crc_abort_name = private unnamed_addr constant [11 x i8] c"abort call\00", align 1
-@_main_return_code = private unnamed_addr constant [12 x i8] c"main return\00", align 1
+; Name to hash out when adding hash for main return
+@_crc_main_ret_name = private unnamed_addr constant [12 x i8] c"main return\00", align 1
 
 @globalVar1_name = private unnamed_addr constant [11 x i8] c"globalVar1\00", align 1
 @globalVar2_name = private unnamed_addr constant [11 x i8] c"globalVar2\00", align 1
@@ -37,9 +35,6 @@
 ; Args: pointer to data, size of data, pointer to string name of the var, to_print (boolean)
 declare void @transparent_crc_bytes(i8*, i32, i8*, i1)
 declare i32 @printf(i8* nocapture readonly, ...) 
-
-; Format string for "Hello, world!" (15 characters: includes newline and null terminator)
-@.str = private unnamed_addr constant [15 x i8] c"Hello, world!\0A\00", align 1
 
 ; Function to replace standard @exit() calls.
 ; It increments the exit counter, calls the CRC function with the counter's info,
@@ -61,7 +56,6 @@ entry:
     call void @transparent_crc_bytes(i8* %exitcode_ptr_i8, i32 4, i8* %name_marker_ptr, i1 false)
     ret void
 }
-
 
 ; Function to replace standard @abort() calls.
 ; It increments the abort counter, calls the CRC function with the counter's info,
