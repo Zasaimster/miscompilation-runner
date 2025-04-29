@@ -8,11 +8,8 @@ import re
 import subprocess
 import glob
 
-# Directory to search for .ll files (use '.' for the current directory)
 SEARCH_DIR = "./miscomp_tests_renamed"
-# Sanitizer configurations to test
 SANITIZERS = ["memory,undefined", "address,undefined"]
-# Output files
 FAILURE_FILE = "./scripts/sanitizer_failures.txt"
 CRASH_COUNT_FILE = "./scripts/num_crashes.txt"
 CRC_HELPER_OBJ_FILE = "crc/csmith_crc_minimal.o"
@@ -29,7 +26,7 @@ def run_command(cmd_list, ll_file):
             cmd_list,
             capture_output=True,
             text=True,
-            check=False,  # Don't raise exception on non-zero exit
+            check=False,
             timeout=30,
         )
         if result.returncode != 0:
@@ -54,12 +51,10 @@ def cleanup_files(*filenames):
 
 def write_crashed_file(num_crashes):
     with open(CRASH_COUNT_FILE, "w") as f_crash:
-        # print(f"Writing compilation error count to {CRASH_COUNT_FILE}...")
         f_crash.write(f"{num_crashes}\n")
 
 
 def write_sanitizer_failures(fail):
-    # Write sanitizer failures
     with open(FAILURE_FILE, "a") as f_fail:
         f_fail.write(f"{fail}\n")
 
@@ -67,7 +62,6 @@ def write_sanitizer_failures(fail):
 def sort_key(file):
     base_name = os.path.splitext(os.path.basename(file))[0]
     match = re.match(r"(\d+)_", base_name)
-    # print(match)
     if match:
         return int(match.group(1))
     return 0
@@ -77,7 +71,6 @@ def main():
     compilation_errors = 0
     sanitizer_failures = set()
 
-    # Find all .ll files in the specified directory
     search_pattern = os.path.join(SEARCH_DIR, "*.ll")
     ll_files = glob.glob(search_pattern)
 
@@ -92,11 +85,8 @@ def main():
         print(f"\nProcessing {ll_file}...")
 
         for sanitizer in SANITIZERS:
-            # print(f" Testing with sanitizer: '{sanitizer}'")
-            # --- Compilation Step ---
             compile_cmd = ["clang", "-c", ll_file, f"-fsanitize={sanitizer}", "-o", o_file]
             compile_retcode, _, _ = run_command(compile_cmd, ll_file)
-
             if compile_retcode != 0:
                 compilation_errors += 1
                 print(f"  Compilation error for {ll_file} with sanitizer '{sanitizer}'.")
@@ -104,13 +94,11 @@ def main():
                 write_crashed_file(compilation_errors)
                 continue
 
-            # --- Linking Step ---
             if "crc" in ll_file:
                 link_cmd = ["clang", o_file, CRC_HELPER_OBJ_FILE, f"-fsanitize={sanitizer}", "-o", exe_file]
             else:
                 link_cmd = ["clang", o_file, f"-fsanitize={sanitizer}", "-o", exe_file]
             link_retcode, _, _ = run_command(link_cmd, ll_file)
-
             if link_retcode != 0:
                 compilation_errors += 1
                 print(f"  Compilation error for {ll_file} with sanitizer '{sanitizer}'.")
@@ -118,27 +106,18 @@ def main():
                 write_crashed_file(compilation_errors)
                 continue
 
-            # --- Execution Step ---
             run_cmd = [f"./{exe_file}"]
             execute_retcode, _, stderr = run_command(run_cmd, ll_file)
-
             if execute_retcode != 0 and "ERROR: " in stderr:
                 print(
                     f"  SANITIZE ERROR detected for {ll_file} with sanitizer '{sanitizer}' (Exit code: {execute_retcode}). Recording failure."
                 )
-                # sanitizer_failures.add(os.path.basename(ll_file) + sanitizer)
                 write_sanitizer_failures(f"{os.path.basename(ll_file)}->{sanitizer}")
-            # else:
-            #     print(f"  Execution successful for {ll_file} with sanitizer '{sanitizer}'.")
 
             cleanup_files(o_file, exe_file)
 
-    # --- Write Output Files ---
-    print("\nProcessing complete.")
     print(f"Total compilation/linking errors encountered: {compilation_errors}")
     print(f"Total sanitizer failures detected: {len(sanitizer_failures)}")
-
-    print("Done.")
 
 
 if __name__ == "__main__":

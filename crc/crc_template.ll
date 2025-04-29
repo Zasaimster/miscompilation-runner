@@ -18,7 +18,7 @@
 ; Name to hash out when adding hash for abort()
 @_crc_abort_name = private unnamed_addr constant [11 x i8] c"abort call\00", align 1
 ; Name to hash out when adding hash for main return
-@_crc_main_ret_name = private unnamed_addr constant [12 x i8] c"main return\00", align 1
+@_crc_main_ret_name = private unnamed_addr constant [18 x i8] c"main return value\00", align 1
 
 @globalVar1_name = private unnamed_addr constant [11 x i8] c"globalVar1\00", align 1
 @globalVar2_name = private unnamed_addr constant [11 x i8] c"globalVar2\00", align 1

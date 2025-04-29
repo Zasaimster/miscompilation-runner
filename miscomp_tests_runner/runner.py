@@ -11,9 +11,11 @@ import re
         -d is optional. defaults to miscomp_tests_renamed/
     2. Run from file: python3 miscomp_tests_runner/runner.py -i <input_file> [-d /path/to/ll/files]
 """
-timeout_duration = 30  # seconds
-log_path = "miscomp_tests_runner/"
-ll_file_directory = "miscomp_tests_renamed/"  # Directory where .ll files reside
+TIMEOUT = 30  # seconds
+LOG_PATH = "miscomp_tests_runner"
+STATS_PATH = os.path.join(LOG_PATH, "stats/")
+OUTPUT_PATH = os.path.join(LOG_PATH, "test_outs/")
+IR_DIR = "miscomp_tests_renamed/"
 
 stats = {
     "total_programs": 0,
@@ -28,34 +30,34 @@ stats = {
     "crc_injection_failure": 0,
     "crc_no_hash_found": 0,
     "crc_logic_failed": 0,
+    "crc_logic_undeterminable": 0,
     "crc_succeeded": 0,
     "alive2_error": 0,
     "alive2_incorrect": 0,
     "alive2_no_prove": 0,
     "alive2_correct": 0,
-    "alive2_empty_output": 0,
 }
-stats_log = f"{log_path}/stats.txt"
+stats_log = os.path.join(STATS_PATH, "stats.txt")
 
-timed_out_log = f"{log_path}/timed_out.txt"
-regular_executed_log = f"{log_path}/regular_executed.txt"
-regular_compile_crash = f"{log_path}/regular_compile_crash.txt"
-regular_same_output_log = f"{log_path}/regular_same_output.txt"
-regular_different_output_log = f"{log_path}/regular_different_output.txt"
-regular_undeterminable_log = f"{log_path}/regular_undeterminable_output.txt"
+timed_out_log = os.path.join(STATS_PATH, "timed_out.txt")
+regular_executed_log = os.path.join(STATS_PATH, "regular_executed.txt")
+regular_compile_crash = os.path.join(STATS_PATH, "regular_compile_crash.txt")
+regular_same_output_log = os.path.join(STATS_PATH, "regular_same_output.txt")
+regular_different_output_log = os.path.join(STATS_PATH, "regular_different_output.txt")
+regular_undeterminable_log = os.path.join(STATS_PATH, "regular_undeterminable_output.txt")
 
-crc_executed_log = f"{log_path}/crc_executed.txt"
-crc_compile_crash_log = f"{log_path}/crc_compile_crash.txt"
-crc_injection_failure = f"{log_path}/crc_injection_failure.txt"
-crc_no_hash_found = f"{log_path}/crc_no_hash_found.txt"
-crc_logic_failed_log = f"{log_path}/crc_logic_failed.txt"
-crc_succeeded_log = f"{log_path}/crc_succeeded.txt"
+crc_executed_log = os.path.join(STATS_PATH, "crc_executed.txt")
+crc_compile_crash_log = os.path.join(STATS_PATH, "crc_compile_crash.txt")
+crc_injection_failure = os.path.join(STATS_PATH, "crc_injection_failure.txt")
+crc_no_hash_found = os.path.join(STATS_PATH, "crc_no_hash_found.txt")
+crc_logic_failed_log = os.path.join(STATS_PATH, "crc_logic_failed.txt")
+crc_logic_undeterminable_log = os.path.join(STATS_PATH, "crc_logic_undeterminable.txt")
+crc_succeeded_log = os.path.join(STATS_PATH, "crc_succeeded.txt")
 
-alive2_error_log = f"{log_path}/alive2_error.txt"
-alive2_incorrect_log = f"{log_path}/alive2_incorrect.txt"
-alive2_no_prove_log = f"{log_path}/alive2_no_prove.txt"
-alive2_correct_log = f"{log_path}/alive2_correct.txt"
-alive2_empty_log = f"{log_path}/alive2_empty.txt"
+alive2_error_log = os.path.join(STATS_PATH, "alive2_error.txt")
+alive2_incorrect_log = os.path.join(STATS_PATH, "alive2_incorrect.txt")
+alive2_no_prove_log = os.path.join(STATS_PATH, "alive2_no_prove.txt")
+alive2_correct_log = os.path.join(STATS_PATH, "alive2_correct.txt")
 
 # List of all log files for easy clearing
 all_log_files = [
@@ -71,16 +73,16 @@ all_log_files = [
     crc_injection_failure,
     crc_no_hash_found,
     crc_logic_failed_log,
+    crc_logic_undeterminable_log,
     crc_succeeded_log,
     alive2_error_log,
     alive2_incorrect_log,
     alive2_no_prove_log,
     alive2_correct_log,
-    alive2_empty_log,
 ]
 
 
-def clear_log_files():
+def clear_stats_files():
     for log_file in all_log_files:
         open(log_file, "w").close()
 
@@ -99,8 +101,7 @@ def add_id_to_log(log_file, id):
         log.write(f"{id}\n")
 
 
-def write_final_stats():
-    # Write the final stats to the stats log
+def write_stats():
     with open(stats_log, "w") as stats_file:
         for key, value in stats.items():
             stats_file.write(f"{key}: {value}\n")
@@ -111,16 +112,16 @@ def run_main(id, f1, f2, opt):
     print(f"Running {id}_{opt}: {' '.join(cmd)}")
     res = None
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout_duration)
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=TIMEOUT)
     except subprocess.TimeoutExpired:
-        print(f"Command {id}_{opt} timed out after {timeout_duration} seconds.")
-        # Treat as error
+        print(f"Command {id}_{opt} timed out after {TIMEOUT} seconds.")
+        # consider timeout an error
         res = subprocess.CompletedProcess(cmd, returncode=1, stdout="", stderr="Timeout")
     if res.stderr == "Timeout":
         with open(timed_out_log, "a") as timed_out:
             timed_out.write(f"{id}_{opt}\n")
 
-    output_filename = f"./miscomp_tests_runner/test_outs/{id}_{opt}.out"
+    output_filename = os.path.join(OUTPUT_PATH, f"{id}_{opt}.out")
     with open(output_filename, "w") as outfile:
         outfile.write(f"Stdout:\n{res.stdout}\n")
         outfile.write(f"Stderr:\n{res.stderr}\n")
@@ -130,7 +131,7 @@ def run_main(id, f1, f2, opt):
         stats["timed_out"] += 1
         add_id_to_log(timed_out_log, f"{id}_{opt}")
 
-    if "ALIVE2 EXECUTION ERROR " in res.stdout:
+    if "ALIVE2 EXECUTION ERROR" in res.stdout:
         stats["alive2_error"] += 1
         add_id_to_log(alive2_error_log, f"{id}_{opt}")
     elif "ALIVE2 INCORRECT TRANSFORMATION" in res.stdout:
@@ -139,12 +140,9 @@ def run_main(id, f1, f2, opt):
     elif "ALIVE2 UNDETERMINISTIC TRANSFORMATION" in res.stdout:
         stats["alive2_no_prove"] += 1
         add_id_to_log(alive2_no_prove_log, f"{id}_{opt}")
-    elif "ALIVE2 CORRECT TRANSFORMATION" in res.stdout:
+    elif "ALIVE2 CORRECT TRANSFORMATION" in res.stdout or "ALIVE2 NO TRANSFORMATION" in res.stdout:
         stats["alive2_correct"] += 1
         add_id_to_log(alive2_correct_log, f"{id}_{opt}")
-    elif "ALIVE2 NO OUTPUT" in res.stdout:
-        stats["alive2_empty_output"] += 1
-        add_id_to_log(alive2_empty_log, f"{id}_{opt}")
 
     if "COMPILE EXCEPTION" in res.stdout:
         stats["regular_compile_crash"] += 1
@@ -177,6 +175,9 @@ def run_main(id, f1, f2, opt):
     if "CRC NO HASH FOUND" in res.stdout:
         stats["crc_no_hash_found"] += 1
         add_id_to_log(crc_no_hash_found, f"{id}_{opt}")
+    elif "CRC HASHES VARYING" in res.stdout:
+        stats["crc_logic_undeterminable"] += 1
+        add_id_to_log(crc_logic_undeterminable_log, f"{id}_{opt}")
     elif "CRC LOGIC FAILED" in res.stdout:
         stats["crc_logic_failed"] += 1
         add_id_to_log(crc_logic_failed_log, f"{id}_{opt}")
@@ -185,6 +186,7 @@ def run_main(id, f1, f2, opt):
         add_id_to_log(crc_succeeded_log, f"{id}_{opt}")
 
     pprint.pprint(stats)
+    write_stats()
 
 
 def run_tests_from_file(input_filename, directory_path):
@@ -199,7 +201,7 @@ def run_tests_from_file(input_filename, directory_path):
         return
 
     processed_count = 0
-    for line_num, line in enumerate(test_cases, 1):
+    for _, line in enumerate(test_cases, 1):
         line = line.strip()
 
         match = line_pattern.match(line)
@@ -256,17 +258,10 @@ def run_script_on_files(directory_path):
             file2_o1_opt = opt_levels["O1"]["opt"]
             run_main(file_id, file1_o1, file2_o1_opt, "O1")
 
-        # Write the final stats to the stats log
-        with open(stats_log, "w") as stats_file:
-            for key, value in stats.items():
-                stats_file.write(f"{key}: {value}\n")
+        # write_stats()
 
 
 if __name__ == "__main__":
-    directory_to_scan = "miscomp_tests_renamed/"
-    os.makedirs("miscomp_tests_runner/test_outs", exist_ok=True)
-
-    # Setup argument parser
     parser = argparse.ArgumentParser(description="Run main.py on specified LLVM file pairs.")
     parser.add_argument(
         "-i",
@@ -277,28 +272,30 @@ if __name__ == "__main__":
     parser.add_argument(
         "-d",
         "--directory",
-        default=ll_file_directory,
-        help=f"Directory containing the .ll files (default: {ll_file_directory})",
+        default=IR_DIR,
+        help=f"Directory containing the .ll files (default: {IR_DIR})",
     )
     args = parser.parse_args()
     ll_file_directory_to_use = args.directory
 
-    print("Clearing previous log files...")
-    clear_log_files()
-    print(f"Clearing runtime folder: {ll_file_directory_to_use}runtime")
-    clear_folder(f"{ll_file_directory_to_use}runtime")
-    print(f"Clearing old test_outs folder: {ll_file_directory_to_use}runtime")
-    clear_folder(f"{log_path}test_outs")
+    directory_to_scan = "miscomp_tests_renamed/"
 
-    # Create the output directory for .out files
-    os.makedirs(f"{log_path}test_outs", exist_ok=True)
+    # Create the directory for stats and output logs
+    os.makedirs(STATS_PATH, exist_ok=True)
+    os.makedirs(OUTPUT_PATH, exist_ok=True)
+
+    # Clear old files
+    print(f"Removing runtime files: {ll_file_directory_to_use}runtime")
+    clear_folder(os.path.join(ll_file_directory_to_use, "runtime"))
+    print(f"Removing output logs: {ll_file_directory_to_use}runtime")
+    clear_folder(OUTPUT_PATH)
+    print("Clearing stats logs...")
+    clear_stats_files()
 
     if args.input_file:
         run_tests_from_file(args.input_file, ll_file_directory_to_use)
     else:
         run_script_on_files(ll_file_directory_to_use)
-
-    write_final_stats()
 
     # Cleanup
     print(f"Clearing runtime folder: {ll_file_directory_to_use}runtime")

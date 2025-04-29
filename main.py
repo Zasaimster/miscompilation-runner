@@ -3,7 +3,6 @@ import os
 import shutil
 import sys
 
-# import regex as re
 import re
 import subprocess
 from string import Template
@@ -22,7 +21,7 @@ global_varname_code = """
 ; Name to hash out when adding hash for abort()
 @_crc_abort_name = private unnamed_addr constant [11 x i8] c"abort call\\00", align 1
 ; Name to hash out when adding hash for main return
-@_crc_main_ret_name = private unnamed_addr constant [12 x i8] c"main return\\00", align 1
+@_crc_main_ret_name = private unnamed_addr constant [18 x i8] c"main return value\\00", align 1
 ; Create name global variables for each variable
 """
 crc_functions_template = Template(
@@ -32,20 +31,17 @@ crc_functions_template = Template(
 ; and then returns void.
 define void @_crc_exit_call(i32 %exitcode) {
 entry:
-    ; Allocate space on the stack to store the exit code temporarily
-    %exitcode_addr = alloca i32, align 4
-    ; Store the passed exit code value into the allocated stack space
-    store i32 %exitcode, i32* %exitcode_addr, align 4
-
-    ; Get pointer to the "exit call" name string
-    %name_marker_ptr = getelementptr inbounds [10 x i8], [10 x i8]* @_crc_exit_name, i32 0, i32 0
-
-    ; Cast the address of the stored exit code (i32*) to i8* for the CRC function
-    %exitcode_ptr_i8 = bitcast i32* %exitcode_addr to i8*
-
-    ; Call CRC function: pass exit code address as data, size of i32 (4), exit name string, and true flag
-    call void @transparent_crc_bytes(i8* %exitcode_ptr_i8, i32 4, i8* %name_marker_ptr, i1 true)
-    ret void
+  ; Allocate space on the stack to store the exit code temporarily
+  %exitcode_addr = alloca i32, align 4
+  ; Store the passed exit code value into the allocated stack space
+  store i32 %exitcode, i32* %exitcode_addr, align 4  
+  ; Get pointer to the "exit call" name string
+  %name_marker_ptr = getelementptr inbounds [10 x i8], [10 x i8]* @_crc_exit_name, i32 0, i32 0  
+  ; Cast the address of the stored exit code (i32*) to i8* for the CRC function
+  %exitcode_ptr_i8 = bitcast i32* %exitcode_addr to i8*  
+  ; Call CRC function: pass exit code address as data, size of i32 (4), exit name string, and true flag
+  call void @transparent_crc_bytes(i8* %exitcode_ptr_i8, i32 4, i8* %name_marker_ptr, i1 true)
+  ret void
 }
 
 ; Function to replace standard @abort() calls.
@@ -53,88 +49,82 @@ entry:
 ; and then returns void.
 define void @_crc_abort_call() {
 entry:
-    ; Atomically increment the abort counter. Returns the *old* value, which we ignore.
-    %old_count = atomicrmw add i32* @_crc_abort_count, i32 1 monotonic, align 4
-
-    ; Get pointer to the "abort call" name string
-    %name_marker_ptr = getelementptr inbounds [11 x i8], [11 x i8]* @_crc_abort_name, i32 0, i32 0
-
-    ; Get pointer to the counter variable and cast it to i8* for the CRC function
-    %counter_ptr_i8 = bitcast i32* @_crc_abort_count to i8*
-
-    ; Call CRC function: pass counter address as data, size of i32 (4), abort name string, and true flag
-    call void @transparent_crc_bytes(i8* %counter_ptr_i8, i32 4, i8* %name_marker_ptr, i1 true)
-    ret void
+  ; Atomically increment the abort counter.
+  %old_count = atomicrmw add i32* @_crc_abort_count, i32 1 monotonic, align 4  
+  ; Get pointer to the "abort call" name string
+  %name_marker_ptr = getelementptr inbounds [11 x i8], [11 x i8]* @_crc_abort_name, i32 0, i32 0  
+  ; Get pointer to the counter variable and cast it to i8* for the CRC function
+  %counter_ptr_i8 = bitcast i32* @_crc_abort_count to i8*  
+  ; Call CRC function: pass counter address as data, size of i32 (4), abort name string, and true flag
+  call void @transparent_crc_bytes(i8* %counter_ptr_i8, i32 4, i8* %name_marker_ptr, i1 true)
+  ret void
 }
 
 ; Function to compute CRC for all globals in the table
 define void @_compute_globals_crc() {
 entry:
-    ; Get pointer to the first element of the globals_table (1 element)
-    %table_ptr = getelementptr inbounds [$num_table_entries x %global_info], [$num_table_entries x %global_info]* @globals_table, i32 0, i32 0
-    ; Allocate loop counter
-    %i = alloca i32, align 4
-    store i32 0, i32* %i
-    br label %loop
+  ; Get pointer to the first element of the globals_table (1 element)
+  %table_ptr = getelementptr inbounds [$num_table_entries x %global_info], [$num_table_entries x %global_info]* @globals_table, i32 0, i32 0
+  ; loop counter
+  %i = alloca i32, align 4
+  store i32 0, i32* %i
+  br label %loop
 
 loop:
-    %i_val = load i32, i32* %i, align 4
-    ; Compare i with the number of elements (1)
-    %cmp = icmp slt i32 %i_val, $num_table_entries
-    br i1 %cmp, label %body, label %exit
+  %i_val = load i32, i32* %i, align 4
+  %cmp = icmp slt i32 %i_val, $num_table_entries
+  br i1 %cmp, label %body, label %exit
 
 body:
-    ; Get pointer to globals_table[i]
-    %entry_ptr = getelementptr inbounds %global_info, %global_info* %table_ptr, i32 %i_val
-    
-    ; Load the entry
-    %gi = load %global_info, %global_info* %entry_ptr, align 4
-    
-    ; Extract the ptr, size, and name
-    %global_ptr = extractvalue %global_info %gi, 0
-    %global_size = extractvalue %global_info %gi, 1
-    %global_name = extractvalue %global_info %gi, 2
-    
-    ; Call the CRC function
-    call void @transparent_crc_bytes(i8* %global_ptr, i32 %global_size, i8* %global_name, i1 true)
-
-    ; Increment the loop counter
-    %i_next = add i32 %i_val, 1
-    store i32 %i_next, i32* %i
-    br label %loop
-
+  ; Load the entry
+  %entry_ptr = getelementptr inbounds %global_info, %global_info* %table_ptr, i32 %i_val
+  %gi = load %global_info, %global_info* %entry_ptr, align 4
+  %global_ptr = extractvalue %global_info %gi, 0
+  %global_size = extractvalue %global_info %gi, 1
+  %global_name = extractvalue %global_info %gi, 2
+  
+  call void @transparent_crc_bytes(i8* %global_ptr, i32 %global_size, i8* %global_name, i1 true)
+  
+  ; increment loop
+  %i_next = add i32 %i_val, 1
+  store i32 %i_next, i32* %i
+  br label %loop
+  
 exit:
-    ret void
+  ret void
 }\n
 """
 )
-new_main_function_code = """
+
+call_old_main_with_i32 = """
+  ; Call the original main logic
+  %retval_storage = alloca i32, align 4
+  %orig_ret = call i32 @_crc_main_old()
+  store i32 %orig_ret, i32* %retval_storage, align 4
+  %ret_name_marker_ptr = getelementptr inbounds [18 x i8], [18 x i8]* @_crc_main_ret_name, i32 0, i32 0
+  %retval_ptr_i8 = bitcast i32* %retval_storage to i8*
+  ; Hash the return value
+  call void @transparent_crc_bytes(i8* %retval_ptr_i8, i32 4, i8* %ret_name_marker_ptr, i1 true)
+"""
+call_old_void_main = """
+  call void @_crc_main_old()
+  ; Hash a default return value of 0
+  %retval_storage = alloca i32, align 4
+  store i32 0, i32* %retval_storage, align 4
+  %ret_name_marker_ptr = getelementptr inbounds [18 x i8], [18 x i8]* @_crc_main_ret_name, i32 0, i32 0
+  %retval_ptr_i8 = bitcast i32* %retval_storage to i8*
+  call void @transparent_crc_bytes(i8* %retval_ptr_i8, i32 4, i8* %ret_name_marker_ptr, i1 true)
+  ret i32 0
+"""
+new_main_function_code = Template("""
 \ndefine i32 @main() {
 entry:
-    ; Allocate space on the stack to store the return value from the old main
-    %retval_storage = alloca i32, align 4
-
-    ; Call the original main logic (now renamed @_crc_main_old)
-    ; Adjust the call signature if @crc_main_old takes arguments.
-    %orig_ret = call i32 @_crc_main_old()
-
-    ; Store the return value from the original main into the allocated stack space
-    store i32 %orig_ret, i32* %retval_storage, align 4
-
-    ; --- Hash the return value ---
-    ; Get pointer to the name marker for the return value
-    %ret_name_marker_ptr = getelementptr inbounds [18 x i8], [18 x i8]* @_crc_main_ret_name, i32 0, i32 0
-    ; Cast the address of the stored return value (i32*) to i8*
-    %retval_ptr_i8 = bitcast i32* %retval_storage to i8*
-    ; Call CRC function: pass return value address, size of i32 (4), name marker, and true flag
-    call void @transparent_crc_bytes(i8* %retval_ptr_i8, i32 4, i8* %ret_name_marker_ptr, i1 true)
-
-    ; --- Hash the global variables ---
-    call void @_compute_globals_crc()
-
-    ret i32 0
+  $old_main_call
+  ; --- Hash the global variables ---
+  call void @_compute_globals_crc()
+  ret i32 0
 }\n
-"""
+""")
 
 
 def parse_args():
@@ -149,7 +139,6 @@ def get_commands_for_normal_exec(file):
     path = "/".join(file.split("/")[:-1])
     out_path = f"{path}/runtime/{filename}"
 
-    # Commands
     # obj_file = f"clang -c {file} -fsanitize=memory -o {out_path}.o"
     obj_file = f"clang -c {file} -o {out_path}.o"
     # exec = f"clang {out_path}.o -fsanitize=memory -o {out_path}"
@@ -160,7 +149,6 @@ def get_commands_for_normal_exec(file):
     else:
         execute_cmd = [f"./{out_path}"]
 
-    # return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
     return [obj_file.split(), exec.split(), execute_cmd]
 
 
@@ -169,7 +157,6 @@ def get_commands_for_crc_exec(file):
     path = "/".join(file.split("/")[:-1])
     out_path = f"{path}/runtime/{filename}"
 
-    # Commands
     # obj_file = f"clang -c {file} -fsanitize=memory -o {out_path}.o"
     obj_file = f"clang -c {file} -o {out_path}.o"
     # exec = f"clang {out_path}.o {CRC_HELPER_OBJ_FILE} -fsanitize=memory -o {out_path}"
@@ -179,7 +166,6 @@ def get_commands_for_crc_exec(file):
     else:
         execute_cmd = [f"./{out_path}"]
 
-    # return [llc.split(), obj_file.split(), exec.split(), execute_cmd]
     return [obj_file.split(), exec.split(), execute_cmd]
 
 
@@ -267,6 +253,57 @@ def rerun_og_cmds_for_undeterminism(p, p_prime):
 
     # False if p and p' have any differences in executions, True if everything is the same
     return executions_have_same_outputs(p_outs) and executions_have_same_outputs(p_prime_outs)
+
+
+def rerun_crc_cmds_for_undeterminism(p_crc, p_prime_crc):
+    """
+    Re-runs crc cmds for p and p_prime 3x.
+    Returns true if the hashes are consistently different
+    Returns false if the output is the exact same each time
+    """
+    print(f"\n{hyphens}Re-Executing {p_crc}, {p_prime_crc} 3 times each{hyphens}")
+    p_exec = get_commands_for_crc_exec(p_crc)[-1]
+    p_prime_exec = get_commands_for_crc_exec(p_prime_crc)[-1]
+    p_outs = []
+    p_prime_outs = []
+    for _ in range(3):
+        p_outs.append(subprocess.run(p_exec, capture_output=True, text=True))
+        p_prime_outs.append(subprocess.run(p_prime_exec, capture_output=True, text=True))
+
+        print(f"p return code: {p_outs[-1].returncode} | p_prime return code: {p_prime_outs[-1].returncode}")
+        print(f"p stdout: {p_outs[-1].stdout} | p_prime stdout: {p_prime_outs[-1].stdout}")
+        print(f"p stderr: {p_outs[-1].stderr} | p_prime stderr: {p_prime_outs[-1].stderr}")
+    print(f"{hyphens}Finished re-executing {p_crc}, {p_prime_crc}{hyphens}\n")
+
+    # Analyze similarity of the output of executing each compiled program individually for p
+    def executions_have_same_hashes(outs):
+        for i in range(1, 3):
+            last = outs[i - 1].stdout.strip().split("\n")
+            curr = outs[i].stdout.strip().split("\n")
+            last_hash_i, curr_hash_i = -1, -1
+            for i, line in enumerate(last):
+                if "...checksum after hashing" in line:
+                    last_hash_i = i
+                    break
+            for i, line in enumerate(curr):
+                if "...checksum after hashing" in line:
+                    curr_hash_i = i
+                    break
+            if last_hash_i == -1 and curr_hash_i == -1:
+                continue  # both are empty, skip
+            elif last_hash_i == -1 or curr_hash_i == -1:
+                return True  # one is empty, the other is not -> the hashes are different
+            last_hash = last[last_hash_i:]
+            curr_hash = curr[curr_hash_i:]
+            if len(last_hash) != len(curr_hash):
+                return True
+            for i in range(len(last_hash)):
+                if last_hash[i] != curr_hash[i]:
+                    return True
+        return False
+
+    # False if p and p' have any difference in their own hashes, True if everything is the same
+    return executions_have_same_hashes(p_outs) and executions_have_same_hashes(p_prime_outs)
 
 
 def get_code(filename):
@@ -364,17 +401,17 @@ def run_globals_pass(file):
     process = subprocess.run(opt_command, capture_output=True, text=True, check=True)
 
     stdout = process.stdout
-    print("\tPass output captured:\n", stdout)  # Debug print
+    print("\tPass output captured:\n", stdout)
 
     global_sizes = {}
     lines = stdout.splitlines()
     found_relevant_section = False
     for line in lines:
-        # Look for the start of the pass output
+        # start of the pass output
         if "Global Variable Sizes in Module" in line:
             found_relevant_section = True
             continue
-        # Look for end
+        # end of pass output
         if "-----" in line or "No user-defined" in line:
             break
         if found_relevant_section and ": Type=" in line:
@@ -421,7 +458,6 @@ def get_globals_info(file):
 
 
 def find_main_end_index(crc_code):
-    # Find main function index after all changes have been made since line numbers will change as new lines are added
     main_function_index = -1
     for i, line in enumerate(crc_code):
         match = re.search(r"^\s*define\s+.*?@main\s*\(", line)
@@ -452,11 +488,8 @@ def get_default_return_value(return_type):
         return f"{return_type} 0.0"
     elif return_type.endswith("*"):  # Pointer types
         return f"{return_type} null"
-    # Add more complex types if needed, otherwise default to undef
-    # For aggregate types ({...}, [...], <...>), 'undef' is often the safest default
-    # without knowing the specific structure.
-    else:
-        # Returning undef for unknown or aggregate types
+    # ? add more complex types if needed
+    else:  # unknown type
         return f"{return_type} undef"
 
 
@@ -465,10 +498,10 @@ def replace_main_function(crc_code):
     main_func_end = find_main_end_index(crc_code)
 
     # Rename main function to @_crc_main_old()
+    main_return_type = None
     for i, line in enumerate(crc_code):
         # Use regex to find 'define' followed by optional attributes, return type,
         # and exactly '@main(' to avoid replacing it in comments or other contexts.
-        # This regex looks for:
         # ^           - Start of the line
         # \s* - Optional leading whitespace
         # define      - The keyword 'define'
@@ -477,14 +510,21 @@ def replace_main_function(crc_code):
         # @main       - The literal '@main'
         # \s* - Optional whitespace
         # \(          - The literal opening parenthesis '('
-        match = re.search(r"^\s*define\s+.*?@main\s*\(", line)
+        match = re.search(r"^\s*define\s+.*?(\S+)\s+@main\s*\(", line)
         if match:
             # Replace only the first occurrence of '@main(' on the matched line
+            main_return_type = match.group(1)
             crc_code[i] = line.replace("@main(", "@_crc_main_old(", 1)
             break
 
     # Insert new main() method
-    crc_code = crc_code[: main_func_end + 1] + new_main_function_code.splitlines() + crc_code[main_func_end + 1 :]
+    if main_return_type == "i32":
+        main_call_body = call_old_main_with_i32
+    else:
+        main_call_body = call_old_void_main
+
+    main_func_code = new_main_function_code.substitute(old_main_call=main_call_body)
+    crc_code = crc_code[: main_func_end + 1] + main_func_code.splitlines() + crc_code[main_func_end + 1 :]
     return crc_code
 
 
@@ -501,7 +541,7 @@ def replace_abort_exit_calls(crc_code):
     skip_next_line = False
     i = 0
     while i < len(crc_code):
-        # Check if we need to skip this line because it was 'unreachable'
+        # skip this line because it was 'unreachable'
         if skip_next_line:
             skip_next_line = False
             i += 1
@@ -510,8 +550,7 @@ def replace_abort_exit_calls(crc_code):
         line = crc_code[i]
         processed = False
 
-        # --- Track current function definition and return type ---
-        # Regex breakdown:
+        # Track current function definition and return type
         # ^\s*define\s+ - Start with 'define'
         # ([\w\s%."{}[\]<>*]+?) - Capture group 1: Attributes and the return type (non-greedy)
         # \s+@          - Whitespace before function name '@'
@@ -520,7 +559,7 @@ def replace_abort_exit_calls(crc_code):
             # Extract the part containing attributes and return type
             type_and_attrs = define_match.group(1).strip()
             # Split by space and take the last part as the likely return type
-            # This is a simplification and might fail on complex attributes/types
+            # This simplification and might fail on complex attributes/types
             parts = type_and_attrs.split()
             if parts:
                 current_function_return_type = parts[-1]
@@ -529,14 +568,13 @@ def replace_abort_exit_calls(crc_code):
                 current_function_return_type = None
                 print("\tWarning: Could not determine return type from define line:", line.strip())
 
-        # --- Reset return type if we leave a function ---
+        # Reset return type if we leave a function
         if line.strip() == "}":
             current_function_return_type = None
 
         processed = False
 
-        # --- Check for exit call (including tail call) ---
-        # Regex breakdown:
+        # Check for exit call (including tail)
         # ^\s* - Start of line with optional whitespace
         # (tail\s+)?    - Optional capture group 1: 'tail ' prefix
         # call\s+void\s+ - 'call void ' with whitespace
@@ -548,11 +586,9 @@ def replace_abort_exit_calls(crc_code):
         if exit_match:
             if current_function_return_type is None:
                 print(f"\tWarning: Found exit call but current function return type is unknown. Line: {line.strip()}")
-                # Fallback or skip adding 'ret'? For now, we'll skip 'ret' if type unknown.
             else:
-                tail_prefix = exit_match.group(1) or ""  # Get 'tail ' if present, else empty string
-                arguments = exit_match.group(2).strip()  # Get the arguments passed to exit
-                # Construct the replacement line, preserving 'tail' if it was there
+                tail_prefix = exit_match.group(1) or ""  # tail if present, else empty string
+                arguments = exit_match.group(2).strip()  # arguments passed to exit
                 replacement_line = f"\t{tail_prefix}call void @_crc_exit_call({arguments})"
                 new_crc_code.append(replacement_line)
                 print(f"\tReplaced: {line.strip()} -> {replacement_line.strip()}")
@@ -565,36 +601,31 @@ def replace_abort_exit_calls(crc_code):
 
                 # Check if the next line is 'unreachable'
                 if i + 1 < len(crc_code) and re.search(r"^\s*unreachable\b", crc_code[i + 1]):
-                    print(f"\tSkipping next line (unreachable): {crc_code[i + 1].strip()}")
-                    skip_next_line = True  # Mark the next line to be skipped
+                    skip_next_line = True
 
                 processed = True
 
-        # --- Check for abort call (including tail call) ---
-        # Regex breakdown: similar to exit
+        # Check for abort call (including tail)
+        # similar to exit regex
         # ^\s*(tail\s+)?call\s+void\s+@abort\s*\(\s*\)(\s*#\d+)?
         abort_match = re.search(r"^\s*(tail\s+)?call\s+void\s+@abort\s*\(\s*\)(\s*#\d+)?", line)
         if not processed and abort_match:
             if current_function_return_type is None:
                 print(f"\tWarning: Found abort call but current function return type is unknown. Line: {line.strip()}")
-                # Fallback or skip adding 'ret'? For now, we'll skip 'ret' if type unknown.
             else:
-                tail_prefix = abort_match.group(1) or ""  # Get 'tail ' if present, else empty string
-                # Construct the replacement line, preserving 'tail'
+                tail_prefix = abort_match.group(1) or ""  # tail if present, else empty string
                 replacement_line = f"\t{tail_prefix}call void @_crc_abort_call()"
                 new_crc_code.append(replacement_line)
-                print(f"\tReplaced: {line.strip()} -> {replacement_line.strip()}")  # Debug print
+                print(f"\tReplaced: {line.strip()} -> {replacement_line.strip()}")
 
                 # Add the return instruction
                 ret_value = get_default_return_value(current_function_return_type)
                 ret_line = f"\tret {ret_value}"
                 new_crc_code.append(ret_line)
-                print(f"\tAdded return: {ret_line.strip()}")  # Debug print
+                print(f"\tAdded return: {ret_line.strip()}")
 
-                # Check if the next line is 'unreachable'
                 if i + 1 < len(crc_code) and re.search(r"^\s*unreachable\b", crc_code[i + 1]):
-                    print(f"\tSkipping next line (unreachable): {crc_code[i + 1].strip()}")  # Debug print
-                    skip_next_line = True  # Mark the next line to be skipped
+                    skip_next_line = True
 
                 processed = True
 
@@ -612,7 +643,7 @@ def replace_abort_exit_calls(crc_code):
 
 
 def add_crc_to_ir(p):
-    # Define some static code injections here
+    # static code injections
     crc_declaration = "\n; External function declaration for crc calculation\ndeclare void @transparent_crc_bytes(i8*, i32, i8*, i1)\n"
     global_info = "\n; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }\n%global_info = type { i8*, i32, i8*}\n"
 
@@ -630,7 +661,8 @@ def add_crc_to_ir(p):
         # Find global variables and mark latest index
         if re.match(r"^@([a-zA-Z_.][a-zA-Z0-9_.]*)\s*=", line):
             last_global_var_index = i
-    last_global_var_index = max(last_global_var_index, 4)  # Inject code after top-level info
+    # Inject code after top-level info if there are no global vars
+    last_global_var_index = max(last_global_var_index, 4)
 
     # this should never be the case, but just to be safe
     if last_global_var_index == len(code_arr) - 1:
@@ -761,7 +793,7 @@ def get_injected_crc_code(p_file, p_prime_file):
     return crc_p, crc_p_prime
 
 
-def process_crc_outs(cmd_outs):
+def process_crc_outs(cmd_outs, p, p_prime):
     def print_crc_hashes(hashes, name):
         print(f"\tHashes for: {name}")
         print("\n".join(f"\t\t{h}" for h in hashes))
@@ -789,9 +821,7 @@ def process_crc_outs(cmd_outs):
     # Else, both P, P' produced > 0 hashes
     else:
         # Separate normal output and the CRC output
-        # p_out = p_stdout[:p_hash_i]
         p_hash = p_stdout[p_hash_i:]
-        # p_prime_out = p_prime_stdout[:p_prime_hash_i]
         p_prime_hash = p_prime_stdout[p_prime_hash_i:]
 
         print_crc_hashes(p_hash, "P")
@@ -800,7 +830,11 @@ def process_crc_outs(cmd_outs):
         if len(p_hash) != len(p_prime_hash):
             print("\tMISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
         elif p_hash[-1].split(" ")[-1] != p_prime_hash[-1].split(" ")[-1]:
-            print("\tMISCOMPILATION STATUS: CRC LOGIC FAILED. Different hashes")
+            is_different_output = rerun_crc_cmds_for_undeterminism(p, p_prime)
+            if is_different_output:
+                print("\tMISCOMPILATION STATUS: CRC HASHES VARYING. Undeterminable")
+            else:
+                print("\tMISCOMPILATION STATUS: CRC LOGIC FAILED. Consistently different hashes")
         else:
             print("\tMISCOMPILATION STATUS: CRC SUCCEEDED. Same hashes")
 
@@ -836,7 +870,7 @@ def main():
         elif alive2_res["correct_transformations"] != 0:
             print("\tALIVE2 CORRECT TRANSFORMATION")
         else:
-            print("\tALIVE2 NO OUTPUT (ERROR)")
+            print("\tALIVE2 NO TRANSFORMATION")
     print("---------------Finished Running Alive2---------------\n")
 
     # Run original files
@@ -868,7 +902,7 @@ def main():
 
         if not crc_cmds_error:
             print("\tMISCOMPILATION STATUS: CRC EXECUTED")
-            process_crc_outs(crc_cmd_outs)
+            process_crc_outs(crc_cmd_outs, crc_p, crc_p_prime)
         print(f"{hyphens}Finished evaluating CRC executions...{hyphens}")
 
 
