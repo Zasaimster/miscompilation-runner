@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import shutil
 import sys
@@ -11,7 +12,28 @@ CRC_HELPER_OBJ_FILE = "crc/csmith_crc_minimal.o"
 CSV_FILENAME = "results/results.csv"
 PASS_DIR = "llvm_c"
 LIB_NAME = "libGlobalSizePass.so"
-hyphens = "-" * 15
+TIMEOUT = 30  # seconds
+HYPHENS = "=" * 10
+
+summary = {
+    "alive2_error": False,
+    "alive2_incorrect": False,
+    "alive2_no_prove": False,
+    "alive2_correct": False,
+    "timeout": False,
+    "regular_compile_crash": False,
+    "regular_executed": False,
+    "regular_different_output": False,
+    "regular_undeterminable_output": False,
+    "regular_same_output": False,
+    "crc_injection_failure": False,
+    "crc_compile_crash": False,
+    "crc_executed": False,
+    "crc_no_hash_found": False,
+    "crc_logic_failed": False,
+    "crc_logic_undeterminable": False,
+    "crc_succeeded": False,
+}
 
 global_varname_code = """
 ; Counter for replaced abort calls
@@ -174,13 +196,16 @@ def run_cmds(cmds):
     for cmd in cmds:
         try:
             print(f"\tRunning: {' '.join(cmd)}")
-            out = subprocess.run(cmd, capture_output=True, text=True)
+            out = subprocess.run(cmd, capture_output=True, text=True, timeout=TIMEOUT)
             print(f"\tReturn code: {out.returncode}")
             res.append(out)
             if out.returncode != 0:
                 print(f"\tstdout: {out.stdout}")
                 print(f"\tstderr: {out.stderr}")
                 break
+        except subprocess.TimeoutExpired:
+            print(f"Command {cmd} timed out after {TIMEOUT} seconds.")
+            res.append(subprocess.CompletedProcess(cmd, returncode=-1, stdout="", stderr="Timeout"))
         except Exception as e:
             print(f"\tError running command: {' '.join(cmd)}")
             print("\tError: ", e)
@@ -193,13 +218,13 @@ def execute_original_programs(p, p_prime):
     Compile each .ll file and run the executable multiple times for differential testing.
     The results are returned as
     """
-    print(f"\n{hyphens}Executing {p}, {p_prime}{hyphens}")
+    print(f"\n{HYPHENS}Executing {p}, {p_prime}{HYPHENS}")
     p_cmds = get_commands_for_normal_exec(p)
     p_prime_cmds = get_commands_for_normal_exec(p_prime)
 
     p_out = run_cmds(p_cmds)
     p_prime_out = run_cmds(p_prime_cmds)
-    print(f"{hyphens}Finished executing {p}, {p_prime}{hyphens}\n")
+    print(f"{HYPHENS}Finished executing {p}, {p_prime}{HYPHENS}\n")
     return {"p": p_out, "p_prime": p_prime_out}
 
 
@@ -208,12 +233,12 @@ def execute_crc_programs(p, p_prime):
     Compile each .ll file with injected CRC code and run the executables for differential testing and to validate hashed CRCs.
     """
 
-    print(f"\n{hyphens}Executing {p}, {p_prime}{hyphens}")
+    print(f"\n{HYPHENS}Executing {p}, {p_prime}{HYPHENS}")
     p_cmds = get_commands_for_crc_exec(p)
     p_prime_cmds = get_commands_for_crc_exec(p_prime)
     p_out = run_cmds(p_cmds)
     p_prime_out = run_cmds(p_prime_cmds)
-    print(f"{hyphens}Finished executing {p}, {p_prime}{hyphens}\n")
+    print(f"{HYPHENS}Finished executing {p}, {p_prime}{HYPHENS}\n")
 
     return {"p": p_out, "p_prime": p_prime_out}
 
@@ -224,19 +249,27 @@ def rerun_og_cmds_for_undeterminism(p, p_prime):
     Returns true if the output is consistently different (undeterminable if there is a miscompilation).
     Returns false if the output is the exact same each time.
     """
-    print(f"\n{hyphens}Re-Executing {p}, {p_prime} 3 times each{hyphens}")
+    print(f"\n{HYPHENS}Re-Executing {p}, {p_prime} 3 times each{HYPHENS}")
     p_exec = get_commands_for_normal_exec(p)[-1]
     p_prime_exec = get_commands_for_normal_exec(p_prime)[-1]
     p_outs = []
     p_prime_outs = []
     for _ in range(3):
-        p_outs.append(subprocess.run(p_exec, capture_output=True, text=True))
-        p_prime_outs.append(subprocess.run(p_prime_exec, capture_output=True, text=True))
+        try:
+            p_outs.append(subprocess.run(p_exec, capture_output=True, text=True, timeout=TIMEOUT))
+        except subprocess.TimeoutExpired:
+            print(f"Command {p_exec} timed out after {TIMEOUT} seconds.")
+            p_outs.append(subprocess.CompletedProcess(p_exec, returncode=-1, stdout="", stderr="Timeout"))
+        try:
+            p_prime_outs.append(subprocess.run(p_prime_exec, capture_output=True, text=True, timeout=TIMEOUT))
+        except subprocess.TimeoutExpired:
+            print(f"Command {p_prime_exec} timed out after {TIMEOUT} seconds.")
+            p_prime_outs.append(subprocess.CompletedProcess(p_prime_exec, returncode=-1, stdout="", stderr="Timeout"))
 
         print(f"p return code: {p_outs[-1].returncode} | p_prime return code: {p_prime_outs[-1].returncode}")
         print(f"p stdout: {p_outs[-1].stdout} | p_prime stdout: {p_prime_outs[-1].stdout}")
         print(f"p stderr: {p_outs[-1].stderr} | p_prime stderr: {p_prime_outs[-1].stderr}")
-    print(f"{hyphens}Finished re-executing {p}, {p_prime}{hyphens}\n")
+    print(f"{HYPHENS}Finished re-executing {p}, {p_prime}{HYPHENS}\n")
 
     # Analyze similarity of the output of executing each compiled program individually for p
     def executions_have_same_outputs(outs):
@@ -261,19 +294,27 @@ def rerun_crc_cmds_for_undeterminism(p_crc, p_prime_crc):
     Returns true if the hashes are consistently different
     Returns false if the output is the exact same each time
     """
-    print(f"\n{hyphens}Re-Executing {p_crc}, {p_prime_crc} 3 times each{hyphens}")
+    print(f"\n{HYPHENS}Re-Executing {p_crc}, {p_prime_crc} 3 times each{HYPHENS}")
     p_exec = get_commands_for_crc_exec(p_crc)[-1]
     p_prime_exec = get_commands_for_crc_exec(p_prime_crc)[-1]
     p_outs = []
     p_prime_outs = []
     for _ in range(3):
-        p_outs.append(subprocess.run(p_exec, capture_output=True, text=True))
-        p_prime_outs.append(subprocess.run(p_prime_exec, capture_output=True, text=True))
+        try:
+            p_outs.append(subprocess.run(p_exec, capture_output=True, text=True, timeout=TIMEOUT))
+        except subprocess.TimeoutExpired:
+            print(f"Command {p_exec} timed out after {TIMEOUT} seconds.")
+            p_outs.append(subprocess.CompletedProcess(p_exec, returncode=-1, stdout="", stderr="Timeout"))
+        try:
+            p_prime_outs.append(subprocess.run(p_prime_exec, capture_output=True, text=True, timeout=TIMEOUT))
+        except subprocess.TimeoutExpired:
+            print(f"Command {p_prime_exec} timed out after {TIMEOUT} seconds.")
+            p_prime_outs.append(subprocess.CompletedProcess(p_prime_exec, returncode=-1, stdout="", stderr="Timeout"))
 
         print(f"p return code: {p_outs[-1].returncode} | p_prime return code: {p_prime_outs[-1].returncode}")
         print(f"p stdout: {p_outs[-1].stdout} | p_prime stdout: {p_prime_outs[-1].stdout}")
         print(f"p stderr: {p_outs[-1].stderr} | p_prime stderr: {p_prime_outs[-1].stderr}")
-    print(f"{hyphens}Finished re-executing {p_crc}, {p_prime_crc}{hyphens}\n")
+    print(f"{HYPHENS}Finished re-executing {p_crc}, {p_prime_crc}{HYPHENS}\n")
 
     # Analyze similarity of the output of executing each compiled program individually for p
     def executions_have_same_hashes(outs):
@@ -353,11 +394,7 @@ def build_globals_pass():
         # Run cmake
         print("\tRunning cmake...")
         cmake_process = subprocess.run(
-            ["cmake", ".."],
-            cwd=build_dir,
-            capture_output=True,
-            text=True,
-            check=True,
+            ["cmake", ".."], cwd=build_dir, capture_output=True, text=True, check=True, timeout=TIMEOUT
         )
         print("\tCMake output:\n", cmake_process.stdout)
         if cmake_process.stderr:
@@ -370,7 +407,7 @@ def build_globals_pass():
             cwd=build_dir,
             capture_output=True,
             text=True,
-            # check=True,
+            timeout=TIMEOUT,
         )
         print("\tMake output:\n", make_process.stdout)
         if make_process.stderr:
@@ -398,7 +435,7 @@ def run_globals_pass(file):
     ]
     print(f"\tRunning command: {' '.join(opt_command)}")
 
-    process = subprocess.run(opt_command, capture_output=True, text=True, check=True)
+    process = subprocess.run(opt_command, capture_output=True, text=True, check=True, timeout=TIMEOUT)
 
     stdout = process.stdout
     print("\tPass output captured:\n", stdout)
@@ -721,21 +758,21 @@ def alive2_tv_check(p, p_prime):
     cmd = f"alive-tv --smt-stats {p} {p_prime}"
     # --version to get llvm version
     print(f"Running: {cmd}")
-    res = subprocess.run(cmd.split(" "), capture_output=True, text=True)
+    res = subprocess.run(cmd.split(" "), capture_output=True, text=True, timeout=TIMEOUT)
     if res.returncode != 0:
         print(f"Unexpected output. Return code = {res.returncode}")
         print(f"stdout: {res.stdout}")
         print(f"stderr: {res.stderr}")
         return None
 
-    summary = [out.strip() for out in res.stdout.split("Summary:\n ")[1].split("\n")]
-    summary = summary[:-1]
+    atv_summary = [out.strip() for out in res.stdout.split("Summary:\n ")[1].split("\n")]
+    atv_summary = atv_summary[:-1]
     # 0: correct, 1: incorrect, 2: failed-to-prove, 3: Alive2 errors
     res = {
-        "correct_transformations": int(summary[0][0]),
-        "incorrect_transformations": int(summary[1][0]),
-        "no_prove_transformations": int(summary[2][0]),
-        "errors": int(summary[3][0]),
+        "correct_transformations": int(atv_summary[0][0]),
+        "incorrect_transformations": int(atv_summary[1][0]),
+        "no_prove_transformations": int(atv_summary[2][0]),
+        "errors": int(atv_summary[3][0]),
     }
     return res
 
@@ -755,6 +792,14 @@ def check_for_compilation_exception(outs, is_crc=False):
                 print(f"\tError: {out[1]}")
 
             print(f"\t{exception_str}")
+            if is_crc:
+                summary["crc_compile_crash"] = True
+            else:
+                summary["regular_compile_crash"] = True
+        if isinstance(out, subprocess.CompletedProcess) and out.stderr == "Timeout":
+            cmds_error = True
+            print("\tMISCOMPILATION STATUS: TIMEOUT")
+            summary["timeout"] = True
 
     return cmds_error
 
@@ -764,6 +809,7 @@ def process_reg_cmd_outs(reg_cmds_outs, p, p_prime):
     p_prime_last_out = reg_cmds_outs["p_prime"][-1]
 
     print("\tMISCOMPILATION STATUS: REGULAR EXECUTED")
+    summary["regular_executed"] = True
     print(f"\tp return code: {p_last_out.returncode} | p_prime return code: {p_prime_last_out.returncode}")
     print(f"\tp stdout: {p_last_out.stdout} | p_prime stdout: {p_prime_last_out.stdout}")
     print(f"\tp stderr: {p_last_out.stderr} | p_prime stderr: {p_prime_last_out.stderr}")
@@ -774,21 +820,24 @@ def process_reg_cmd_outs(reg_cmds_outs, p, p_prime):
         and p_last_out.stderr == p_prime_last_out.stderr
     ):
         print("\tMISCOMPILATION STATUS: REGULAR OUTPUT MATCH.")
+        summary["regular_same_output"] = True
     else:
         is_different_output = rerun_og_cmds_for_undeterminism(p, p_prime)
         if is_different_output:
             print("\tMISCOMPILATION STATUS: REGULAR OUTPUT VARYING (UNDETERMINABLE)")
+            summary["regular_undeterminable_output"] = True
         else:
             print("\tMISCOMPILATION STATUS: REGULAR OUTPUT DIFFERENT.")
+            summary["regular_different_output"] = True
 
 
 def get_injected_crc_code(p_file, p_prime_file):
-    print(f"\n{hyphens}Injecting CRC to P...{hyphens}")
+    print(f"\n{HYPHENS}Injecting CRC to P...{HYPHENS}")
     crc_p = add_crc_to_ir(p_file)
-    print(f"{hyphens}Finished injecting CRC to P...{hyphens}")
-    print(f"\n{hyphens}Injecting CRC to P prime...{hyphens}")
+    print(f"{HYPHENS}Finished injecting CRC to P...{HYPHENS}")
+    print(f"\n{HYPHENS}Injecting CRC to P prime...{HYPHENS}")
     crc_p_prime = add_crc_to_ir(p_prime_file)
-    print(f"{hyphens}Finished injecting CRC to P prime...{hyphens}")
+    print(f"{HYPHENS}Finished injecting CRC to P prime...{HYPHENS}")
 
     return crc_p, crc_p_prime
 
@@ -815,9 +864,11 @@ def process_crc_outs(cmd_outs, p, p_prime):
     # Handle no hash found separately
     if p_hash_i == -1 and p_prime_hash_i == -1:
         print("\tMISCOMPILATION STATUS: CRC NO HASH FOUND.")
+        summary["crc_no_hash_found"] = True
     # Different # of hashes implies varying output. Therefore, this is a miscompilation
     elif p_hash_i == -1 or p_prime_hash_i == -1:
         print("\tMISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
+        summary["crc_logic_failed"] = True
     # Else, both P, P' produced > 0 hashes
     else:
         # Separate normal output and the CRC output
@@ -829,14 +880,18 @@ def process_crc_outs(cmd_outs, p, p_prime):
 
         if len(p_hash) != len(p_prime_hash):
             print("\tMISCOMPILATION STATUS: CRC LOGIC FAILED. Different # of hashes")
+            summary["crc_logic_failed"] = True
         elif p_hash[-1].split(" ")[-1] != p_prime_hash[-1].split(" ")[-1]:
             is_different_output = rerun_crc_cmds_for_undeterminism(p, p_prime)
             if is_different_output:
                 print("\tMISCOMPILATION STATUS: CRC HASHES VARYING. Undeterminable")
+                summary["crc_logic_undeterminable"] = True
             else:
                 print("\tMISCOMPILATION STATUS: CRC LOGIC FAILED. Consistently different hashes")
+                summary["crc_logic_failed"] = True
         else:
             print("\tMISCOMPILATION STATUS: CRC SUCCEEDED. Same hashes")
+            summary["crc_succeeded"] = True
 
 
 # todo: add same output types as runner.py to give more succinct output
@@ -854,35 +909,41 @@ def main():
             except OSError as e:
                 print(f"Error creating directory {p}/runtime: {e}")
 
-    print("\n---------------Running Alive2 Translation Validation---------------")
+    print(f"\n{HYPHENS}Running Alive2 Translation Validation{HYPHENS}")
     # Run Alive2 soundness check
     alive2_res = alive2_tv_check(p_file, p_prime_file)
     if alive2_res is None:
         print("\tALIVE2 EXECUTION ERROR")
+        summary["alive2_error"] = True
     else:
         print(f"\tAlive2 output: {alive2_res}")
         if alive2_res["errors"] != 0:
             print("\tALIVE2 EXECUTION ERROR")
+            summary["alive2_error"] = True
         elif alive2_res["incorrect_transformations"] != 0:
             print("\tALIVE2 INCORRECT TRANSFORMATION")
+            summary["alive2_incorrect"] = True
         elif alive2_res["no_prove_transformations"] != 0:
             print("\tALIVE2 UNDETERMINISTIC TRANSFORMATION")
+            summary["alive2_no_prove"] = True
         elif alive2_res["correct_transformations"] != 0:
             print("\tALIVE2 CORRECT TRANSFORMATION")
+            summary["alive2_correct"] = True
         else:
             print("\tALIVE2 NO TRANSFORMATION")
-    print("---------------Finished Running Alive2---------------\n")
+            summary["alive2_correct"] = True
+    print(f"{HYPHENS}Finished Running Alive2{HYPHENS}\n")
 
     # Run original files
     reg_cmds_outs = execute_original_programs(p_file, p_prime_file)
-    print(f"{hyphens}Evaluating P and P' execution...{hyphens}")
+    print(f"{HYPHENS}Evaluating P and P' execution...{HYPHENS}")
     reg_cmds_compilation_error = check_for_compilation_exception(reg_cmds_outs["p"]) or check_for_compilation_exception(
         reg_cmds_outs["p_prime"]
     )
     # Handle no crash
     if not reg_cmds_compilation_error:
         process_reg_cmd_outs(reg_cmds_outs, p_file, p_prime_file)
-    print(f"{hyphens}Finished evaluating P and P' execution...{hyphens}")
+    print(f"{HYPHENS}Finished evaluating P and P' execution...{HYPHENS}")
 
     # Run modified code with injected CRC
     crc_p, crc_p_prime = get_injected_crc_code(p_file, p_prime_file)
@@ -893,17 +954,23 @@ def main():
     if crc_p is False or crc_p_prime is False:
         crc_cmds_error = True
         print("MISCOMPILATION STATUS: CRC FAILED. unable to inject crc")
+        summary["crc_injection_failure"] = True
     else:
         crc_cmd_outs = execute_crc_programs(crc_p, crc_p_prime)
-        print(f"{hyphens}Evaluating CRC executions...{hyphens}")
+        print(f"{HYPHENS}Evaluating CRC executions...{HYPHENS}")
         crc_cmds_error = check_for_compilation_exception(crc_cmd_outs["p"], True) or check_for_compilation_exception(
             crc_cmd_outs["p_prime"], True
         )
-
         if not crc_cmds_error:
             print("\tMISCOMPILATION STATUS: CRC EXECUTED")
+            summary["crc_executed"] = True
             process_crc_outs(crc_cmd_outs, crc_p, crc_p_prime)
-        print(f"{hyphens}Finished evaluating CRC executions...{hyphens}")
+        print(f"{HYPHENS}Finished evaluating CRC executions...{HYPHENS}")
+
+    json_summary = {k: str(v).lower() for k, v in summary.items()}
+    json_output = json.dumps(json_summary, indent=4)
+    print(f"\n{HYPHENS}Miscompilation Prediction Output{HYPHENS}")
+    print(json_output)
 
 
 if __name__ == "__main__":

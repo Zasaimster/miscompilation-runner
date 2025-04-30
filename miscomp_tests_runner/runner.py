@@ -1,5 +1,6 @@
 import argparse
 import glob
+import json
 import os
 import pprint
 import subprocess
@@ -59,6 +60,26 @@ alive2_incorrect_log = os.path.join(STATS_PATH, "alive2_incorrect.txt")
 alive2_no_prove_log = os.path.join(STATS_PATH, "alive2_no_prove.txt")
 alive2_correct_log = os.path.join(STATS_PATH, "alive2_correct.txt")
 
+log_files_map = {
+    "timed_out": timed_out_log,
+    "regular_executed": regular_executed_log,
+    "regular_compile_crash": regular_compile_crash,
+    "regular_same_output": regular_same_output_log,
+    "regular_different_output": regular_different_output_log,
+    "regular_undeterminable_output": regular_undeterminable_log,
+    "crc_executed": crc_executed_log,
+    "crc_compile_crash": crc_compile_crash_log,
+    "crc_injection_failure": crc_injection_failure,
+    "crc_no_hash_found": crc_no_hash_found,
+    "crc_logic_failed": crc_logic_failed_log,
+    "crc_logic_undeterminable": crc_logic_undeterminable_log,
+    "crc_succeeded": crc_succeeded_log,
+    "alive2_error": alive2_error_log,
+    "alive2_incorrect": alive2_incorrect_log,
+    "alive2_no_prove": alive2_no_prove_log,
+    "alive2_correct": alive2_correct_log,
+}
+
 # List of all log files for easy clearing
 all_log_files = [
     stats_log,
@@ -110,80 +131,39 @@ def write_stats():
 def run_main(id, f1, f2, opt):
     cmd = ["python3", "main.py", f1, f2]
     print(f"Running {id}_{opt}: {' '.join(cmd)}")
-    res = None
-    try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=TIMEOUT)
-    except subprocess.TimeoutExpired:
-        print(f"Command {id}_{opt} timed out after {TIMEOUT} seconds.")
-        # consider timeout an error
-        res = subprocess.CompletedProcess(cmd, returncode=1, stdout="", stderr="Timeout")
-    if res.stderr == "Timeout":
-        with open(timed_out_log, "a") as timed_out:
-            timed_out.write(f"{id}_{opt}\n")
+    res = subprocess.run(cmd, capture_output=True, text=True)
 
     output_filename = os.path.join(OUTPUT_PATH, f"{id}_{opt}.out")
     with open(output_filename, "w") as outfile:
         outfile.write(f"Stdout:\n{res.stdout}\n")
         outfile.write(f"Stderr:\n{res.stderr}\n")
 
+    marker = f"{'=' * 10}Miscompilation Prediction Output{'=' * 10}"
+    log_entry = f"{id}_{opt}"
     stats["total_programs"] += 1
-    if res.stderr == "Timeout":
-        stats["timed_out"] += 1
-        add_id_to_log(timed_out_log, f"{id}_{opt}")
+    o = res.stdout
+    try:
+        marker_start_index = o.find(marker)
+        if marker_start_index == -1:
+            print(f"WARNING: Marker '{marker}' not found for {log_entry}. Output:\n{o[:500]}...")
+            return
 
-    if "ALIVE2 EXECUTION ERROR" in res.stdout:
-        stats["alive2_error"] += 1
-        add_id_to_log(alive2_error_log, f"{id}_{opt}")
-    elif "ALIVE2 INCORRECT TRANSFORMATION" in res.stdout:
-        stats["alive2_incorrect"] += 1
-        add_id_to_log(alive2_incorrect_log, f"{id}_{opt}")
-    elif "ALIVE2 UNDETERMINISTIC TRANSFORMATION" in res.stdout:
-        stats["alive2_no_prove"] += 1
-        add_id_to_log(alive2_no_prove_log, f"{id}_{opt}")
-    elif "ALIVE2 CORRECT TRANSFORMATION" in res.stdout or "ALIVE2 NO TRANSFORMATION" in res.stdout:
-        stats["alive2_correct"] += 1
-        add_id_to_log(alive2_correct_log, f"{id}_{opt}")
+        # Find the start of the JSON data (after the marker and the newline)
+        potential_json_str = o[marker_start_index + len(marker) :]
+        results_dict = json.loads(potential_json_str)
 
-    if "COMPILE EXCEPTION" in res.stdout:
-        stats["regular_compile_crash"] += 1
-        add_id_to_log(regular_compile_crash, f"{id}_{opt}")
-    elif "REGULAR EXECUTED" in res.stdout:
-        stats["regular_executed"] += 1
-        add_id_to_log(regular_executed_log, f"{id}_{opt}")
-
-        if "REGULAR OUTPUT MATCH" in res.stdout:
-            stats["regular_same_output"] += 1
-            add_id_to_log(regular_same_output_log, f"{id}_{opt}")
-        elif "REGULAR OUTPUT DIFFERENT" in res.stdout:
-            stats["regular_different_output"] += 1
-            add_id_to_log(regular_different_output_log, f"{id}_{opt}")
-        elif "REGULAR OUTPUT VARYING (UNDETERMINABLE)" in res.stdout:
-            stats["regular_undeterminable_output"] += 1
-            add_id_to_log(regular_undeterminable_log, f"{id}_{opt}")
-
-    if "COMPILE CRC EXCEPTION" in res.stdout:
-        stats["crc_compile_crash"] += 1
-        add_id_to_log(crc_compile_crash_log, f"{id}_{opt}")
-    elif "CRC EXECUTED" in res.stdout:
-        stats["crc_executed"] += 1
-        add_id_to_log(crc_executed_log, f"{id}_{opt}")
-
-    if "CRC FAILED. unable to inject crc" in res.stdout:
-        stats["crc_injection_failure"] += 1
-        add_id_to_log(crc_injection_failure, f"{id}_{opt}")
-
-    if "CRC NO HASH FOUND" in res.stdout:
-        stats["crc_no_hash_found"] += 1
-        add_id_to_log(crc_no_hash_found, f"{id}_{opt}")
-    elif "CRC HASHES VARYING" in res.stdout:
-        stats["crc_logic_undeterminable"] += 1
-        add_id_to_log(crc_logic_undeterminable_log, f"{id}_{opt}")
-    elif "CRC LOGIC FAILED" in res.stdout:
-        stats["crc_logic_failed"] += 1
-        add_id_to_log(crc_logic_failed_log, f"{id}_{opt}")
-    elif "CRC SUCCEEDED" in res.stdout:
-        stats["crc_succeeded"] += 1
-        add_id_to_log(crc_succeeded_log, f"{id}_{opt}")
+        # Update stats and logs based on JSON content
+        for key, value_str in results_dict.items():
+            if value_str.lower() == "true":
+                # Update stats and log file
+                if key in stats and key in log_files_map:
+                    stats[key] += 1
+                    add_id_to_log(log_files_map[key], log_entry)
+                else:
+                    print(f"WARNING: Key '{key}' not found in stats for {log_entry}.")
+    except json.JSONDecodeError as e:
+        print(f"ERROR: Failed to decode JSON for {log_entry}. Error: {e}")
+        print(f"Problematic JSON string slice: {potential_json_str[:200]}...")
 
     pprint.pprint(stats)
     write_stats()
