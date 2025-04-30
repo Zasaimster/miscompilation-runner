@@ -60,6 +60,7 @@ $ rm -rf build && mkdir build && cd build && cmake .. && make
 # Good to proceed after running ^. Example manual usage below
 $ opt -load-pass-plugin libGlobalSizePass.so -passes=global-size path/to/some_ir_file.ll
 ```
+The pass plugin leverages the LLVM C++ APIs and prints the global variable names, types, and size allocated in bytes.
 
 # Usage
 ## Standalone script
