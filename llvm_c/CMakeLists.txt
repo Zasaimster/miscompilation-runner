@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.13)
 project(GlobalSizePassProject)
 
-# set(CMAKE_CXX_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang++)
-# set(CMAKE_C_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang)
-set(CMAKE_CXX_COMPILER ${LLVM_BIN_DIR}/clang++)
-set(CMAKE_C_COMPILER ${LLVM_BIN_DIR}/clang)
+set(CMAKE_CXX_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang++)
+set(CMAKE_C_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang)
+# set(CMAKE_CXX_COMPILER ${LLVM_BIN_DIR}/clang++)
+# set(CMAKE_C_COMPILER ${LLVM_BIN_DIR}/clang)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Define a CMake variable LT_LLVM_INSTALL_DIR with an empty string as initial value. This is used to specify the directory where the LLVM toolchain is installed.
@@ -29,10 +29,22 @@ message(STATUS "LLVM library dirs: ${LLVM_LIBRARY_DIRS}")
 # Add LLVM include directories and definitions
 include_directories(${LLVM_INCLUDE_DIRS})
 add_definitions(${LLVM_DEFINITIONS})
+# link_directories(${LLVM_LIBRARY_DIRS})
 
 # Define the pass library
 # This creates a shared library (libGlobalSizePass.so)
 add_library(GlobalSizePass MODULE GlobalSizePass.cpp)
 
+# Link the pass library against the necessary LLVM components
+# Removed Passes as it's more related to legacy PM structure.
+# llvm_map_components_to_libnames(llvm_libs
+#     Core
+#     Support
+#     Analysis      # Analysis framework
+#     IRReader      # For parsing textual IR
+#     AsmParser     # For parsing textual IR
+#     BitReader     # For parsing bitcode
+#     TransformUtils
+# )
 
 target_link_libraries(GlobalSizePass PRIVATE ${llvm_libs})
