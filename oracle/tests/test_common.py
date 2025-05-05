@@ -3,7 +3,6 @@
 import pytest
 from unittest.mock import patch, MagicMock, mock_open
 import subprocess
-import os
 
 import common
 

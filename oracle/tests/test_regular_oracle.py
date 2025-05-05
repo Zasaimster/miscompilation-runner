@@ -43,21 +43,21 @@ MOCK_EXEC_PROGRAMS_RESULT = {"p": MOCK_P_RUN_RESULTS, "p_prime": MOCK_P_PRIME_RU
 
 
 # rerun_cmds_for_undeterminism() tests
-@patch("oracles.regular.subprocess.run")
-@patch("oracles.regular.get_exec_commands")
-def test_rerun_consistent_outputs(mock_get_exec_commands, mock_subprocess_run):
-    """Test rerun when both p and p_prime outputs are consistent across runs."""
-    mock_get_exec_commands.side_effect = [MOCK_P_CMDS, MOCK_P_PRIME_CMDS]
-    # Simulate 3 identical runs for p, then 3 identical runs for p_prime
-    p_res = create_mock_subprocess_result(stdout="p_out", returncode=0)
-    pp_res = create_mock_subprocess_result(stdout="pp_out", returncode=0)
-    mock_subprocess_run.side_effect = [p_res, pp_res, p_res, pp_res, p_res, pp_res]
+@patch("oracles.regular.reexecute_cmds")
+def test_rerun_consistent_outputs(mock_reexecute_cmds):
+    """Test consistent outputs for regular oracle"""
+
+    # Setup consistent mock subprocess results
+    p_res = create_mock_subprocess_result(stdout="p out", stderr="p err")
+    pp_res = create_mock_subprocess_result(stdout="pp out", stderr="pp err")
+
+    mock_p_outs = [p_res] * 3
+    mock_p_prime_outs = [pp_res] * 3
+    mock_reexecute_cmds.return_value = (mock_p_outs, mock_p_prime_outs)
 
     is_different = regular.rerun_cmds_for_undeterminism(MOCK_P_FILE, MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS)
 
-    assert mock_subprocess_run.call_count == 6
-    assert mock_subprocess_run.call_args_list[0][0][0] == MOCK_P_CMDS[-1]  # Check first call uses p_exec cmd
-    assert mock_subprocess_run.call_args_list[3][0][0] == MOCK_P_PRIME_CMDS[-1]  # Check 4th call uses p_prime_exec cmd
+    mock_reexecute_cmds.assert_called_once_with(MOCK_P_FILE, MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS)
     assert is_different is False
 
 

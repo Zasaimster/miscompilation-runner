@@ -15,7 +15,7 @@ eval_output=$(python3 main.py "$file1" "$file2" | "$parser_script")
 eval "$eval_output"
 echo "Variable assignments evaluated."
 
-echo "--- Results ---"
+echo Results"
 echo "Alive2 Error Status:                    $alive2_error"
 echo "Alive2 Incorrect Status:                $alive2_incorrect"
 echo "Alive2 No Prove Status:                 $alive2_no_prove"
