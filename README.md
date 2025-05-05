@@ -9,6 +9,7 @@ This tool was tested and developed with Python 3.10
 
 ### Python libraries
 - difflib
+- pytest
 
 ### Other dependencies
 Install [CMake](https://cmake.org/download/)

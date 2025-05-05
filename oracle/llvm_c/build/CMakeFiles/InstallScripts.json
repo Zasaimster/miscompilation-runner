@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/saim/miscompilation-runner/llvm_c/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
