@@ -16,7 +16,7 @@ struct GlobalSizePass : public PassInfoMixin<GlobalSizePass> {
         const DataLayout &DL = M.getDataLayout();
 
         // Print a header
-        outs() << "--- Global Variable Sizes in Module (NPM Pass) ---\n";
+        outs() << "Global Variable Sizes in Module (NPM Pass)\n";
 
         bool foundGlobals = false;
         for (GlobalVariable &GV : M.globals()) {

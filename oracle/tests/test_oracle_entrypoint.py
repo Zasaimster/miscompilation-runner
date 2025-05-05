@@ -4,7 +4,6 @@ import sys
 import oracle
 
 
-# Helper function to run parse_args with mocked argv
 def run_parser(monkeypatch, args_list):
     """Mocks sys.argv and runs parse_args."""
     # Prepend a dummy script name, as argparse expects it
@@ -13,7 +12,6 @@ def run_parser(monkeypatch, args_list):
     return oracle.parse_args()
 
 
-# --- Tests for Successful Parsing ---
 def test_parse_args_valid_required_only(monkeypatch, tmp_path):
     """Test parsing with only the required arguments."""
     # Create dummy input files

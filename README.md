@@ -8,8 +8,8 @@ All of these steps are necessary to run the core script.
 This tool was tested and developed with Python 3.10
 
 ### Python libraries
-- difflib
 - pytest
+- difflib
 
 ### Other dependencies
 Install [CMake](https://cmake.org/download/)
@@ -65,9 +65,36 @@ The pass plugin leverages the LLVM C++ APIs and prints the global variable names
 
 # Usage
 ## Standalone script
-If you have two `.ll` files you would like to test, you can run `python3 main.py path/to/p.ll path/to/p_prime.ll`.
+If you have two `.ll` files you would like to test, you can run `python3 oracle.py -i path/to/p.ll path/to/p_prime.ll -o path/to/output/json`
 
-TODO: discuss output and how to process manually
+This will run the script with all available oracles and store the output in `path/to/output/json`. An example successful output may look something like:
+
+```json
+{
+    "timeout": "false",
+    "regular_compile_crash": "false",
+    "regular_execution_crash": "false",
+    "regular_undefined_execution": "false",
+    "regular_executed": "true",
+    "regular_different_output": "false",
+    "regular_undeterminable_output": "false",
+    "regular_same_output": "true",
+    "alive2_error": "false",
+    "alive2_incorrect": "false",
+    "alive2_no_prove": "false",
+    "alive2_correct": "true",
+    "crc_compile_crash": "false",
+    "crc_execution_crash": "false",
+    "crc_undefined_execution": "false",
+    "crc_executed": "true",
+    "crc_no_hash_found": "false",
+    "crc_logic_failed": "false",
+    "crc_logic_undeterminable": "false",
+    "crc_succeeded": "true"
+}
+```
+Fields of interest to indicate successful compilation and execution: `"regular_executed": "true"`, `"alive2_correct": "true"`, and `"crc_executed": "true"`. The other fields are important to log any compilation issues, execution errors, false positives, and true positives.
+
 
 ### Functionality
 - Runs Alive2 translation verification, `alive-tv`, on both files
@@ -116,3 +143,6 @@ The runner script store all logs of `main.py` in `miscomp_tests_runner/test_outs
 
 [`scripts/sanitizer_tests.py`](scripts/sanitizer_tests.py)
 - This scripts runs `fsanitize` with different flags on all files in `miscomp_tests_renamed/`
+
+## Tests
+- After installing `pytest`, run `pytest` or `python3 -m pytest` in `oracle/` to run the test suite. 

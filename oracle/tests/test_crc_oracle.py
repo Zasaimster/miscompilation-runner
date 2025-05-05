@@ -106,7 +106,6 @@ Global Variable Sizes in Module 'test.ll':
 @var1: Type=i32, Size=4
 @var_ptr: Type=ptr, Size=8
 @var2: Type=[10 x i8], Size=10
------ User Function Info -----
 More stuff...
     """
 
@@ -143,7 +142,6 @@ def test_run_globals_pass_no_user_globals(mock_run):
     mock_stdout = """
     Global Variable Sizes in Module 'test.ll':
     No user-defined global variables found.
-    ----- User Function Info -----
     """
     mock_run.return_value = create_mock_subprocess_result(stdout=mock_stdout)
 
@@ -349,60 +347,50 @@ def test_add_crc_to_ir_structure(
     assert "\nreplaced_main" in written_content
 
 
-# --- rerun_cmds_for_undeterminism() tests
-@patch("oracles.crc.subprocess.run")
-@patch("oracles.crc.get_exec_commands")
-def test_rerun_crc_consistent_hashes(mock_get_exec_commands, mock_subprocess_run):
+# rerun_cmds_for_undeterminism() tests
+@patch("oracles.crc.reexecute_cmds")
+def test_rerun_crc_consistent_hashes(mock_reexecute_cmds):
     """Test rerun CRC when hashes are consistent."""
-    mock_p_exec_cmd = ["./crc_p_exec"]
-    mock_pp_exec_cmd = ["./crc_pp_exec"]
-    # Need to ensure is_crc=True is handled correctly by the mocked function if it matters
-    mock_get_exec_commands.side_effect = (
-        lambda file, bins, is_crc=False: [None, None, mock_p_exec_cmd]
-        if file == MOCK_P_FILE
-        else [None, None, mock_pp_exec_cmd]
-    )
 
-    p_stdout = "Some output\n...checksum after hashing is ABC\nFinal line"
+    p_stdout = "Some output\n...checksum after hashing is ABC\n"
     pp_stdout = "Other output\n...checksum after hashing is DEF\n"
+
     p_res = create_mock_subprocess_result(stdout=p_stdout, returncode=0)
     pp_res = create_mock_subprocess_result(stdout=pp_stdout, returncode=0)
-    mock_subprocess_run.side_effect = [p_res, pp_res] * 3
+
+    mock_p_outs = [p_res] * 3
+    mock_p_prime_outs = [pp_res] * 3
+    mock_reexecute_cmds.return_value = (mock_p_outs, mock_p_prime_outs)
 
     is_different = crc.rerun_cmds_for_undeterminism(MOCK_P_FILE, MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS)
 
-    assert mock_subprocess_run.call_count == 6
-    # Check get_exec_commands was called with is_crc=True
-    mock_get_exec_commands.assert_any_call(MOCK_P_FILE, MOCK_BINARY_EXECS, is_crc=True)
-    mock_get_exec_commands.assert_any_call(MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS, is_crc=True)
+    mock_reexecute_cmds.assert_called_once_with(MOCK_P_FILE, MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS, is_crc=True)
     assert is_different is False
 
 
-@patch("oracles.crc.subprocess.run")
-@patch("oracles.crc.get_exec_commands")  # Assuming 'import common' in crc.py
-def test_rerun_crc_inconsistent_hashes_p(mock_get_exec_commands, mock_subprocess_run):
+@patch("oracles.crc.reexecute_cmds")
+def test_rerun_crc_inconsistent_hashes_p(mock_reexecute_cmds):
     """Test rerun CRC when p's hashes vary."""
-    mock_p_exec_cmd = ["./crc_p_exec"]
-    mock_pp_exec_cmd = ["./crc_pp_exec"]
-    mock_get_exec_commands.side_effect = (
-        lambda file, bins, is_crc=False: [None, None, mock_p_exec_cmd]
-        if file == MOCK_P_FILE
-        else [None, None, mock_pp_exec_cmd]
-    )
+    p_stdout_run1 = "Output run 1\n...checksum after hashing is ABC\n"
+    p_stdout_run2 = "Output run 2\n...checksum after hashing is XYZ\n"
+    p_stdout_run3 = "Output run 3\n...checksum after hashing is ABC\n"
 
-    p_stdout1 = "Output\n...checksum after hashing is ABC\n"
-    p_stdout2_diff = "Output\n...checksum after hashing is XYZ\n"
-    pp_stdout = "Other output\n...checksum after hashing is DEF\n"
-    p_res1 = create_mock_subprocess_result(stdout=p_stdout1)
-    p_res2 = create_mock_subprocess_result(stdout=p_stdout2_diff)
-    pp_res = create_mock_subprocess_result(stdout=pp_stdout)
-    mock_subprocess_run.side_effect = [p_res1, p_res2, p_res1] + [pp_res] * 3
+    pp_stdout_consistent = "Other output\n...checksum after hashing is DEF\nEnd PP"
 
+    p_res1 = create_mock_subprocess_result(stdout=p_stdout_run1, returncode=0)
+    p_res2 = create_mock_subprocess_result(stdout=p_stdout_run2, returncode=0)
+    p_res3 = create_mock_subprocess_result(stdout=p_stdout_run3, returncode=0)
+
+    pp_res = create_mock_subprocess_result(stdout=pp_stdout_consistent, returncode=0)
+
+    mock_p_outs = [p_res1, p_res2, p_res3]
+    mock_p_prime_outs = [pp_res] * 3
+    mock_reexecute_cmds.return_value = (mock_p_outs, mock_p_prime_outs)
+
+    # Call the function under test
     is_different = crc.rerun_cmds_for_undeterminism(MOCK_P_FILE, MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS)
 
-    assert mock_subprocess_run.call_count == 6
-    mock_get_exec_commands.assert_any_call(MOCK_P_FILE, MOCK_BINARY_EXECS, is_crc=True)
-    mock_get_exec_commands.assert_any_call(MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS, is_crc=True)
+    mock_reexecute_cmds.assert_called_once_with(MOCK_P_FILE, MOCK_P_PRIME_FILE, MOCK_BINARY_EXECS, is_crc=True)
     assert is_different is True
 
 

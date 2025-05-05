@@ -4,7 +4,15 @@ import shutil
 import subprocess
 import sys
 
-from common import HYPHENS, TIMEOUT, check_for_compilation_exception, get_code, get_exec_commands, run_cmds
+from common import (
+    HYPHENS,
+    TIMEOUT,
+    check_for_compilation_exception,
+    get_code,
+    get_exec_commands,
+    reexecute_cmds,
+    run_cmds,
+)
 from .crc_templates import (
     global_varname_code,
     varname_template,
@@ -427,27 +435,8 @@ def rerun_cmds_for_undeterminism(p, p_prime, binary_execs):
     Returns true if the hashes are consistently different
     Returns false if the output is the exact same each time
     """
-    print(f"\n{HYPHENS}Re-Executing {p}, {p_prime} 3 times each{HYPHENS}")
-    p_exec = get_exec_commands(p, binary_execs, is_crc=True)[-1]
-    p_prime_exec = get_exec_commands(p_prime, binary_execs, is_crc=True)[-1]
-    p_outs = []
-    p_prime_outs = []
-    for _ in range(3):
-        try:
-            p_outs.append(subprocess.run(p_exec, capture_output=True, text=True, timeout=TIMEOUT))
-        except subprocess.TimeoutExpired:
-            print(f"Command {p_exec} timed out after {TIMEOUT} seconds.")
-            p_outs.append(subprocess.CompletedProcess(p_exec, returncode=-1, stdout="", stderr="Timeout"))
-        try:
-            p_prime_outs.append(subprocess.run(p_prime_exec, capture_output=True, text=True, timeout=TIMEOUT))
-        except subprocess.TimeoutExpired:
-            print(f"Command {p_prime_exec} timed out after {TIMEOUT} seconds.")
-            p_prime_outs.append(subprocess.CompletedProcess(p_prime_exec, returncode=-1, stdout="", stderr="Timeout"))
-
-        print(f"p return code: {p_outs[-1].returncode} | p_prime return code: {p_prime_outs[-1].returncode}")
-        print(f"p stdout: {p_outs[-1].stdout} | p_prime stdout: {p_prime_outs[-1].stdout}")
-        print(f"p stderr: {p_outs[-1].stderr} | p_prime stderr: {p_prime_outs[-1].stderr}")
-    print(f"{HYPHENS}Finished re-executing {p}, {p_prime}{HYPHENS}\n")
+    # Re-execute P, P's executables
+    p_outs, p_prime_outs = reexecute_cmds(p, p_prime, binary_execs, is_crc=True)
 
     # Analyze similarity of the output of executing each compiled program individually for p
     def executions_have_same_hashes(outs):

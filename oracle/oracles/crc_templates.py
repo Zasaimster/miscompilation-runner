@@ -113,7 +113,7 @@ new_main_function_code = Template("""
 \ndefine i32 @main() {
 entry:
   $old_main_call
-  ; --- Hash the global variables ---
+  ; Hash the global variables
   call void @_compute_globals_crc()
   ret i32 0
 }\n
