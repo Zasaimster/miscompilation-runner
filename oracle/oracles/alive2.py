@@ -2,13 +2,6 @@ import subprocess
 
 from common import TIMEOUT, HYPHENS
 
-summary = {
-    "alive2_error": False,
-    "alive2_incorrect": False,
-    "alive2_no_prove": False,
-    "alive2_correct": False,
-}
-
 
 def alive2_tv_check(p, p_prime, binary_execs):
     """
@@ -29,19 +22,31 @@ def alive2_tv_check(p, p_prime, binary_execs):
         print(f"Error running Alive2: {e}")
         return None
 
-    atv_summary = [out.strip() for out in res.stdout.split("Summary:\n ")[1].split("\n")]
-    atv_summary = atv_summary[:-1]
-    # 0: correct, 1: incorrect, 2: failed-to-prove, 3: Alive2 errors
-    res = {
-        "correct_transformations": int(atv_summary[0][0]),
-        "incorrect_transformations": int(atv_summary[1][0]),
-        "no_prove_transformations": int(atv_summary[2][0]),
-        "errors": int(atv_summary[3][0]),
-    }
+    try:
+        atv_summary = [out.strip() for out in res.stdout.split("Summary:\n ")[1].split("\n")]
+        atv_summary = atv_summary[:-1]
+        # 0: correct, 1: incorrect, 2: failed-to-prove, 3: Alive2 errors
+        res = {
+            "correct_transformations": int(atv_summary[0][0]),
+            "incorrect_transformations": int(atv_summary[1][0]),
+            "no_prove_transformations": int(atv_summary[2][0]),
+            "errors": int(atv_summary[3][0]),
+        }
+    except Exception as e:
+        print(f"Error parsing Alive2 output: {e}")
+        print(f"Unexpected alive-tv output: {res.stdout}")
+        return None
+
     return res
 
 
 def run(p, p_prime, binary_execs):
+    summary = {
+        "alive2_error": False,
+        "alive2_incorrect": False,
+        "alive2_no_prove": False,
+        "alive2_correct": False,
+    }
     # Run Alive2 soundness check
     print(f"\n{HYPHENS}Running Alive2 Translation Validation{HYPHENS}")
     alive2_res = alive2_tv_check(p, p_prime, binary_execs)

@@ -108,7 +108,7 @@ def run_globals_pass(file):
             varsize = varsize.split("=")[1].strip()
             if vartype != "ptr":
                 global_sizes[varname] = {"var_type": vartype, "size": varsize}
-
+    print(f"\tFound global variables: {global_sizes}")
     return global_sizes
 
 
@@ -140,12 +140,12 @@ def get_default_return_value(return_type):
     return_type = return_type.strip()
     if return_type == "void":
         return "void"
+    elif return_type.endswith("*"):  # Pointer types
+        return f"{return_type} null"
     elif return_type.startswith("i"):  # Integer types
         return f"{return_type} 0"
     elif return_type in ["float", "double", "fp128", "half", "bfloat"]:  # Floating point
         return f"{return_type} 0.0"
-    elif return_type.endswith("*"):  # Pointer types
-        return f"{return_type} null"
     # ? add more complex types if needed
     else:  # unknown type
         return f"{return_type} undef"
@@ -162,6 +162,7 @@ def replace_abort_exit_calls(crc_code):
     """
     new_crc_code = []
     skip_next_line = False
+    current_function_return_type = None
     i = 0
     while i < len(crc_code):
         # skip this line because it was 'unreachable'
@@ -383,8 +384,11 @@ def add_crc_to_ir(p):
     crc_code = replace_main_function(crc_code)
 
     # print(f"\n\n{'\n'.join(crc_code)}")
+
     # Write new file
-    new_file = p.split(".")[0] + "_modified_crc.ll"
+    file_stem, file_ext = os.path.splitext(os.path.basename(p))
+    new_filename = f"{file_stem}_modified_crc{file_ext}"
+    new_file = os.path.join(os.path.dirname(p), new_filename)
     with open(new_file, "w") as f:
         f.write("\n".join(crc_code))
 
@@ -470,10 +474,12 @@ def rerun_cmds_for_undeterminism(p, p_prime, binary_execs):
             for i in range(len(last_hash)):
                 if last_hash[i] != curr_hash[i]:
                     return True
+        # Everything was consistent
         return False
 
-    # False if p and p' have any difference in their own hashes, True if everything is the same
-    return executions_have_same_hashes(p_outs) and executions_have_same_hashes(p_prime_outs)
+    # True if p and p' have any difference in their own hashes, false if everything is the same
+    # is_different value
+    return executions_have_same_hashes(p_outs) or executions_have_same_hashes(p_prime_outs)
 
 
 def process_outputs(cmd_outs, p, p_prime, summary, binary_execs, mark_diff_numhashes_undeterminable):
@@ -535,6 +541,7 @@ def process_outputs(cmd_outs, p, p_prime, summary, binary_execs, mark_diff_numha
 
 
 def run(p, p_prime, binary_execs, mark_diff_numhashes_undeterminable):
+    print(p, p_prime)
     summary = {
         "timeout": False,
         "crc_compile_crash": False,

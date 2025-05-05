@@ -20,8 +20,8 @@ def exec_programs(p, p_prime, binary_execs):
 def rerun_cmds_for_undeterminism(p, p_prime, binary_execs):
     """
     Re-runs original cmds for p and p_prime 3x.
-    Returns true if the output is consistently different (undeterminable if there is a miscompilation).
-    Returns false if the output is the exact same each time.
+    Returns true if the output is consistently different (undeterminable).
+    Returns false if the individual outputs of p/p' are always the same.
     """
     print(f"\n{HYPHENS}Re-Executing {p}, {p_prime} 3 times each{HYPHENS}")
     p_exec = get_exec_commands(p, binary_execs)[-1]
@@ -46,7 +46,7 @@ def rerun_cmds_for_undeterminism(p, p_prime, binary_execs):
     print(f"{HYPHENS}Finished re-executing {p}, {p_prime}{HYPHENS}\n")
 
     # Analyze similarity of the output of executing each compiled program individually for p
-    def executions_have_same_outputs(outs):
+    def executions_have_different_outputs(outs):
         for i in range(1, 3):
             last_exec_output = outs[i - 1]
             curr_output = outs[i]
@@ -55,11 +55,21 @@ def rerun_cmds_for_undeterminism(p, p_prime, binary_execs):
                 or last_exec_output.stdout != curr_output.stdout
                 or last_exec_output.stderr != curr_output.stderr
             ):
+                print(
+                    last_exec_output.returncode,
+                    curr_output.returncode,
+                    last_exec_output.returncode != curr_output.returncode,
+                )
+                print(last_exec_output.stdout, curr_output.stdout, last_exec_output.stdout != curr_output.stdout)
+                print(last_exec_output.stderr, curr_output.stderr, last_exec_output.stderr != curr_output.stderr)
                 return True
+
+        # Everything was consistent
         return False
 
-    # False if p and p' have any differences in executions, True if everything is the same
-    return executions_have_same_outputs(p_outs) and executions_have_same_outputs(p_prime_outs)
+    # True if p and p' have any differences in executions, False if everything is the same
+    # is_different value
+    return executions_have_different_outputs(p_outs) or executions_have_different_outputs(p_prime_outs)
 
 
 def process_outputs(reg_cmds_outs, p, p_prime, summary, binary_execs):

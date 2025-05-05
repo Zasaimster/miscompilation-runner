@@ -11,27 +11,6 @@ from oracles import (
     crc as crc_oracle,
 )
 
-# "alive2_error": False,
-# "alive2_incorrect": False,
-# "alive2_no_prove": False,
-# "alive2_correct": False,
-# "timeout": False,
-# "regular_compile_crash": False,
-# "regular_execution_crash": False,
-# "regular_undefined_execution": False,
-# "regular_executed": False,
-# "regular_different_output": False,
-# "regular_undeterminable_output": False,
-# "regular_same_output": False,
-# "crc_compile_crash": False,
-# "crc_execution_crash": False,
-# "crc_undefined_execution": False,
-# "crc_executed": False,
-# "crc_no_hash_found": False,
-# "crc_logic_failed": False,
-# "crc_logic_undeterminable": False,
-# "crc_succeeded": False
-
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -206,12 +185,3 @@ def main():
 if __name__ == "__main__":
     print(f"Command: {' '.join(sys.argv)}")
     main()
-
-# test cases
-# - all parameters
-# - invalid executable paths
-# - not a real input file
-# - invalid IR files
-# - all combos of oracles (including no oracle)
-# - try to replicate how the code failed (no relative paths, local path, absolute path(?))
-# - != 2 input files
