@@ -35,11 +35,8 @@ echo "CRC Logic Undeterminable Status:        $crc_logic_undeterminable"
 echo "CRC Succeeded Status:                   $crc_succeeded"
 
 # Example conditional logic
-# if [[ "$crc_succeeded" == "true" && "$regular_same_output" == "true" ]]; then
-#     echo "Verification successful based on CRC and regular output."
-# elif [[ "$alive2_incorrect" == "true" ]]; then
-#     echo "Warning: Alive2 reported incorrect transformation for $file1 -> $file2"
-# fi
+# Should not solely rely on regular_different_output. Alive2 and CRC can show that it's valid or undeterminable
+# which should indicate that it isn't a miscompilation
 
 echo -e "\nRun script finished."
 exit 0

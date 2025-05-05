@@ -1,4 +1,4 @@
-; THIS FILE GENERALLY DESCRIBES WHAT IS INJECTED BY main.py
+; THIS FILE GENERALLY DESCRIBES WHAT IS INJECTED BY oracles/crc.py
 
 ; Format string for "Hello, world!" (15 characters: includes newline and null terminator)
 @.str = private unnamed_addr constant [15 x i8] c"Hello, world!\0A\00", align 1
