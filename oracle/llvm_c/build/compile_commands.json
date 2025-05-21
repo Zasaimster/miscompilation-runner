@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/saim/miscompilation-runner/llvm_c/build",
-  "command": "/usr/bin/c++ -DGlobalSizePass_EXPORTS -I/home/saim/llvm-project/llvm/include -I/home/saim/llvm-project/build/include -fPIC   -D_GNU_SOURCE -D_DEBUG -D_GLIBCXX_ASSERTIONS -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -o CMakeFiles/GlobalSizePass.dir/GlobalSizePass.cpp.o -c /home/saim/miscompilation-runner/llvm_c/GlobalSizePass.cpp",
-  "file": "/home/saim/miscompilation-runner/llvm_c/GlobalSizePass.cpp",
-  "output": "CMakeFiles/GlobalSizePass.dir/GlobalSizePass.cpp.o"
-}
-]

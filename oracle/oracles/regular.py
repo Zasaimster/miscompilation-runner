@@ -1,5 +1,4 @@
-import subprocess
-from common import HYPHENS, TIMEOUT, check_for_compilation_exception, get_exec_commands, reexecute_cmds, run_cmds
+from common import HYPHENS, check_for_compilation_exception, get_exec_commands, reexecute_cmds, run_cmds
 
 
 def exec_programs(p, p_prime, binary_execs):

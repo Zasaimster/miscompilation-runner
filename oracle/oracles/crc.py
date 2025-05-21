@@ -23,8 +23,11 @@ from .crc_templates import (
     new_main_function_code,
 )
 
-PASS_DIR = "llvm_c"
+SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PASS_LOCAL_DIR = "llvm_c"
 LIB_NAME = "libGlobalSizePass.so"
+PASS_DIR = os.path.join(SCRIPT_DIR, PASS_LOCAL_DIR)
+RUNTIME_DIR = "oracle_runtime"
 
 
 def build_globals_pass():
@@ -348,8 +351,20 @@ def add_crc_to_ir(p):
         # Find global variables and mark latest index
         if re.match(r"^@([a-zA-Z_.][a-zA-Z0-9_.]*)\s*=", line):
             last_global_var_index = i
-    # Inject code after top-level info if there are no global vars
-    last_global_var_index = max(last_global_var_index, 4)
+
+    # Handle no global variables
+    if last_global_var_index == -1:
+        # Inject code after top-level info (target triple definition)
+        for i, line in enumerate(code_arr):
+            if line.strip().startswith("target triple"):
+                last_global_var_index = i
+                break
+        # If no target triple, inject at the very beginning
+        if last_global_var_index == -1:
+            code_arr = [""] + code_arr
+            last_global_var_index = 0
+
+    print(last_global_var_index)
 
     # this should never be the case, but just to be safe
     if last_global_var_index == len(code_arr) - 1:
@@ -397,6 +412,7 @@ def add_crc_to_ir(p):
     file_stem, file_ext = os.path.splitext(os.path.basename(p))
     new_filename = f"{file_stem}_modified_crc{file_ext}"
     new_file = os.path.join(os.path.dirname(p), new_filename)
+    # new_file = os.path.join(RUNTIME_DIR, new_filename) we want to write the modified crc IR file to the same location as the input so it doesn't get deleted in the runtime directory
     with open(new_file, "w") as f:
         f.write("\n".join(crc_code))
 

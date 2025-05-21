@@ -6,7 +6,8 @@ import subprocess
 TIMEOUT = 30  # seconds
 HYPHENS = "=" * 10
 RUNTIME_DIR = "oracle_runtime"
-CRC_HELPER_OBJ_FILE = "crc/csmith_crc_minimal.o"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CRC_HELPER_OBJ_FILE = os.path.join(SCRIPT_DIR, "crc/csmith_crc_minimal.o")
 
 
 def get_code(filename):
@@ -19,8 +20,10 @@ def get_code(filename):
 def get_exec_commands(file, binary_execs, is_crc=False):
     obj_cmd_flags = "-fsanitize=undefined"
     if is_crc:
+        # link_cmd_flags = f"{CRC_HELPER_OBJ_FILE} examples/P4.o -fsanitize=undefined"
         link_cmd_flags = f"{CRC_HELPER_OBJ_FILE} -fsanitize=undefined"
     else:
+        # link_cmd_flags = "examples/P4.o -fsanitize=undefined"
         link_cmd_flags = "-fsanitize=undefined"
 
     file_dir = os.path.dirname(file)
@@ -51,6 +54,8 @@ def run_cmds(cmds):
         try:
             print(f"\tRunning: {' '.join(cmd)}")
             out = subprocess.run(cmd, capture_output=True, text=True, timeout=TIMEOUT)
+            print(f"\tstdout: {out.stdout}")
+            print(f"\tstderr: {out.stderr}")
             print(f"\tReturn code: {out.returncode}")
             res.append(out)
             if out.returncode != 0:
@@ -72,13 +77,13 @@ def check_for_compilation_exception(outs, summary, is_crc=False):
     # -6 is the normal abort signal. We don't consider this an error since we expect to see aborts during execution occasionally
     safe_termination_codes = [-6]
     if is_crc:
-        compile_exception_str = "MISCOMPILATION STATUS: COMPILE CRC EXCEPTION FOR P"
-        execution_exception_str = "MISCOMPILATION STATUS: EXECUTE CRC EXCEPTION FOR P"
-        sanitizer_str = "MISCOMPILATION STATUS: CRC SANITIZER EXCEPTION FOR P"
+        compile_exception_str = "MISCOMPILATION STATUS: COMPILE CRC EXCEPTION"
+        execution_exception_str = "MISCOMPILATION STATUS: EXECUTE CRC EXCEPTION"
+        sanitizer_str = "MISCOMPILATION STATUS: CRC SANITIZER EXCEPTION"
     else:
-        compile_exception_str = "MISCOMPILATION STATUS: COMPILE EXCEPTION FOR P"
-        execution_exception_str = "MISCOMPILATION STATUS: EXECUTE EXCEPTION FOR P"
-        sanitizer_str = "MISCOMPILATION STATUS: SANITIZER EXCEPTION FOR P"
+        compile_exception_str = "MISCOMPILATION STATUS: COMPILE EXCEPTION"
+        execution_exception_str = "MISCOMPILATION STATUS: EXECUTE EXCEPTION"
+        sanitizer_str = "MISCOMPILATION STATUS: SANITIZER EXCEPTION"
 
     cmds_error = False
     saniter_exception = False
@@ -97,7 +102,7 @@ def check_for_compilation_exception(outs, summary, is_crc=False):
         # 3. returncode < 0 which indicates a linux raised exception
         if (
             isinstance(out, tuple)
-            or out.stderr != ""
+            or (out.stderr != "" and not out.stderr.startswith("warning"))
             or (out.returncode < 0 and out.returncode not in safe_termination_codes)
         ):
             cmds_error = True
