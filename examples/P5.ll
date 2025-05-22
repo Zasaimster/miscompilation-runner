@@ -1,81 +1,49 @@
-@counter = common global i32 0, align 4
-@control_val = common global i32 0, align 4
-@selector_flag = common global i1 false, align 1 ; Decides which internal modifier to call
-
-; Internal helper function A: sets @control_val to 1
-define internal void @internal_modifier_A() {
-entry:
-  store i32 1, i32* @control_val, align 4
-  ret void
-}
-
-; Internal helper function B: sets @control_val to 0
-define internal void @internal_modifier_B() {
-entry:
-  store i32 0, i32* @control_val, align 4
-  ret void
-}
-
-; Recursive function
-define void @recursive_worker(i32 %n, i32 %current_depth) {
-entry:
-  ; Base case: if n <= 0, stop recursion.
-  %n_is_positive = icmp sgt i32 %n, 0
-  br i1 %n_is_positive, label %recursive_step, label %base_case
-
-recursive_step:
-  ; Increment the global counter.
-  %old_counter = load i32, i32* @counter, align 4
-  %new_counter = add i32 %old_counter, 1
-  store i32 %new_counter, i32* @counter, align 4
-
-  ; Flip the @selector_flag based on depth (e.g., even/odd)
-  ; This makes the choice of modifier alternate or change in a non-trivial way.
-  %remainder = srem i32 %current_depth, 2
-  %is_depth_even = icmp eq i32 %remainder, 0
-  store i1 %is_depth_even, i1* @selector_flag, align 1
-
-  ; Load the selector flag and call the appropriate internal modifier.
-  %chosen_selector = load i1, i1* @selector_flag, align 1
-  br i1 %chosen_selector, label %call_modifier_A, label %call_modifier_B
-
-call_modifier_A:
-  call void @internal_modifier_A()
-  br label %after_modifier_call
-
-call_modifier_B:
-  call void @internal_modifier_B()
-  br label %after_modifier_call
-
-after_modifier_call:
-  ; Load from @control_val. Its value depends on which modifier was called.
-  %loaded_control_val = load i32, i32* @control_val, align 4
-
-  ; Modify recursion based on the loaded control value.
-  %is_control_active = icmp ne i32 %loaded_control_val, 0 ; True if @internal_modifier_A was called
-  %decrement_amount = select i1 %is_control_active, i32 2, i32 1 ; Step by 2 if A, else 1
-
-  %next_n = sub i32 %n, %decrement_amount
-  %next_depth = add i32 %current_depth, 1
-  call void @recursive_worker(i32 %next_n, i32 %next_depth)
-  br label %return_block
-
-base_case:
-  br label %return_block
-
-return_block:
-  ret void
-}
+@result = common global i32 0, align 4
+@mode_switch = common global i32 0, align 4 ; This will be accessed with volatile operations
 
 define i32 @main() {
-  ; Initialize globals
-  store i32 0, i32* @counter, align 4
-  store i32 0, i32* @control_val, align 4
-  store i1 false, i1* @selector_flag, align 1
+entry:
+  store i32 0, i32* @result, align 4
+  store volatile i32 0, i32* @mode_switch, align 4 ; Initialize volatile variable
 
-  ; Start the recursion
-  call void @recursive_worker(i32 5, i32 0) ; Initial n=5, initial depth=0
+  %i = alloca i32, align 4
+  store i32 0, i32* %i, align 4 ; Loop counter i = 0
+  br label %loop_header
 
-  ; Your CRC oracle would hash globals here.
+loop_header:
+  %i_val = load i32, i32* %i, align 4
+  %loop_cond = icmp slt i32 %i_val, 5 ; Loop 5 times (0 to 4)
+  br i1 %loop_cond, label %loop_body, label %loop_exit
+
+loop_body:
+  ; Load the current mode using a volatile load
+  %current_mode = load volatile i32, i32* @mode_switch, align 4
+
+  %is_mode_zero = icmp eq i32 %current_mode, 0
+  br i1 %is_mode_zero, label %path_mode_zero, label %path_mode_one
+
+path_mode_zero:
+  ; If mode is 0, add i_val to result and switch mode to 1
+  %res_val_0 = load i32, i32* @result, align 4
+  %new_res_0 = add i32 %res_val_0, %i_val
+  store i32 %new_res_0, i32* @result, align 4
+  store volatile i32 1, i32* @mode_switch, align 4 ; Switch mode
+  br label %loop_continue
+
+path_mode_one:
+  ; If mode is not 0 (i.e., 1), subtract i_val from result and switch mode to 0
+  %res_val_1 = load i32, i32* @result, align 4
+  %new_res_1 = sub i32 %res_val_1, %i_val
+  store i32 %new_res_1, i32* @result, align 4
+  store volatile i32 0, i32* @mode_switch, align 4 ; Switch mode back
+  br label %loop_continue
+
+loop_continue:
+  %next_i = add i32 %i_val, 1
+  store i32 %next_i, i32* %i, align 4
+  br label %loop_header
+
+loop_exit:
+  ; Your CRC oracle would hash @result here
   ret i32 0
 }

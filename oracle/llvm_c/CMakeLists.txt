@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
 project(GlobalSizePassProject)
 
-set(CMAKE_CXX_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang++)
-set(CMAKE_C_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang)
+# set(CMAKE_CXX_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang++)
+# set(CMAKE_C_COMPILER /targetfuzz-campaign/compilers/llvm/llvm-project/build/bin/clang)
 # set(CMAKE_CXX_COMPILER ${LLVM_BIN_DIR}/clang++)
 # set(CMAKE_C_COMPILER ${LLVM_BIN_DIR}/clang)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

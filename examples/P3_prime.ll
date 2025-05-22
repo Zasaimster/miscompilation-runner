@@ -16,11 +16,13 @@ loop_cond:
 loop_body:
   %current_acc = load i32, ptr @accumulated_result, align 4
   
-  ; P': Slightly different calculation
+  ; P: Original calculation
   %next_acc_P = add i32 %current_acc, %current_i
-  %next_acc_P_plus_one = add i32 %next_acc_P, 1 ;
   
-  ; Store the result
+  ; --- Misoptimization: Add an extra 1 ---
+  %next_acc_P_plus_one = add i32 %next_acc_P, 1
+  
+  ; Store the result (the misoptimized one)
   store i32 %next_acc_P_plus_one, ptr @accumulated_result, align 4
 
   %inc_i = add i32 %current_i, 1
