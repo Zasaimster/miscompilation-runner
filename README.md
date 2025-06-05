@@ -1,4 +1,6 @@
 # Overview
+This is a UCLA Capstone project worked on by Saim Ahmad, Zitong Zhou, and Miryung Kim. You can view the report [here](https://drive.google.com/file/d/16V2RukqOWdvCFQGXAehHWb8EEolATwj7/view?usp=sharing).
+
 This codebase is a tool that helps determine the correctness of a compiler optimization on a program P to P'. It specifically tests LLVM IR files optimized with Clang. 
 
 # Setup
