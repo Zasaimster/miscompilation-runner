@@ -74,6 +74,13 @@ def parse_args():
         help="Mark the number of hashes as undeterminable if the CRC oracle finds a different number of hashes.",
     )
 
+    parser.add_argument(
+        "--keep-runtime",
+        action="store_true",
+        dest="keep_runtime",
+        help="Script will not delete the runtime directory before execution.",
+    )
+
     args = parser.parse_args()
 
     # 1. Validate output file path (--output)
@@ -146,7 +153,7 @@ def main():
     # Setup runtime directory
     try:
         # Clear runtime if it exists (avoid overfilling with files, but keep between runs for analysis)
-        if os.path.exists(RUNTIME_DIR):
+        if os.path.exists(RUNTIME_DIR) and not args.keep_runtime:
             shutil.rmtree(RUNTIME_DIR)
         os.makedirs(RUNTIME_DIR, exist_ok=True)
     except OSError as e:
@@ -171,8 +178,6 @@ def main():
 
     json_summary = {k: str(v).lower() for k, v in summary.items()}
     json_output = json.dumps(json_summary, indent=4)
-    print(f"\n{HYPHENS}Miscompilation Prediction Output{HYPHENS}")
-    print(json_output)
 
     try:
         with open(output_file, "w") as f:
@@ -180,6 +185,9 @@ def main():
         print(f"\nResults successfully written to: {output_file}")
     except Exception as e:
         print(f"\nError writing results to file {output_file}: {e}")
+
+    print(f"\n{HYPHENS}Miscompilation Prediction Output{HYPHENS}")
+    print(json_output)
 
 
 if __name__ == "__main__":

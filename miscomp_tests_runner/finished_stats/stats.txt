@@ -4,7 +4,7 @@ regular_executed: 9111
 regular_compile_crash: 1380
 regular_execution_crash: 18
 regular_undefined_execution: 576
-regular_same_output: 9067
+regular_same_output: 9064
 regular_different_output: 6
 regular_undeterminable_output: 38
 crc_executed: 9077
@@ -18,4 +18,4 @@ crc_succeeded: 8923
 alive2_error: 2146
 alive2_incorrect: 0
 alive2_no_prove: 30
-alive2_correct: 9061
+alive2_correct: 9062

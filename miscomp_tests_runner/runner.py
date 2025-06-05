@@ -10,6 +10,7 @@ import glob
 import json
 import os
 import pprint
+import shutil
 import subprocess
 import re
 import time
@@ -152,7 +153,7 @@ def write_stats(stats):
 
 
 def run_main(id, f1, f2, opt, stats, lock):
-    cmd = ["python3", "main.py", f1, f2]
+    cmd = ["python3", "oracle/oracle.py", "-i", f1, f2, "-o", "out.json", "--keep-runtime"]
     print(f"Running {id}_{opt}: {' '.join(cmd)}")
     start = time.time()
     res = subprocess.run(cmd, capture_output=True, text=True)
@@ -171,11 +172,13 @@ def run_main(id, f1, f2, opt, stats, lock):
     try:
         marker_start_index = o.find(marker)
         if marker_start_index == -1:
+            # print(o)
             print(f"WARNING: Marker '{marker}' not found for {log_entry}. Output:\n{o[:500]}...")
             return
 
         # Find the start of the JSON data (after the marker and the newline)
         potential_json_str = o[marker_start_index + len(marker) :]
+        print(potential_json_str)
         results_dict = json.loads(potential_json_str)
 
         # Update stats and logs based on JSON content
@@ -313,6 +316,7 @@ if __name__ == "__main__":
     clear_folder(OUTPUT_PATH)
     print("Clearing stats logs...")
     clear_stats_files()
+    shutil.rmtree("oracle_runtime")
 
     manager = Manager()
     shared_stats = manager.dict(stats)
@@ -347,3 +351,5 @@ if __name__ == "__main__":
     # Cleanup
     print(f"Clearing runtime folder: {ll_file_directory_to_use}runtime")
     clear_folder(f"{ll_file_directory_to_use}runtime")
+
+    shutil.rmtree("oracle_runtime")
