@@ -1,5 +1,5 @@
 # Overview
-This is a UCLA Capstone project worked on by Saim Ahmad, Zitong Zhou, and Miryung Kim. You can view the report [here](https://drive.google.com/file/d/16V2RukqOWdvCFQGXAehHWb8EEolATwj7/view?usp=sharing).
+This is a UCLA Cmoputer Science Master's Capstone project worked on by Saim Ahmad, Zitong Zhou, and Miryung Kim. This project implements [GrayC's enhanCer](https://srg.doc.ic.ac.uk/files/papers/grayc-issta-23.pdf) at the LLVM IR level. It detects misoptimizations by computing the CRC hash of all global variables by instrumenting this procedure into LLVM IR code instead of performing it at the C level, like in GrayC. You can view demo examples in `examples/`. The report for this project is available [here](https://drive.google.com/file/d/16V2RukqOWdvCFQGXAehHWb8EEolATwj7/view?usp=sharing).
 
 This codebase is a tool that helps determine the correctness of a compiler optimization on a program P to P'. It specifically tests LLVM IR files optimized with Clang. 
 
