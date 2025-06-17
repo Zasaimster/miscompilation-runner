@@ -53,14 +53,14 @@ $ export PATH="/path/to/alive2/build:$PATH"
 
 ## Generate CRC calculation object file
 ```bash
-$ cd crc
+$ cd oracle/crc
 $ chmod +x compile_crc.sh
 $ ./compile_crc_.sh
 ```
 
 ## Build the LLVM Pass Plugin
 ```bash
-$ cd llvm_c
+$ cd oracle/llvm_c
 $ rm -rf build && mkdir build && cd build && cmake .. && make
 # Good to proceed after running ^. Example manual usage below
 $ opt -load-pass-plugin libGlobalSizePass.so -passes=global-size path/to/some_ir_file.ll
