@@ -79,12 +79,12 @@ def build_globals_pass():
             raise Exception(f"Error: Build process completed, but '{LIB_NAME}' was not found.")
 
 
-def run_globals_pass(file):
+def run_globals_pass(file, binary_execs):
     build_dir = os.path.join(PASS_DIR, "build")
     lib_path = os.path.join(build_dir, LIB_NAME)
 
     opt_command = [
-        "opt",
+        binary_execs["opt"],
         "-load-pass-plugin",
         lib_path,
         "-passes=global-size",
@@ -123,11 +123,11 @@ def run_globals_pass(file):
     return global_sizes
 
 
-def get_globals_info(file):
+def get_globals_info(file, binary_execs):
     # Build executable
     build_globals_pass()
     # Run globals pass
-    global_var_info = run_globals_pass(file)
+    global_var_info = run_globals_pass(file, binary_execs)
 
     for var_name in global_var_info.keys():
         var_type = global_var_info[var_name]["var_type"]
@@ -332,7 +332,7 @@ def replace_main_function(crc_code):
     return crc_code
 
 
-def add_crc_to_ir(p):
+def add_crc_to_ir(p, binary_execs):
     # static code injections
     crc_declaration = "\n; External function declaration for crc calculation\ndeclare void @transparent_crc_bytes(i8*, i32, i8*, i1)\n"
     global_info = "\n; Define type for entry into globals_table. This is { pointer to variable, var size, pointer to string with variable name }\n%global_info = type { i8*, i32, i8*}\n"
@@ -370,7 +370,7 @@ def add_crc_to_ir(p):
     if last_global_var_index == len(code_arr) - 1:
         last_global_var_index -= 1
 
-    global_var_info = get_globals_info(p)
+    global_var_info = get_globals_info(p, binary_execs)
 
     # Create name global vars for each variable
     varnames_code = global_varname_code[:]
@@ -419,12 +419,12 @@ def add_crc_to_ir(p):
     return new_file
 
 
-def get_injected_crc_code(p_file, p_prime_file):
+def get_injected_crc_code(p_file, p_prime_file, binary_execs):
     print(f"\n{HYPHENS}Injecting CRC to P...{HYPHENS}")
-    crc_p = add_crc_to_ir(p_file)
+    crc_p = add_crc_to_ir(p_file, binary_execs)
     print(f"{HYPHENS}Finished injecting CRC to P...{HYPHENS}")
     print(f"\n{HYPHENS}Injecting CRC to P prime...{HYPHENS}")
-    crc_p_prime = add_crc_to_ir(p_prime_file)
+    crc_p_prime = add_crc_to_ir(p_prime_file, binary_execs)
     print(f"{HYPHENS}Finished injecting CRC to P prime...{HYPHENS}")
 
     return crc_p, crc_p_prime
@@ -559,7 +559,7 @@ def run(p, p_prime, binary_execs, mark_diff_numhashes_undeterminable):
         "crc_succeeded": False,
     }
     # Run modified code with injected CRC
-    crc_p, crc_p_prime = get_injected_crc_code(p, p_prime)
+    crc_p, crc_p_prime = get_injected_crc_code(p, p_prime, binary_execs)
 
     # Injection will only fail if there is no main function, which will cause a crash later anyways
     if crc_p is False or crc_p_prime is False:
